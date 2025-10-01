@@ -1,4 +1,4 @@
-import { Heart, HeartOff, Wind, Star } from 'lucide-react';
+import { Wind, Star } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { DefaultLayout } from '../components/layouts';
@@ -17,7 +17,7 @@ import FavoriteButton from '../components/FavoriteButton';
  */
 function Breathing() {
   const navigate = useNavigate();
-  const { breathing: breathingPrefs, toggleBreathingMoodCheck, getFavoriteExerciseIds } = usePreferencesStore();
+  const { breathing: breathingPrefs, getFavoriteExerciseIds } = usePreferencesStore();
   const [selectedDuration, setSelectedDuration] = useState(breathingPrefs.defaultDuration || 3);
 
   const favoriteExerciseIds = getFavoriteExerciseIds();
@@ -57,21 +57,6 @@ function Breathing() {
           title="Breathing Exercises"
           subtitle="Practice pranayama for quick stress relief and focus"
           showBack={false}
-          actions={
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={toggleBreathingMoodCheck}
-              className={breathingPrefs.showMoodCheck ? 'text-sage-600' : 'text-sage-400'}
-              title={breathingPrefs.showMoodCheck ? 'Mood tracking on' : 'Mood tracking off'}
-            >
-              {breathingPrefs.showMoodCheck ? (
-                <><Heart className="h-5 w-5 mr-1" /> Mood On</>
-              ) : (
-                <><HeartOff className="h-5 w-5 mr-1" /> Mood Off</>
-              )}
-            </Button>
-          }
         />
       }
       contentClassName="px-4"

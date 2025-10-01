@@ -16,18 +16,18 @@ test.describe('Navigation', () => {
   });
 
   test('should navigate between all main tabs', async ({ page }) => {
-    const tabs = [
-      { name: /discover|sessions/i, url: /\/sessions/ },
-      { name: /progress|insights/i, url: /\/insights|\/progress/ }
-    ];
+    // Navigate to Sessions/Discover tab using bottom nav
+    const discoverButton = page.getByRole('button', { name: 'Discover', exact: true });
+    if (await discoverButton.isVisible({ timeout: 2000 }).catch(() => false)) {
+      await discoverButton.click();
+      await expect(page).toHaveURL(/\/sessions/, { timeout: 5000 });
+    }
 
-    // Test at least 2 navigation actions
-    for (const tab of tabs) {
-      const button = page.getByRole('button', { name: tab.name });
-      if (await button.isVisible({ timeout: 2000 }).catch(() => false)) {
-        await button.click();
-        await expect(page).toHaveURL(tab.url, { timeout: 5000 });
-      }
+    // Navigate to Progress/Insights tab using bottom nav
+    const progressButton = page.getByRole('button', { name: /progress|insights/i });
+    if (await progressButton.isVisible({ timeout: 2000 }).catch(() => false)) {
+      await progressButton.click();
+      await expect(page).toHaveURL(/\/insights|\/progress/, { timeout: 5000 });
     }
   });
 
@@ -36,8 +36,8 @@ test.describe('Navigation', () => {
     const bottomNav = page.locator('nav').filter({ has: page.locator('button') });
     await expect(bottomNav.first()).toBeVisible();
 
-    // Navigate to different screens
-    await page.getByRole('button', { name: /discover/i }).click();
+    // Navigate to different screens using bottom nav (exact match to avoid "Discover Multi-Week Programs")
+    await page.getByRole('button', { name: 'Discover', exact: true }).click();
     await expect(bottomNav.first()).toBeVisible();
 
     await page.getByRole('button', { name: /progress|insights/i }).click();
@@ -58,8 +58,8 @@ test.describe('Navigation', () => {
     // Start at home
     await expect(page).toHaveURL('/');
 
-    // Navigate to sessions
-    await page.getByRole('button', { name: /discover/i }).click();
+    // Navigate to sessions using bottom nav (exact match to avoid "Discover Multi-Week Programs")
+    await page.getByRole('button', { name: 'Discover', exact: true }).click();
     await page.waitForURL(/\/sessions/);
 
     // Go back
@@ -68,8 +68,8 @@ test.describe('Navigation', () => {
   });
 
   test('should highlight active tab in bottom nav', async ({ page }) => {
-    // Navigate to sessions
-    await page.getByRole('button', { name: /discover/i }).click();
+    // Navigate to sessions using bottom nav (exact match to avoid "Discover Multi-Week Programs")
+    await page.getByRole('button', { name: 'Discover', exact: true }).click();
     await page.waitForURL(/\/sessions/);
 
     // Active tab should have different styling (aria-current or class)

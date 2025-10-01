@@ -1,10 +1,12 @@
 import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { CheckCircle, Home, RotateCcw, Star, Wind, TrendingUp, Heart } from 'lucide-react';
+import { CheckCircle, Home, RotateCcw, Star, Wind, TrendingUp, Heart, Trophy } from 'lucide-react';
 import { motion } from 'framer-motion';
 import confetti from 'canvas-confetti';
 import { getSessionById } from '../data/sessions';
+import { getWeekByNumber } from '../data/programs';
 import useProgressStore from '../stores/progress';
+import useProgramProgressStore from '../stores/programProgress';
 import { FullscreenLayout } from '../components/layouts';
 
 function Complete() {
@@ -23,11 +25,16 @@ function Complete() {
   const postMoodData = location.state?.postMoodData;
   const sessionMoodData = location.state?.sessionMoodData;
 
+  // Get program context from location state (optional)
+  const programContext = location.state?.programContext; // { programId, weekNumber, dayNumber }
+
   const session = !isBreathingSession ? getSessionById(sessionId) : null;
-  const { completeSession, getStreakStatus } = useProgressStore();
+  const { completeSession, getStreakStatus, getProgramWeekSessions } = useProgressStore();
+  const { completeWeek, isWeekCompleted } = useProgramProgressStore();
 
   const [sessionRecord, setSessionRecord] = useState(null);
   const [streakStatus, setStreakStatus] = useState(null);
+  const [weekCompletionInfo, setWeekCompletionInfo] = useState(null);
   const [shouldReduceMotion, setShouldReduceMotion] = useState(false);
 
   // Check for prefers-reduced-motion
@@ -75,14 +82,57 @@ function Complete() {
         const fallbackDuration = Math.round(session.poses.reduce((total, pose) => total + pose.duration, 0) / 60);
         const durationInMinutes = actualDuration || fallbackDuration;
 
-        // Record the yoga session with mood data
+        // Record the yoga session with mood data and program context
         record = completeSession({
           sessionId: session.id,
           sessionName: session.name,
           duration: durationInMinutes,
           poses: session.poses,
-          ...(sessionMoodData || {})
+          ...(sessionMoodData || {}),
+          // Add program tracking fields if available
+          ...(programContext?.programId && {
+            programId: programContext.programId,
+            weekNumber: programContext.weekNumber,
+            dayNumber: programContext.dayNumber
+          })
         });
+
+        // Check if this session completes a program week
+        if (programContext?.programId && programContext?.weekNumber) {
+          const { programId, weekNumber } = programContext;
+
+          // Get week definition from programs.js
+          const weekDef = getWeekByNumber(programId, weekNumber);
+
+          if (weekDef) {
+            // Get all sessions completed this week (including the one we just recorded)
+            const weekSessions = getProgramWeekSessions(programId, weekNumber);
+
+            // Extract unique session IDs completed this week
+            const completedSessionIds = [...new Set(weekSessions.map(s => s.sessionId))];
+
+            // Check if all recommended sessions for this week are now completed
+            const recommendedSessionIds = weekDef.recommendedSessions || [];
+            const allRecommendedCompleted = recommendedSessionIds.length > 0 &&
+              recommendedSessionIds.every(id => completedSessionIds.includes(id));
+
+            // Check if week wasn't already marked as completed
+            const weekAlreadyCompleted = isWeekCompleted(programId, weekNumber);
+
+            if (allRecommendedCompleted && !weekAlreadyCompleted) {
+              // Week just completed! Mark it in program progress
+              completeWeek(programId, weekNumber, weekSessions.length);
+
+              setWeekCompletionInfo({
+                weekNumber,
+                weekName: weekDef.name,
+                programId,
+                sessionsCompleted: weekSessions.length,
+                isMilestone: weekDef.isMilestone
+              });
+            }
+          }
+        }
       }
 
       setSessionRecord(record);
@@ -94,7 +144,7 @@ function Complete() {
       // Check for any new achievements (they're included in the store already)
       // For demo purposes, we could show them here if needed
     }
-  }, [session, sessionRecord, completeSession, getStreakStatus, isBreathingSession]);
+  }, [session, sessionRecord, completeSession, getStreakStatus, isBreathingSession, programContext, getProgramWeekSessions, completeWeek, isWeekCompleted, searchParams, sessionMoodData]);
 
   const handleGoHome = () => {
     navigate('/');
@@ -262,6 +312,36 @@ function Complete() {
                 <p className="text-xs opacity-80 mt-1">
                   {moodImprovementInfo.detail}
                 </p>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
+        {/* Week Completion Display with celebration */}
+        {weekCompletionInfo && (
+          <motion.div
+            className="mb-6 w-full rounded-lg border-2 border-accent bg-amber-50 p-4 shadow-lg"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, delay: 1.0 }}
+          >
+            <div className="flex items-start space-x-3">
+              <Trophy className="h-6 w-6 text-accent flex-shrink-0 mt-0.5" />
+              <div className="flex-1">
+                <p className="font-semibold text-base text-accent mb-1">
+                  {weekCompletionInfo.isMilestone ? '🎉 Milestone Achievement!' : 'Week Complete!'}
+                </p>
+                <p className="font-medium text-sm text-amber-900 mb-1">
+                  {weekCompletionInfo.weekName}
+                </p>
+                <p className="text-xs text-amber-800">
+                  You completed all recommended sessions for this week ({weekCompletionInfo.sessionsCompleted} sessions total)
+                </p>
+                {weekCompletionInfo.isMilestone && (
+                  <p className="text-xs text-amber-700 mt-2 italic">
+                    This is a significant milestone in your journey!
+                  </p>
+                )}
               </div>
             </div>
           </motion.div>

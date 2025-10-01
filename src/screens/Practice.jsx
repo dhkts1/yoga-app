@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Play, Pause, SkipBack, SkipForward, X, HelpCircle } from 'lucide-react';
+import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
+import { Play, Pause, SkipBack, SkipForward, X, HelpCircle, BookMarked } from 'lucide-react';
 import { getSessionById } from '../data/sessions';
 import { getPoseById } from '../data/poses';
 import { getCustomSessionWithPoses } from '../data/customSessions';
@@ -12,9 +12,14 @@ import FeatureTooltip from '../components/FeatureTooltip';
 
 function Practice() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [searchParams] = useSearchParams();
   const sessionId = searchParams.get('session');
   const customSessionId = searchParams.get('customSession');
+
+  // Get program context from navigation state (if practicing as part of a program)
+  const programContext = location.state?.programContext || null;
+  const { programName, weekNumber, dayNumber } = programContext || {};
 
   // Refs for tooltip targeting
   const tipsButtonRef = useRef(null);
@@ -316,7 +321,7 @@ function Practice() {
       finalPracticeTime += (now - lastResumeTimeRef.current) / 1000;
     }
 
-    // Navigate with mood data in state
+    // Navigate with mood data and program context in state
     navigate(`/complete?session=${sessionId}&duration=${Math.round(finalPracticeTime / 60)}`, {
       state: {
         preMoodData,
@@ -326,7 +331,9 @@ function Practice() {
           preEnergy: preMoodData?.energy?.value,
           postMood: moodData?.mood?.value,
           postEnergy: moodData?.energy?.value
-        }
+        },
+        // Pass program context through if present
+        ...(programContext && { programContext })
       }
     });
   };
@@ -344,7 +351,10 @@ function Practice() {
       finalPracticeTime += (now - lastResumeTimeRef.current) / 1000;
     }
 
-    navigate(`/complete?session=${sessionId}&duration=${Math.round(finalPracticeTime / 60)}`);
+    navigate(`/complete?session=${sessionId}&duration=${Math.round(finalPracticeTime / 60)}`, {
+      // Pass program context through if present
+      ...(programContext && { state: { programContext } })
+    });
   };
 
   const formatTime = (seconds) => {
@@ -426,6 +436,15 @@ function Practice() {
         </button>
 
         <div className="text-center min-w-0 flex-1 mx-3">
+          {/* Program Context Badge (if practicing as part of a program) */}
+          {programContext && (
+            <div className="flex items-center justify-center gap-1 mb-1">
+              <BookMarked className="h-3 w-3 text-sage-600" />
+              <p className="text-xs text-sage-600 truncate">
+                {programName} • Week {weekNumber}, Day {dayNumber}
+              </p>
+            </div>
+          )}
           <h1 className="text-sm font-medium text-primary truncate">{session.name}</h1>
           <p className="text-xs text-secondary">
             {currentPoseIndex + 1} of {session?.poses?.length || 0}

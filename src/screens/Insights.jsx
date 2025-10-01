@@ -18,6 +18,7 @@ import StatCard from '../components/charts/StatCard';
 import SimpleBarChart from '../components/charts/SimpleBarChart';
 import HeatmapCalendar from '../components/charts/HeatmapCalendar';
 import SessionHistoryModal from '../components/SessionHistoryModal';
+import ProgramProgressCard from '../components/ProgramProgressCard';
 
 function Insights() {
   const navigate = useNavigate();
@@ -175,6 +176,11 @@ function Insights() {
               icon={Activity}
               trend={`Best: ${summary.overall.longestStreak} days`}
             />
+          </div>
+
+          {/* Active Program Progress */}
+          <div className="mb-8 w-full">
+            <ProgramProgressCard />
           </div>
 
           {/* Practice Calendar */}

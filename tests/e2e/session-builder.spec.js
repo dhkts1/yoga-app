@@ -17,8 +17,8 @@ test.describe('Session Builder', () => {
   });
 
   test('should navigate to session builder from sessions screen', async ({ page }) => {
-    // Go to Sessions screen
-    await page.getByRole('button', { name: /discover/i }).click();
+    // Go to Sessions screen using bottom nav (exact match to avoid "Discover Multi-Week Programs")
+    await page.getByRole('button', { name: 'Discover', exact: true }).click();
     await page.waitForURL(/\/sessions/);
 
     // Click create/build button

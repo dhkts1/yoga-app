@@ -54,7 +54,7 @@ function PoseLibrary() {
   const handlePoseSelect = (poseId) => {
     // Navigate to pose detail or add to custom session
     // For now, we'll just show the pose details in a future enhancement
-    console.log('Selected pose:', poseId);
+    // Future: navigate(`/poses/${poseId}`)
   };
 
   const clearFilters = () => {

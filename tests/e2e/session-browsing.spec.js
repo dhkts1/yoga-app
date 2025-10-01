@@ -26,8 +26,8 @@ test.describe('Session Browsing', () => {
   });
 
   test('should navigate to Discover tab and show sessions', async ({ page }) => {
-    // Navigate to Discover/Sessions tab - using button in bottom nav
-    const discoverTab = page.getByRole('button', { name: /discover/i });
+    // Navigate to Discover/Sessions tab - using button in bottom nav (exact match to avoid "Discover Multi-Week Programs")
+    const discoverTab = page.getByRole('button', { name: 'Discover', exact: true });
     await discoverTab.click();
 
     // Should navigate to sessions page
@@ -39,8 +39,8 @@ test.describe('Session Browsing', () => {
   });
 
   test('should show category tabs on Discover screen', async ({ page }) => {
-    // Navigate to Discover - using button in bottom nav
-    const discoverTab = page.getByRole('button', { name: /discover/i });
+    // Navigate to Discover - using button in bottom nav (exact match to avoid "Discover Multi-Week Programs")
+    const discoverTab = page.getByRole('button', { name: 'Discover', exact: true });
     await discoverTab.click();
     await page.waitForURL(/\/sessions/);
 
@@ -50,8 +50,8 @@ test.describe('Session Browsing', () => {
   });
 
   test('should filter sessions when category is clicked', async ({ page }) => {
-    // Navigate to Discover - using button in bottom nav
-    const discoverTab = page.getByRole('button', { name: /discover/i });
+    // Navigate to Discover - using button in bottom nav (exact match to avoid "Discover Multi-Week Programs")
+    const discoverTab = page.getByRole('button', { name: 'Discover', exact: true });
     await discoverTab.click();
     await page.waitForURL(/\/sessions/);
 
@@ -67,8 +67,8 @@ test.describe('Session Browsing', () => {
   });
 
   test('should navigate to session preview when session card is clicked', async ({ page }) => {
-    // Navigate to Discover - using button in bottom nav
-    const discoverTab = page.getByRole('button', { name: /discover/i });
+    // Navigate to Discover - using button in bottom nav (exact match to avoid "Discover Multi-Week Programs")
+    const discoverTab = page.getByRole('button', { name: 'Discover', exact: true });
     await discoverTab.click();
     await page.waitForURL(/\/sessions/);
 
@@ -84,8 +84,8 @@ test.describe('Session Browsing', () => {
   });
 
   test('should show session details on preview screen', async ({ page }) => {
-    // Navigate to Discover - using button in bottom nav
-    const discoverTab = page.getByRole('button', { name: /discover/i });
+    // Navigate to Discover - using button in bottom nav (exact match to avoid "Discover Multi-Week Programs")
+    const discoverTab = page.getByRole('button', { name: 'Discover', exact: true });
     await discoverTab.click();
     await page.waitForURL(/\/sessions/);
 
@@ -110,8 +110,8 @@ test.describe('Session Browsing', () => {
   });
 
   test('should allow favoriting a session', async ({ page }) => {
-    // Navigate to Discover - using button in bottom nav
-    const discoverTab = page.getByRole('button', { name: /discover/i });
+    // Navigate to Discover - using button in bottom nav (exact match to avoid "Discover Multi-Week Programs")
+    const discoverTab = page.getByRole('button', { name: 'Discover', exact: true });
     await discoverTab.click();
     await page.waitForURL(/\/sessions/);
 
@@ -142,8 +142,8 @@ test.describe('Session Browsing', () => {
   });
 
   test('should show favorite indicator after favoriting', async ({ page }) => {
-    // Navigate to Discover - using button in bottom nav
-    const discoverTab = page.getByRole('button', { name: /discover/i });
+    // Navigate to Discover - using button in bottom nav (exact match to avoid "Discover Multi-Week Programs")
+    const discoverTab = page.getByRole('button', { name: 'Discover', exact: true });
     await discoverTab.click();
     await page.waitForURL(/\/sessions/);
 
@@ -173,8 +173,8 @@ test.describe('Session Browsing', () => {
   });
 
   test('should allow building custom session', async ({ page }) => {
-    // Navigate to Discover - using button in bottom nav
-    const discoverTab = page.getByRole('button', { name: /discover/i });
+    // Navigate to Discover - using button in bottom nav (exact match to avoid "Discover Multi-Week Programs")
+    const discoverTab = page.getByRole('button', { name: 'Discover', exact: true });
     await discoverTab.click();
     await page.waitForURL(/\/sessions/);
 
@@ -187,8 +187,8 @@ test.describe('Session Browsing', () => {
   });
 
   test('should show breathing exercises section', async ({ page }) => {
-    // Navigate to Discover - using button in bottom nav
-    const discoverTab = page.getByRole('button', { name: /discover/i });
+    // Navigate to Discover - using button in bottom nav (exact match to avoid "Discover Multi-Week Programs")
+    const discoverTab = page.getByRole('button', { name: 'Discover', exact: true });
     await discoverTab.click();
     await page.waitForURL(/\/sessions/);
 

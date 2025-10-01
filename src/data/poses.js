@@ -1,4 +1,6 @@
 // Enhanced yoga poses with detailed information
+import { posesExtended } from './poses_extended.js';
+
 export const poses = [
   {
     id: 'mountain-pose',
@@ -1064,27 +1066,34 @@ export const poses = [
   }
 ];
 
-// Helper function to get pose by ID
+// Combine original poses with extended Iyengar poses (28 additional poses)
+// Total: 23 original + 28 extended = 51 poses
+export const allPoses = [...poses, ...posesExtended];
+
+// Export combined array as default for backward compatibility
+export default allPoses;
+
+// Helper function to get pose by ID (works with all poses)
 export const getPoseById = (id) => {
-  return poses.find(pose => pose.id === id);
+  return allPoses.find(pose => pose.id === id);
 };
 
 // Helper function to filter poses by category
 export const getPosesByCategory = (category) => {
-  return poses.filter(pose => pose.category === category);
+  return allPoses.filter(pose => pose.category === category);
 };
 
 // Helper function to get poses by difficulty
 export const getPosesByDifficulty = (difficulty) => {
-  return poses.filter(pose => pose.difficulty === difficulty);
+  return allPoses.filter(pose => pose.difficulty === difficulty);
 };
 
 // Get random pose
 export const getRandomPose = () => {
-  return poses[Math.floor(Math.random() * poses.length)];
+  return allPoses[Math.floor(Math.random() * allPoses.length)];
 };
 
 // Get pose categories
 export const getCategories = () => {
-  return [...new Set(poses.map(pose => pose.category))];
+  return [...new Set(allPoses.map(pose => pose.category))];
 };

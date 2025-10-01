@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
-import { Clock, TrendingUp, Target, Calendar, Play, Heart, Share2 } from 'lucide-react';
+import { useParams, useNavigate, useSearchParams, useLocation } from 'react-router-dom';
+import { Clock, TrendingUp, Target, Calendar, Play, Heart, Share2, BookMarked } from 'lucide-react';
 import { getSessionById } from '../data/sessions';
 import { getBreathingExerciseById } from '../data/breathing';
 import { getPoseById } from '../data/poses';
@@ -14,7 +14,11 @@ import useProgressStore from '../stores/progress';
 function SessionDetail() {
   const { sessionId } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const [searchParams] = useSearchParams();
+
+  // Get program context if this session is part of a program
+  const programContext = location.state?.programContext || null;
   const [sessionData, setSessionData] = useState(null);
   const [sessionType, setSessionType] = useState(null); // 'prebuilt', 'custom', 'breathing'
   const [isCustom, setIsCustom] = useState(false);
@@ -118,9 +122,15 @@ function SessionDetail() {
     if (sessionType === 'breathing') {
       navigate(`/breathing/practice?exercise=${sessionId}&duration=${sessionData.defaultDuration}`);
     } else if (isCustom) {
-      navigate(`/practice?customSession=${sessionId}`);
+      navigate(`/practice?customSession=${sessionId}`, {
+        // Pass program context if available
+        ...(programContext && { state: { programContext } })
+      });
     } else {
-      navigate(`/practice?session=${sessionId}`);
+      navigate(`/practice?session=${sessionId}`, {
+        // Pass program context if available
+        ...(programContext && { state: { programContext } })
+      });
     }
   };
 
@@ -203,6 +213,16 @@ function SessionDetail() {
 
           {/* Metadata Badges */}
           <div className="flex flex-wrap items-center justify-center gap-2 mb-2">
+            {/* Program Context Badge */}
+            {programContext && (
+              <div className="flex items-center gap-1 px-2.5 py-1 bg-accent/20 rounded-full shadow-sm border border-accent/30">
+                <BookMarked className="h-3.5 w-3.5 text-accent" />
+                <span className="text-xs font-semibold text-accent">
+                  Week {programContext.weekNumber}, Day {programContext.dayNumber}
+                </span>
+              </div>
+            )}
+
             {/* Duration */}
             <div className="flex items-center gap-1 px-2.5 py-1 bg-white rounded-full shadow-sm">
               <Clock className="h-3.5 w-3.5 text-sage-600" />

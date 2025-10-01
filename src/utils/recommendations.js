@@ -129,7 +129,7 @@ export function getSmartRecommendation(currentTime = new Date(), practiceHistory
     if (timeAppropriate || strongFavorite.count >= 5) {
       return {
         sessionId: strongFavorite.sessionId,
-        reason: 'Your favorite practice',
+        reason: '',
         confidence: Math.min(strongFavorite.count / 10, 0.95),
         category: 'history'
       };

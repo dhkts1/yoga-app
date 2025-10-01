@@ -89,6 +89,10 @@ const useProgressStore = create(
           completedAt: now.toISOString(),
           poses: sessionData.poses || [],
           date: today,
+          // Program tracking (optional)
+          programId: sessionData.programId || null,
+          weekNumber: sessionData.weekNumber || null,
+          dayNumber: sessionData.dayNumber || null,
           // Mood tracking data
           preMood: sessionData.preMood || null,
           preEnergy: sessionData.preEnergy || null,
@@ -764,6 +768,63 @@ const useProgressStore = create(
             longestStreak: state.longestStreak,
             currentStreak: state.currentStreak
           }
+        };
+      },
+
+      // Program-specific analytics methods
+
+      // Get sessions for a specific program
+      getProgramSessions: (programId) => {
+        const state = get();
+        return state.practiceHistory.filter(session => session.programId === programId);
+      },
+
+      // Get sessions for a specific week within a program
+      getProgramWeekSessions: (programId, weekNumber) => {
+        const state = get();
+        return state.practiceHistory.filter(
+          session => session.programId === programId && session.weekNumber === weekNumber
+        );
+      },
+
+      // Get sessions for a specific day within a program week
+      getProgramDaySessions: (programId, weekNumber, dayNumber) => {
+        const state = get();
+        return state.practiceHistory.filter(
+          session =>
+            session.programId === programId &&
+            session.weekNumber === weekNumber &&
+            session.dayNumber === dayNumber
+        );
+      },
+
+      // Check if a specific program day has been completed
+      isProgramDayCompleted: (programId, weekNumber, dayNumber) => {
+        const state = get();
+        return state.practiceHistory.some(
+          session =>
+            session.programId === programId &&
+            session.weekNumber === weekNumber &&
+            session.dayNumber === dayNumber
+        );
+      },
+
+      // Get completion stats for a program week
+      getProgramWeekStats: (programId, weekNumber, totalDays) => {
+        const state = get();
+        const weekSessions = state.practiceHistory.filter(
+          session => session.programId === programId && session.weekNumber === weekNumber
+        );
+
+        const completedDays = new Set(weekSessions.map(s => s.dayNumber)).size;
+        const totalMinutes = weekSessions.reduce((sum, s) => sum + s.duration, 0);
+
+        return {
+          completedDays,
+          totalDays,
+          completionRate: totalDays > 0 ? Math.round((completedDays / totalDays) * 100) : 0,
+          totalMinutes,
+          sessionsCompleted: weekSessions.length
         };
       }
     }),

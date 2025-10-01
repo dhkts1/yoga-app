@@ -1,6 +1,6 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useRef, useState, useEffect } from 'react';
-import { Sun, Compass, TrendingUp, User } from 'lucide-react';
+import { Sun, Compass, Wind, Calendar, TrendingUp, User } from 'lucide-react';
 import { cn } from '../lib/utils';
 import useProgressStore from '../stores/progress';
 import usePreferencesStore from '../stores/preferences';
@@ -11,7 +11,7 @@ import FeatureTooltip from './FeatureTooltip';
  * Following Material Design and Nielsen Norman Group best practices (3-5 tabs)
  *
  * Features:
- * - 4 tabs: Today, Discover, Progress, Profile (wellness app mental models)
+ * - 6 tabs: Today, Discover, Breathe, Programs, Progress, Profile
  * - Active state with color and icon style changes
  * - Fixed position with safe area handling
  * - 44px minimum touch targets
@@ -75,8 +75,24 @@ function BottomNav({ className }) {
       label: 'Discover',
       icon: Compass,
       path: '/sessions',
-      // Match /sessions, /sessions/builder, /breathing, and /breathing/practice
-      isActive: location.pathname.startsWith('/sessions') || location.pathname.startsWith('/breathing')
+      // Match /sessions and /sessions/builder only (not breathing)
+      isActive: location.pathname.startsWith('/sessions')
+    },
+    {
+      id: 'breathe',
+      label: 'Breathe',
+      icon: Wind,
+      path: '/breathing',
+      // Match /breathing and /breathing/practice
+      isActive: location.pathname.startsWith('/breathing')
+    },
+    {
+      id: 'programs',
+      label: 'Programs',
+      icon: Calendar,
+      path: '/programs',
+      // Match /programs and program detail pages
+      isActive: location.pathname.startsWith('/programs')
     },
     {
       id: 'progress',

@@ -134,6 +134,14 @@ const SessionCard = ({
                   <span className="text-sage-500">Custom</span>
                 </>
               )}
+              {session.week && (
+                <>
+                  <span>•</span>
+                  <span className="px-2 py-0.5 rounded-full bg-sage-100 text-sage-700 font-medium text-xs">
+                    Week {session.week}
+                  </span>
+                </>
+              )}
             </div>
           )}
         </div>

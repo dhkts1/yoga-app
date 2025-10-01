@@ -15,7 +15,6 @@ import { getBreathingExerciseById } from '../data/breathing';
 import {
   categories,
   filterSessionsByCategory,
-  filterBreathingExercisesByCategory,
   filterCustomSessionsByCategory,
   getCategoryCounts
 } from '../utils/sessionCategories';
@@ -86,12 +85,6 @@ function Sessions() {
     'evening-wind-down': Moon
   };
 
-  const sessionDescriptions = {
-    'morning-energizer': 'Start your day with energy and focus',
-    'lunch-break-relief': 'Reset and refresh during your busy day',
-    'evening-wind-down': 'Relax and prepare for restful sleep'
-  };
-
   const handleSessionSelect = (sessionId, isCustom = false) => {
     if (isCustom) {
       navigate(`/sessions/${sessionId}/preview?custom=true`);
@@ -126,7 +119,6 @@ function Sessions() {
 
   // Filter by selected category
   const filteredSessions = filterSessionsByCategory(selectedCategory);
-  const filteredBreathingExercises = filterBreathingExercisesByCategory(selectedCategory);
   const filteredCustomSessions = filterCustomSessionsByCategory(customSessions, selectedCategory);
 
   // Get category counts
@@ -135,9 +127,6 @@ function Sessions() {
   // Separate filtered sessions into favorites and non-favorites
   const favoriteSessionsList = filteredSessions.filter(s => favoriteIds.includes(s.id));
   const nonFavoriteSessionsList = filteredSessions.filter(s => !favoriteIds.includes(s.id));
-
-  // Separate filtered breathing exercises into favorites and non-favorites
-  const favoriteBreathingList = filteredBreathingExercises.filter(e => favoriteIds.includes(e.id));
 
   // Separate filtered custom sessions into favorites and non-favorites
   const favoriteCustomSessionsList = filteredCustomSessions.filter(s => favoriteIds.includes(s.id));
@@ -457,7 +446,7 @@ function Sessions() {
                           </h2>
                         </div>
                         <p className="text-sm text-sage-700 mb-2 line-clamp-1">
-                          {sessionDescriptions[session.id]}
+                          {session.description}
                         </p>
                         <div className="flex items-center gap-4 text-sm text-sage-600 flex-wrap">
                           <div className="flex items-center gap-1">
@@ -468,6 +457,14 @@ function Sessions() {
                           <span>{session.poses.length} poses</span>
                           <span>•</span>
                           <span className="capitalize">{session.difficulty}</span>
+                          {session.week && (
+                            <>
+                              <span>•</span>
+                              <span className="px-2 py-0.5 rounded-full bg-sage-100 text-sage-700 font-medium text-xs">
+                                Week {session.week}
+                              </span>
+                            </>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -482,11 +479,12 @@ function Sessions() {
         </div>
       )}
 
+
       {/* Non-favorite Pre-built Sessions */}
-      <div className="mb-24">
-        {(customSessions.length > 0 || favoriteSessionsList.length > 0 || favoriteBreathingList.length > 0) && (
+      <div className="mb-8">
+        {(customSessions.length > 0 || favoriteSessionsList.length > 0) && nonFavoriteSessionsList.length > 0 && (
           <h2 className="text-lg font-medium text-sage-900 mb-4 text-center">
-            {favoriteSessionsList.length > 0 || favoriteBreathingList.length > 0 ? 'More Sessions' : 'Pre-built Sessions'}
+            {favoriteSessionsList.length > 0 ? 'More Sessions' : 'Pre-built Sessions'}
           </h2>
         )}
         <motion.div
@@ -512,7 +510,7 @@ function Sessions() {
                         </h2>
                       </div>
                       <p className="text-sm text-sage-700 mb-2 line-clamp-1">
-                        {sessionDescriptions[session.id]}
+                        {session.description}
                       </p>
                       <div className="flex items-center gap-4 text-sm text-sage-600 flex-wrap">
                         <div className="flex items-center gap-1">
@@ -523,6 +521,14 @@ function Sessions() {
                         <span>{session.poses.length} poses</span>
                         <span>•</span>
                         <span className="capitalize">{session.difficulty}</span>
+                        {session.week && (
+                          <>
+                            <span>•</span>
+                            <span className="px-2 py-0.5 rounded-full bg-sage-100 text-sage-700 font-medium text-xs">
+                              Week {session.week}
+                            </span>
+                          </>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -535,6 +541,7 @@ function Sessions() {
           })}
         </motion.div>
       </div>
+
     </DefaultLayout>
   );
 }

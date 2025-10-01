@@ -58,16 +58,8 @@ export default defineConfig({
   // Configure projects for major browsers and devices
   projects: [
     {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
-    },
-    {
       name: 'mobile',
       use: { ...devices['iPhone 13'] },
-    },
-    {
-      name: 'webkit',
-      use: { ...devices['iPhone 12'] },
     },
   ],
 

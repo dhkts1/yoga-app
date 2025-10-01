@@ -1,15 +1,17 @@
 import { useNavigate } from 'react-router-dom';
 import { useRef, useState, useEffect } from 'react';
-import { Sun, Moon, Sunrise, Flame, Star, ChevronRight, Sparkles } from 'lucide-react';
+import { Sun, Moon, Sunrise, Flame, Star, ChevronRight, Sparkles, BookOpen, Calendar } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button, Heading, Text } from '../components/design-system';
 import { FullscreenLayout } from '../components/layouts';
 import useProgressStore from '../stores/progress';
 import usePreferencesStore from '../stores/preferences';
+import useProgramProgressStore from '../stores/programProgress';
 import FeatureTooltip from '../components/FeatureTooltip';
 import { getSessionById } from '../data/sessions';
 import { getBreathingExerciseById } from '../data/breathing';
 import { getSmartRecommendation, getRecommendationButtonText } from '../utils/recommendations';
+import { getProgramById } from '../data/programs';
 
 function Welcome() {
   const navigate = useNavigate();
@@ -20,6 +22,9 @@ function Welcome() {
   // Progress store
   const { getStreakStatus, totalSessions, practiceHistory, breathingHistory, getRecentAllSessions } = useProgressStore();
   const streakStatus = getStreakStatus();
+
+  // Program progress store
+  const { activeProgram, getCurrentWeek } = useProgramProgressStore();
 
   // Preferences store for tooltips and milestones
   const {
@@ -258,6 +263,71 @@ function Welcome() {
           Browse All Sessions
           <ChevronRight className="h-4 w-4" />
         </button>
+
+        {/* Program Discovery Section */}
+        {activeProgram ? (
+          // Active Program Card
+          <div className="w-full mb-8">
+            <Text variant="body" className="text-secondary font-medium mb-4 block">
+              Your Program
+            </Text>
+            <button
+              onClick={() => {
+                const program = getProgramById(activeProgram.programId);
+                const currentWeek = getCurrentWeek(activeProgram.programId);
+                if (program) {
+                  navigate(`/programs/${activeProgram.programId}/week/${currentWeek}`);
+                }
+              }}
+              className="w-full p-5 bg-gradient-to-br from-sage-50 to-cream-50 rounded-xl shadow-sm hover:shadow-md transition-all text-left border border-sage-200 hover:border-sage-300"
+            >
+              <div className="flex items-start justify-between mb-3">
+                <div className="flex-1 min-w-0 mr-3">
+                  <div className="flex items-center gap-2 mb-2">
+                    <BookOpen className="h-5 w-5 text-sage-600 flex-shrink-0" />
+                    <Text variant="body" className="font-medium text-primary">
+                      {getProgramById(activeProgram.programId)?.name}
+                    </Text>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-secondary">
+                    <Calendar className="h-4 w-4 flex-shrink-0" />
+                    <span>Week {getCurrentWeek(activeProgram.programId)} of {getProgramById(activeProgram.programId)?.totalWeeks}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between mt-4">
+                <Text variant="caption" className="text-sage-600">
+                  Continue your journey
+                </Text>
+                <ChevronRight className="h-5 w-5 text-sage-600" />
+              </div>
+            </button>
+          </div>
+        ) : (
+          // Discover Programs CTA
+          <div className="w-full mb-8">
+            <button
+              onClick={() => navigate('/programs')}
+              className="w-full p-5 bg-gradient-to-br from-purple-50 to-blue-50 rounded-xl shadow-sm hover:shadow-md transition-all text-left border border-purple-200 hover:border-purple-300"
+            >
+              <div className="flex items-start justify-between">
+                <div className="flex-1 min-w-0 mr-3">
+                  <div className="flex items-center gap-2 mb-2">
+                    <BookOpen className="h-5 w-5 text-purple-600 flex-shrink-0" />
+                    <Text variant="body" className="font-medium text-primary">
+                      Discover Multi-Week Programs
+                    </Text>
+                  </div>
+                  <Text variant="caption" className="text-secondary leading-relaxed">
+                    Build a deeper practice with structured 8-13 week yoga journeys
+                  </Text>
+                </div>
+                <ChevronRight className="h-5 w-5 text-purple-600 flex-shrink-0 mt-1" />
+              </div>
+            </button>
+          </div>
+        )}
 
         {/* Recently Practiced - only show if user has history */}
         {recentSessions.length > 0 && (

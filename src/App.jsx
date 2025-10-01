@@ -12,6 +12,9 @@ import BreathingPractice from './screens/BreathingPractice';
 import Insights from './screens/Insights';
 import Settings from './screens/Settings';
 import PoseLibrary from './screens/PoseLibrary';
+import Programs from './screens/Programs';
+import ProgramDetail from './screens/ProgramDetail';
+import WeekDetail from './screens/WeekDetail';
 import OfflineIndicator from './components/design-system/OfflineIndicator';
 import Onboarding from './components/Onboarding';
 
@@ -220,6 +223,48 @@ function AnimatedRoutes() {
               transition={pageTransition}
             >
               <PoseLibrary />
+            </motion.div>
+          }
+        />
+        <Route
+          path="/programs"
+          element={
+            <motion.div
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              variants={pageVariants}
+              transition={pageTransition}
+            >
+              <Programs />
+            </motion.div>
+          }
+        />
+        <Route
+          path="/programs/:programId"
+          element={
+            <motion.div
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              variants={pageVariants}
+              transition={pageTransition}
+            >
+              <ProgramDetail />
+            </motion.div>
+          }
+        />
+        <Route
+          path="/programs/:programId/week/:weekNumber"
+          element={
+            <motion.div
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              variants={pageVariants}
+              transition={pageTransition}
+            >
+              <WeekDetail />
             </motion.div>
           }
         />
