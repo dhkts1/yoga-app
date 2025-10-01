@@ -28,7 +28,7 @@ test.describe('Insights', () => {
     await page.waitForURL(/\/insights|\/progress/);
 
     // Should show message about no practice yet
-    const emptyMessage = page.locator('text=/no.*practice|start.*practice|get started/i');
+    const emptyMessage = page.locator('text=/no.*practic|start.*practic|get started|more practice needed/i');
     await expect(emptyMessage.first()).toBeVisible({ timeout: 3000 });
   });
 

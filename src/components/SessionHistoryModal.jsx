@@ -202,7 +202,7 @@ function SessionHistoryModal({
 
               return (
                 <div
-                  key={session.id || `session-${index}`}
+                  key={`${session.id}-${index}`}
                   className="bg-white border border-cream-200 rounded-lg p-3 hover:border-sage-300 transition-colors"
                 >
                   {/* Session Header */}

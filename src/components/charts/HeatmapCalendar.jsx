@@ -74,14 +74,14 @@ function HeatmapCalendar({
   };
 
   return (
-    <Card className={`p-4 !overflow-visible ${className}`}>
+    <Card className={`p-4 ${className}`}>
       {/* Title */}
       <Text variant="body" className="font-medium mb-4">
         {title}
       </Text>
 
       {/* Calendar Grid */}
-      <div className="space-y-3 overflow-visible">
+      <div className="space-y-3">
         {/* Month labels */}
         <div className="flex items-center gap-2 mb-2">
           {daysList.map((day, index) => {
@@ -98,7 +98,7 @@ function HeatmapCalendar({
         </div>
 
         {/* Days grid - 7 columns for weeks */}
-        <div className="grid grid-cols-7 gap-1.5 overflow-visible">
+        <div className="grid grid-cols-7 gap-1.5">
           {/* Day labels */}
           {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((dayName, index) => (
             <div key={dayName + index} className="text-center">

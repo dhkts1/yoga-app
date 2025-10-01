@@ -143,7 +143,6 @@ function Insights() {
           />
         }
         className="print:p-0"
-        contentClassName="pb-24 !overflow-visible"
       >
         <div className="px-4 py-6 print:p-4 max-w-full">
           {/* Key Metrics Grid */}
@@ -179,7 +178,7 @@ function Insights() {
           </div>
 
           {/* Practice Calendar */}
-          <div className="mb-8 w-full overflow-visible">
+          <div className="mb-8 w-full">
             <HeatmapCalendar
               title="Practice Frequency (Last 30 Days)"
               practiceData={heatmapData}

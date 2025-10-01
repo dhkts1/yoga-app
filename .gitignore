@@ -91,6 +91,7 @@ out
 # Nuxt.js build / generate output
 .nuxt
 dist
+dev-dist/
 
 # Gatsby files
 .cache/
@@ -221,3 +222,16 @@ fabric.properties
 
 # Android studio 3.1+ serialized cache file
 .idea/caches/build_file_checksums.ser
+
+# Playwright test results
+test-results/
+playwright-report/
+test-output.txt
+
+# Temporary documentation files
+*_SUMMARY.md
+*_GUIDE.md
+*_REPORT.md
+*_STATUS.md
+*_MIGRATION.md
+*_MAPPING.md

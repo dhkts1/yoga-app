@@ -13,7 +13,7 @@ const PoseImage = ({
 }) => {
   // Size variants
   const sizeClasses = {
-    small: 'w-16 h-16',
+    small: 'w-12 h-12',
     medium: 'w-32 h-32',
     large: 'w-48 h-48',
     full: 'w-full h-full'
@@ -30,7 +30,7 @@ const PoseImage = ({
           ${className}
         `}
       >
-        <div className="text-sage-400 text-2xl">
+        <div className={`text-sage-400 ${size === 'small' ? 'text-xl' : 'text-2xl'}`}>
           {pose?.emoji || '🧘'}
         </div>
       </div>

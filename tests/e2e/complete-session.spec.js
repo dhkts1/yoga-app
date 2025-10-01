@@ -90,6 +90,7 @@ test.describe('Complete Session', () => {
   });
 
   test('should show streak badge after completing first session', async ({ page }) => {
+    await dismissOnboardingIfPresent(page);
     await fastForwardTimer(page);
     await page.getByRole('button', { name: /start/i }).click();
     await page.waitForURL(/\/practice/);
