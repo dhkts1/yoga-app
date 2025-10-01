@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Volume2, VolumeX, Bell, Download, Trash2, Info, RefreshCw, ChevronDown, Clock } from 'lucide-react';
+import { Bell, Download, Trash2, Info, RefreshCw, ChevronDown, Clock } from 'lucide-react';
 import { DefaultLayout } from '../components/layouts';
 import { PageHeader } from '../components/headers';
 import { Heading, Text } from '../components/design-system/Typography';
@@ -20,7 +20,6 @@ function Settings() {
 
   // Collapsible sections state - all closed by default
   const [openSections, setOpenSections] = useState({
-    voice: false,
     practice: false,
     popups: false,
     notifications: false,
@@ -37,20 +36,12 @@ function Settings() {
 
   // Preferences store
   const {
-    voiceEnabled,
-    voicePersonality,
-    voiceSpeed,
-    voiceVolume,
     restDuration,
     practiceReminders,
     streakAlerts,
     reminderTime,
     yoga,
     breathing,
-    setVoiceEnabled,
-    setVoicePersonality,
-    setVoiceSpeed,
-    setVoiceVolume,
     setRestDuration,
     setPracticeReminders,
     setStreakAlerts,
@@ -108,118 +99,6 @@ function Settings() {
       header={<PageHeader title="Settings" backPath="/" />}
     >
       <Container className="py-6 space-y-4 pb-24">
-        {/* Voice Coaching Section */}
-        <Card variant="default" padding="none" className="overflow-hidden">
-          <button
-            onClick={() => toggleSection('voice')}
-            className="w-full flex items-center justify-between gap-3 p-4 sm:p-5 hover:bg-sage-50 transition-colors group"
-          >
-            <div className="flex items-center gap-3">
-              <div className={`p-2 rounded-lg transition-colors ${voiceEnabled ? 'bg-sage-100 text-sage-700' : 'bg-cream-100 text-sage-400'}`}>
-                {voiceEnabled ? (
-                  <Volume2 className="h-5 w-5" />
-                ) : (
-                  <VolumeX className="h-5 w-5" />
-                )}
-              </div>
-              <div className="text-left">
-                <Heading level={3} className="text-sage-800 text-base sm:text-lg">Voice Coaching</Heading>
-                <Text variant="caption" className="text-sage-600">Audio guidance and encouragement</Text>
-              </div>
-            </div>
-            <ChevronDown className={`h-5 w-5 text-sage-500 transition-transform duration-300 ${openSections.voice ? 'rotate-180' : ''}`} />
-          </button>
-
-          {openSections.voice && (
-            <div className="space-y-4 p-4 sm:p-5 pt-0 border-t border-sage-100 animate-in fade-in slide-in-from-top-2 duration-300">
-            {/* Enable/Disable Toggle */}
-            <div className="flex items-center justify-between py-2">
-              <div>
-                <Text className="text-sage-800 font-medium">Enable Voice</Text>
-                <Text variant="caption" className="text-sage-600">Get audio guidance during practice</Text>
-              </div>
-              <Switch
-                checked={voiceEnabled}
-                onCheckedChange={setVoiceEnabled}
-              />
-            </div>
-
-            <div className="border-t border-sage-100" />
-
-            {/* Voice Personality */}
-            <div className="py-2">
-              <Text className="text-sage-800 font-medium mb-3">Coaching Personality</Text>
-              <div className="grid grid-cols-3 gap-2">
-                {['gentle', 'motivational', 'minimal'].map((personality) => (
-                  <button
-                    key={personality}
-                    onClick={() => setVoicePersonality(personality)}
-                    disabled={!voiceEnabled}
-                    className={`py-3 px-3 rounded-lg text-sm font-medium transition-all duration-300 ${
-                      voicePersonality === personality
-                        ? 'bg-sage-600 text-white shadow-md scale-105'
-                        : voiceEnabled
-                          ? 'bg-sage-50 text-sage-700 hover:bg-sage-100 hover:scale-105'
-                          : 'bg-cream-100 text-sage-300 cursor-not-allowed'
-                    }`}
-                  >
-                    {personality.charAt(0).toUpperCase() + personality.slice(1)}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="border-t border-sage-100" />
-
-            {/* Voice Speed */}
-            <div className="py-2">
-              <div className="flex items-center justify-between mb-3">
-                <Text className="text-sage-800 font-medium">Voice Speed</Text>
-                <span className="text-sm font-medium text-sage-600 bg-sage-100 px-2 py-1 rounded-md">{voiceSpeed.toFixed(1)}x</span>
-              </div>
-              <input
-                type="range"
-                min="0.8"
-                max="1.2"
-                step="0.1"
-                value={voiceSpeed}
-                onChange={(e) => setVoiceSpeed(parseFloat(e.target.value))}
-                disabled={!voiceEnabled}
-                className="w-full h-2 bg-sage-200 rounded-lg appearance-none cursor-pointer slider accent-sage-600"
-              />
-              <div className="flex justify-between mt-2">
-                <Text variant="caption" className="text-sage-500">Slower</Text>
-                <Text variant="caption" className="text-sage-500">Faster</Text>
-              </div>
-            </div>
-
-            <div className="border-t border-sage-100" />
-
-            {/* Voice Volume */}
-            <div className="py-2">
-              <div className="flex items-center justify-between mb-3">
-                <Text className="text-sage-800 font-medium">Volume</Text>
-                <span className="text-sm font-medium text-sage-600 bg-sage-100 px-2 py-1 rounded-md">{Math.round(voiceVolume * 100)}%</span>
-              </div>
-              <input
-                type="range"
-                min="0"
-                max="1"
-                step="0.1"
-                value={voiceVolume}
-                onChange={(e) => setVoiceVolume(parseFloat(e.target.value))}
-                disabled={!voiceEnabled}
-                className="w-full h-2 bg-sage-200 rounded-lg appearance-none cursor-pointer slider accent-sage-600"
-              />
-              <div className="flex justify-between mt-2">
-                <Text variant="caption" className="text-sage-500">Quiet</Text>
-                <Text variant="caption" className="text-sage-500">Loud</Text>
-              </div>
-            </div>
-          </div>
-          )}
-        </Card>
-
         {/* Practice Settings Section */}
         <Card variant="default" padding="none" className="overflow-hidden">
           <button
