@@ -147,7 +147,12 @@ function Complete() {
   }, [session, sessionRecord, completeSession, getStreakStatus, isBreathingSession, programContext, getProgramWeekSessions, completeWeek, isWeekCompleted, searchParams, sessionMoodData]);
 
   const handleGoHome = () => {
-    navigate('/');
+    // If completed as part of a program, return to week detail page
+    if (programContext?.programId && programContext?.weekNumber) {
+      navigate(`/programs/${programContext.programId}/week/${programContext.weekNumber}`);
+    } else {
+      navigate('/');
+    }
   };
 
   const handlePracticeAgain = () => {

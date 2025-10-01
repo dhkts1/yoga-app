@@ -144,7 +144,6 @@ function Welcome() {
   return (
     <DefaultLayout
       header={<PageHeader title="Today" showBack={false} />}
-      showBottomNav={true}
     >
       <div className="w-full max-w-sm mx-auto px-4 py-6 flex flex-col items-center">
         {/* Time-based greeting */}

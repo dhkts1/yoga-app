@@ -157,9 +157,14 @@ function SessionDetail() {
     }
   };
 
+  // Determine back path based on program context
+  const backPath = programContext?.programId && programContext?.weekNumber
+    ? `/programs/${programContext.programId}/week/${programContext.weekNumber}`
+    : '/sessions';
+
   if (!sessionData) {
     return (
-      <DefaultLayout header={<PageHeader title="Loading..." backPath="/sessions" />}>
+      <DefaultLayout header={<PageHeader title="Loading..." backPath={backPath} />}>
         <div className="flex items-center justify-center min-h-[60vh]">
           <div className="text-center">
             <div className="text-sage-400 text-lg">Loading session...</div>
@@ -179,7 +184,7 @@ function SessionDetail() {
       header={
         <PageHeader
           title={sessionName}
-          backPath="/sessions"
+          backPath={backPath}
           actions={
             <div className="flex items-center gap-2">
               <button

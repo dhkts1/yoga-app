@@ -85,11 +85,8 @@
         font-size: 18px; /* Base reading size per PRD */
         line-height: 1.6;
         overflow-x: hidden;
-        /* Support for iPhone notches and safe areas */
-        padding-top: env(safe-area-inset-top);
-        padding-bottom: env(safe-area-inset-bottom);
-        padding-left: env(safe-area-inset-left);
-        padding-right: env(safe-area-inset-right);
+        margin: 0;
+        padding: 0;
     }
 
     /* Prevent content from extending beyond viewport width */

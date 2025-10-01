@@ -68,6 +68,9 @@ function AppLayout({
           showFooter && fixedFooter && !showBottomNav && 'pb-[env(safe-area-inset-bottom)]',
           contentClassName
         )}
+        style={{
+          WebkitOverflowScrolling: 'touch'
+        }}
       >
         {children}
       </div>

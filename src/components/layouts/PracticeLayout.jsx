@@ -30,8 +30,9 @@ function PracticeLayout({
       showHeader={!!header}
       showFooter={!!footer}
       showBottomNav={false}
-      fixedHeader={false} // Use sticky instead
+      fixedHeader={true}  // Header should stick to top
       fixedFooter={true}  // Footer should stick to bottom
+      scrollable={true}   // Ensure content is scrollable
       className={className}
       contentClassName={contentClassName}
       header={header}

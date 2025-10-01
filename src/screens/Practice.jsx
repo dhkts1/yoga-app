@@ -290,7 +290,13 @@ function Practice() {
   const handleExit = () => {
     // If user started the session but didn't complete it, we don't record progress
     // This maintains the principle that only completed sessions count toward progress
-    navigate('/');
+
+    // If practicing as part of a program, return to week detail page
+    if (programContext?.programId && programContext?.weekNumber) {
+      navigate(`/programs/${programContext.programId}/week/${programContext.weekNumber}`);
+    } else {
+      navigate('/');
+    }
   };
 
   // Handle pre-practice mood tracking completion

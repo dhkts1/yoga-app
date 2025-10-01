@@ -391,6 +391,11 @@ test.describe('Multi-Week Programs Flow', () => {
 
       const sessionButton = page.locator('button:has-text("Iyengar Foundation")').first();
       await sessionButton.click();
+      await page.waitForURL(/\/sessions\/.*\/preview/);
+
+      // Click "Start Practice" button on preview screen
+      const startPracticeButton = page.getByRole('button', { name: /start practice/i });
+      await startPracticeButton.click();
       await page.waitForURL(/\/practice/);
       await skipMoodTrackerIfPresent(page);
 
@@ -420,6 +425,11 @@ test.describe('Multi-Week Programs Flow', () => {
 
       const sessionButton = page.locator('button:has-text("Iyengar Foundation")').first();
       await sessionButton.click();
+      await page.waitForURL(/\/sessions\/.*\/preview/);
+
+      // Click "Start Practice" button on preview screen
+      const startPracticeButton = page.getByRole('button', { name: /start practice/i });
+      await startPracticeButton.click();
       await page.waitForURL(/\/practice/);
       await skipMoodTrackerIfPresent(page);
 
@@ -914,7 +924,7 @@ test.describe('Multi-Week Programs Flow', () => {
 
         // Navigate back to week detail
         await page.getByRole('button', { name: 'Back to Home' }).click();
-        await page.waitForURL(/^\//); // Wait for home page
+        await page.waitForURL('/'); // Wait for home page
         await page.getByRole('button', { name: 'Programs', exact: true }).click();
         await page.waitForURL(/\/programs/);
         const iyengarProgram = page.locator('button:has-text("Iyengar Foundation")').first();
@@ -999,7 +1009,7 @@ test.describe('Multi-Week Programs Flow', () => {
 
         // Navigate back to week detail
         await page.getByRole('button', { name: 'Back to Home' }).click();
-        await page.waitForURL(/^\//); // Wait for home page
+        await page.waitForURL('/'); // Wait for home page
         await page.getByRole('button', { name: 'Programs', exact: true }).click();
         await page.waitForURL(/\/programs/);
         const iyengarProgram = page.locator('button:has-text("Iyengar Foundation")').first();
@@ -1203,6 +1213,433 @@ test.describe('Multi-Week Programs Flow', () => {
         expect(programContext.weekNumber).toBe(1);
         expect(programContext.dayNumber).toBe(3);
       }
+    });
+  });
+
+  // ==================== WEEK COMPLETION ====================
+
+  test.describe('Week Completion', () => {
+    /**
+     * PDDL Planning Approach:
+     *
+     * State Transitions:
+     * s₀: Week started → No sessions completed
+     * s₁: All sessions completed → Week marked as completed
+     * s₂: Trophy celebration shown → User acknowledges completion
+     * s₃: Advance to next week → currentWeek incremented
+     *
+     * Preconditions:
+     * - Program must be active
+     * - All recommended sessions for the week must be completed
+     * - Week must not already be marked as completed
+     *
+     * Invariants:
+     * - Week completion only triggers once per week
+     * - currentWeek advances by exactly 1
+     * - completedWeeks array grows by 1
+     * - Trophy celebration appears on completion screen
+     *
+     * External Validation:
+     * - localStorage state checked after completion
+     * - Trophy UI element verified in DOM
+     * - currentWeek value validated
+     * - Progress percentage recalculated
+     */
+
+    test('should auto-detect week completion when all sessions done', async ({ page }) => {
+      // Enable fast timer
+      await fastForwardTimer(page);
+
+      // Helper function to complete a session and check for week completion
+      const completeSessionAndCheck = async () => {
+        // Find next uncompleted session
+        const uncompletedSession = page.locator('button').filter({
+          hasNotText: 'Completed'
+        }).filter({
+          hasText: /Session \d+/
+        }).first();
+
+        await uncompletedSession.click();
+        await page.waitForURL(/\/sessions\/.*\/preview/);
+
+        // Click "Start Practice" button on SessionDetail page
+        const startPracticeButton = page.getByRole('button', { name: /start practice/i });
+        await startPracticeButton.click();
+        await page.waitForURL(/\/practice/);
+        await skipMoodTrackerIfPresent(page);
+
+        await page.getByRole('button', { name: /play/i }).click();
+        await skipMoodTrackerIfPresent(page);
+        await page.waitForURL(/\/complete/, { timeout: 15000 });
+
+        // Wait for Complete screen to process week completion logic
+        await page.waitForTimeout(2000);
+
+        // Check if week completion was detected
+        const weekCompletionMessage = page.locator('text=/week complete|milestone achievement/i');
+        const hasWeekCompletion = await weekCompletionMessage.isVisible().catch(() => false);
+
+        if (!hasWeekCompletion) {
+          // Navigate back to week detail for next session
+          await page.getByRole('button', { name: 'Back to Home' }).click();
+          await page.waitForURL('/');
+          await page.getByRole('button', { name: 'Programs', exact: true }).click();
+          await page.waitForURL(/\/programs/);
+          const iyengarProgram = page.locator('button:has-text("Iyengar Foundation")').first();
+          await iyengarProgram.click();
+          await page.waitForURL(/\/programs\/iyengar-foundation-13/);
+          const week1Button = page.locator('button:has-text("Week 1")').first();
+          await week1Button.click();
+          await page.waitForURL(/\/programs\/iyengar-foundation-13\/week\/1/);
+        }
+
+        return hasWeekCompletion;
+      };
+
+      // Start program
+      await page.getByRole('button', { name: 'Programs', exact: true }).click();
+      await page.waitForURL(/\/programs/);
+
+      const iyengarProgram = page.locator('button:has-text("Iyengar Foundation")').first();
+      await iyengarProgram.click();
+      await page.waitForURL(/\/programs\/iyengar-foundation-13/);
+
+      const startButton = page.getByRole('button', { name: /start program/i });
+      await startButton.click();
+
+      // Wait for week buttons to appear (indicates program started)
+      const week1Button = page.locator('button:has-text("Week 1")').first();
+      await week1Button.waitFor({ state: 'visible', timeout: 3000 });
+      await week1Button.click();
+      await page.waitForURL(/\/programs\/iyengar-foundation-13\/week\/1/);
+
+      // Get total session count
+      const sessionCount = await page.locator('button').filter({ hasText: /Session \d+/ }).count();
+
+      // Complete all sessions until week completion is detected
+      let weekCompleted = false;
+      for (let i = 0; i < sessionCount && !weekCompleted; i++) {
+        weekCompleted = await completeSessionAndCheck();
+      }
+
+      // External Validation: Week completion should have been auto-detected
+      expect(weekCompleted).toBe(true);
+    });
+
+    test('should show trophy celebration on week completion', async ({ page }) => {
+      // Enable fast timer
+      await fastForwardTimer(page);
+
+      // Helper function to complete a session
+      const completeSession = async () => {
+        // Find next uncompleted session
+        const uncompletedSession = page.locator('button').filter({
+          hasNotText: 'Completed'
+        }).filter({
+          hasText: /Session \d+/
+        }).first();
+
+        await uncompletedSession.click();
+        await page.waitForURL(/\/sessions\/.*\/preview/);
+
+        // Click "Start Practice" button on SessionDetail page
+        const startPracticeButton = page.getByRole('button', { name: /start practice/i });
+        await startPracticeButton.click();
+        await page.waitForURL(/\/practice/);
+        await skipMoodTrackerIfPresent(page);
+
+        await page.getByRole('button', { name: /play/i }).click();
+        await skipMoodTrackerIfPresent(page);
+        await page.waitForURL(/\/complete/, { timeout: 15000 });
+
+        // Wait for Complete screen to process week completion logic
+        await page.waitForTimeout(2000);
+      };
+
+      // Start program and navigate to week detail
+      await page.getByRole('button', { name: 'Programs', exact: true }).click();
+      await page.waitForURL(/\/programs/);
+
+      const iyengarProgram = page.locator('button:has-text("Iyengar Foundation")').first();
+      await iyengarProgram.click();
+      await page.waitForURL(/\/programs\/iyengar-foundation-13/);
+
+      const startButton = page.getByRole('button', { name: /start program/i });
+      await startButton.click();
+
+      // Wait for week buttons to appear (indicates program started)
+      const week1Button = page.locator('button:has-text("Week 1")').first();
+      await week1Button.waitFor({ state: 'visible', timeout: 3000 });
+      await week1Button.click();
+      await page.waitForURL(/\/programs\/iyengar-foundation-13\/week\/1/);
+
+      // Get total session count
+      const sessionCount = await page.locator('button').filter({ hasText: /Session \d+/ }).count();
+
+      // Complete all sessions
+      for (let i = 0; i < sessionCount; i++) {
+        await completeSession();
+      }
+
+      // State Verification: Trophy celebration should appear
+      const trophyIcon = page.locator('svg.lucide-trophy');
+      await expect(trophyIcon).toBeVisible({ timeout: 3000 });
+
+      const weekCompleteText = page.locator('text=/week complete|milestone achievement/i');
+      await expect(weekCompleteText).toBeVisible({ timeout: 3000 });
+
+      // Verify amber/gold styling for celebration
+      const celebrationCard = page.locator('.border-accent.bg-amber-50, .bg-amber-50');
+      await expect(celebrationCard).toBeVisible({ timeout: 3000 });
+    });
+
+    test('should advance to next week automatically', async ({ page }) => {
+      // Enable fast timer
+      await fastForwardTimer(page);
+
+      // Helper function to complete a session
+      const completeSession = async () => {
+        // Find next uncompleted session
+        const uncompletedSession = page.locator('button').filter({
+          hasNotText: 'Completed'
+        }).filter({
+          hasText: /Session \d+/
+        }).first();
+
+        await uncompletedSession.click();
+        await page.waitForURL(/\/sessions\/.*\/preview/);
+
+        // Click "Start Practice" button on SessionDetail page
+        const startPracticeButton = page.getByRole('button', { name: /start practice/i });
+        await startPracticeButton.click();
+        await page.waitForURL(/\/practice/);
+        await skipMoodTrackerIfPresent(page);
+
+        await page.getByRole('button', { name: /play/i }).click();
+        await skipMoodTrackerIfPresent(page);
+        await page.waitForURL(/\/complete/, { timeout: 15000 });
+
+        // Wait for Complete screen to process week completion logic
+        await page.waitForTimeout(2000);
+      };
+
+      // Start program
+      await page.getByRole('button', { name: 'Programs', exact: true }).click();
+      await page.waitForURL(/\/programs/);
+
+      const iyengarProgram = page.locator('button:has-text("Iyengar Foundation")').first();
+      await iyengarProgram.click();
+      await page.waitForURL(/\/programs\/iyengar-foundation-13/);
+
+      const startButton = page.getByRole('button', { name: /start program/i });
+      await startButton.click();
+
+      // Wait for week buttons to appear (indicates program started)
+      const week1Button = page.locator('button:has-text("Week 1")').first();
+      await week1Button.waitFor({ state: 'visible', timeout: 3000 });
+      await week1Button.click();
+      await page.waitForURL(/\/programs\/iyengar-foundation-13\/week\/1/);
+
+      // Get total session count
+      const sessionCount = await page.locator('button').filter({ hasText: /Session \d+/ }).count();
+
+      // Complete all sessions
+      for (let i = 0; i < sessionCount; i++) {
+        await completeSession();
+      }
+
+      // Navigate back to program detail to check current week
+      await page.getByRole('button', { name: 'Back to Home' }).click();
+      await page.waitForURL('/');
+      await page.getByRole('button', { name: 'Programs', exact: true }).click();
+      await page.waitForURL(/\/programs/);
+      const iyengarProgram2 = page.locator('button:has-text("Iyengar Foundation")').first();
+      await iyengarProgram2.click();
+      await page.waitForURL(/\/programs\/iyengar-foundation-13/);
+
+      // External Validation: Check localStorage for currentWeek = 2
+      const storage = await page.evaluate(() => {
+        const programProgress = localStorage.getItem('yoga-program-progress');
+        if (!programProgress) return null;
+        return JSON.parse(programProgress);
+      });
+
+      expect(storage?.state?.activeProgram?.currentWeek).toBe(2);
+
+      // Verify "Week 2 of 13" appears in UI
+      const week2Progress = page.locator('text=/week\\s+2\\s+of\\s+13/i');
+      await expect(week2Progress).toBeVisible({ timeout: 3000 });
+    });
+
+    test('should update week progress to 100%', async ({ page }) => {
+      // Enable fast timer
+      await fastForwardTimer(page);
+
+      // Helper function to complete a session
+      const completeSession = async () => {
+        // Find next uncompleted session
+        const uncompletedSession = page.locator('button').filter({
+          hasNotText: 'Completed'
+        }).filter({
+          hasText: /Session \d+/
+        }).first();
+
+        await uncompletedSession.click();
+        await page.waitForURL(/\/sessions\/.*\/preview/);
+
+        // Click "Start Practice" button on SessionDetail page
+        const startPracticeButton = page.getByRole('button', { name: /start practice/i });
+        await startPracticeButton.click();
+        await page.waitForURL(/\/practice/);
+        await skipMoodTrackerIfPresent(page);
+
+        await page.getByRole('button', { name: /play/i }).click();
+        await skipMoodTrackerIfPresent(page);
+        await page.waitForURL(/\/complete/, { timeout: 15000 });
+
+        // Wait for Complete screen to process week completion logic
+        await page.waitForTimeout(2000);
+
+        // Navigate back to week detail
+        await page.getByRole('button', { name: 'Back to Home' }).click();
+        await page.waitForURL('/');
+        await page.getByRole('button', { name: 'Programs', exact: true }).click();
+        await page.waitForURL(/\/programs/);
+        const iyengarProgram = page.locator('button:has-text("Iyengar Foundation")').first();
+        await iyengarProgram.click();
+        await page.waitForURL(/\/programs\/iyengar-foundation-13/);
+        const week1Button = page.locator('button:has-text("Week 1")').first();
+        await week1Button.click();
+        await page.waitForURL(/\/programs\/iyengar-foundation-13\/week\/1/);
+      };
+
+      // Start program
+      await page.getByRole('button', { name: 'Programs', exact: true }).click();
+      await page.waitForURL(/\/programs/);
+
+      const iyengarProgram = page.locator('button:has-text("Iyengar Foundation")').first();
+      await iyengarProgram.click();
+      await page.waitForURL(/\/programs\/iyengar-foundation-13/);
+
+      const startButton = page.getByRole('button', { name: /start program/i });
+      await startButton.click();
+
+      // Wait for week buttons to appear (indicates program started)
+      const week1Button = page.locator('button:has-text("Week 1")').first();
+      await week1Button.waitFor({ state: 'visible', timeout: 3000 });
+      await week1Button.click();
+      await page.waitForURL(/\/programs\/iyengar-foundation-13\/week\/1/);
+
+      // Get total session count
+      const sessionCount = await page.locator('button').filter({ hasText: /Session \d+/ }).count();
+
+      // Complete all sessions except the last one
+      for (let i = 0; i < sessionCount - 1; i++) {
+        await completeSession();
+      }
+
+      // Verify progress bar is NOT at 100% yet
+      let progressBar = page.locator('.bg-green-600').first();
+      let width = await progressBar.evaluate((el) => el.style.width);
+      expect(width).not.toBe('100%');
+
+      // Complete final session
+      await completeSession();
+
+      // State Verification: Progress bar should now be at 100%
+      progressBar = page.locator('.bg-green-600').first();
+      width = await progressBar.evaluate((el) => el.style.width);
+      expect(width).toBe('100%');
+
+      // Verify "All sessions complete!" message
+      const completeMessage = page.locator('text=/all sessions complete/i');
+      await expect(completeMessage).toBeVisible({ timeout: 3000 });
+    });
+
+    test('should mark week as completed in programProgress store', async ({ page }) => {
+      // Enable fast timer
+      await fastForwardTimer(page);
+
+      // Helper function to complete a session
+      const completeSession = async () => {
+        // Find next uncompleted session
+        const uncompletedSession = page.locator('button').filter({
+          hasNotText: 'Completed'
+        }).filter({
+          hasText: /Session \d+/
+        }).first();
+
+        await uncompletedSession.click();
+        await page.waitForURL(/\/sessions\/.*\/preview/);
+
+        // Click "Start Practice" button on SessionDetail page
+        const startPracticeButton = page.getByRole('button', { name: /start practice/i });
+        await startPracticeButton.click();
+        await page.waitForURL(/\/practice/);
+        await skipMoodTrackerIfPresent(page);
+
+        await page.getByRole('button', { name: /play/i }).click();
+        await skipMoodTrackerIfPresent(page);
+        await page.waitForURL(/\/complete/, { timeout: 15000 });
+
+        // Wait for Complete screen to process week completion logic
+        await page.waitForTimeout(2000);
+      };
+
+      // Start program
+      await page.getByRole('button', { name: 'Programs', exact: true }).click();
+      await page.waitForURL(/\/programs/);
+
+      const iyengarProgram = page.locator('button:has-text("Iyengar Foundation")').first();
+      await iyengarProgram.click();
+      await page.waitForURL(/\/programs\/iyengar-foundation-13/);
+
+      const startButton = page.getByRole('button', { name: /start program/i });
+      await startButton.click();
+
+      // Wait for week buttons to appear (indicates program started)
+      const week1Button = page.locator('button:has-text("Week 1")').first();
+      await week1Button.waitFor({ state: 'visible', timeout: 3000 });
+      await week1Button.click();
+      await page.waitForURL(/\/programs\/iyengar-foundation-13\/week\/1/);
+
+      // Get total session count
+      const sessionCount = await page.locator('button').filter({ hasText: /Session \d+/ }).count();
+
+      // Precondition Check: Week 1 should NOT be in completedWeeks yet
+      let storage = await page.evaluate(() => {
+        const programProgress = localStorage.getItem('yoga-program-progress');
+        if (!programProgress) return null;
+        return JSON.parse(programProgress);
+      });
+
+      const week1CompletedBefore = storage?.state?.completedWeeks?.some(
+        w => w.programId === 'iyengar-foundation-13' && w.weekNumber === 1
+      );
+      expect(week1CompletedBefore).toBeFalsy();
+
+      // Complete all sessions
+      for (let i = 0; i < sessionCount; i++) {
+        await completeSession();
+      }
+
+      // External Validation: Week 1 should now be in completedWeeks
+      storage = await page.evaluate(() => {
+        const programProgress = localStorage.getItem('yoga-program-progress');
+        if (!programProgress) return null;
+        return JSON.parse(programProgress);
+      });
+
+      const completedWeeks = storage?.state?.completedWeeks || [];
+      const week1Completed = completedWeeks.find(
+        w => w.programId === 'iyengar-foundation-13' && w.weekNumber === 1
+      );
+
+      expect(week1Completed).toBeTruthy();
+      expect(week1Completed.weekNumber).toBe(1);
+      expect(week1Completed.programId).toBe('iyengar-foundation-13');
+      expect(week1Completed.sessionsCompleted).toBeGreaterThan(0);
+      expect(week1Completed.completedAt).toBeTruthy(); // Should have timestamp
     });
   });
 

@@ -30,7 +30,7 @@ function FullscreenLayout({
       className={className}
       contentClassName={
         centered
-          ? `flex items-center justify-center ${contentClassName || ''}`
+          ? `flex items-center justify-center min-h-0 ${contentClassName || ''}`
           : contentClassName
       }
       {...props}
