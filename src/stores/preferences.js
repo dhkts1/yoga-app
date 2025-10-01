@@ -20,6 +20,7 @@ const usePreferencesStore = create(
       autoAdvance: true, // Auto-advance to next pose
       countdownSounds: false, // Play sounds during countdown
       showTips: true, // Show tip overlays during practice
+      restDuration: 5, // Rest time between poses in seconds (0, 5, 10, 15)
 
       // Notification Settings (for future implementation)
       practiceReminders: false,
@@ -138,12 +139,24 @@ const usePreferencesStore = create(
         return newShowTips;
       },
 
+      setRestDuration: (duration) => {
+        // Validate that duration is one of the allowed values
+        const validDurations = [0, 5, 10, 15];
+        if (!validDurations.includes(duration)) {
+          console.warn(`Invalid rest duration: ${duration}. Using 5 as default.`);
+          duration = 5;
+        }
+        set({ restDuration: duration });
+        return duration;
+      },
+
       getPracticeSettings: () => {
         const state = get();
         return {
           autoAdvance: state.autoAdvance,
           countdownSounds: state.countdownSounds,
-          showTips: state.showTips
+          showTips: state.showTips,
+          restDuration: state.restDuration
         };
       },
 
@@ -499,6 +512,7 @@ const usePreferencesStore = create(
           autoAdvance: true,
           countdownSounds: false,
           showTips: true,
+          restDuration: 5,
 
           // Notifications
           practiceReminders: false,
@@ -555,6 +569,7 @@ const usePreferencesStore = create(
             autoAdvance: persistedState.autoAdvance ?? true,
             countdownSounds: persistedState.countdownSounds ?? false,
             showTips: persistedState.showTips ?? true,
+            restDuration: persistedState.restDuration ?? 5,
             // Add notifications
             practiceReminders: persistedState.practiceReminders ?? false,
             reminderTime: persistedState.reminderTime ?? '09:00',

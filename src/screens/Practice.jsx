@@ -50,12 +50,17 @@ function Practice() {
     dismissTooltip,
     getTooltipShownCount,
     yoga,
+    restDuration,
   } = usePreferencesStore();
 
   const [currentPoseIndex, setCurrentPoseIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [showTips, setShowTips] = useState(false);
   const [sessionStarted, setSessionStarted] = useState(false);
+
+  // Rest period state
+  const [isResting, setIsResting] = useState(false);
+  const [restTimeRemaining, setRestTimeRemaining] = useState(0);
 
   // Mood tracking state - initialize based on preferences
   const [showPreMoodTracker, setShowPreMoodTracker] = useState(yoga?.showMoodCheck ?? true);
@@ -158,7 +163,7 @@ function Practice() {
   // Timer countdown logic with voice coaching triggers
   useEffect(() => {
     let interval;
-    if (isPlaying && timeRemaining > 0) {
+    if (isPlaying && timeRemaining > 0 && !isResting) {
       // Get timer speed from test mode (default 1000ms = 1 second)
       const timerSpeed = (typeof window !== 'undefined' && window.__TIMER_SPEED__)
         ? 1000 / window.__TIMER_SPEED__ // e.g., 100x speed = 10ms intervals
@@ -169,15 +174,22 @@ function Practice() {
           const newTime = prev - 1;
 
           if (newTime <= 0) {
-            // Auto-advance to next pose
-            if (session && currentPoseIndex < session.poses.length - 1) {
-              setCurrentPoseIndex(prevIndex => prevIndex + 1);
-              // Keep playing - don't stop between poses
-            } else {
-              // Session complete
-              // Show post-practice mood tracker instead of navigating immediately
+            const isLastPose = session && currentPoseIndex === session.poses.length - 1;
+
+            if (isLastPose) {
+              // Session complete - show post-practice mood tracker
               setShowPostMoodTracker(true);
               setIsPlaying(false);
+            } else if (restDuration > 0) {
+              // Enter rest period
+              const effectiveRestDuration = getEffectiveDuration(restDuration);
+              setIsResting(true);
+              setRestTimeRemaining(effectiveRestDuration);
+              // Keep playing during rest
+            } else {
+              // No rest period - advance immediately
+              setCurrentPoseIndex(prevIndex => prevIndex + 1);
+              // Keep playing - don't stop between poses
             }
             return 0;
           }
@@ -186,7 +198,33 @@ function Practice() {
       }, timerSpeed);
     }
     return () => clearInterval(interval);
-  }, [isPlaying, timeRemaining, currentPoseIndex, session?.poses?.length || 0]);
+  }, [isPlaying, timeRemaining, currentPoseIndex, session?.poses?.length || 0, isResting, restDuration]);
+
+  // Rest timer countdown logic
+  useEffect(() => {
+    let interval;
+    if (isPlaying && isResting && restTimeRemaining > 0) {
+      // Get timer speed from test mode
+      const timerSpeed = (typeof window !== 'undefined' && window.__TIMER_SPEED__)
+        ? 1000 / window.__TIMER_SPEED__
+        : 1000;
+
+      interval = setInterval(() => {
+        setRestTimeRemaining((prev) => {
+          const newTime = prev - 1;
+
+          if (newTime <= 0) {
+            // Rest complete - advance to next pose
+            setIsResting(false);
+            setCurrentPoseIndex(prevIndex => prevIndex + 1);
+            return 0;
+          }
+          return newTime;
+        });
+      }, timerSpeed);
+    }
+    return () => clearInterval(interval);
+  }, [isPlaying, isResting, restTimeRemaining]);
 
   const handlePlayPause = () => {
     const now = Date.now();
@@ -211,6 +249,14 @@ function Practice() {
   };
 
   const handleNextPose = () => {
+    if (isResting) {
+      // Skip rest period and advance to next pose immediately
+      setIsResting(false);
+      setRestTimeRemaining(0);
+      setCurrentPoseIndex(prev => prev + 1);
+      return;
+    }
+
     if (session && currentPoseIndex < session.poses.length - 1) {
       setCurrentPoseIndex(prev => prev + 1);
       // Keep playing - don't pause
@@ -223,6 +269,12 @@ function Practice() {
   };
 
   const handlePreviousPose = () => {
+    if (isResting) {
+      // Cancel rest and go back to previous pose
+      setIsResting(false);
+      setRestTimeRemaining(0);
+    }
+
     if (currentPoseIndex > 0) {
       setCurrentPoseIndex(prev => prev - 1);
       // Keep playing - don't pause

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Volume2, VolumeX, Bell, Download, Trash2, Info, RefreshCw, ChevronDown } from 'lucide-react';
+import { Volume2, VolumeX, Bell, Download, Trash2, Info, RefreshCw, ChevronDown, Clock } from 'lucide-react';
 import { DefaultLayout } from '../components/layouts';
 import { PageHeader } from '../components/headers';
 import { Heading, Text } from '../components/design-system/Typography';
@@ -20,6 +20,7 @@ function Settings() {
   // Collapsible sections state - all closed by default
   const [openSections, setOpenSections] = useState({
     voice: false,
+    practice: false,
     popups: false,
     notifications: false,
     data: false,
@@ -39,6 +40,7 @@ function Settings() {
     voicePersonality,
     voiceSpeed,
     voiceVolume,
+    restDuration,
     practiceReminders,
     streakAlerts,
     reminderTime,
@@ -48,6 +50,7 @@ function Settings() {
     setVoicePersonality,
     setVoiceSpeed,
     setVoiceVolume,
+    setRestDuration,
     setPracticeReminders,
     setStreakAlerts,
     setReminderTime,
@@ -213,6 +216,65 @@ function Settings() {
               </div>
             </div>
           </div>
+          )}
+        </Card>
+
+        {/* Practice Settings Section */}
+        <Card variant="default" padding="none" className="overflow-hidden">
+          <button
+            onClick={() => toggleSection('practice')}
+            className="w-full flex items-center justify-between gap-3 p-4 sm:p-5 hover:bg-sage-50 transition-colors group"
+          >
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-cream-100 text-sage-600">
+                <Clock className="h-5 w-5" />
+              </div>
+              <div className="text-left">
+                <Heading level={3} className="text-sage-800 text-base sm:text-lg">Practice Settings</Heading>
+                <Text variant="caption" className="text-sage-600">Customize your practice experience</Text>
+              </div>
+            </div>
+            <ChevronDown className={`h-5 w-5 text-sage-500 transition-transform duration-300 ${openSections.practice ? 'rotate-180' : ''}`} />
+          </button>
+
+          {openSections.practice && (
+            <div className="space-y-4 p-4 sm:p-5 pt-0 border-t border-sage-100 animate-in fade-in slide-in-from-top-2 duration-300">
+              {/* Rest Duration Setting */}
+              <div className="py-2">
+                <div className="mb-3">
+                  <Text className="text-sage-800 font-medium">Rest Time Between Poses</Text>
+                  <Text variant="caption" className="text-sage-600">Time to transition between poses</Text>
+                </div>
+                <div className="grid grid-cols-4 gap-2">
+                  {[
+                    { value: 0, label: 'None' },
+                    { value: 5, label: '5s' },
+                    { value: 10, label: '10s' },
+                    { value: 15, label: '15s' }
+                  ].map((option) => (
+                    <button
+                      key={option.value}
+                      onClick={() => setRestDuration(option.value)}
+                      className={`py-3 px-3 rounded-lg text-sm font-medium transition-all duration-300 ${
+                        restDuration === option.value
+                          ? 'bg-sage-600 text-white shadow-md scale-105'
+                          : 'bg-sage-50 text-sage-700 hover:bg-sage-100 hover:scale-105'
+                      }`}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+                <div className="mt-3 p-3 bg-cream-50 rounded-lg border border-cream-200">
+                  <Text variant="caption" className="text-sage-600">
+                    {restDuration === 0 && 'Poses will transition immediately without rest periods.'}
+                    {restDuration === 5 && 'Short rest periods - great for faster-paced practices.'}
+                    {restDuration === 10 && 'Medium rest periods - balanced for most practices.'}
+                    {restDuration === 15 && 'Longer rest periods - perfect for gentle, restorative sessions.'}
+                  </Text>
+                </div>
+              </div>
+            </div>
           )}
         </Card>
 
