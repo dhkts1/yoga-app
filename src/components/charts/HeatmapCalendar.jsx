@@ -150,7 +150,7 @@ function HeatmapCalendar({
                 <div className={`absolute ${tooltipPositionClass} left-1/2 -translate-x-1/2
                               bg-gray-800 text-white text-xs rounded px-2 py-1
                               opacity-0 group-hover:opacity-100 transition-opacity
-                              pointer-events-none z-[9999] whitespace-nowrap shadow-lg min-w-max`}>
+                              pointer-events-none z-50 whitespace-nowrap shadow-lg min-w-max`}>
                   {day.date.toLocaleDateString()}<br />
                   {day.sessions} session{day.sessions !== 1 ? 's' : ''}<br />
                   {day.totalMinutes} min
