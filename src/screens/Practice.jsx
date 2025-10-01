@@ -512,6 +512,11 @@ function Practice() {
         <div className="mt-3 text-center">
           <p className="text-xs text-secondary">
             Next: {getPoseById(session.poses[currentPoseIndex + 1].poseId)?.nameEnglish}
+            {session.poses[currentPoseIndex + 1]?.side && (
+              <span className="ml-1">
+                ({session.poses[currentPoseIndex + 1].side === 'right' ? 'Right' : 'Left'})
+              </span>
+            )}
           </p>
         </div>
       ) : session && currentPoseIndex === session.poses.length - 1 && (
@@ -566,6 +571,11 @@ function Practice() {
                 <p className="text-xs sm:text-sm text-sage-600 mb-1">Next Pose:</p>
                 <p className="text-lg sm:text-xl font-medium text-sage-800">
                   {nextPose.nameEnglish}
+                  {nextPoseData?.side && (
+                    <span className="ml-2 text-base font-normal text-sage-600">
+                      ({nextPoseData.side === 'right' ? 'Right Side' : 'Left Side'})
+                    </span>
+                  )}
                 </p>
                 <p className="text-xs sm:text-sm text-sage-500 italic">
                   {nextPose.nameSanskrit}
@@ -605,6 +615,11 @@ function Practice() {
       <div className="text-center">
         <h2 className="mb-1 text-lg sm:text-xl font-medium text-primary">
           {pose.nameEnglish}
+          {currentPoseData?.side && (
+            <span className="ml-2 text-base font-normal text-sage-600">
+              ({currentPoseData.side === 'right' ? 'Right Side' : 'Left Side'})
+            </span>
+          )}
         </h2>
         <p className="mb-1 text-xs sm:text-sm text-secondary italic">
           {pose.nameSanskrit}

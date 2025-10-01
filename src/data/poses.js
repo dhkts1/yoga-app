@@ -104,6 +104,7 @@ export const poses = [
     category: 'standing',
     difficulty: 'beginner',
     duration: 30,
+    requiresBothSides: true,
     imageUrl: '/src/assets/poses/warrior-one.svg',
     description: 'A powerful standing pose that builds focus, power, and stability. Warrior I creates a strong foundation while opening the chest and hips.',
     instructions: [
@@ -152,6 +153,7 @@ export const poses = [
     category: 'standing',
     difficulty: 'beginner',
     duration: 30,
+    requiresBothSides: true,
     imageUrl: '/src/assets/poses/warrior-two.svg',
     description: 'A pose of strength and grace, Warrior II cultivates concentration while strengthening the legs and opening the hips. It teaches us to stay centered even in challenge.',
     instructions: [
@@ -200,6 +202,7 @@ export const poses = [
     category: 'balance',
     difficulty: 'beginner',
     duration: 30,
+    requiresBothSides: true,
     imageUrl: '/src/assets/poses/tree-pose.svg',
     description: 'Tree Pose teaches us to find balance and grace while remaining grounded. It strengthens the legs while opening the hips and improving focus.',
     instructions: [
@@ -248,6 +251,7 @@ export const poses = [
     category: 'standing',
     difficulty: 'beginner',
     duration: 30,
+    requiresBothSides: true,
     imageUrl: '/src/assets/poses/triangle-pose.svg',
     description: 'Triangle Pose is a standing pose that stretches and strengthens the entire body. It improves digestion and relieves stress while building core strength.',
     instructions: [
@@ -628,6 +632,7 @@ export const poses = [
     category: 'standing',
     difficulty: 'intermediate',
     duration: 30,
+    requiresBothSides: true,
     imageUrl: '/src/assets/poses/extended-side-angle.svg',
     description: 'A powerful standing pose that stretches the entire side body while building leg strength. Creates length and opening from heel to fingertips.',
     instructions: [
@@ -676,6 +681,7 @@ export const poses = [
     category: 'standing',
     difficulty: 'intermediate',
     duration: 30,
+    requiresBothSides: true,
     imageUrl: '/src/assets/poses/pyramid-pose.svg',
     description: 'An intense hamstring stretch that also improves balance and calms the mind. Pyramid pose teaches patience and alignment.',
     instructions: [
@@ -724,6 +730,7 @@ export const poses = [
     category: 'seated',
     difficulty: 'intermediate',
     duration: 60,
+    requiresBothSides: true,
     imageUrl: '/src/assets/poses/pigeon-pose.svg',
     description: 'A deep hip opener that releases tension stored in the hips. Often emotional, this pose teaches surrender and patience.',
     instructions: [
@@ -820,6 +827,7 @@ export const poses = [
     category: 'balance',
     difficulty: 'intermediate',
     duration: 30,
+    requiresBothSides: true,
     imageUrl: '/src/assets/poses/eagle-pose.svg',
     description: 'A challenging balance pose that wraps and stretches the shoulders and outer hips. Builds focus and coordination.',
     instructions: [
@@ -868,6 +876,7 @@ export const poses = [
     category: 'balance',
     difficulty: 'advanced',
     duration: 30,
+    requiresBothSides: true,
     imageUrl: '/src/assets/poses/half-moon.svg',
     description: 'An advanced balancing pose that builds strength, flexibility, and concentration. Creates a crescent moon shape with the body.',
     instructions: [
@@ -964,6 +973,7 @@ export const poses = [
     category: 'seated',
     difficulty: 'beginner',
     duration: 45,
+    requiresBothSides: true,
     imageUrl: '/src/assets/poses/supine-twist.svg',
     description: 'A gentle restorative twist that releases the spine and hips. Perfect for ending practice or before bed.',
     instructions: [

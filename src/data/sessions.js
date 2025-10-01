@@ -22,21 +22,25 @@ export const sessions = [
       {
         poseId: 'warrior-one',
         duration: 30,
+        side: 'right',
         transition: 'Step back and switch sides'
       },
       {
         poseId: 'warrior-one', // Other side
         duration: 30,
+        side: 'left',
         transition: 'Return to center and find your balance'
       },
       {
         poseId: 'tree-pose',
         duration: 30,
+        side: 'right',
         transition: 'Switch sides for tree pose'
       },
       {
         poseId: 'tree-pose', // Other side
         duration: 30,
+        side: 'left',
         transition: 'Come down to the floor'
       },
       {
@@ -211,31 +215,37 @@ export const sessions = [
       {
         poseId: 'warrior-one',
         duration: 30,
+        side: 'right',
         transition: 'Switch sides'
       },
       {
         poseId: 'warrior-one',
         duration: 30,
+        side: 'left',
         transition: 'Step to warrior two'
       },
       {
         poseId: 'warrior-two',
         duration: 30,
+        side: 'right',
         transition: 'Switch sides'
       },
       {
         poseId: 'warrior-two',
         duration: 30,
+        side: 'left',
         transition: 'Come to triangle pose'
       },
       {
         poseId: 'triangle-pose',
         duration: 30,
+        side: 'right',
         transition: 'Switch sides'
       },
       {
         poseId: 'triangle-pose',
         duration: 30,
+        side: 'left',
         transition: 'Return to standing'
       },
       {
@@ -262,11 +272,13 @@ export const sessions = [
       {
         poseId: 'pigeon-pose',
         duration: 90,
+        side: 'right',
         transition: 'Switch sides'
       },
       {
         poseId: 'pigeon-pose',
         duration: 90,
+        side: 'left',
         transition: 'Roll onto your back'
       },
       {
@@ -277,11 +289,13 @@ export const sessions = [
       {
         poseId: 'supine-twist',
         duration: 60,
+        side: 'right',
         transition: 'Switch sides'
       },
       {
         poseId: 'supine-twist',
         duration: 60,
+        side: 'left',
         transition: 'Rest in final relaxation'
       },
       {
@@ -313,11 +327,13 @@ export const sessions = [
       {
         poseId: 'supine-twist',
         duration: 60,
+        side: 'right',
         transition: 'Switch sides'
       },
       {
         poseId: 'supine-twist',
         duration: 60,
+        side: 'left',
         transition: 'Draw knees to chest'
       },
       {
@@ -374,11 +390,13 @@ export const sessions = [
       {
         poseId: 'warrior-one',
         duration: 30,
+        side: 'right',
         transition: 'Switch sides'
       },
       {
         poseId: 'warrior-one',
         duration: 30,
+        side: 'left',
         transition: 'Come down for boat pose'
       },
       {
@@ -404,11 +422,13 @@ export const sessions = [
       {
         poseId: 'supine-twist',
         duration: 45,
+        side: 'right',
         transition: 'Switch sides'
       },
       {
         poseId: 'supine-twist',
         duration: 45,
+        side: 'left',
         transition: 'Final rest'
       },
       {
@@ -435,11 +455,13 @@ export const sessions = [
       {
         poseId: 'tree-pose',
         duration: 45,
+        side: 'right',
         transition: 'Switch sides'
       },
       {
         poseId: 'tree-pose',
         duration: 45,
+        side: 'left',
         transition: 'Step to warrior three'
       },
       {
@@ -450,36 +472,43 @@ export const sessions = [
       {
         poseId: 'eagle-pose',
         duration: 30,
+        side: 'right',
         transition: 'Switch sides'
       },
       {
         poseId: 'eagle-pose',
         duration: 30,
+        side: 'left',
         transition: 'Move to triangle'
       },
       {
         poseId: 'triangle-pose',
         duration: 30,
+        side: 'right',
         transition: 'Prepare for half moon'
       },
       {
         poseId: 'half-moon',
         duration: 30,
+        side: 'right',
         transition: 'Switch sides carefully'
       },
       {
         poseId: 'half-moon',
         duration: 30,
+        side: 'left',
         transition: 'Return to standing'
       },
       {
         poseId: 'tree-pose',
         duration: 45,
+        side: 'right',
         transition: 'Switch sides'
       },
       {
         poseId: 'tree-pose',
         duration: 45,
+        side: 'left',
         transition: 'Come down to seated'
       },
       {
@@ -500,11 +529,13 @@ export const sessions = [
       {
         poseId: 'supine-twist',
         duration: 45,
+        side: 'right',
         transition: 'Switch sides'
       },
       {
         poseId: 'supine-twist',
         duration: 45,
+        side: 'left',
         transition: 'Final rest'
       },
       {
@@ -541,56 +572,67 @@ export const sessions = [
       {
         poseId: 'warrior-one',
         duration: 30,
+        side: 'right',
         transition: 'Open to warrior two'
       },
       {
         poseId: 'warrior-two',
         duration: 30,
+        side: 'right',
         transition: 'Extend to side angle'
       },
       {
         poseId: 'extended-side-angle',
         duration: 30,
+        side: 'right',
         transition: 'Return to warrior two'
       },
       {
         poseId: 'warrior-two',
         duration: 30,
+        side: 'right',
         transition: 'Switch sides - warrior one'
       },
       {
         poseId: 'warrior-one',
         duration: 30,
+        side: 'left',
         transition: 'Warrior two'
       },
       {
         poseId: 'warrior-two',
         duration: 30,
+        side: 'left',
         transition: 'Side angle'
       },
       {
         poseId: 'extended-side-angle',
         duration: 30,
+        side: 'left',
         transition: 'Triangle pose'
       },
       {
         poseId: 'triangle-pose',
         duration: 30,
+        side: 'right',
         transition: 'Switch sides'
       },
       {
         poseId: 'triangle-pose',
         duration: 30,
+        side: 'left',
         transition: 'Pyramid pose'
       },
       {
         poseId: 'pyramid-pose',
         duration: 30,
+        side: 'right',
         transition: 'Switch sides'
       },
       {
         poseId: 'pyramid-pose',
         duration: 30,
+        side: 'left',
         transition: 'Downward dog'
       },
       {
@@ -616,21 +658,25 @@ export const sessions = [
       {
         poseId: 'tree-pose',
         duration: 45,
+        side: 'right',
         transition: 'Switch sides'
       },
       {
         poseId: 'tree-pose',
         duration: 45,
+        side: 'left',
         transition: 'Eagle pose'
       },
       {
         poseId: 'eagle-pose',
         duration: 30,
+        side: 'right',
         transition: 'Switch sides'
       },
       {
         poseId: 'eagle-pose',
         duration: 30,
+        side: 'left',
         transition: 'Come down to seated'
       },
       {
@@ -656,11 +702,13 @@ export const sessions = [
       {
         poseId: 'supine-twist',
         duration: 60,
+        side: 'right',
         transition: 'Switch sides'
       },
       {
         poseId: 'supine-twist',
         duration: 60,
+        side: 'left',
         transition: 'Final relaxation'
       },
       {
@@ -687,61 +735,73 @@ export const sessions = [
       {
         poseId: 'tree-pose',
         duration: 60,
+        side: 'right',
         transition: 'Shift weight to left foot for tree pose'
       },
       {
         poseId: 'tree-pose',
         duration: 60,
+        side: 'left',
         transition: 'Switch to right foot, find your balance'
       },
       {
         poseId: 'triangle-pose',
         duration: 60,
+        side: 'right',
         transition: 'Step wide for triangle pose, right side first'
       },
       {
         poseId: 'triangle-pose',
         duration: 60,
+        side: 'left',
         transition: 'Flow to the left side'
       },
       {
         poseId: 'extended-side-angle',
         duration: 45,
+        side: 'right',
         transition: 'Bend your right knee for extended side angle'
       },
       {
         poseId: 'extended-side-angle',
         duration: 45,
+        side: 'left',
         transition: 'Switch to the left side'
       },
       {
         poseId: 'warrior-one',
         duration: 45,
+        side: 'right',
         transition: 'Square your hips for warrior one, right side'
       },
       {
         poseId: 'warrior-one',
         duration: 45,
+        side: 'left',
         transition: 'Step through to the left side'
       },
       {
         poseId: 'warrior-two',
         duration: 45,
+        side: 'right',
         transition: 'Open to warrior two, right side'
       },
       {
         poseId: 'warrior-two',
         duration: 45,
+        side: 'left',
         transition: 'Flow to the left side'
       },
       {
         poseId: 'pyramid-pose',
         duration: 45,
+        side: 'right',
         transition: 'Straighten your legs for pyramid pose, right side'
       },
       {
         poseId: 'pyramid-pose',
         duration: 45,
+        side: 'left',
         transition: 'Switch to the left side'
       },
       {
@@ -904,51 +964,61 @@ export const sessions = [
       {
         poseId: 'tree-pose',
         duration: 45,
+        side: 'right',
         transition: 'Find your balance on the left foot'
       },
       {
         poseId: 'tree-pose',
         duration: 45,
+        side: 'left',
         transition: 'Switch to the right foot'
       },
       {
         poseId: 'warrior-one',
         duration: 45,
+        side: 'right',
         transition: 'Step back to warrior one, right leg forward'
       },
       {
         poseId: 'warrior-one',
         duration: 45,
+        side: 'left',
         transition: 'Switch to left leg forward'
       },
       {
         poseId: 'warrior-two',
         duration: 45,
+        side: 'right',
         transition: 'Open to warrior two, right side'
       },
       {
         poseId: 'warrior-two',
         duration: 45,
+        side: 'left',
         transition: 'Flow to the left side'
       },
       {
         poseId: 'triangle-pose',
         duration: 45,
+        side: 'right',
         transition: 'Straighten your legs for triangle, right side'
       },
       {
         poseId: 'triangle-pose',
         duration: 45,
+        side: 'left',
         transition: 'Switch to the left side'
       },
       {
         poseId: 'extended-side-angle',
         duration: 30,
+        side: 'right',
         transition: 'Bend your knee for side angle, right'
       },
       {
         poseId: 'extended-side-angle',
         duration: 30,
+        side: 'left',
         transition: 'Left side'
       },
       {
@@ -1025,11 +1095,13 @@ export const sessions = [
       {
         poseId: 'supine-twist',
         duration: 45,
+        side: 'right',
         transition: 'Gentle twist to the right'
       },
       {
         poseId: 'supine-twist',
         duration: 45,
+        side: 'left',
         transition: 'Twist to the left'
       },
       {
@@ -1061,11 +1133,13 @@ export const sessions = [
       {
         poseId: 'pyramid-pose',
         duration: 60,
+        side: 'right',
         transition: 'Step right foot forward for pyramid'
       },
       {
         poseId: 'pyramid-pose',
         duration: 60,
+        side: 'left',
         transition: 'Switch to left foot forward'
       },
       {
@@ -1086,11 +1160,13 @@ export const sessions = [
       {
         poseId: 'supine-twist',
         duration: 60,
+        side: 'right',
         transition: 'Lie back for gentle twist, right side'
       },
       {
         poseId: 'supine-twist',
         duration: 60,
+        side: 'left',
         transition: 'Switch to left side'
       },
       {
@@ -1142,11 +1218,13 @@ export const sessions = [
       {
         poseId: 'supine-twist',
         duration: 60,
+        side: 'right',
         transition: 'Lie back for healing twist, right'
       },
       {
         poseId: 'supine-twist',
         duration: 60,
+        side: 'left',
         transition: 'Twist to the left'
       },
       {
@@ -1234,51 +1312,61 @@ export const sessions = [
       {
         poseId: 'warrior-one',
         duration: 45,
+        side: 'right',
         transition: 'Step right foot forward, warrior one'
       },
       {
         poseId: 'warrior-one',
         duration: 45,
+        side: 'left',
         transition: 'Left side warrior one'
       },
       {
         poseId: 'warrior-two',
         duration: 45,
+        side: 'right',
         transition: 'Open to warrior two, right'
       },
       {
         poseId: 'warrior-two',
         duration: 45,
+        side: 'left',
         transition: 'Left side warrior two'
       },
       {
         poseId: 'triangle-pose',
         duration: 45,
+        side: 'right',
         transition: 'Triangle pose, right'
       },
       {
         poseId: 'triangle-pose',
         duration: 45,
+        side: 'left',
         transition: 'Triangle pose, left'
       },
       {
         poseId: 'extended-side-angle',
         duration: 30,
+        side: 'right',
         transition: 'Extended side angle, right'
       },
       {
         poseId: 'extended-side-angle',
         duration: 30,
+        side: 'left',
         transition: 'Left side'
       },
       {
         poseId: 'pyramid-pose',
         duration: 45,
+        side: 'right',
         transition: 'Pyramid pose, right'
       },
       {
         poseId: 'pyramid-pose',
         duration: 45,
+        side: 'left',
         transition: 'Left side pyramid'
       },
       {
@@ -1324,11 +1412,13 @@ export const sessions = [
       {
         poseId: 'supine-twist',
         duration: 45,
+        side: 'right',
         transition: 'Gentle twist, right'
       },
       {
         poseId: 'supine-twist',
         duration: 45,
+        side: 'left',
         transition: 'Twist to the left'
       },
       {

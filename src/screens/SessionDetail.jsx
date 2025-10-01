@@ -185,55 +185,43 @@ function SessionDetail() {
       }
     >
       {/* Hero Section */}
-      <div className="px-4 py-6 bg-gradient-to-b from-cream-50 to-cream">
+      <div className="px-4 py-3 bg-gradient-to-b from-cream-50 to-cream">
         <div className="mx-auto max-w-sm text-center">
           {/* Session Icon/Emoji */}
-          <div className="mb-4 flex items-center justify-center">
-            <div className="w-20 h-20 rounded-full bg-sage-100 flex items-center justify-center">
-              <span className="text-4xl">
+          <div className="mb-2 flex items-center justify-center">
+            <div className="w-12 h-12 rounded-full bg-sage-100 flex items-center justify-center">
+              <span className="text-2xl">
                 {sessionData.emoji || '🧘'}
               </span>
             </div>
           </div>
 
-          {/* Session Name */}
-          <h1 className="text-2xl font-medium text-sage-900 mb-2">
-            {sessionName}
-          </h1>
-
-          {/* Sanskrit name for breathing */}
-          {sessionType === 'breathing' && sessionData.nameSanskrit && (
-            <p className="text-sage-600 text-sm mb-4 italic">
-              {sessionData.nameSanskrit}
-            </p>
-          )}
-
           {/* Description */}
-          <p className="text-sage-700 text-base mb-6">
+          <p className="text-sage-700 text-sm mb-3">
             {sessionDescription}
           </p>
 
           {/* Metadata Badges */}
-          <div className="flex flex-wrap items-center justify-center gap-3 mb-4">
+          <div className="flex flex-wrap items-center justify-center gap-2 mb-2">
             {/* Duration */}
-            <div className="flex items-center gap-1 px-3 py-1.5 bg-white rounded-full shadow-sm">
-              <Clock className="h-4 w-4 text-sage-600" />
-              <span className="text-sm font-medium text-sage-900">{totalDuration} min</span>
+            <div className="flex items-center gap-1 px-2.5 py-1 bg-white rounded-full shadow-sm">
+              <Clock className="h-3.5 w-3.5 text-sage-600" />
+              <span className="text-xs font-medium text-sage-900">{totalDuration} min</span>
             </div>
 
             {/* Difficulty */}
             {sessionData.difficulty && (
-              <div className="flex items-center gap-1 px-3 py-1.5 bg-white rounded-full shadow-sm">
-                <TrendingUp className="h-4 w-4 text-sage-600" />
-                <span className="text-sm font-medium text-sage-900 capitalize">{sessionData.difficulty}</span>
+              <div className="flex items-center gap-1 px-2.5 py-1 bg-white rounded-full shadow-sm">
+                <TrendingUp className="h-3.5 w-3.5 text-sage-600" />
+                <span className="text-xs font-medium text-sage-900 capitalize">{sessionData.difficulty}</span>
               </div>
             )}
 
             {/* Category/Focus */}
             {(sessionData.focus || sessionData.category) && (
-              <div className="flex items-center gap-1 px-3 py-1.5 bg-white rounded-full shadow-sm">
-                <Target className="h-4 w-4 text-sage-600" />
-                <span className="text-sm font-medium text-sage-900 capitalize">
+              <div className="flex items-center gap-1 px-2.5 py-1 bg-white rounded-full shadow-sm">
+                <Target className="h-3.5 w-3.5 text-sage-600" />
+                <span className="text-xs font-medium text-sage-900 capitalize">
                   {sessionData.focus || sessionData.category}
                 </span>
               </div>
@@ -241,9 +229,9 @@ function SessionDetail() {
 
             {/* Practice Count */}
             {practiceCount > 0 && (
-              <div className="flex items-center gap-1 px-3 py-1.5 bg-accent/10 rounded-full shadow-sm">
-                <Calendar className="h-4 w-4 text-accent" />
-                <span className="text-sm font-medium text-accent">
+              <div className="flex items-center gap-1 px-2.5 py-1 bg-accent/10 rounded-full shadow-sm">
+                <Calendar className="h-3.5 w-3.5 text-accent" />
+                <span className="text-xs font-medium text-accent">
                   Practiced {practiceCount}x
                 </span>
               </div>
@@ -252,7 +240,7 @@ function SessionDetail() {
 
           {/* Custom Session Badge */}
           {isCustom && (
-            <div className="inline-block px-3 py-1 bg-sage-100 rounded-full">
+            <div className="inline-block px-2.5 py-0.5 bg-sage-100 rounded-full">
               <span className="text-xs font-medium text-sage-700">Custom Session</span>
             </div>
           )}
@@ -293,6 +281,11 @@ function SessionDetail() {
                       <div className="flex-1 min-w-0">
                         <h3 className="text-sm font-medium text-sage-900 truncate">
                           {pose.nameEnglish}
+                          {poseItem?.side && (
+                            <span className="ml-1 text-xs font-normal text-sage-500">
+                              ({poseItem.side === 'right' ? 'Right' : 'Left'})
+                            </span>
+                          )}
                         </h3>
                         <p className="text-xs text-sage-600 truncate">
                           {pose.nameSanskrit}
