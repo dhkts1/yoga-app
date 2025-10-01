@@ -1,0 +1,36 @@
+<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="sageGradient" x1="0%" y1="100%" x2="50%" y2="0%">
+      <stop offset="0%" style="stop-color:#8FA68E;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#A8BFA7;stop-opacity:0.8" />
+    </linearGradient>
+    <radialGradient id="hamstringStretch" cx="50%" cy="50%">
+      <stop offset="0%" style="stop-color:#D4AF37;stop-opacity:0.5" />
+      <stop offset="100%" style="stop-color:#D4AF37;stop-opacity:0" />
+    </radialGradient>
+  </defs>
+
+  <!-- Ground base -->
+  <ellipse cx="200" cy="350" rx="100" ry="15" fill="#8FA68E" opacity="0.3"/>
+
+  <!-- Forward fold pyramid shape -->
+  <path d="M150 350 L200 120 L250 350 Z"
+        fill="url(#sageGradient)"
+        opacity="0.7"/>
+
+  <!-- Inner triangle for depth -->
+  <path d="M170 350 L200 180 L230 350 Z"
+        fill="#8FA68E"
+        opacity="0.5"/>
+
+  <!-- Hamstring lines -->
+  <line x1="150" y1="350" x2="200" y2="150" stroke="#F5F3F0" stroke-width="2" opacity="0.5"/>
+  <line x1="250" y1="350" x2="200" y2="150" stroke="#F5F3F0" stroke-width="2" opacity="0.5"/>
+
+  <!-- Stretch energy -->
+  <circle cx="200" cy="200" r="70" fill="url(#hamstringStretch)"/>
+
+  <!-- Alignment point -->
+  <circle cx="200" cy="120" r="10" fill="#D4AF37" opacity="0.7"/>
+  <circle cx="200" cy="120" r="15" fill="none" stroke="#D4AF37" stroke-width="2" opacity="0.4"/>
+</svg>

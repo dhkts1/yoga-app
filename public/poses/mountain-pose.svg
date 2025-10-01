@@ -1,0 +1,24 @@
+<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle for grounding -->
+  <circle cx="200" cy="350" r="30" fill="#F5F3F0" opacity="0.6"/>
+
+  <!-- Mountain silhouette in background -->
+  <path d="M50 250 L120 180 L200 120 L280 180 L350 250 L350 350 L50 350 Z" fill="#8FA68E" opacity="0.3"/>
+
+  <!-- Central figure - geometric mountain/person shape -->
+  <rect x="180" y="150" width="40" height="120" fill="#8FA68E" rx="8"/>
+
+  <!-- Arms - gentle curves -->
+  <ellipse cx="150" cy="180" rx="8" ry="40" fill="#D4AF37" opacity="0.8"/>
+  <ellipse cx="250" cy="180" rx="8" ry="40" fill="#D4AF37" opacity="0.8"/>
+
+  <!-- Head - simple circle -->
+  <circle cx="200" cy="130" r="20" fill="#F5F3F0"/>
+
+  <!-- Grounding triangles -->
+  <polygon points="180,270 200,300 220,270" fill="#8FA68E"/>
+
+  <!-- Subtle energy lines -->
+  <line x1="200" y1="110" x2="200" y2="90" stroke="#D4AF37" stroke-width="3" opacity="0.7"/>
+  <line x1="190" y1="95" x2="210" y2="95" stroke="#D4AF37" stroke-width="2" opacity="0.5"/>
+</svg>

@@ -1,0 +1,52 @@
+<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="sageGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8FA68E;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#A8BFA7;stop-opacity:0.8" />
+    </linearGradient>
+    <linearGradient id="creamGlow" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" style="stop-color:#F5F3F0;stop-opacity:0.3" />
+      <stop offset="50%" style="stop-color:#F5F3F0;stop-opacity:0.6" />
+      <stop offset="100%" style="stop-color:#F5F3F0;stop-opacity:0.1" />
+    </linearGradient>
+    <radialGradient id="goldAccent" cx="50%" cy="30%">
+      <stop offset="0%" style="stop-color:#D4AF37;stop-opacity:0.4" />
+      <stop offset="100%" style="stop-color:#D4AF37;stop-opacity:0" />
+    </radialGradient>
+  </defs>
+
+  <!-- Base ground connection -->
+  <ellipse cx="200" cy="350" rx="120" ry="15" fill="#8FA68E" opacity="0.3"/>
+
+  <!-- Central vertical forms suggesting strength and grounding -->
+  <path d="M180 350 L185 150 Q190 140 200 140 Q210 140 215 150 L220 350 Z"
+        fill="url(#sageGradient)"
+        opacity="0.8"/>
+
+  <!-- Supporting mountain-like forms -->
+  <path d="M150 350 L160 200 Q170 180 180 200 L190 350 Z"
+        fill="#8FA68E"
+        opacity="0.6"/>
+
+  <path d="M210 350 L220 200 Q230 180 240 200 L250 350 Z"
+        fill="#8FA68E"
+        opacity="0.6"/>
+
+  <!-- Flowing energy lines -->
+  <path d="M200 140 Q200 100 200 80"
+        stroke="#D4AF37"
+        stroke-width="3"
+        fill="none"
+        opacity="0.7"/>
+
+  <!-- Gentle glow effect -->
+  <circle cx="200" cy="150" r="80" fill="url(#goldAccent)"/>
+
+  <!-- Subtle vertical energy lines -->
+  <line x1="190" y1="330" x2="190" y2="160" stroke="#F5F3F0" stroke-width="1" opacity="0.4"/>
+  <line x1="210" y1="330" x2="210" y2="160" stroke="#F5F3F0" stroke-width="1" opacity="0.4"/>
+
+  <!-- Crown chakra representation -->
+  <circle cx="200" cy="80" r="8" fill="#D4AF37" opacity="0.6"/>
+  <circle cx="200" cy="80" r="12" fill="none" stroke="#D4AF37" stroke-width="1" opacity="0.3"/>
+</svg>

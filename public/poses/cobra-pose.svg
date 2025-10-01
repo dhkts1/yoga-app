@@ -1,0 +1,34 @@
+<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <!-- Ground/mat -->
+  <rect x="50" y="320" width="300" height="12" fill="#F5F3F0" opacity="0.6" rx="6"/>
+
+  <!-- Main arched back curve -->
+  <path d="M120 310 Q200 200 280 250" stroke="#8FA68E" stroke-width="25" fill="none" stroke-linecap="round"/>
+
+  <!-- Chest/torso rising -->
+  <ellipse cx="200" cy="240" rx="40" ry="20" fill="#8FA68E" opacity="0.8"/>
+
+  <!-- Head looking up -->
+  <circle cx="220" cy="220" r="18" fill="#F5F3F0"/>
+
+  <!-- Supporting arms -->
+  <ellipse cx="160" cy="280" rx="12" ry="30" fill="#D4AF37" opacity="0.9"/>
+  <ellipse cx="180" cy="290" rx="8" ry="20" fill="#D4AF37" opacity="0.7"/>
+
+  <!-- Lower body on ground -->
+  <ellipse cx="140" cy="310" rx="25" ry="15" fill="#8FA68E" opacity="0.6"/>
+
+  <!-- Energy lines flowing upward -->
+  <path d="M200 200 Q210 180 220 160" stroke="#D4AF37" stroke-width="3" fill="none" opacity="0.7"/>
+  <path d="M190 210 Q200 190 210 170" stroke="#D4AF37" stroke-width="2" fill="none" opacity="0.5"/>
+  <path d="M210 210 Q220 190 230 170" stroke="#D4AF37" stroke-width="2" fill="none" opacity="0.5"/>
+
+  <!-- Strength radiating lines -->
+  <line x1="240" y1="200" x2="260" y2="180" stroke="#D4AF37" stroke-width="2" opacity="0.6"/>
+  <line x1="250" y1="220" x2="270" y2="210" stroke="#D4AF37" stroke-width="2" opacity="0.4"/>
+
+  <!-- Abstract scales pattern for cobra reference -->
+  <circle cx="180" cy="250" r="3" fill="#F5F3F0" opacity="0.4"/>
+  <circle cx="200" cy="255" r="2" fill="#F5F3F0" opacity="0.5"/>
+  <circle cx="220" cy="250" r="3" fill="#F5F3F0" opacity="0.4"/>
+</svg>

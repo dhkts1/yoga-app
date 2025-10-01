@@ -1,0 +1,30 @@
+<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <!-- Calming background waves -->
+  <path d="M50 300 Q150 280 250 300 Q350 320 400 300 L400 400 L50 400 Z" fill="#F5F3F0" opacity="0.4"/>
+
+  <!-- Main curved resting shape -->
+  <ellipse cx="200" cy="260" rx="80" ry="40" fill="#8FA68E"/>
+
+  <!-- Head resting position -->
+  <circle cx="200" cy="240" r="20" fill="#F5F3F0"/>
+
+  <!-- Arms extending forward -->
+  <ellipse cx="130" cy="280" rx="30" ry="12" fill="#D4AF37" opacity="0.8"/>
+  <ellipse cx="270" cy="280" rx="30" ry="12" fill="#D4AF37" opacity="0.8"/>
+
+  <!-- Knees tucked under -->
+  <ellipse cx="180" cy="300" rx="15" ry="25" fill="#8FA68E" opacity="0.7"/>
+  <ellipse cx="220" cy="300" rx="15" ry="25" fill="#8FA68E" opacity="0.7"/>
+
+  <!-- Gentle energy flow lines -->
+  <path d="M100 250 Q150 230 200 240 Q250 230 300 250" stroke="#D4AF37" stroke-width="2" fill="none" opacity="0.5"/>
+  <path d="M120 270 Q160 260 200 265 Q240 260 280 270" stroke="#8FA68E" stroke-width="2" fill="none" opacity="0.3"/>
+
+  <!-- Peaceful floating elements -->
+  <circle cx="100" cy="180" r="3" fill="#D4AF37" opacity="0.4"/>
+  <circle cx="300" cy="200" r="4" fill="#F5F3F0" opacity="0.5"/>
+  <circle cx="150" cy="160" r="2" fill="#8FA68E" opacity="0.4"/>
+
+  <!-- Grounding mat -->
+  <rect x="80" y="320" width="240" height="8" fill="#F5F3F0" opacity="0.6" rx="4"/>
+</svg>

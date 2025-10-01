@@ -1,0 +1,77 @@
+<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="triangleGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8FA68E;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#A8BFA7;stop-opacity:0.9" />
+      <stop offset="100%" style="stop-color:#8FA68E;stop-opacity:0.7" />
+    </linearGradient>
+    <linearGradient id="flowGradient" x1="0%" y1="50%" x2="100%" y2="50%">
+      <stop offset="0%" style="stop-color:#F5F3F0;stop-opacity:0.6" />
+      <stop offset="50%" style="stop-color:#D4AF37;stop-opacity:0.4" />
+      <stop offset="100%" style="stop-color:#F5F3F0;stop-opacity:0.6" />
+    </linearGradient>
+    <radialGradient id="energyGlow" cx="50%" cy="40%">
+      <stop offset="0%" style="stop-color:#D4AF37;stop-opacity:0.3" />
+      <stop offset="100%" style="stop-color:#D4AF37;stop-opacity:0" />
+    </radialGradient>
+  </defs>
+
+  <!-- Ground connection points -->
+  <ellipse cx="120" cy="320" rx="40" ry="8" fill="#8FA68E" opacity="0.4"/>
+  <ellipse cx="280" cy="320" rx="40" ry="8" fill="#8FA68E" opacity="0.4"/>
+
+  <!-- Main inverted triangle representing the pose -->
+  <path d="M200 120 L120 280 Q130 290 140 285 L200 180 L260 285 Q270 290 280 280 Z"
+        fill="url(#triangleGradient)"/>
+
+  <!-- Flowing curves for arms/legs -->
+  <path d="M120 280 Q100 270 90 250"
+        stroke="#8FA68E"
+        stroke-width="8"
+        fill="none"
+        stroke-linecap="round"
+        opacity="0.8"/>
+
+  <path d="M280 280 Q320 270 330 250"
+        stroke="#8FA68E"
+        stroke-width="8"
+        fill="none"
+        stroke-linecap="round"
+        opacity="0.8"/>
+
+  <!-- Energy flow lines -->
+  <path d="M200 120 Q200 100 200 80 Q200 60 190 50"
+        stroke="#D4AF37"
+        stroke-width="3"
+        fill="none"
+        opacity="0.7"/>
+
+  <path d="M200 120 Q200 100 200 80 Q200 60 210 50"
+        stroke="#D4AF37"
+        stroke-width="3"
+        fill="none"
+        opacity="0.7"/>
+
+  <!-- Spine line suggesting length -->
+  <line x1="200" y1="180" x2="200" y2="120" stroke="#F5F3F0" stroke-width="2" opacity="0.6"/>
+
+  <!-- Gentle energy glow -->
+  <circle cx="200" cy="160" r="100" fill="url(#energyGlow)"/>
+
+  <!-- Breath flow indicators -->
+  <path d="M160 200 Q200 190 240 200"
+        stroke="url(#flowGradient)"
+        stroke-width="2"
+        fill="none"
+        opacity="0.5"/>
+
+  <path d="M140 230 Q200 215 260 230"
+        stroke="url(#flowGradient)"
+        stroke-width="2"
+        fill="none"
+        opacity="0.4"/>
+
+  <!-- Grounding circles -->
+  <circle cx="120" cy="280" r="12" fill="#8FA68E" opacity="0.6"/>
+  <circle cx="280" cy="280" r="12" fill="#8FA68E" opacity="0.6"/>
+</svg>

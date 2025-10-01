@@ -1,0 +1,37 @@
+<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="hipOpening" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8FA68E;stop-opacity:0.9" />
+      <stop offset="100%" style="stop-color:#A8BFA7;stop-opacity:0.6" />
+    </linearGradient>
+    <radialGradient id="hipGlow" cx="40%" cy="60%">
+      <stop offset="0%" style="stop-color:#D4AF37;stop-opacity:0.6" />
+      <stop offset="100%" style="stop-color:#D4AF37;stop-opacity:0" />
+    </radialGradient>
+  </defs>
+
+  <!-- Ground base -->
+  <ellipse cx="200" cy="320" rx="140" ry="20" fill="#8FA68E" opacity="0.3"/>
+
+  <!-- Folded leg representation -->
+  <ellipse cx="160" cy="280" rx="80" ry="40" fill="url(#hipOpening)" opacity="0.8"/>
+
+  <!-- Extended leg -->
+  <rect x="220" y="260" width="120" height="25" rx="12" fill="#8FA68E" opacity="0.6"/>
+
+  <!-- Torso folding forward -->
+  <path d="M140 240 Q180 200 220 180 Q200 160 180 180 Q160 200 140 220 Z"
+        fill="url(#hipOpening)"
+        opacity="0.7"/>
+
+  <!-- Hip opening energy -->
+  <circle cx="160" cy="280" r="90" fill="url(#hipGlow)"/>
+
+  <!-- Release lines -->
+  <path d="M150 270 Q145 250 155 240" stroke="#F5F3F0" stroke-width="2" fill="none" opacity="0.5"/>
+  <path d="M170 270 Q175 250 165 240" stroke="#F5F3F0" stroke-width="2" fill="none" opacity="0.5"/>
+
+  <!-- Grounding points -->
+  <circle cx="160" cy="310" r="8" fill="#D4AF37" opacity="0.5"/>
+  <circle cx="340" cy="275" r="6" fill="#D4AF37" opacity="0.5"/>
+</svg>

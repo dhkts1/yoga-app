@@ -1,0 +1,94 @@
+<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="nurturingGlow" cx="50%" cy="60%">
+      <stop offset="0%" style="stop-color:#F5F3F0;stop-opacity:0.8" />
+      <stop offset="50%" style="stop-color:#D4AF37;stop-opacity:0.4" />
+      <stop offset="100%" style="stop-color:#8FA68E;stop-opacity:0.3" />
+    </radialGradient>
+    <linearGradient id="restGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8FA68E;stop-opacity:0.9" />
+      <stop offset="50%" style="stop-color:#A8BFA7;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#F5F3F0;stop-opacity:0.7" />
+    </linearGradient>
+    <radialGradient id="protectiveShell" cx="50%" cy="50%">
+      <stop offset="0%" style="stop-color:#F5F3F0;stop-opacity:0.2" />
+      <stop offset="70%" style="stop-color:#8FA68E;stop-opacity:0.6" />
+      <stop offset="100%" style="stop-color:#8FA68E;stop-opacity:0.8" />
+    </radialGradient>
+  </defs>
+
+  <!-- Grounding base -->
+  <ellipse cx="200" cy="320" rx="120" ry="20" fill="#8FA68E" opacity="0.3"/>
+
+  <!-- Main protective shell shape -->
+  <path d="M120 320 Q120 200 150 160 Q200 140 250 160 Q280 200 280 320 Q250 330 200 330 Q150 330 120 320 Z"
+        fill="url(#protectiveShell)"/>
+
+  <!-- Inner resting form -->
+  <ellipse cx="200" cy="240" rx="80" ry="60" fill="url(#restGradient)"/>
+
+  <!-- Nested protective curves -->
+  <path d="M150 280 Q200 220 250 280 Q225 300 200 300 Q175 300 150 280 Z"
+        fill="#F5F3F0"
+        opacity="0.6"/>
+
+  <!-- Gentle energy glow -->
+  <circle cx="200" cy="250" r="120" fill="url(#nurturingGlow)"/>
+
+  <!-- Arms folded/extended forward -->
+  <ellipse cx="170" cy="200" rx="30" ry="8" fill="#8FA68E" opacity="0.7"/>
+  <ellipse cx="230" cy="200" rx="30" ry="8" fill="#8FA68E" opacity="0.7"/>
+
+  <!-- Peaceful breath circles -->
+  <circle cx="200" cy="180" r="15" fill="#D4AF37" opacity="0.3"/>
+  <circle cx="200" cy="180" r="25" fill="none" stroke="#D4AF37" stroke-width="1" opacity="0.2"/>
+  <circle cx="200" cy="180" r="35" fill="none" stroke="#D4AF37" stroke-width="1" opacity="0.1"/>
+
+  <!-- Comfort elements -->
+  <path d="M140 200 Q160 190 180 195"
+        stroke="#F5F3F0"
+        stroke-width="3"
+        fill="none"
+        opacity="0.5"/>
+
+  <path d="M220 195 Q240 190 260 200"
+        stroke="#F5F3F0"
+        stroke-width="3"
+        fill="none"
+        opacity="0.5"/>
+
+  <!-- Soft curved edges -->
+  <path d="M120 280 Q100 260 100 240"
+        stroke="#8FA68E"
+        stroke-width="4"
+        fill="none"
+        stroke-linecap="round"
+        opacity="0.6"/>
+
+  <path d="M280 280 Q300 260 300 240"
+        stroke="#8FA68E"
+        stroke-width="4"
+        fill="none"
+        stroke-linecap="round"
+        opacity="0.6"/>
+
+  <!-- Knees indication -->
+  <circle cx="170" cy="280" r="12" fill="#8FA68E" opacity="0.5"/>
+  <circle cx="230" cy="280" r="12" fill="#8FA68E" opacity="0.5"/>
+
+  <!-- Gentle flow lines -->
+  <path d="M160 260 Q200 250 240 260"
+        stroke="#F5F3F0"
+        stroke-width="2"
+        fill="none"
+        opacity="0.4"/>
+
+  <!-- Serene floating elements -->
+  <circle cx="140" cy="220" r="4" fill="#D4AF37" opacity="0.3"/>
+  <circle cx="260" cy="220" r="4" fill="#D4AF37" opacity="0.3"/>
+  <circle cx="180" cy="160" r="3" fill="#D4AF37" opacity="0.4"/>
+  <circle cx="220" cy="160" r="3" fill="#D4AF37" opacity="0.4"/>
+
+  <!-- Heart center peace -->
+  <circle cx="200" cy="240" r="8" fill="#F5F3F0" opacity="0.6"/>
+</svg>

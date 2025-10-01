@@ -1,0 +1,28 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle with sage green -->
+  <circle cx="50" cy="50" r="45" fill="#8FA68E" stroke="#F5F3F0" stroke-width="2"/>
+
+  <!-- Simple yoga pose figure -->
+  <!-- Head -->
+  <circle cx="50" cy="25" r="6" fill="#F5F3F0"/>
+
+  <!-- Body -->
+  <line x1="50" y1="31" x2="50" y2="55" stroke="#F5F3F0" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- Arms in tree pose -->
+  <line x1="50" y1="40" x2="42" y2="32" stroke="#F5F3F0" stroke-width="3" stroke-linecap="round"/>
+  <line x1="50" y1="40" x2="58" y2="32" stroke="#F5F3F0" stroke-width="3" stroke-linecap="round"/>
+  <line x1="42" y1="32" x2="38" y2="28" stroke="#F5F3F0" stroke-width="3" stroke-linecap="round"/>
+  <line x1="58" y1="32" x2="62" y2="28" stroke="#F5F3F0" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- Legs in tree pose -->
+  <line x1="50" y1="55" x2="50" y2="75" stroke="#F5F3F0" stroke-width="3" stroke-linecap="round"/>
+  <line x1="50" y1="60" x2="40" y2="50" stroke="#F5F3F0" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- Lotus accent -->
+  <g transform="translate(50,85)">
+    <ellipse cx="0" cy="0" rx="12" ry="4" fill="#D4AF37" opacity="0.7"/>
+    <ellipse cx="-8" cy="-2" rx="6" ry="2" fill="#D4AF37" opacity="0.5"/>
+    <ellipse cx="8" cy="-2" rx="6" ry="2" fill="#D4AF37" opacity="0.5"/>
+  </g>
+</svg>

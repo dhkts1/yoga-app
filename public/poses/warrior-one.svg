@@ -1,0 +1,28 @@
+<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background strength symbol -->
+  <polygon points="200,80 220,120 260,120 230,145 240,185 200,160 160,185 170,145 140,120 180,120" fill="#D4AF37" opacity="0.3"/>
+
+  <!-- Main figure body -->
+  <rect x="180" y="160" width="40" height="100" fill="#8FA68E" rx="8"/>
+
+  <!-- Lunging leg -->
+  <rect x="160" y="250" width="35" height="80" fill="#8FA68E" rx="6" transform="rotate(-15 177.5 290)"/>
+
+  <!-- Back leg -->
+  <rect x="220" y="270" width="60" height="20" fill="#8FA68E" rx="10"/>
+
+  <!-- Raised arms forming victory shape -->
+  <rect x="140" y="90" width="15" height="80" fill="#D4AF37" rx="8" transform="rotate(-25 147.5 130)"/>
+  <rect x="245" y="90" width="15" height="80" fill="#D4AF37" rx="8" transform="rotate(25 252.5 130)"/>
+
+  <!-- Head -->
+  <circle cx="200" cy="140" r="18" fill="#F5F3F0"/>
+
+  <!-- Power lines radiating outward -->
+  <line x1="150" y1="100" x2="130" y2="80" stroke="#D4AF37" stroke-width="3" opacity="0.6"/>
+  <line x1="250" y1="100" x2="270" y2="80" stroke="#D4AF37" stroke-width="3" opacity="0.6"/>
+  <line x1="200" y1="90" x2="200" y2="70" stroke="#D4AF37" stroke-width="4" opacity="0.8"/>
+
+  <!-- Grounding base -->
+  <ellipse cx="200" cy="340" rx="80" ry="12" fill="#F5F3F0" opacity="0.4"/>
+</svg>

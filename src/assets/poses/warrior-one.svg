@@ -1,0 +1,93 @@
+<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="powerGradient" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#8FA68E;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#A8BFA7;stop-opacity:0.9" />
+      <stop offset="100%" style="stop-color:#D4AF37;stop-opacity:0.8" />
+    </linearGradient>
+    <linearGradient id="strengthGradient" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" style="stop-color:#D4AF37;stop-opacity:0.7" />
+      <stop offset="100%" style="stop-color:#8FA68E;stop-opacity:0.9" />
+    </linearGradient>
+    <radialGradient id="warriorGlow" cx="50%" cy="30%">
+      <stop offset="0%" style="stop-color:#D4AF37;stop-opacity:0.4" />
+      <stop offset="100%" style="stop-color:#D4AF37;stop-opacity:0" />
+    </radialGradient>
+  </defs>
+
+  <!-- Ground stance - wide base -->
+  <ellipse cx="160" cy="350" rx="50" ry="10" fill="#8FA68E" opacity="0.5"/>
+  <ellipse cx="240" cy="360" rx="35" ry="8" fill="#8FA68E" opacity="0.4"/>
+
+  <!-- Main warrior form - angular and strong -->
+  <path d="M160 350 L170 200 Q175 180 185 180 Q195 180 200 200 L200 120 Q200 110 210 110 Q220 110 220 120 L220 200 Q225 180 235 180 Q245 180 250 200 L240 360 Z"
+        fill="url(#powerGradient)"/>
+
+  <!-- Arms raised overhead - victory/strength -->
+  <path d="M185 180 Q160 120 140 80"
+        stroke="#8FA68E"
+        stroke-width="8"
+        fill="none"
+        stroke-linecap="round"
+        opacity="0.8"/>
+
+  <path d="M215 180 Q240 120 260 80"
+        stroke="#8FA68E"
+        stroke-width="8"
+        fill="none"
+        stroke-linecap="round"
+        opacity="0.8"/>
+
+  <!-- Power lines - energy radiating -->
+  <path d="M140 80 Q130 70 120 60"
+        stroke="#D4AF37"
+        stroke-width="3"
+        fill="none"
+        opacity="0.7"/>
+
+  <path d="M260 80 Q270 70 280 60"
+        stroke="#D4AF37"
+        stroke-width="3"
+        fill="none"
+        opacity="0.7"/>
+
+  <!-- Central strength line -->
+  <line x1="200" y1="350" x2="200" y2="120" stroke="#F5F3F0" stroke-width="3" opacity="0.6"/>
+
+  <!-- Warrior energy glow -->
+  <circle cx="200" cy="150" r="120" fill="url(#warriorGlow)"/>
+
+  <!-- Focus point - third eye -->
+  <circle cx="200" cy="110" r="6" fill="#D4AF37" opacity="0.8"/>
+
+  <!-- Angular power shapes -->
+  <polygon points="180,220 190,210 200,220 190,230"
+           fill="#D4AF37"
+           opacity="0.5"/>
+
+  <polygon points="200,220 210,210 220,220 210,230"
+           fill="#D4AF37"
+           opacity="0.5"/>
+
+  <!-- Stability triangles -->
+  <polygon points="160,340 170,330 150,330"
+           fill="#8FA68E"
+           opacity="0.7"/>
+
+  <polygon points="240,350 250,340 230,340"
+           fill="#8FA68E"
+           opacity="0.6"/>
+
+  <!-- Dynamic energy lines -->
+  <path d="M120 200 Q140 180 160 200"
+        stroke="#F5F3F0"
+        stroke-width="2"
+        fill="none"
+        opacity="0.4"/>
+
+  <path d="M240 200 Q260 180 280 200"
+        stroke="#F5F3F0"
+        stroke-width="2"
+        fill="none"
+        opacity="0.4"/>
+</svg>

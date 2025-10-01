@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" fill="none">
+  <!-- Abstract Bridge Pose - arched back with hips lifted -->
+  <!-- Ground/Mat -->
+  <line x1="30" y1="170" x2="270" y2="170" stroke="#D4AF37" stroke-width="2" opacity="0.5"/>
+
+  <!-- Body arch -->
+  <path d="M80 160 Q150 80 220 160" stroke="#8FA68E" stroke-width="20" stroke-linecap="round" fill="none" opacity="0.8"/>
+
+  <!-- Head on ground -->
+  <circle cx="70" cy="160" r="15" fill="#8FA68E" opacity="0.9"/>
+
+  <!-- Feet on ground -->
+  <rect x="200" y="155" width="30" height="10" rx="5" fill="#8FA68E" opacity="0.9"/>
+  <rect x="210" y="145" width="10" height="15" rx="5" fill="#8FA68E" opacity="0.9"/>
+
+  <!-- Arms supporting -->
+  <line x1="85" y1="160" x2="110" y2="150" stroke="#8FA68E" stroke-width="8" stroke-linecap="round" opacity="0.7"/>
+  <line x1="190" y1="150" x2="215" y2="160" stroke="#8FA68E" stroke-width="8" stroke-linecap="round" opacity="0.7"/>
+
+  <!-- Energy lines showing lift -->
+  <path d="M150 100 L150 70" stroke="#D4AF37" stroke-width="2" opacity="0.6" stroke-linecap="round"/>
+  <path d="M140 95 L135 65" stroke="#D4AF37" stroke-width="1.5" opacity="0.5" stroke-linecap="round"/>
+  <path d="M160 95 L165 65" stroke="#D4AF37" stroke-width="1.5" opacity="0.5" stroke-linecap="round"/>
+</svg>

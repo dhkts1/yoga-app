@@ -1,0 +1,108 @@
+<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="trunkGradient" x1="50%" y1="100%" x2="50%" y2="0%">
+      <stop offset="0%" style="stop-color:#8FA68E;stop-opacity:1" />
+      <stop offset="70%" style="stop-color:#A8BFA7;stop-opacity:0.9" />
+      <stop offset="100%" style="stop-color:#D4AF37;stop-opacity:0.8" />
+    </linearGradient>
+    <linearGradient id="branchGradient" x1="0%" y1="50%" x2="100%" y2="50%">
+      <stop offset="0%" style="stop-color:#8FA68E;stop-opacity:0.8" />
+      <stop offset="50%" style="stop-color:#D4AF37;stop-opacity:0.6" />
+      <stop offset="100%" style="stop-color:#8FA68E;stop-opacity:0.8" />
+    </linearGradient>
+    <radialGradient id="balanceGlow" cx="50%" cy="60%">
+      <stop offset="0%" style="stop-color:#F5F3F0;stop-opacity:0.3" />
+      <stop offset="100%" style="stop-color:#F5F3F0;stop-opacity:0" />
+    </radialGradient>
+  </defs>
+
+  <!-- Root/ground connection -->
+  <ellipse cx="200" cy="350" rx="60" ry="12" fill="#8FA68E" opacity="0.4"/>
+
+  <!-- Standing leg - trunk -->
+  <path d="M185 350 L190 120 Q195 100 200 100 Q205 100 210 120 L215 350 Z"
+        fill="url(#trunkGradient)"/>
+
+  <!-- Bent leg - branch -->
+  <path d="M210 240 Q250 220 280 200 Q290 195 295 200 Q290 210 280 215 Q250 235 220 250"
+        fill="url(#branchGradient)"
+        opacity="0.9"/>
+
+  <!-- Arms as branches -->
+  <path d="M195 180 Q160 140 130 110"
+        stroke="#8FA68E"
+        stroke-width="6"
+        fill="none"
+        stroke-linecap="round"
+        opacity="0.8"/>
+
+  <path d="M205 180 Q240 140 270 110"
+        stroke="#8FA68E"
+        stroke-width="6"
+        fill="none"
+        stroke-linecap="round"
+        opacity="0.8"/>
+
+  <!-- Delicate leaves/energy -->
+  <circle cx="125" cy="105" r="8" fill="#D4AF37" opacity="0.6"/>
+  <circle cx="135" cy="100" r="6" fill="#D4AF37" opacity="0.5"/>
+  <circle cx="115" cy="115" r="5" fill="#D4AF37" opacity="0.7"/>
+
+  <circle cx="275" cy="105" r="8" fill="#D4AF37" opacity="0.6"/>
+  <circle cx="265" cy="100" r="6" fill="#D4AF37" opacity="0.5"/>
+  <circle cx="285" cy="115" r="5" fill="#D4AF37" opacity="0.7"/>
+
+  <!-- Bent leg foot placement -->
+  <ellipse cx="295" cy="205" rx="15" ry="8" fill="#8FA68E" opacity="0.7"/>
+
+  <!-- Balance energy glow -->
+  <circle cx="200" cy="200" r="100" fill="url(#balanceGlow)"/>
+
+  <!-- Central focus point -->
+  <circle cx="200" cy="100" r="10" fill="#D4AF37" opacity="0.5"/>
+  <circle cx="200" cy="100" r="15" fill="none" stroke="#D4AF37" stroke-width="1" opacity="0.3"/>
+
+  <!-- Asymmetric balance lines -->
+  <path d="M200 350 Q200 200 200 100"
+        stroke="#F5F3F0"
+        stroke-width="2"
+        opacity="0.6"/>
+
+  <!-- Energy flowing through lifted leg -->
+  <path d="M210 240 Q240 210 270 190"
+        stroke="#F5F3F0"
+        stroke-width="2"
+        fill="none"
+        opacity="0.5"/>
+
+  <!-- Small floating elements suggesting movement/balance -->
+  <circle cx="160" cy="180" r="3" fill="#D4AF37" opacity="0.4"/>
+  <circle cx="240" cy="160" r="3" fill="#D4AF37" opacity="0.4"/>
+  <circle cx="180" cy="140" r="2" fill="#D4AF37" opacity="0.5"/>
+
+  <!-- Root energy -->
+  <path d="M185 340 Q170 330 155 335"
+        stroke="#8FA68E"
+        stroke-width="3"
+        fill="none"
+        opacity="0.5"/>
+
+  <path d="M215 340 Q230 330 245 335"
+        stroke="#8FA68E"
+        stroke-width="3"
+        fill="none"
+        opacity="0.5"/>
+
+  <!-- Wind/breath lines -->
+  <path d="M300 120 Q320 115 340 120"
+        stroke="#F5F3F0"
+        stroke-width="1"
+        fill="none"
+        opacity="0.3"/>
+
+  <path d="M60 130 Q80 125 100 130"
+        stroke="#F5F3F0"
+        stroke-width="1"
+        fill="none"
+        opacity="0.3"/>
+</svg>

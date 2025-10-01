@@ -1,0 +1,132 @@
+<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bridgeArch" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#8FA68E;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#A8BFA7;stop-opacity:0.9" />
+      <stop offset="100%" style="stop-color:#D4AF37;stop-opacity:0.8" />
+    </linearGradient>
+    <linearGradient id="openingGradient" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" style="stop-color:#F5F3F0;stop-opacity:0.8" />
+      <stop offset="50%" style="stop-color:#D4AF37;stop-opacity:0.6" />
+      <stop offset="100%" style="stop-color:#8FA68E;stop-opacity:0.7" />
+    </linearGradient>
+    <radialGradient id="heartGlow" cx="50%" cy="40%">
+      <stop offset="0%" style="stop-color:#D4AF37;stop-opacity:0.5" />
+      <stop offset="100%" style="stop-color:#D4AF37;stop-opacity:0" />
+    </radialGradient>
+  </defs>
+
+  <!-- Ground support points -->
+  <ellipse cx="130" cy="350" rx="35" ry="10" fill="#8FA68E" opacity="0.6"/>
+  <ellipse cx="270" cy="350" rx="35" ry="10" fill="#8FA68E" opacity="0.6"/>
+  <ellipse cx="180" cy="320" rx="25" ry="8" fill="#8FA68E" opacity="0.4"/>
+  <ellipse cx="220" cy="320" rx="25" ry="8" fill="#8FA68E" opacity="0.4"/>
+
+  <!-- Main bridge arch -->
+  <path d="M130 350 Q160 280 200 200 Q240 280 270 350"
+        stroke="url(#bridgeArch)"
+        stroke-width="20"
+        fill="none"
+        stroke-linecap="round"/>
+
+  <!-- Heart/chest opening -->
+  <ellipse cx="200" cy="240" rx="60" ry="40" fill="url(#openingGradient)"/>
+
+  <!-- Supporting legs -->
+  <rect x="120" y="320" width="20" height="30" rx="10" fill="#8FA68E" opacity="0.8"/>
+  <rect x="260" y="320" width="20" height="30" rx="10" fill="#8FA68E" opacity="0.8"/>
+
+  <!-- Shoulders/arms on ground -->
+  <ellipse cx="180" cy="310" rx="20" ry="8" fill="#8FA68E" opacity="0.7"/>
+  <ellipse cx="220" cy="310" rx="20" ry="8" fill="#8FA68E" opacity="0.7"/>
+
+  <!-- Energy radiating from heart -->
+  <circle cx="200" cy="220" r="100" fill="url(#heartGlow)"/>
+
+  <!-- Spine arch line -->
+  <path d="M200 320 Q200 260 200 200"
+        stroke="#F5F3F0"
+        stroke-width="3"
+        opacity="0.6"/>
+
+  <!-- Opening energy rays */
+  <path d="M200 200 Q180 160 160 130"
+        stroke="#D4AF37"
+        stroke-width="3"
+        fill="none"
+        opacity="0.6"/>
+
+  <path d="M200 200 Q220 160 240 130"
+        stroke="#D4AF37"
+        stroke-width="3"
+        fill="none"
+        opacity="0.6"/>
+
+  <path d="M200 200 Q200 160 200 120"
+        stroke="#D4AF37"
+        stroke-width="4"
+        fill="none"
+        opacity="0.7"/>
+
+  <!-- Hip lift indication -->
+  <ellipse cx="200" cy="280" rx="40" ry="15" fill="#F5F3F0" opacity="0.4"/>
+
+  <!-- Arch flow lines -->
+  <path d="M140 320 Q200 230 260 320"
+        stroke="#F5F3F0"
+        stroke-width="2"
+        fill="none"
+        opacity="0.5"/>
+
+  <path d="M150 300 Q200 220 250 300"
+        stroke="#F5F3F0"
+        stroke-width="2"
+        fill="none"
+        opacity="0.4"/>
+
+  <!-- Feet grounding -->
+  <circle cx="130" cy="350" r="8" fill="#8FA68E" opacity="0.8"/>
+  <circle cx="270" cy="350" r="8" fill="#8FA68E" opacity="0.8"/>
+
+  <!-- Heart opening symbol -->
+  <path d="M185 230 Q190 220 200 230 Q210 220 215 230 Q210 245 200 250 Q190 245 185 230"
+        fill="#D4AF37"
+        opacity="0.6"/>
+
+  <!-- Breath expansion circles -->
+  <ellipse cx="200" cy="240" rx="45" ry="25" fill="none" stroke="#F5F3F0" stroke-width="2" opacity="0.3"/>
+  <ellipse cx="200" cy="240" rx="30" ry="18" fill="none" stroke="#F5F3F0" stroke-width="2" opacity="0.4"/>
+
+  <!-- Crown energy -->
+  <circle cx="200" cy="120" r="10" fill="#D4AF37" opacity="0.5"/>
+  <circle cx="200" cy="120" r="15" fill="none" stroke="#D4AF37" stroke-width="1" opacity="0.3"/>
+
+  <!-- Stability arrows -->
+  <path d="M120 340 Q110 335 100 340"
+        stroke="#8FA68E"
+        stroke-width="3"
+        fill="none"
+        opacity="0.5"/>
+
+  <path d="M280 340 Q290 335 300 340"
+        stroke="#8FA68E"
+        stroke-width="3"
+        fill="none"
+        opacity="0.5"/>
+
+  <!-- Energy flow through legs -->
+  <path d="M130 340 Q130 320 130 300"
+        stroke="#F5F3F0"
+        stroke-width="2"
+        fill="none"
+        opacity="0.4"/>
+
+  <path d="M270 340 Q270 320 270 300"
+        stroke="#F5F3F0"
+        stroke-width="2"
+        fill="none"
+        opacity="0.4"/>
+
+  <!-- Inner light -->
+  <circle cx="200" cy="240" r="12" fill="#F5F3F0" opacity="0.7"/>
+</svg>

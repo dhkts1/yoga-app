@@ -1,0 +1,116 @@
+<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="peaceGradient" x1="0%" y1="50%" x2="100%" y2="50%">
+      <stop offset="0%" style="stop-color:#F5F3F0;stop-opacity:0.9" />
+      <stop offset="50%" style="stop-color:#D4AF37;stop-opacity:0.4" />
+      <stop offset="100%" style="stop-color:#F5F3F0;stop-opacity:0.9" />
+    </linearGradient>
+    <radialGradient id="restGlow" cx="50%" cy="50%">
+      <stop offset="0%" style="stop-color:#F5F3F0;stop-opacity:0.6" />
+      <stop offset="50%" style="stop-color:#D4AF37;stop-opacity:0.3" />
+      <stop offset="100%" style="stop-color:#8FA68E;stop-opacity:0.2" />
+    </radialGradient>
+    <linearGradient id="serenityGradient" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" style="stop-color:#D4AF37;stop-opacity:0.3" />
+      <stop offset="100%" style="stop-color:#8FA68E;stop-opacity:0.5" />
+    </linearGradient>
+  </defs>
+
+  <!-- Ground support -->
+  <ellipse cx="200" cy="350" rx="150" ry="20" fill="#8FA68E" opacity="0.3"/>
+
+  <!-- Body outline - horizontal rest -->
+  <ellipse cx="200" cy="280" rx="120" ry="40" fill="url(#peaceGradient)"/>
+
+  <!-- Head -->
+  <circle cx="200" cy="220" r="25" fill="url(#serenityGradient)"/>
+
+  <!-- Arms relaxed to sides -->
+  <ellipse cx="120" cy="260" rx="35" ry="12" fill="#8FA68E" opacity="0.6" transform="rotate(-15 120 260)"/>
+  <ellipse cx="280" cy="260" rx="35" ry="12" fill="#8FA68E" opacity="0.6" transform="rotate(15 280 260)"/>
+
+  <!-- Legs extended -->
+  <ellipse cx="170" cy="320" rx="45" ry="15" fill="#8FA68E" opacity="0.7"/>
+  <ellipse cx="230" cy="320" rx="45" ry="15" fill="#8FA68E" opacity="0.7"/>
+
+  <!-- Peaceful energy field -->
+  <circle cx="200" cy="270" r="160" fill="url(#restGlow)"/>
+
+  <!-- Complete stillness indicators -->
+  <circle cx="200" cy="270" r="80" fill="none" stroke="#F5F3F0" stroke-width="1" opacity="0.2"/>
+  <circle cx="200" cy="270" r="100" fill="none" stroke="#F5F3F0" stroke-width="1" opacity="0.15"/>
+  <circle cx="200" cy="270" r="120" fill="none" stroke="#F5F3F0" stroke-width="1" opacity="0.1"/>
+
+  <!-- Natural breath rhythm -->
+  <circle cx="200" cy="260" r="20" fill="#D4AF37" opacity="0.2"/>
+  <circle cx="200" cy="260" r="30" fill="none" stroke="#D4AF37" stroke-width="1" opacity="0.15"/>
+  <circle cx="200" cy="260" r="40" fill="none" stroke="#D4AF37" stroke-width="1" opacity="0.1"/>
+
+  <!-- Palms facing up (openness) -->
+  <ellipse cx="90" cy="270" rx="8" ry="5" fill="#F5F3F0" opacity="0.6"/>
+  <ellipse cx="310" cy="270" rx="8" ry="5" fill="#F5F3F0" opacity="0.6"/>
+
+  <!-- Feet naturally falling open -->
+  <ellipse cx="150" cy="350" rx="12" ry="8" fill="#8FA68E" opacity="0.5" transform="rotate(-20 150 350)"/>
+  <ellipse cx="250" cy="350" rx="12" ry="8" fill="#8FA68E" opacity="0.5" transform="rotate(20 250 350)"/>
+
+  <!-- Complete relaxation lines -->
+  <path d="M80 200 Q200 195 320 200"
+        stroke="#F5F3F0"
+        stroke-width="2"
+        fill="none"
+        opacity="0.3"/>
+
+  <path d="M60 220 Q200 210 340 220"
+        stroke="#F5F3F0"
+        stroke-width="2"
+        fill="none"
+        opacity="0.25"/>
+
+  <!-- Gentle floating elements suggesting peace -->
+  <circle cx="120" cy="200" r="3" fill="#D4AF37" opacity="0.3"/>
+  <circle cx="280" cy="210" r="3" fill="#D4AF37" opacity="0.3"/>
+  <circle cx="160" cy="180" r="2" fill="#D4AF37" opacity="0.4"/>
+  <circle cx="240" cy="190" r="2" fill="#D4AF37" opacity="0.4"/>
+
+  <!-- Heart center peace -->
+  <circle cx="200" cy="260" r="6" fill="#F5F3F0" opacity="0.7"/>
+
+  <!-- Integration energy -->
+  <path d="M120 240 Q200 235 280 240"
+        stroke="#D4AF37"
+        stroke-width="2"
+        fill="none"
+        opacity="0.3"/>
+
+  <!-- Complete surrender indicators -->
+  <path d="M170 300 Q200 295 230 300"
+        stroke="#F5F3F0"
+        stroke-width="2"
+        fill="none"
+        opacity="0.4"/>
+
+  <!-- Third eye relaxation -->
+  <circle cx="200" cy="210" r="4" fill="#D4AF37" opacity="0.4"/>
+
+  <!-- Total stillness */
+  <circle cx="200" cy="220" r="8" fill="none" stroke="#D4AF37" stroke-width="1" opacity="0.2"/>
+
+  <!-- Horizon lines suggesting infinite rest -->
+  <path d="M50 350 Q200 345 350 350"
+        stroke="#8FA68E"
+        stroke-width="3"
+        fill="none"
+        opacity="0.4"/>
+
+  <!-- Gentle energy release -->
+  <path d="M200 190 Q200 170 200 150"
+        stroke="#D4AF37"
+        stroke-width="2"
+        fill="none"
+        opacity="0.3"/>
+
+  <!-- Universal connection -->
+  <circle cx="200" cy="150" r="8" fill="#D4AF37" opacity="0.3"/>
+  <circle cx="200" cy="150" r="15" fill="none" stroke="#D4AF37" stroke-width="1" opacity="0.2"/>
+</svg>

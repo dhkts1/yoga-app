@@ -1,0 +1,124 @@
+<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="spineFlow" x1="0%" y1="50%" x2="100%" y2="50%">
+      <stop offset="0%" style="stop-color:#8FA68E;stop-opacity:1" />
+      <stop offset="25%" style="stop-color:#A8BFA7;stop-opacity:0.9" />
+      <stop offset="50%" style="stop-color:#D4AF37;stop-opacity:0.8" />
+      <stop offset="75%" style="stop-color:#A8BFA7;stop-opacity:0.9" />
+      <stop offset="100%" style="stop-color:#8FA68E;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="waveGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F5F3F0;stop-opacity:0.8" />
+      <stop offset="50%" style="stop-color:#D4AF37;stop-opacity:0.6" />
+      <stop offset="100%" style="stop-color:#8FA68E;stop-opacity:0.8" />
+    </linearGradient>
+    <radialGradient id="movementGlow" cx="50%" cy="50%">
+      <stop offset="0%" style="stop-color:#D4AF37;stop-opacity:0.3" />
+      <stop offset="100%" style="stop-color:#D4AF37;stop-opacity:0" />
+    </radialGradient>
+  </defs>
+
+  <!-- Base support points -->
+  <ellipse cx="120" cy="320" rx="25" ry="8" fill="#8FA68E" opacity="0.6"/>
+  <ellipse cx="280" cy="320" rx="25" ry="8" fill="#8FA68E" opacity="0.6"/>
+  <ellipse cx="120" cy="280" rx="20" ry="6" fill="#8FA68E" opacity="0.5"/>
+  <ellipse cx="280" cy="280" rx="20" ry="6" fill="#8FA68E" opacity="0.5"/>
+
+  <!-- Cat pose spine (rounded up) -->
+  <path d="M120 300 Q160 180 200 160 Q240 180 280 300"
+        stroke="url(#spineFlow)"
+        stroke-width="12"
+        fill="none"
+        stroke-linecap="round"/>
+
+  <!-- Cow pose spine (arched down) - shown as shadow/flow -->
+  <path d="M120 300 Q160 350 200 360 Q240 350 280 300"
+        stroke="#8FA68E"
+        stroke-width="8"
+        fill="none"
+        stroke-linecap="round"
+        opacity="0.4"/>
+
+  <!-- Movement waves showing spine flexibility -->
+  <path d="M140 280 Q180 200 220 180 Q260 200 300 280"
+        stroke="#F5F3F0"
+        stroke-width="3"
+        fill="none"
+        opacity="0.6"/>
+
+  <path d="M140 320 Q180 340 220 350 Q260 340 300 320"
+        stroke="#F5F3F0"
+        stroke-width="3"
+        fill="none"
+        opacity="0.4"/>
+
+  <!-- Head positions -->
+  <circle cx="200" cy="140" r="20" fill="url(#waveGradient)" opacity="0.8"/>
+  <circle cx="200" cy="370" r="15" fill="#8FA68E" opacity="0.3"/>
+
+  <!-- Energy flow glow -->
+  <circle cx="200" cy="250" r="150" fill="url(#movementGlow)"/>
+
+  <!-- Breath rhythm indicators -->
+  <circle cx="180" cy="200" r="8" fill="#D4AF37" opacity="0.5"/>
+  <circle cx="220" cy="200" r="8" fill="#D4AF37" opacity="0.5"/>
+
+  <!-- Motion lines */
+  <path d="M200 140 Q190 120 180 100"
+        stroke="#D4AF37"
+        stroke-width="3"
+        fill="none"
+        opacity="0.6"/>
+
+  <path d="M200 140 Q210 120 220 100"
+        stroke="#D4AF37"
+        stroke-width="3"
+        fill="none"
+        opacity="0.6"/>
+
+  <!-- Leg supports -->
+  <rect x="110" y="280" width="20" height="40" rx="10" fill="#8FA68E" opacity="0.7"/>
+  <rect x="270" y="280" width="20" height="40" rx="10" fill="#8FA68E" opacity="0.7"/>
+
+  <!-- Arm supports -->
+  <rect x="110" y="270" width="20" height="15" rx="7" fill="#8FA68E" opacity="0.6"/>
+  <rect x="270" y="270" width="20" height="15" rx="7" fill="#8FA68E" opacity="0.6"/>
+
+  <!-- Flow direction arrows (subtle) -->
+  <path d="M160 160 Q170 150 180 160"
+        stroke="#D4AF37"
+        stroke-width="2"
+        fill="none"
+        opacity="0.4"/>
+
+  <path d="M220 160 Q230 150 240 160"
+        stroke="#D4AF37"
+        stroke-width="2"
+        fill="none"
+        opacity="0.4"/>
+
+  <!-- Wave patterns showing continuous movement -->
+  <path d="M100 240 Q140 220 180 240 Q220 260 260 240 Q300 220 340 240"
+        stroke="#F5F3F0"
+        stroke-width="2"
+        fill="none"
+        opacity="0.3"/>
+
+  <!-- Center balance point -->
+  <circle cx="200" cy="230" r="6" fill="#D4AF37" opacity="0.6"/>
+
+  <!-- Tailbone movement indication -->
+  <path d="M280 300 Q300 290 320 300"
+        stroke="#8FA68E"
+        stroke-width="4"
+        fill="none"
+        stroke-linecap="round"
+        opacity="0.5"/>
+
+  <path d="M280 300 Q300 310 320 300"
+        stroke="#8FA68E"
+        stroke-width="4"
+        fill="none"
+        stroke-linecap="round"
+        opacity="0.3"/>
+</svg>

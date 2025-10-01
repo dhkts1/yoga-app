@@ -1,0 +1,216 @@
+/**
+ * Test Helper Utilities
+ *
+ * Provides reusable functions for E2E tests:
+ * - State cleanup and management
+ * - Timer control for fast testing
+ * - Common user flows
+ * - Storage inspection
+ */
+
+/**
+ * Clear all application data (localStorage and sessionStorage)
+ * Use before each test to ensure clean state
+ *
+ * @param {import('@playwright/test').Page} page - Playwright page object
+ */
+export async function clearAppData(page) {
+  // Use context API for more reliable storage clearing
+  await page.context().clearCookies();
+
+  // Navigate to the app first to have proper context
+  await page.goto('/');
+
+  // Now clear storage and set onboarding as completed to skip it
+  await page.evaluate(() => {
+    try {
+      localStorage.clear();
+      sessionStorage.clear();
+
+      // Set onboarding as completed to skip the welcome dialog
+      const preferencesStore = {
+        state: {
+          hasSeenOnboarding: true,
+          tooltipsDismissed: [],
+          tooltipsShownCount: {},
+          favoriteSessions: [],
+          favoriteExercises: []
+        },
+        version: 0
+      };
+      localStorage.setItem('mindful-yoga-preferences', JSON.stringify(preferencesStore));
+    } catch (e) {
+      // Ignore errors if storage is not available
+      console.warn('Could not clear storage:', e.message);
+    }
+  });
+
+  // Reload to apply the new state
+  await page.reload();
+  await page.waitForLoadState('networkidle');
+
+  // Dismiss onboarding if it still appears
+  await dismissOnboardingIfPresent(page);
+}
+
+/**
+ * Dismiss onboarding modal if it's present
+ * The app shows a welcome dialog to first-time users
+ *
+ * @param {import('@playwright/test').Page} page - Playwright page object
+ */
+export async function dismissOnboardingIfPresent(page) {
+  try {
+    // Wait for network to be idle to ensure onboarding has time to render
+    await page.waitForLoadState('networkidle');
+
+    // Look for onboarding dialog with timeout
+    const onboardingDialog = page.locator('[role="dialog"]').filter({ hasText: /welcome to mindful yoga|onboarding/i });
+
+    // Wait for dialog to be visible (gives animation time to complete)
+    await onboardingDialog.waitFor({ state: 'visible', timeout: 5000 });
+
+    // Try to find Skip button first (fastest way)
+    const skipButton = page.getByRole('button', { name: /skip/i });
+
+    await skipButton.waitFor({ state: 'visible', timeout: 2000 });
+    await skipButton.click();
+
+    // Wait for onboarding to disappear
+    await onboardingDialog.waitFor({ state: 'hidden', timeout: 5000 });
+  } catch (error) {
+    // Onboarding not present or already dismissed, that's fine
+    console.log('No onboarding to dismiss or already dismissed');
+  }
+}
+
+/**
+ * Dismiss mood tracker if it appears
+ * The app shows mood tracking before practice
+ *
+ * @param {import('@playwright/test').Page} page - Playwright page object
+ */
+export async function skipMoodTrackerIfPresent(page) {
+  try {
+    // Look for mood tracker with "Skip this step" button
+    const skipButton = page.getByRole('button', { name: /skip.*step/i });
+
+    // Wait for the button to be visible with a longer timeout
+    await skipButton.waitFor({ state: 'visible', timeout: 5000 });
+    await skipButton.click();
+
+    // Wait for mood tracker to disappear completely
+    await skipButton.waitFor({ state: 'hidden', timeout: 3000 });
+  } catch {
+    // Mood tracker not present or already dismissed, that's fine
+  }
+}
+
+/**
+ * Enable test mode to speed up timers
+ * Sets window.__TEST_MODE__ flag that Practice component checks
+ * Also stores in sessionStorage so it persists across navigation
+ *
+ * @param {import('@playwright/test').Page} page - Playwright page object
+ */
+export async function fastForwardTimer(page) {
+  await page.evaluate(() => {
+    window.__TEST_MODE__ = true;
+    window.__TIMER_SPEED__ = 100; // 100x speed
+    // Store in sessionStorage so it persists across navigation
+    sessionStorage.setItem('__TEST_MODE__', 'true');
+    sessionStorage.setItem('__TIMER_SPEED__', '100');
+  });
+}
+
+/**
+ * Complete a quick practice session (full flow)
+ * Useful for setting up test state with completed sessions
+ *
+ * Flow: Home -> Start -> Practice (fast) -> Complete
+ *
+ * @param {import('@playwright/test').Page} page - Playwright page object
+ */
+export async function completeQuickSession(page) {
+  // Navigate to home
+  await page.goto('/');
+
+  // Enable test mode for fast timers
+  await fastForwardTimer(page);
+
+  // Click Quick Start button
+  await page.getByRole('button', { name: /start/i }).click();
+
+  // Wait for practice screen
+  await page.waitForURL(/\/practice/);
+
+  // Click play button to start
+  await page.getByRole('button', { name: /play/i }).click();
+
+  // Wait for completion screen
+  await page.waitForURL(/\/complete/, { timeout: 30000 });
+}
+
+/**
+ * Get current localStorage state
+ * Useful for verifying data persistence
+ *
+ * @param {import('@playwright/test').Page} page - Playwright page object
+ * @returns {Promise<{progress: Object, preferences: Object}>} Storage state
+ */
+export async function getStorageState(page) {
+  return await page.evaluate(() => ({
+    progress: JSON.parse(localStorage.getItem('yoga-progress') || '{}'),
+    preferences: JSON.parse(localStorage.getItem('mindful-yoga-preferences') || '{}'),
+  }));
+}
+
+/**
+ * Wait for navigation to complete and content to be visible
+ * More reliable than just waitForURL
+ *
+ * @param {import('@playwright/test').Page} page - Playwright page object
+ * @param {string} urlPattern - URL pattern to match (regex string or exact)
+ */
+export async function waitForNavigation(page, urlPattern) {
+  await page.waitForURL(urlPattern);
+  // Wait for any loading states to complete
+  await page.waitForLoadState('networkidle');
+}
+
+/**
+ * Navigate to a specific tab in the app
+ * Handles bottom navigation interaction
+ *
+ * @param {import('@playwright/test').Page} page - Playwright page object
+ * @param {string} tabName - Tab name (Home, Discover, Insights, Settings)
+ */
+export async function navigateToTab(page, tabName) {
+  await page.getByRole('navigation').getByRole('link', { name: tabName }).click();
+}
+
+/**
+ * Check if a streak badge is visible with specific count
+ *
+ * @param {import('@playwright/test').Page} page - Playwright page object
+ * @param {number} expectedCount - Expected streak count
+ * @returns {Promise<boolean>} Whether streak badge with count is visible
+ */
+export async function hasStreakBadge(page, expectedCount) {
+  try {
+    const badge = page.locator(`text=/streak.*${expectedCount}/i`);
+    return await badge.isVisible({ timeout: 5000 });
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Start dev server and wait for it to be ready
+ * Useful for debugging tests locally
+ */
+export async function ensureDevServerRunning() {
+  // This is handled by webServer config in playwright.config.js
+  // Just a placeholder for documentation
+  return true;
+}

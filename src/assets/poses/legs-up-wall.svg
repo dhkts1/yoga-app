@@ -1,0 +1,41 @@
+<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="restorativeGradient" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" style="stop-color:#A8BFA7;stop-opacity:0.8" />
+      <stop offset="50%" style="stop-color:#8FA68E;stop-opacity:0.7" />
+      <stop offset="100%" style="stop-color:#F5F3F0;stop-opacity:0.5" />
+    </linearGradient>
+    <radialGradient id="calmGlow" cx="50%" cy="60%">
+      <stop offset="0%" style="stop-color:#D4AF37;stop-opacity:0.4" />
+      <stop offset="100%" style="stop-color:#D4AF37;stop-opacity:0" />
+    </radialGradient>
+  </defs>
+
+  <!-- Wall representation -->
+  <rect x="50" y="50" width="10" height="300" rx="5" fill="#8FA68E" opacity="0.3"/>
+
+  <!-- Legs up against wall -->
+  <rect x="60" y="80" width="30" height="140" rx="15" fill="url(#restorativeGradient)" opacity="0.8"/>
+  <rect x="100" y="80" width="30" height="140" rx="15" fill="url(#restorativeGradient)" opacity="0.8"/>
+
+  <!-- Body lying down -->
+  <ellipse cx="150" cy="270" rx="80" ry="40" fill="#8FA68E" opacity="0.7"/>
+
+  <!-- Arms resting -->
+  <rect x="140" y="280" width="70" height="12" rx="6" fill="#8FA68E" opacity="0.5"/>
+  <rect x="70" y="280" width="60" height="10" rx="5" fill="#8FA68E" opacity="0.5"/>
+
+  <!-- Calming energy -->
+  <circle cx="150" cy="230" r="120" fill="url(#calmGlow)"/>
+
+  <!-- Rest and restoration waves -->
+  <path d="M60 100 Q100 95 130 100" stroke="#F5F3F0" stroke-width="2" fill="none" opacity="0.4"/>
+  <path d="M60 140 Q100 135 130 140" stroke="#F5F3F0" stroke-width="2" fill="none" opacity="0.4"/>
+  <path d="M60 180 Q100 175 130 180" stroke="#F5F3F0" stroke-width="2" fill="none" opacity="0.4"/>
+
+  <!-- Grounding -->
+  <ellipse cx="150" cy="310" rx="70" ry="15" fill="#8FA68E" opacity="0.2"/>
+
+  <!-- Peaceful center -->
+  <circle cx="150" cy="270" r="6" fill="#D4AF37" opacity="0.5"/>
+</svg>

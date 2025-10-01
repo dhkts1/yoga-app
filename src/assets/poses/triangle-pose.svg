@@ -1,0 +1,109 @@
+<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="triangleFlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8FA68E;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#A8BFA7;stop-opacity:0.9" />
+      <stop offset="100%" style="stop-color:#D4AF37;stop-opacity:0.8" />
+    </linearGradient>
+    <linearGradient id="sideStretch" x1="0%" y1="50%" x2="100%" y2="50%">
+      <stop offset="0%" style="stop-color:#F5F3F0;stop-opacity:0.7" />
+      <stop offset="50%" style="stop-color:#D4AF37;stop-opacity:0.5" />
+      <stop offset="100%" style="stop-color:#8FA68E;stop-opacity:0.8" />
+    </linearGradient>
+    <radialGradient id="expansionGlow" cx="50%" cy="50%">
+      <stop offset="0%" style="stop-color:#F5F3F0;stop-opacity:0.3" />
+      <stop offset="100%" style="stop-color:#F5F3F0;stop-opacity:0" />
+    </radialGradient>
+  </defs>
+
+  <!-- Wide stance base -->
+  <ellipse cx="120" cy="350" rx="50" ry="12" fill="#8FA68E" opacity="0.5"/>
+  <ellipse cx="280" cy="350" rx="50" ry="12" fill="#8FA68E" opacity="0.5"/>
+
+  <!-- Main triangle form -->
+  <path d="M120 350 L200 150 L280 350 Z"
+        fill="url(#triangleFlow)"
+        opacity="0.7"/>
+
+  <!-- Side body extension -->
+  <path d="M200 150 L320 200 Q330 205 325 215 Q315 220 305 215 L200 170 Z"
+        fill="url(#sideStretch)"/>
+
+  <!-- Torso/spine line -->
+  <line x1="200" y1="350" x2="200" y2="150" stroke="#F5F3F0" stroke-width="3" opacity="0.6"/>
+
+  <!-- Arms - one down, one up -->
+  <line x1="200" y1="180" x2="280" y2="280" stroke="#8FA68E" stroke-width="8" stroke-linecap="round" opacity="0.8"/>
+  <line x1="200" y1="180" x2="120" y2="120" stroke="#8FA68E" stroke-width="8" stroke-linecap="round" opacity="0.8"/>
+
+  <!-- Extended energy line -->
+  <path d="M320 200 Q340 195 360 200"
+        stroke="#D4AF37"
+        stroke-width="4"
+        fill="none"
+        stroke-linecap="round"
+        opacity="0.7"/>
+
+  <!-- Grounding through legs -->
+  <path d="M120 350 Q110 330 115 310"
+        stroke="#8FA68E"
+        stroke-width="10"
+        fill="none"
+        stroke-linecap="round"
+        opacity="0.8"/>
+
+  <path d="M280 350 Q290 330 285 310"
+        stroke="#8FA68E"
+        stroke-width="10"
+        fill="none"
+        stroke-linecap="round"
+        opacity="0.8"/>
+
+  <!-- Expansion glow -->
+  <circle cx="200" cy="250" r="120" fill="url(#expansionGlow)"/>
+
+  <!-- Energy flow through side body -->
+  <path d="M180 200 Q240 180 300 200"
+        stroke="#F5F3F0"
+        stroke-width="2"
+        fill="none"
+        opacity="0.5"/>
+
+  <path d="M160 240 Q220 220 280 240"
+        stroke="#F5F3F0"
+        stroke-width="2"
+        fill="none"
+        opacity="0.4"/>
+
+  <!-- Geometric accent points -->
+  <polygon points="280,280 290,270 290,290"
+           fill="#D4AF37"
+           opacity="0.6"/>
+
+  <polygon points="120,120 110,110 130,110"
+           fill="#D4AF37"
+           opacity="0.6"/>
+
+  <!-- Center balance point -->
+  <circle cx="200" cy="250" r="8" fill="#D4AF37" opacity="0.5"/>
+
+  <!-- Flow lines suggesting opening -->
+  <path d="M140 300 Q200 280 260 300"
+        stroke="#8FA68E"
+        stroke-width="3"
+        fill="none"
+        opacity="0.5"/>
+
+  <!-- Stability diamonds -->
+  <polygon points="120,340 130,330 120,320 110,330"
+           fill="#8FA68E"
+           opacity="0.7"/>
+
+  <polygon points="280,340 290,330 280,320 270,330"
+           fill="#8FA68E"
+           opacity="0.7"/>
+
+  <!-- Breath awareness circles -->
+  <circle cx="180" cy="180" r="5" fill="#D4AF37" opacity="0.4"/>
+  <circle cx="220" cy="180" r="5" fill="#D4AF37" opacity="0.4"/>
+</svg>

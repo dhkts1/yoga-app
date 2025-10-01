@@ -1,0 +1,49 @@
+<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="crescentGradient" x1="0%" y1="50%" x2="100%" y2="50%">
+      <stop offset="0%" style="stop-color:#8FA68E;stop-opacity:0.9" />
+      <stop offset="50%" style="stop-color:#A8BFA7;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8FA68E;stop-opacity:0.7" />
+    </linearGradient>
+    <radialGradient id="moonGlow" cx="50%" cy="50%">
+      <stop offset="0%" style="stop-color:#D4AF37;stop-opacity:0.6" />
+      <stop offset="100%" style="stop-color:#D4AF37;stop-opacity:0" />
+    </radialGradient>
+  </defs>
+
+  <!-- Ground support -->
+  <ellipse cx="140" cy="340" rx="35" ry="10" fill="#8FA68E" opacity="0.3"/>
+
+  <!-- Standing leg -->
+  <rect x="125" y="250" width="30" height="90" rx="15" fill="url(#crescentGradient)" opacity="0.8"/>
+
+  <!-- Torso reaching sideways -->
+  <ellipse cx="180" cy="220" rx="60" ry="30" fill="#8FA68E" opacity="0.7"/>
+
+  <!-- Extended leg creating crescent -->
+  <path d="M200 220 Q280 180 340 160"
+        stroke="url(#crescentGradient)"
+        stroke-width="25"
+        fill="none"
+        opacity="0.8"/>
+
+  <!-- Top arm reaching up -->
+  <path d="M180 200 Q200 120 220 80"
+        stroke="#8FA68E"
+        stroke-width="12"
+        fill="none"
+        opacity="0.7"/>
+
+  <!-- Bottom arm to ground -->
+  <line x1="160" y1="230" x2="140" y2="320" stroke="#8FA68E" stroke-width="10" opacity="0.6"/>
+
+  <!-- Crescent moon glow -->
+  <ellipse cx="240" cy="180" rx="120" ry="80" fill="url(#moonGlow)" transform="rotate(-20 240 180)"/>
+
+  <!-- Balance energy -->
+  <circle cx="140" cy="330" r="12" fill="#D4AF37" opacity="0.6"/>
+  <circle cx="220" cy="80" r="8" fill="#D4AF37" opacity="0.7"/>
+
+  <!-- Alignment arc -->
+  <path d="M140 330 Q240 200 220 80" stroke="#F5F3F0" stroke-width="1.5" fill="none" opacity="0.3" stroke-dasharray="5,5"/>
+</svg>

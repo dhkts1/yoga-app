@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" fill="none">
+  <!-- Abstract Cat-Cow Flow - showing both positions -->
+  <!-- Ground line -->
+  <line x1="30" y1="170" x2="270" y2="170" stroke="#D4AF37" stroke-width="2" opacity="0.5"/>
+
+  <!-- Cat pose (arched back) - left side -->
+  <g opacity="0.6">
+    <!-- Arched spine -->
+    <path d="M50 140 Q80 70 110 140" stroke="#8FA68E" stroke-width="15" stroke-linecap="round" fill="none"/>
+    <!-- Head tucked -->
+    <circle cx="50" cy="145" r="12" fill="#8FA68E"/>
+    <!-- Hands -->
+    <circle cx="55" cy="160" r="6" fill="#8FA68E"/>
+    <!-- Knees -->
+    <circle cx="105" cy="160" r="6" fill="#8FA68E"/>
+  </g>
+
+  <!-- Cow pose (dropped belly) - right side -->
+  <g opacity="0.8">
+    <!-- Dropped spine -->
+    <path d="M190 140 Q220 180 250 140" stroke="#8FA68E" stroke-width="15" stroke-linecap="round" fill="none"/>
+    <!-- Head lifted -->
+    <circle cx="250" cy="125" r="12" fill="#8FA68E"/>
+    <!-- Hands -->
+    <circle cx="195" cy="160" r="6" fill="#8FA68E"/>
+    <!-- Knees -->
+    <circle cx="245" cy="160" r="6" fill="#8FA68E"/>
+  </g>
+
+  <!-- Flow arrows -->
+  <path d="M130 100 Q150 90 170 100" stroke="#D4AF37" stroke-width="2" fill="none" opacity="0.7" marker-end="url(#arrowhead)"/>
+
+  <!-- Arrow marker -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#D4AF37" opacity="0.7"/>
+    </marker>
+  </defs>
+
+  <!-- Breath indicators -->
+  <text x="80" y="50" font-family="Arial" font-size="12" fill="#D4AF37" opacity="0.8">Exhale</text>
+  <text x="210" y="50" font-family="Arial" font-size="12" fill="#D4AF37" opacity="0.8">Inhale</text>
+</svg>

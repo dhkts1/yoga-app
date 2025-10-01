@@ -1,0 +1,126 @@
+<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="foldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8FA68E;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#A8BFA7;stop-opacity:0.9" />
+      <stop offset="100%" style="stop-color:#F5F3F0;stop-opacity:0.8" />
+    </linearGradient>
+    <linearGradient id="introspectiveGradient" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" style="stop-color:#F5F3F0;stop-opacity:0.7" />
+      <stop offset="100%" style="stop-color:#8FA68E;stop-opacity:0.8" />
+    </linearGradient>
+    <radialGradient id="calmGlow" cx="50%" cy="60%">
+      <stop offset="0%" style="stop-color:#F5F3F0;stop-opacity:0.4" />
+      <stop offset="100%" style="stop-color:#8FA68E;stop-opacity:0.3" />
+    </radialGradient>
+  </defs>
+
+  <!-- Base/sitting position -->
+  <ellipse cx="200" cy="350" rx="80" ry="15" fill="#8FA68E" opacity="0.5"/>
+
+  <!-- Extended legs -->
+  <rect x="100" y="340" width="200" height="20" rx="10" fill="#8FA68E" opacity="0.7"/>
+
+  <!-- Folded torso layers -->
+  <path d="M120 350 Q140 300 160 280 Q180 270 200 270 Q220 270 240 280 Q260 300 280 350 Z"
+        fill="url(#foldGradient)"
+        opacity="0.8"/>
+
+  <!-- Inner folding layer -->
+  <path d="M140 340 Q160 300 180 290 Q200 285 220 290 Q240 300 260 340 Z"
+        fill="url(#introspectiveGradient)"
+        opacity="0.7"/>
+
+  <!-- Arms reaching forward -->
+  <ellipse cx="190" cy="280" rx="40" ry="8" fill="#8FA68E" opacity="0.6"/>
+  <ellipse cx="210" cy="280" rx="40" ry="8" fill="#8FA68E" opacity="0.6"/>
+
+  <!-- Head folded down -->
+  <ellipse cx="200" cy="290" rx="20" ry="15" fill="#F5F3F0" opacity="0.8"/>
+
+  <!-- Peaceful energy glow -->
+  <circle cx="200" cy="300" r="120" fill="url(#calmGlow)"/>
+
+  <!-- Spine curve -->
+  <path d="M200 350 Q200 320 200 290"
+        stroke="#F5F3F0"
+        stroke-width="3"
+        opacity="0.6"/>
+
+  <!-- Forward reach lines */
+  <path d="M200 280 Q250 275 300 280"
+        stroke="#D4AF37"
+        stroke-width="3"
+        fill="none"
+        opacity="0.6"/>
+
+  <!-- Introspective breath circles -->
+  <circle cx="200" cy="310" r="15" fill="#D4AF37" opacity="0.3"/>
+  <circle cx="200" cy="310" r="25" fill="none" stroke="#D4AF37" stroke-width="1" opacity="0.2"/>
+  <circle cx="200" cy="310" r="35" fill="none" stroke="#D4AF37" stroke-width="1" opacity="0.1"/>
+
+  <!-- Hamstring stretch indication -->
+  <path d="M120 340 Q140 335 160 340"
+        stroke="#F5F3F0"
+        stroke-width="2"
+        fill="none"
+        opacity="0.5"/>
+
+  <path d="M240 340 Q260 335 280 340"
+        stroke="#F5F3F0"
+        stroke-width="2"
+        fill="none"
+        opacity="0.5"/>
+
+  <!-- Feet/ankles -->
+  <circle cx="100" cy="350" r="12" fill="#8FA68E" opacity="0.8"/>
+  <circle cx="300" cy="350" r="12" fill="#8FA68E" opacity="0.8"/>
+
+  <!-- Gentle surrender curves -->
+  <path d="M160 320 Q200 300 240 320"
+        stroke="#F5F3F0"
+        stroke-width="2"
+        fill="none"
+        opacity="0.4"/>
+
+  <!-- Inner stillness -->
+  <circle cx="200" cy="300" r="8" fill="#F5F3F0" opacity="0.6"/>
+
+  <!-- Folding layers suggesting depth -->
+  <path d="M170 330 Q200 310 230 330"
+        stroke="#8FA68E"
+        stroke-width="4"
+        fill="none"
+        opacity="0.5"/>
+
+  <path d="M180 320 Q200 305 220 320"
+        stroke="#8FA68E"
+        stroke-width="3"
+        fill="none"
+        opacity="0.4"/>
+
+  <!-- Contemplative elements -->
+  <circle cx="170" cy="300" r="4" fill="#D4AF37" opacity="0.4"/>
+  <circle cx="230" cy="300" r="4" fill="#D4AF37" opacity="0.4"/>
+
+  <!-- Ground connection -->
+  <path d="M180 350 Q200 355 220 350"
+        stroke="#8FA68E"
+        stroke-width="6"
+        fill="none"
+        opacity="0.6"/>
+
+  <!-- Releasing energy -->
+  <path d="M300 280 Q320 275 340 280"
+        stroke="#D4AF37"
+        stroke-width="2"
+        fill="none"
+        opacity="0.4"/>
+
+  <!-- Heart surrender -->
+  <path d="M190 300 Q200 295 210 300"
+        stroke="#F5F3F0"
+        stroke-width="2"
+        fill="none"
+        opacity="0.5"/>
+</svg>

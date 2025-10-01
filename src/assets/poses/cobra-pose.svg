@@ -1,0 +1,124 @@
+<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="risingEnergy" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#8FA68E;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#A8BFA7;stop-opacity:0.9" />
+      <stop offset="100%" style="stop-color:#D4AF37;stop-opacity:0.8" />
+    </linearGradient>
+    <linearGradient id="heartOpening" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" style="stop-color:#D4AF37;stop-opacity:0.7" />
+      <stop offset="50%" style="stop-color:#F5F3F0;stop-opacity:0.6" />
+      <stop offset="100%" style="stop-color:#8FA68E;stop-opacity:0.8" />
+    </linearGradient>
+    <radialGradient id="cobraGlow" cx="50%" cy="30%">
+      <stop offset="0%" style="stop-color:#D4AF37;stop-opacity:0.4" />
+      <stop offset="100%" style="stop-color:#D4AF37;stop-opacity:0" />
+    </radialGradient>
+  </defs>
+
+  <!-- Ground connection -->
+  <ellipse cx="200" cy="350" rx="100" ry="15" fill="#8FA68E" opacity="0.4"/>
+
+  <!-- Lower body on ground -->
+  <ellipse cx="200" cy="330" rx="80" ry="25" fill="#8FA68E" opacity="0.7"/>
+
+  <!-- Rising spine curve -->
+  <path d="M120 330 Q140 300 160 250 Q180 200 200 150 Q220 200 240 250 Q260 300 280 330"
+        stroke="url(#risingEnergy)"
+        stroke-width="15"
+        fill="none"
+        stroke-linecap="round"/>
+
+  <!-- Chest opening -->
+  <path d="M160 200 Q200 120 240 200"
+        fill="url(#heartOpening)"
+        opacity="0.8"/>
+
+  <!-- Arms supporting -->
+  <ellipse cx="150" cy="280" rx="30" ry="12" fill="#8FA68E" opacity="0.8"/>
+  <ellipse cx="250" cy="280" rx="30" ry="12" fill="#8FA68E" opacity="0.8"/>
+
+  <!-- Head lifted */
+  <circle cx="200" cy="130" r="25" fill="url(#heartOpening)"/>
+
+  <!-- Energy radiating from heart -->
+  <circle cx="200" cy="180" r="80" fill="url(#cobraGlow)"/>
+
+  <!-- Spine energy lines */
+  <path d="M200 330 Q200 250 200 150"
+        stroke="#F5F3F0"
+        stroke-width="3"
+        opacity="0.6"/>
+
+  <!-- Heart rays -->
+  <path d="M200 150 Q180 120 160 100"
+        stroke="#D4AF37"
+        stroke-width="3"
+        fill="none"
+        opacity="0.6"/>
+
+  <path d="M200 150 Q220 120 240 100"
+        stroke="#D4AF37"
+        stroke-width="3"
+        fill="none"
+        opacity="0.6"/>
+
+  <path d="M200 150 Q200 110 200 90"
+        stroke="#D4AF37"
+        stroke-width="4"
+        fill="none"
+        opacity="0.7"/>
+
+  <!-- Shoulder blade engagement -->
+  <ellipse cx="170" cy="220" rx="15" ry="8" fill="#8FA68E" opacity="0.6"/>
+  <ellipse cx="230" cy="220" rx="15" ry="8" fill="#8FA68E" opacity="0.6"/>
+
+  <!-- Backbend curve indicators -->
+  <path d="M140 250 Q200 180 260 250"
+        stroke="#F5F3F0"
+        stroke-width="2"
+        fill="none"
+        opacity="0.5"/>
+
+  <!-- Lifting energy -->
+  <path d="M180 280 Q200 260 220 280"
+        stroke="#D4AF37"
+        stroke-width="2"
+        fill="none"
+        opacity="0.5"/>
+
+  <!-- Crown reaching -->
+  <circle cx="200" cy="90" r="8" fill="#D4AF37" opacity="0.6"/>
+  <circle cx="200" cy="90" r="12" fill="none" stroke="#D4AF37" stroke-width="1" opacity="0.4"/>
+
+  <!-- Gentle support lines -->
+  <path d="M120 280 Q110 270 100 260"
+        stroke="#8FA68E"
+        stroke-width="4"
+        fill="none"
+        stroke-linecap="round"
+        opacity="0.5"/>
+
+  <path d="M280 280 Q290 270 300 260"
+        stroke="#8FA68E"
+        stroke-width="4"
+        fill="none"
+        stroke-linecap="round"
+        opacity="0.5"/>
+
+  <!-- Breath expansion -->
+  <ellipse cx="200" cy="180" rx="50" ry="30" fill="none" stroke="#F5F3F0" stroke-width="2" opacity="0.3"/>
+  <ellipse cx="200" cy="180" rx="35" ry="20" fill="none" stroke="#F5F3F0" stroke-width="2" opacity="0.4"/>
+
+  <!-- Base stability -->
+  <path d="M160 330 Q180 340 200 340 Q220 340 240 330"
+        stroke="#8FA68E"
+        stroke-width="6"
+        fill="none"
+        opacity="0.6"/>
+
+  <!-- Opening heart symbol -->
+  <path d="M190 170 Q195 160 200 170 Q205 160 210 170 Q205 180 200 185 Q195 180 190 170"
+        fill="#D4AF37"
+        opacity="0.5"/>
+</svg>

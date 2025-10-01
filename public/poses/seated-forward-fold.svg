@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" fill="none">
+  <!-- Abstract Seated Forward Fold -->
+  <!-- Ground line -->
+  <line x1="30" y1="170" x2="270" y2="170" stroke="#D4AF37" stroke-width="2" opacity="0.5"/>
+
+  <!-- Legs extended -->
+  <rect x="120" y="155" width="120" height="12" rx="6" fill="#8FA68E" opacity="0.9"/>
+
+  <!-- Torso folding forward -->
+  <ellipse cx="100" cy="140" rx="40" ry="25" fill="#8FA68E" opacity="0.8" transform="rotate(-15 100 140)"/>
+
+  <!-- Head reaching toward feet -->
+  <circle cx="140" cy="145" r="15" fill="#8FA68E" opacity="0.9"/>
+
+  <!-- Arms reaching forward -->
+  <path d="M120 135 L180 145" stroke="#8FA68E" stroke-width="8" stroke-linecap="round" opacity="0.7"/>
+  <path d="M120 145 L180 155" stroke="#8FA68E" stroke-width="8" stroke-linecap="round" opacity="0.7"/>
+
+  <!-- Hands reaching toes -->
+  <circle cx="235" cy="155" r="5" fill="#8FA68E" opacity="0.7"/>
+
+  <!-- Energy lines showing stretch -->
+  <path d="M80 120 Q100 100 120 120" stroke="#D4AF37" stroke-width="1.5" opacity="0.6" stroke-linecap="round"/>
+  <path d="M90 110 Q110 90 130 110" stroke="#D4AF37" stroke-width="1.5" opacity="0.5" stroke-linecap="round"/>
+
+  <!-- Breath flow -->
+  <circle cx="100" cy="140" r="25" stroke="#D4AF37" stroke-width="1" fill="none" opacity="0.3" stroke-dasharray="3,3"/>
+</svg>

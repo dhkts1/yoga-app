@@ -1,0 +1,48 @@
+<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="twistGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8FA68E;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#A8BFA7;stop-opacity:0.6" />
+    </linearGradient>
+    <radialGradient id="spineRelease" cx="40%" cy="50%">
+      <stop offset="0%" style="stop-color:#D4AF37;stop-opacity:0.5" />
+      <stop offset="100%" style="stop-color:#D4AF37;stop-opacity:0" />
+    </radialGradient>
+  </defs>
+
+  <!-- Lying position base -->
+  <ellipse cx="180" cy="230" rx="140" ry="40" fill="#8FA68E" opacity="0.2"/>
+
+  <!-- Upper body/torso -->
+  <ellipse cx="180" cy="210" rx="70" ry="45" fill="url(#twistGradient)" opacity="0.8"/>
+
+  <!-- Twisted knee across body -->
+  <ellipse cx="140" cy="240" rx="35" ry="55" fill="#8FA68E" opacity="0.7" transform="rotate(30 140 240)"/>
+
+  <!-- Extended arm -->
+  <rect x="200" y="205" width="90" height="12" rx="6" fill="#8FA68E" opacity="0.6"/>
+
+  <!-- Opposite arm -->
+  <rect x="90" y="205" width="70" height="10" rx="5" fill="#8FA68E" opacity="0.5"/>
+
+  <!-- Bottom leg extended -->
+  <rect x="180" y="260" width="100" height="18" rx="9" fill="#8FA68E" opacity="0.6"/>
+
+  <!-- Spiral/twist energy -->
+  <path d="M180 210 Q160 230 140 240"
+        stroke="#D4AF37"
+        stroke-width="3"
+        fill="none"
+        opacity="0.6"/>
+
+  <!-- Release glow -->
+  <circle cx="160" cy="220" r="90" fill="url(#spineRelease)"/>
+
+  <!-- Gentle curve indicating twist -->
+  <path d="M180 180 Q170 210 160 240"
+        stroke="#F5F3F0"
+        stroke-width="2"
+        fill="none"
+        opacity="0.5"
+        stroke-dasharray="3,3"/>
+</svg>

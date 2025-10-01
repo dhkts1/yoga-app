@@ -1,0 +1,35 @@
+<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="sageGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8FA68E;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#A8BFA7;stop-opacity:0.8" />
+    </linearGradient>
+    <linearGradient id="coreStrength" x1="0%" y1="50%" x2="100%" y2="50%">
+      <stop offset="0%" style="stop-color:#D4AF37;stop-opacity:0.6" />
+      <stop offset="50%" style="stop-color:#D4AF37;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#D4AF37;stop-opacity:0.6" />
+    </linearGradient>
+  </defs>
+
+  <!-- Ground connection -->
+  <ellipse cx="100" cy="320" rx="40" ry="10" fill="#8FA68E" opacity="0.3"/>
+  <ellipse cx="300" cy="320" rx="40" ry="10" fill="#8FA68E" opacity="0.3"/>
+
+  <!-- Main horizontal body line representing plank -->
+  <rect x="80" y="180" width="240" height="30" rx="15" fill="url(#sageGradient)" opacity="0.9"/>
+
+  <!-- Supporting core strength -->
+  <rect x="120" y="185" width="160" height="20" rx="10" fill="url(#coreStrength)" opacity="0.7"/>
+
+  <!-- Arms/support lines -->
+  <line x1="100" y1="195" x2="100" y2="310" stroke="#8FA68E" stroke-width="8" opacity="0.7"/>
+  <line x1="300" y1="195" x2="300" y2="310" stroke="#8FA68E" stroke-width="8" opacity="0.7"/>
+
+  <!-- Energy flow indicators -->
+  <path d="M90 195 Q85 185 90 175" stroke="#D4AF37" stroke-width="2" fill="none" opacity="0.6"/>
+  <path d="M310 195 Q315 185 310 175" stroke="#D4AF37" stroke-width="2" fill="none" opacity="0.6"/>
+
+  <!-- Stability dots -->
+  <circle cx="100" cy="310" r="12" fill="#D4AF37" opacity="0.5"/>
+  <circle cx="300" cy="310" r="12" fill="#D4AF37" opacity="0.5"/>
+</svg>

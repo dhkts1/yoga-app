@@ -1,0 +1,43 @@
+<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="wrappingGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8FA68E;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#A8BFA7;stop-opacity:0.7" />
+    </linearGradient>
+    <radialGradient id="focusGlow" cx="50%" cy="40%">
+      <stop offset="0%" style="stop-color:#D4AF37;stop-opacity:0.7" />
+      <stop offset="100%" style="stop-color:#D4AF37;stop-opacity:0" />
+    </radialGradient>
+  </defs>
+
+  <!-- Standing base -->
+  <ellipse cx="200" cy="350" rx="50" ry="12" fill="#8FA68E" opacity="0.3"/>
+
+  <!-- Standing leg -->
+  <rect x="185" y="260" width="30" height="90" rx="15" fill="url(#wrappingGradient)" opacity="0.8"/>
+
+  <!-- Wrapped leg around standing leg -->
+  <path d="M180 300 Q160 290 170 270 Q180 250 200 260 Q220 270 210 290 Q200 310 180 320"
+        fill="#8FA68E"
+        stroke="#8FA68E"
+        stroke-width="2"
+        opacity="0.6"/>
+
+  <!-- Wrapped arms -->
+  <path d="M170 180 Q190 170 200 180 Q210 190 200 200 Q190 210 180 200 Q170 190 170 180"
+        fill="url(#wrappingGradient)"
+        opacity="0.8"/>
+
+  <!-- Intertwined arm detail -->
+  <path d="M185 180 Q200 175 215 180" stroke="#D4AF37" stroke-width="3" fill="none" opacity="0.6"/>
+
+  <!-- Focus energy -->
+  <circle cx="200" cy="180" r="60" fill="url(#focusGlow)"/>
+
+  <!-- Balance point -->
+  <circle cx="200" cy="340" r="10" fill="#D4AF37" opacity="0.6"/>
+  <circle cx="200" cy="340" r="15" fill="none" stroke="#D4AF37" stroke-width="2" opacity="0.3"/>
+
+  <!-- Vertical alignment line -->
+  <line x1="200" y1="340" x2="200" y2="180" stroke="#F5F3F0" stroke-width="1" opacity="0.3"/>
+</svg>

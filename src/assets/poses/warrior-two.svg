@@ -1,0 +1,92 @@
+<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="horizontalPower" x1="0%" y1="50%" x2="100%" y2="50%">
+      <stop offset="0%" style="stop-color:#8FA68E;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#A8BFA7;stop-opacity:0.9" />
+      <stop offset="100%" style="stop-color:#8FA68E;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="focusGradient" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" style="stop-color:#D4AF37;stop-opacity:0.6" />
+      <stop offset="100%" style="stop-color:#8FA68E;stop-opacity:0.8" />
+    </linearGradient>
+    <radialGradient id="centerGlow" cx="50%" cy="50%">
+      <stop offset="0%" style="stop-color:#F5F3F0;stop-opacity:0.4" />
+      <stop offset="100%" style="stop-color:#F5F3F0;stop-opacity:0" />
+    </radialGradient>
+  </defs>
+
+  <!-- Wide stance base -->
+  <ellipse cx="120" cy="350" rx="45" ry="10" fill="#8FA68E" opacity="0.5"/>
+  <ellipse cx="280" cy="350" rx="45" ry="10" fill="#8FA68E" opacity="0.5"/>
+
+  <!-- Central torso - upright strength -->
+  <rect x="180" y="150" width="40" height="180" rx="10"
+        fill="url(#focusGradient)"/>
+
+  <!-- Arms extended wide - horizontal power -->
+  <rect x="60" y="180" width="120" height="12" rx="6"
+        fill="url(#horizontalPower)"/>
+
+  <rect x="220" y="180" width="120" height="12" rx="6"
+        fill="url(#horizontalPower)"/>
+
+  <!-- Bent front leg -->
+  <path d="M120 350 L130 250 Q140 230 150 250 L160 330"
+        stroke="#8FA68E"
+        stroke-width="15"
+        fill="none"
+        stroke-linecap="round"
+        opacity="0.8"/>
+
+  <!-- Straight back leg -->
+  <path d="M280 350 L270 250 Q265 240 270 230 L260 180"
+        stroke="#8FA68E"
+        stroke-width="12"
+        fill="none"
+        stroke-linecap="round"
+        opacity="0.8"/>
+
+  <!-- Focus direction - gaze line -->
+  <path d="M340 186 Q360 186 380 186"
+        stroke="#D4AF37"
+        stroke-width="4"
+        fill="none"
+        stroke-linecap="round"
+        opacity="0.8"/>
+
+  <!-- Power triangles at arm ends -->
+  <polygon points="60,180 50,170 50,190"
+           fill="#D4AF37"
+           opacity="0.7"/>
+
+  <polygon points="340,180 350,170 350,190"
+           fill="#D4AF37"
+           opacity="0.7"/>
+
+  <!-- Central grounding -->
+  <circle cx="200" cy="250" r="80" fill="url(#centerGlow)"/>
+
+  <!-- Stability diamonds -->
+  <polygon points="200,200 210,190 200,180 190,190"
+           fill="#D4AF37"
+           opacity="0.5"/>
+
+  <!-- Strength lines -->
+  <line x1="120" y1="330" x2="120" y2="250" stroke="#F5F3F0" stroke-width="2" opacity="0.5"/>
+  <line x1="280" y1="330" x2="280" y2="250" stroke="#F5F3F0" stroke-width="2" opacity="0.5"/>
+
+  <!-- Energy flow -->
+  <path d="M120 250 Q200 240 280 250"
+        stroke="#F5F3F0"
+        stroke-width="3"
+        fill="none"
+        opacity="0.4"/>
+
+  <!-- Focus point -->
+  <circle cx="340" cy="186" r="8" fill="#D4AF37" opacity="0.6"/>
+  <circle cx="340" cy="186" r="12" fill="none" stroke="#D4AF37" stroke-width="1" opacity="0.4"/>
+
+  <!-- Grounding symbols -->
+  <circle cx="120" cy="350" r="8" fill="#8FA68E" opacity="0.6"/>
+  <circle cx="280" cy="350" r="8" fill="#8FA68E" opacity="0.6"/>
+</svg>

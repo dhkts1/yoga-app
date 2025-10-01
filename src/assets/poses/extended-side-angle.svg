@@ -1,0 +1,41 @@
+<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="sageGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8FA68E;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#A8BFA7;stop-opacity:0.8" />
+    </linearGradient>
+    <linearGradient id="sideStretch" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F5F3F0;stop-opacity:0.6" />
+      <stop offset="100%" style="stop-color:#D4AF37;stop-opacity:0.4" />
+    </linearGradient>
+  </defs>
+
+  <!-- Base grounding -->
+  <ellipse cx="150" cy="350" rx="60" ry="12" fill="#8FA68E" opacity="0.3"/>
+
+  <!-- Diagonal body representing side angle -->
+  <path d="M120 330 L200 200 Q210 190 220 200 L140 340 Z"
+        fill="url(#sageGradient)"
+        opacity="0.8"/>
+
+  <!-- Extended arm reaching -->
+  <path d="M220 200 L320 80 Q330 70 340 80 L230 210 Z"
+        fill="#8FA68E"
+        opacity="0.6"/>
+
+  <!-- Supporting leg -->
+  <path d="M150 340 L170 240 Q180 230 190 240 L160 340 Z"
+        fill="#8FA68E"
+        opacity="0.7"/>
+
+  <!-- Energy flow along side body -->
+  <path d="M140 330 Q200 210 330 80"
+        stroke="#D4AF37"
+        stroke-width="3"
+        fill="none"
+        opacity="0.6"
+        stroke-dasharray="5,5"/>
+
+  <!-- Expansion glow -->
+  <ellipse cx="250" cy="150" rx="60" ry="40" fill="url(#sideStretch)" opacity="0.5" transform="rotate(-45 250 150)"/>
+</svg>

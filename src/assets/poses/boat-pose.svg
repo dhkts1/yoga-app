@@ -1,0 +1,43 @@
+<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="vShapeGradient" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" style="stop-color:#D4AF37;stop-opacity:0.7" />
+      <stop offset="50%" style="stop-color:#8FA68E;stop-opacity:0.9" />
+      <stop offset="100%" style="stop-color:#A8BFA7;stop-opacity:0.7" />
+    </linearGradient>
+    <radialGradient id="coreGlow" cx="50%" cy="50%">
+      <stop offset="0%" style="stop-color:#D4AF37;stop-opacity:0.6" />
+      <stop offset="100%" style="stop-color:#D4AF37;stop-opacity:0" />
+    </radialGradient>
+  </defs>
+
+  <!-- Balance point -->
+  <ellipse cx="200" cy="250" rx="40" ry="12" fill="#8FA68E" opacity="0.3"/>
+
+  <!-- V-shape body -->
+  <path d="M200 240 L140 140 Q135 130 145 125 L200 220 Z"
+        fill="url(#vShapeGradient)"
+        opacity="0.8"/>
+  <path d="M200 240 L260 140 Q265 130 255 125 L200 220 Z"
+        fill="url(#vShapeGradient)"
+        opacity="0.8"/>
+
+  <!-- Legs lifted -->
+  <rect x="130" y="130" width="30" height="80" rx="15" fill="#8FA68E" opacity="0.7" transform="rotate(-45 145 170)"/>
+  <rect x="240" y="130" width="30" height="80" rx="15" fill="#8FA68E" opacity="0.7" transform="rotate(45 255 170)"/>
+
+  <!-- Arms extended -->
+  <rect x="100" y="215" width="80" height="8" rx="4" fill="#8FA68E" opacity="0.6"/>
+  <rect x="220" y="215" width="80" height="8" rx="4" fill="#8FA68E" opacity="0.6"/>
+
+  <!-- Core strength glow -->
+  <circle cx="200" cy="220" r="80" fill="url(#coreGlow)"/>
+
+  <!-- Balance point emphasis -->
+  <circle cx="200" cy="240" r="10" fill="#D4AF37" opacity="0.7"/>
+  <circle cx="200" cy="240" r="15" fill="none" stroke="#D4AF37" stroke-width="2" opacity="0.4"/>
+
+  <!-- Energy lines -->
+  <line x1="145" y1="130" x2="200" y2="240" stroke="#F5F3F0" stroke-width="1.5" opacity="0.4"/>
+  <line x1="255" y1="130" x2="200" y2="240" stroke="#F5F3F0" stroke-width="1.5" opacity="0.4"/>
+</svg>

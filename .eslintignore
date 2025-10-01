@@ -1,0 +1,23 @@
+# Build outputs and generated files
+dev-dist/
+dist/
+build/
+
+# Test files that use Node.js specific features
+test-app.js
+tests/
+test-preferences-store.js
+
+# Config files that use Node.js features
+playwright.config.js
+
+# Node modules and package lock files
+node_modules/
+package-lock.json
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.localtest-preferences-store.js
