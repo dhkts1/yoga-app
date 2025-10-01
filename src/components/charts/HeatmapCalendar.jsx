@@ -74,14 +74,14 @@ function HeatmapCalendar({
   };
 
   return (
-    <Card className={`p-4 ${className}`}>
+    <Card className={`p-4 !overflow-visible ${className}`}>
       {/* Title */}
       <Text variant="body" className="font-medium mb-4">
         {title}
       </Text>
 
       {/* Calendar Grid */}
-      <div className="space-y-3">
+      <div className="space-y-3 overflow-visible">
         {/* Month labels */}
         <div className="flex items-center gap-2 mb-2">
           {daysList.map((day, index) => {
@@ -98,7 +98,7 @@ function HeatmapCalendar({
         </div>
 
         {/* Days grid - 7 columns for weeks */}
-        <div className="grid grid-cols-7 gap-1.5">
+        <div className="grid grid-cols-7 gap-1.5 overflow-visible">
           {/* Day labels */}
           {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((dayName, index) => (
             <div key={dayName + index} className="text-center">
@@ -114,9 +114,19 @@ function HeatmapCalendar({
           ))}
 
           {/* Practice days */}
-          {daysList.map((day) => {
+          {daysList.map((day, dayIndex) => {
             const isSelected = selectedDate && day.dateString === new Date(selectedDate).toDateString();
             const isClickable = onDayClick && day.sessions > 0;
+
+            // Calculate which row this day is in (0-indexed)
+            const paddingDays = daysList[0]?.date.getDay() || 0;
+            const gridPosition = paddingDays + dayIndex;
+            const rowNumber = Math.floor(gridPosition / 7);
+
+            // Show tooltip above for bottom 2 rows, below for others
+            const totalRows = Math.ceil((daysList.length + paddingDays) / 7);
+            const isBottomRows = rowNumber >= totalRows - 2;
+            const tooltipPositionClass = isBottomRows ? 'bottom-16' : 'top-16';
 
             return (
               <button
@@ -136,11 +146,11 @@ function HeatmapCalendar({
                   {day.day}
                 </span>
 
-                {/* Tooltip on hover */}
-                <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2
+                {/* Tooltip on hover - positioned dynamically based on row */}
+                <div className={`absolute ${tooltipPositionClass} left-1/2 -translate-x-1/2
                               bg-gray-800 text-white text-xs rounded px-2 py-1
                               opacity-0 group-hover:opacity-100 transition-opacity
-                              pointer-events-none z-10 whitespace-nowrap">
+                              pointer-events-none z-[9999] whitespace-nowrap shadow-lg min-w-max`}>
                   {day.date.toLocaleDateString()}<br />
                   {day.sessions} session{day.sessions !== 1 ? 's' : ''}<br />
                   {day.totalMinutes} min
