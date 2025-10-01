@@ -527,6 +527,65 @@ function Practice() {
     </div>
   );
 
+  // Show rest screen when resting
+  if (isResting && session) {
+    const nextPoseData = session.poses[currentPoseIndex + 1];
+    const nextPose = nextPoseData?.poseData ||
+                     (nextPoseData ? getPoseById(nextPoseData.poseId) : null);
+
+    return (
+      <PracticeLayout
+        header={renderHeader()}
+        footer={renderFooter()}
+        contentClassName="px-4 pb-6"
+      >
+        {/* Rest Screen */}
+        <div className="flex flex-col items-center justify-center h-full animate-fade-in">
+          <div className="text-center space-y-6">
+            {/* Rest Message */}
+            <div>
+              <h2 className="text-2xl sm:text-3xl font-light text-sage-700 mb-2">
+                Rest & Transition
+              </h2>
+              <p className="text-sm sm:text-base text-sage-600">
+                Take a moment to prepare for the next pose
+              </p>
+            </div>
+
+            {/* Countdown Timer */}
+            <div className="my-8">
+              <div className="text-6xl sm:text-7xl font-light text-primary mb-2">
+                {restTimeRemaining}
+              </div>
+              <p className="text-sm sm:text-base text-secondary">seconds remaining</p>
+            </div>
+
+            {/* Next Pose Preview */}
+            {nextPose && (
+              <div className="bg-sage-50 rounded-xl p-4 border border-sage-200">
+                <p className="text-xs sm:text-sm text-sage-600 mb-1">Next Pose:</p>
+                <p className="text-lg sm:text-xl font-medium text-sage-800">
+                  {nextPose.nameEnglish}
+                </p>
+                <p className="text-xs sm:text-sm text-sage-500 italic">
+                  {nextPose.nameSanskrit}
+                </p>
+              </div>
+            )}
+
+            {/* Skip Rest Button */}
+            <button
+              onClick={handleNextPose}
+              className="mt-6 px-8 py-3 rounded-full bg-sage-600 hover:bg-sage-700 text-white font-medium transition-all duration-300 shadow-lg hover:shadow-xl active:scale-95"
+            >
+              Skip Rest
+            </button>
+          </div>
+        </div>
+      </PracticeLayout>
+    );
+  }
+
   return (
     <PracticeLayout
       header={renderHeader()}
