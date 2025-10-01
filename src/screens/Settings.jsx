@@ -16,6 +16,7 @@ import useProgressStore from '../stores/progress';
  */
 function Settings() {
   const [showClearDialog, setShowClearDialog] = useState(false);
+  const [showCustomRest, setShowCustomRest] = useState(false);
 
   // Collapsible sections state - all closed by default
   const [openSections, setOpenSections] = useState({
@@ -245,7 +246,9 @@ function Settings() {
                   <Text className="text-sage-800 font-medium">Rest Time Between Poses</Text>
                   <Text variant="caption" className="text-sage-600">Time to transition between poses</Text>
                 </div>
-                <div className="grid grid-cols-4 gap-2">
+
+                {/* Preset buttons */}
+                <div className="grid grid-cols-4 gap-2 mb-2">
                   {[
                     { value: 0, label: 'None' },
                     { value: 5, label: '5s' },
@@ -254,9 +257,12 @@ function Settings() {
                   ].map((option) => (
                     <button
                       key={option.value}
-                      onClick={() => setRestDuration(option.value)}
+                      onClick={() => {
+                        setRestDuration(option.value);
+                        setShowCustomRest(false);
+                      }}
                       className={`py-3 px-3 rounded-lg text-sm font-medium transition-all duration-300 ${
-                        restDuration === option.value
+                        restDuration === option.value && !showCustomRest
                           ? 'bg-sage-600 text-white shadow-md scale-105'
                           : 'bg-sage-50 text-sage-700 hover:bg-sage-100 hover:scale-105'
                       }`}
@@ -265,12 +271,46 @@ function Settings() {
                     </button>
                   ))}
                 </div>
+
+                {/* Custom button */}
+                <button
+                  onClick={() => setShowCustomRest(!showCustomRest)}
+                  className={`w-full py-3 px-3 rounded-lg text-sm font-medium transition-all duration-300 ${
+                    showCustomRest
+                      ? 'bg-sage-600 text-white shadow-md'
+                      : 'bg-sage-50 text-sage-700 hover:bg-sage-100'
+                  }`}
+                >
+                  Custom
+                </button>
+
+                {/* Custom Rest Duration Input - shown when Custom is selected */}
+                {showCustomRest && (
+                  <div className="mt-3 p-3 bg-cream-50 rounded-lg border border-cream-200 animate-in fade-in slide-in-from-top-2 duration-300">
+                    <Text className="text-sage-800 font-medium mb-2 text-sm">Enter Custom Duration</Text>
+                    <div className="flex items-center gap-3">
+                      <input
+                        type="number"
+                        min="0"
+                        max="60"
+                        value={restDuration}
+                        onChange={(e) => setRestDuration(e.target.value)}
+                        placeholder="Enter seconds..."
+                        className="w-24 px-3 py-2 border border-sage-200 rounded-lg bg-white text-sage-800 text-sm focus:outline-none focus:ring-2 focus:ring-sage-500 transition-all"
+                      />
+                      <Text variant="caption" className="text-sage-600">seconds (0-60)</Text>
+                    </div>
+                  </div>
+                )}
+
+                {/* Description */}
                 <div className="mt-3 p-3 bg-cream-50 rounded-lg border border-cream-200">
                   <Text variant="caption" className="text-sage-600">
-                    {restDuration === 0 && 'Poses will transition immediately without rest periods.'}
-                    {restDuration === 5 && 'Short rest periods - great for faster-paced practices.'}
-                    {restDuration === 10 && 'Medium rest periods - balanced for most practices.'}
-                    {restDuration === 15 && 'Longer rest periods - perfect for gentle, restorative sessions.'}
+                    {restDuration === 0 && !showCustomRest && 'Poses will transition immediately without rest periods.'}
+                    {restDuration === 5 && !showCustomRest && 'Short rest periods - great for faster-paced practices.'}
+                    {restDuration === 10 && !showCustomRest && 'Medium rest periods - balanced for most practices.'}
+                    {restDuration === 15 && !showCustomRest && 'Longer rest periods - perfect for gentle, restorative sessions.'}
+                    {showCustomRest && `Custom rest period of ${restDuration} seconds between poses.`}
                   </Text>
                 </div>
               </div>

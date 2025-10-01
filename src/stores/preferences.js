@@ -140,11 +140,13 @@ const usePreferencesStore = create(
       },
 
       setRestDuration: (duration) => {
-        // Validate that duration is one of the allowed values
-        const validDurations = [0, 5, 10, 15];
-        if (!validDurations.includes(duration)) {
+        // Validate that duration is a number within reasonable range (0-60 seconds)
+        const numDuration = Number(duration);
+        if (isNaN(numDuration) || numDuration < 0 || numDuration > 60) {
           console.warn(`Invalid rest duration: ${duration}. Using 5 as default.`);
           duration = 5;
+        } else {
+          duration = Math.round(numDuration); // Ensure integer value
         }
         set({ restDuration: duration });
         return duration;
