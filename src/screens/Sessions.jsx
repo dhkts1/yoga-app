@@ -134,36 +134,31 @@ function Sessions() {
 
   return (
     <DefaultLayout
-      header={
-        <PageHeader
-          title="Sessions"
-          showBack={false}
-          actions={
-            <button
-              onClick={handleCreateSession}
-              className="flex items-center justify-center w-9 h-9 rounded-full bg-sage-600 hover:bg-sage-700 text-white transition-colors"
-              aria-label="Create custom session"
-            >
-              <Plus className="h-5 w-5" />
-            </button>
-          }
-        >
-          {/* Category Tabs below header */}
-          <div className="px-4 pb-3 bg-white border-b border-border-light">
-            <div className="mx-auto max-w-sm">
-              <CategoryTabs
-                categories={categories}
-                selectedCategory={selectedCategory}
-                onCategoryChange={setSelectedCategory}
-                counts={categoryCounts}
-              />
-            </div>
-          </div>
-        </PageHeader>
-      }
+      header={<PageHeader title="Sessions" showBack={false} />}
       className="bg-cream"
       contentClassName="px-4 py-6"
     >
+      {/* Category Tabs & Create Button */}
+      <div className="mb-6 -mt-2">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex-1">
+            <CategoryTabs
+              categories={categories}
+              selectedCategory={selectedCategory}
+              onCategoryChange={setSelectedCategory}
+              counts={categoryCounts}
+            />
+          </div>
+          <button
+            onClick={handleCreateSession}
+            className="ml-3 flex items-center justify-center w-10 h-10 rounded-full bg-sage-600 hover:bg-sage-700 text-white transition-colors flex-shrink-0"
+            aria-label="Create custom session"
+          >
+            <Plus className="h-5 w-5" />
+          </button>
+        </div>
+      </div>
+
       {/* Recommended Sessions Section - Only show if user has enough history */}
       {totalSessions >= 3 && recommendations.length > 0 && (
         <div className="mb-8">

@@ -62,8 +62,8 @@ function AppLayout({
           'flex-1',
           // Enable scrolling when scrollable=true
           scrollable ? 'overflow-y-auto overflow-x-hidden' : 'overflow-hidden',
-          // Add bottom padding for BottomNav (60px + safe area)
-          showBottomNav && 'pb-[calc(60px+env(safe-area-inset-bottom))]',
+          // Add bottom padding for BottomNav (48px + safe area)
+          showBottomNav && 'pb-[calc(48px+env(safe-area-inset-bottom))]',
           // Add bottom padding for fixed footer if present
           showFooter && fixedFooter && !showBottomNav && 'pb-[env(safe-area-inset-bottom)]',
           contentClassName

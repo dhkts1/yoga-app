@@ -51,6 +51,7 @@ function PoseLibrary() {
     return counts;
   }, [difficulties]);
 
+  // eslint-disable-next-line no-unused-vars
   const handlePoseSelect = (poseId) => {
     // Navigate to pose detail or add to custom session
     // For now, we'll just show the pose details in a future enhancement

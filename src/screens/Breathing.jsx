@@ -74,11 +74,11 @@ function Breathing() {
               variant={selectedDuration === duration.value ? 'primary' : 'secondary'}
               size="sm"
               onClick={() => setSelectedDuration(duration.value)}
-              className="flex-1 min-w-0 py-2"
+              className="flex-1 min-w-0 pt-3 pb-2"
             >
               <div className="text-center w-full">
-                <div className="text-lg font-bold">{duration.value}min</div>
-                <div className="text-[10px] leading-tight opacity-80 truncate">{duration.description}</div>
+                <div className="text-lg font-bold leading-none">{duration.value}min</div>
+                <div className="text-[10px] leading-tight opacity-80 truncate mt-0.5">{duration.description}</div>
               </div>
             </Button>
           ))}

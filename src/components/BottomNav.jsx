@@ -127,8 +127,9 @@ function BottomNav({ className }) {
       className={cn(
         // Layout
         'fixed bottom-0 left-0 right-0 z-40',
-        // Styling
-        'bg-white border-t border-border-light',
+        // Styling with gradient
+        'bg-gradient-to-t from-white to-sage-50/20',
+        'border-t border-sage-100',
         // Safe area handling for iOS
         'pb-safe-bottom',
         // Shadow
@@ -136,7 +137,7 @@ function BottomNav({ className }) {
         className
       )}
     >
-      <div className="flex items-stretch justify-around h-[60px]">
+      <div className="flex items-stretch justify-around h-[48px]">
         {tabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = tab.isActive;
@@ -173,7 +174,7 @@ function BottomNav({ className }) {
               {/* Icon */}
               <Icon
                 className={cn(
-                  // Size
+                  // Size - compact for smaller nav
                   'h-6 w-6',
                   // Color based on active state
                   isActive ? 'text-sage-700' : 'text-sage-400',
@@ -185,22 +186,6 @@ function BottomNav({ className }) {
                 strokeLinecap="round"
                 strokeLinejoin="round"
               />
-
-              {/* Label */}
-              <span
-                className={cn(
-                  // Typography
-                  'text-xs mt-1',
-                  // Font weight
-                  isActive ? 'font-semibold' : 'font-medium',
-                  // Color
-                  isActive ? 'text-sage-700' : 'text-sage-400',
-                  // Transition
-                  'transition-all duration-300'
-                )}
-              >
-                {tab.label}
-              </span>
             </button>
           );
         })}

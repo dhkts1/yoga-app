@@ -9,6 +9,7 @@ import {
 import SelectablePoseCard from '../components/SelectablePoseCard';
 import { Button, Card } from '../components/design-system';
 import { DefaultLayout } from '../components/layouts';
+import PageHeader from '../components/headers/PageHeader';
 
 function SessionBuilder() {
   const navigate = useNavigate();
@@ -161,27 +162,23 @@ function SessionBuilder() {
     navigate(`/sessions/${newSession.id}/preview?custom=true`);
   };
 
-  // Header component
-  const header = (
-    <div className="px-4 py-3 bg-cream-50 border-b border-sage-200">
-      <div className="flex items-center justify-between">
-        <h1 className="text-lg font-medium text-sage-900">
-          Create Session
-        </h1>
-        <Button
-          variant="ghost"
-          onClick={() => navigate('/sessions')}
-          className="text-sage-600 text-sm"
-        >
-          Cancel
-        </Button>
-      </div>
-    </div>
-  );
-
   return (
     <DefaultLayout
-      header={header}
+      header={
+        <PageHeader
+          title="Create Session"
+          backPath="/sessions"
+          actions={
+            <Button
+              variant="ghost"
+              onClick={() => navigate('/sessions')}
+              className="text-sage-600 text-sm"
+            >
+              Cancel
+            </Button>
+          }
+        />
+      }
       className="bg-cream"
       contentClassName="px-4 py-6"
     >

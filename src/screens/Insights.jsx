@@ -105,7 +105,7 @@ function Insights() {
 
   if (totalSessions < 5) {
     return (
-      <DefaultLayout header={<PageHeader title="Progress" backPath="/" />}>
+      <DefaultLayout header={<PageHeader title="Progress" showBack={false} />}>
         <div className="px-4 py-8 text-center flex-1 flex items-center justify-center">
           <div className="max-w-sm mx-auto">
             <Activity className="h-16 w-16 text-sage-300 mx-auto mb-4" />
@@ -131,7 +131,7 @@ function Insights() {
           <PageHeader
             title="Practice Insights"
             subtitle="Your mindful journey analytics"
-            backPath="/"
+            showBack={false}
             actions={
               <button
                 onClick={handleExportPDF}

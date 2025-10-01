@@ -7,9 +7,10 @@ import { cn } from '../../lib/utils';
  *
  * Features:
  * - Back button (optional)
- * - Page title
+ * - Page title with gradient text
  * - Right-side actions (optional)
- * - Consistent styling
+ * - Elevated design with subtle shadow
+ * - Design system compliant
  *
  * Usage:
  * <PageHeader
@@ -42,30 +43,44 @@ function PageHeader({
   return (
     <header
       className={cn(
-        'bg-white border-b border-border-light',
+        // Background with subtle gradient
+        'bg-gradient-to-b from-white to-sage-50/30',
+        // Shadow for depth
+        'shadow-sm',
+        // Border
+        'border-b border-sage-100',
         className
       )}
       {...props}
     >
-      <div className="px-4 py-3">
-        <div className="flex items-center justify-between">
+      <div className="px-4 h-14 flex items-center">
+        <div className="flex items-center justify-between w-full">
           {/* Back Button + Title */}
           <div className="flex items-center gap-3 min-w-0 flex-1">
             {showBack && (
               <button
                 onClick={handleBack}
-                className="flex-shrink-0 p-2 -ml-2 text-sage-600 hover:text-sage-700 transition-colors print:hidden"
+                className={cn(
+                  'flex-shrink-0 p-1.5 -ml-1.5',
+                  'text-sage-600 hover:text-sage-700',
+                  'hover:bg-sage-50 rounded-full',
+                  'transition-all duration-200',
+                  'print:hidden'
+                )}
                 aria-label="Go back"
               >
-                <ArrowLeft className="h-6 w-6" />
+                <ArrowLeft className="h-5 w-5" />
               </button>
             )}
             <div className="min-w-0 flex-1">
-              <h1 className="text-lg font-medium text-sage-900 truncate">
+              <h1 className={cn(
+                'text-base font-semibold truncate',
+                'bg-gradient-to-r from-sage-800 to-sage-600 bg-clip-text text-transparent'
+              )}>
                 {title}
               </h1>
               {subtitle && (
-                <p className="text-sm text-secondary truncate">{subtitle}</p>
+                <p className="text-xs text-sage-600 truncate">{subtitle}</p>
               )}
             </div>
           </div>

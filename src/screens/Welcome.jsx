@@ -3,7 +3,8 @@ import { useRef, useState, useEffect } from 'react';
 import { Sun, Moon, Sunrise, Flame, Star, ChevronRight, Sparkles, BookOpen, Calendar } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button, Heading, Text } from '../components/design-system';
-import { FullscreenLayout } from '../components/layouts';
+import { DefaultLayout } from '../components/layouts';
+import { PageHeader } from '../components/headers';
 import useProgressStore from '../stores/progress';
 import usePreferencesStore from '../stores/preferences';
 import useProgramProgressStore from '../stores/programProgress';
@@ -141,11 +142,11 @@ function Welcome() {
   };
 
   return (
-    <FullscreenLayout
+    <DefaultLayout
+      header={<PageHeader title="Today" showBack={false} />}
       showBottomNav={true}
-      centered={true}
     >
-      <div className="w-full max-w-sm px-4 py-8 flex flex-col items-center justify-center min-h-full">
+      <div className="w-full max-w-sm mx-auto px-4 py-6 flex flex-col items-center">
         {/* Time-based greeting */}
         <div className="mb-6 text-center">
           <GreetingIcon className="mx-auto mb-4 h-12 w-12 text-sage-600" />
@@ -376,12 +377,7 @@ function Welcome() {
         )}
       </div>
 
-      {/* Calming background element - abstract per PRD */}
-      <div className="fixed inset-0 -z-10 overflow-hidden">
-        <div className="absolute -top-20 -right-20 h-40 w-40 rounded-full bg-sage-100"></div>
-        <div className="absolute -bottom-20 -left-20 h-32 w-32 rounded-full bg-cream-200"></div>
-      </div>
-    </FullscreenLayout>
+    </DefaultLayout>
   );
 }
 

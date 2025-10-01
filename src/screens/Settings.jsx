@@ -96,7 +96,7 @@ function Settings() {
 
   return (
     <DefaultLayout
-      header={<PageHeader title="Settings" backPath="/" />}
+      header={<PageHeader title="Settings" showBack={false} />}
     >
       <Container className="py-6 space-y-4 pb-24">
         {/* Practice Settings Section */}

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
-import { Play, Pause, SkipBack, SkipForward, X, HelpCircle, BookMarked } from 'lucide-react';
+import { Play, Pause, SkipBack, SkipForward, HelpCircle, BookMarked } from 'lucide-react';
 import { getSessionById } from '../data/sessions';
 import { getPoseById } from '../data/poses';
 import { getCustomSessionWithPoses } from '../data/customSessions';
@@ -9,6 +9,7 @@ import PoseImage from '../components/PoseImage';
 import MoodTracker from '../components/MoodTracker';
 import { PracticeLayout } from '../components/layouts';
 import FeatureTooltip from '../components/FeatureTooltip';
+import { PracticeHeader } from '../components/headers';
 
 function Practice() {
   const navigate = useNavigate();
@@ -424,34 +425,21 @@ function Practice() {
 
   // Render header content
   const renderHeader = () => (
-    <>
-      {/* Header Controls */}
-      <div className="flex items-center justify-between p-3 px-4 relative z-[60]">
-        <button
-          onClick={handleExit}
-          className="flex h-10 w-10 items-center justify-center rounded-full bg-sage-100 text-sage-700 hover:bg-sage-200 transition-colors flex-shrink-0"
-          aria-label="Exit practice"
-        >
-          <X className="h-5 w-5" />
-        </button>
-
-        <div className="text-center min-w-0 flex-1 mx-3">
-          {/* Program Context Badge (if practicing as part of a program) */}
-          {programContext && (
-            <div className="flex items-center justify-center gap-1 mb-1">
-              <BookMarked className="h-3 w-3 text-sage-600" />
-              <p className="text-xs text-sage-600 truncate">
-                {programName} • Week {weekNumber}, Day {dayNumber}
-              </p>
-            </div>
-          )}
-          <h1 className="text-sm font-medium text-primary truncate">{session.name}</h1>
-          <p className="text-xs text-secondary">
-            {currentPoseIndex + 1} of {session?.poses?.length || 0}
+    <PracticeHeader
+      title={session.name}
+      subtitle={`${currentPoseIndex + 1} of ${session?.poses?.length || 0}`}
+      onExit={handleExit}
+      exitButtonStyle="circular"
+      contextBadge={programContext && (
+        <>
+          <BookMarked className="h-3 w-3 text-sage-600" />
+          <p className="text-xs text-sage-600 truncate">
+            {programName} • Week {weekNumber}, Day {dayNumber}
           </p>
-        </div>
-
-        <div className="flex space-x-1 flex-shrink-0">
+        </>
+      )}
+      actions={
+        <>
           <button
             ref={tipsButtonRef}
             onClick={() => {
@@ -478,17 +466,17 @@ function Practice() {
             onDismiss={handleTipsTooltipDismiss}
             delay={0}
           />
+        </>
+      }
+      progressBar={
+        <div className="h-1.5 rounded-full bg-cream-200">
+          <div
+            className="h-full rounded-full bg-primary transition-all duration-1000 ease-linear"
+            style={{ width: `${progressPercent}%` }}
+          />
         </div>
-      </div>
-
-      {/* Progress Bar */}
-      <div className="mx-4 mb-2 h-1.5 rounded-full bg-cream-200">
-        <div
-          className="h-full rounded-full bg-primary transition-all duration-1000 ease-linear"
-          style={{ width: `${progressPercent}%` }}
-        />
-      </div>
-    </>
+      }
+    />
   );
 
   // Render footer content

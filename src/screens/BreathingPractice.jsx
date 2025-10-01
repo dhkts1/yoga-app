@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Play, Pause, X, RotateCcw, Volume2, VolumeX, Heart, HeartOff } from 'lucide-react';
+import { Play, Pause, RotateCcw, Volume2, VolumeX, Heart, HeartOff } from 'lucide-react';
 import { Button, Text, Heading } from '../components/design-system';
 import { PracticeLayout } from '../components/layouts';
 import BreathingGuide from '../components/BreathingGuide';
+import { PracticeHeader } from '../components/headers';
 import { getBreathingExerciseById, calculateBreathingCycles } from '../data/breathing';
 import useProgressStore from '../stores/progress';
 import usePreferencesStore from '../stores/preferences';
@@ -319,27 +320,13 @@ function BreathingPractice() {
   return (
     <PracticeLayout
       header={
-        <div className="px-4 py-3 bg-white border-b border-sage-100">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3 min-w-0 flex-1">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleExit}
-                className="flex-shrink-0 p-2 -ml-2 text-sage-600 hover:text-sage-700"
-              >
-                <X className="h-6 w-6" />
-              </Button>
-              <div className="min-w-0 flex-1">
-                <h1 className="text-lg font-medium text-sage-900 truncate">
-                  {exercise.nameEnglish}
-                </h1>
-                <p className="text-sm text-secondary italic truncate">
-                  {exercise.nameSanskrit}
-                </p>
-              </div>
-            </div>
-            <div className="flex items-center gap-1 flex-shrink-0 ml-3">
+        <PracticeHeader
+          title={exercise.nameEnglish}
+          subtitle={exercise.nameSanskrit}
+          onExit={handleExit}
+          exitButtonStyle="standard"
+          actions={
+            <>
               <Button
                 variant="ghost"
                 size="sm"
@@ -365,9 +352,9 @@ function BreathingPractice() {
               >
                 <RotateCcw className="h-5 w-5" />
               </Button>
-            </div>
-          </div>
-        </div>
+            </>
+          }
+        />
       }
       contentClassName="flex flex-col bg-gradient-to-br from-sage-50 to-cream-50"
     >
