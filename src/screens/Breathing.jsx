@@ -36,8 +36,8 @@ function Breathing() {
     <DefaultLayout
       header={
         <PageHeader
-          title="Breathing Exercises"
-          subtitle="Practice pranayama for quick stress relief and focus"
+          title="Breathwork & Pranayama"
+          subtitle="Find calm in just a few breaths"
           showBack={false}
         />
       }

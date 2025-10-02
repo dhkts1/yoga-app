@@ -116,7 +116,7 @@ function Sessions() {
 
   return (
     <DefaultLayout
-      header={<PageHeader title="Sessions" showBack={false} />}
+      header={<PageHeader title="Choose Your Practice" subtitle="Yoga sessions for every moment" showBack={false} />}
       className="bg-cream"
       contentClassName="px-4 py-6"
     >
