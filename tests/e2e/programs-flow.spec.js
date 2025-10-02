@@ -501,8 +501,11 @@ test.describe('Multi-Week Programs Flow', () => {
       await skipMoodTrackerIfPresent(page);
       await page.waitForURL(/\/complete/, { timeout: 15000 });
 
-      // Navigate to Insights - use bottom nav directly (program sessions return to week detail, not home)
-      await page.waitForTimeout(500);
+      // Navigate back from Complete screen (no bottom nav there), then to Insights
+      await page.getByRole('button', { name: 'Back to Home' }).click();
+      await page.waitForURL(/\/programs\/iyengar-foundation-13\/week\/1/);
+
+      // Now click Progress from bottom nav
       await page.getByRole('button', { name: 'Progress', exact: true }).click();
       await page.waitForURL(/\/insights|\/progress/);
 

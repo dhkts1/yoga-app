@@ -1,11 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Heart, HeartOff } from 'lucide-react';
+import { Play, Pause, RotateCcw } from 'lucide-react';
 import { Button, Text } from '../components/design-system';
 import { PracticeLayout } from '../components/layouts';
 import BreathingGuide from '../components/BreathingGuide';
 import { PracticeHeader } from '../components/headers';
-import GlassIconButton from '../components/ui/GlassIconButton';
 import { getBreathingExerciseById, calculateBreathingCycles } from '../data/breathing';
 import useProgressStore from '../stores/progress';
 import usePreferencesStore from '../stores/preferences';
@@ -320,90 +319,120 @@ function BreathingPractice() {
     );
   }
 
+  // Calculate progress percentage
+  const progressPercent = totalCycles > 0 ? (currentCycle / totalCycles) * 100 : 0;
+
   // Render header
   const renderHeader = () => (
     <PracticeHeader
       title={exercise.nameEnglish}
-      subtitle={exercise.nameSanskrit}
       onExit={handleExit}
       exitButtonStyle="circular"
-      actions={
-        <GlassIconButton
-          icon={breathingPrefs.showMoodCheck ? Heart : HeartOff}
-          onClick={toggleBreathingMoodCheck}
-          label={breathingPrefs.showMoodCheck ? 'Mood check enabled' : 'Mood check disabled'}
-          variant="circular"
-          className={!breathingPrefs.showMoodCheck ? 'opacity-50' : ''}
-        />
+      progressBar={
+        sessionStarted && (
+          <div className="h-1.5 rounded-full bg-cream-200">
+            <div
+              className="h-full rounded-full bg-primary transition-all duration-1000 ease-linear"
+              style={{ width: `${progressPercent}%` }}
+            />
+          </div>
+        )
       }
     />
+  );
+
+  // Render footer with controls
+  const renderFooter = () => (
+    <div className="px-4 pt-6 pb-4 bg-background border-t border-cream-200">
+      <div className="flex items-center justify-center gap-6 max-w-sm mx-auto">
+        {!sessionStarted ? (
+          <button
+            onClick={handleStart}
+            className="flex h-16 w-16 items-center justify-center rounded-full bg-primary text-white shadow-lg hover:bg-primary/90 active:scale-95 transition-transform"
+            aria-label="Start practice"
+          >
+            <Play className="h-7 w-7 ml-1" />
+          </button>
+        ) : (
+          <>
+            <button
+              onClick={handleReset}
+              className="flex h-12 w-12 items-center justify-center rounded-full backdrop-blur-md bg-sage-50/40 text-sage-700 hover:text-sage-900 hover:bg-sage-100/50 transition-all hover:scale-105 active:scale-95"
+              aria-label="Reset"
+            >
+              <RotateCcw className="h-5 w-5" />
+            </button>
+
+            <button
+              onClick={isPaused ? handleResume : handlePause}
+              className="flex h-16 w-16 items-center justify-center rounded-full bg-primary text-white shadow-lg hover:bg-primary/90 active:scale-95 transition-transform"
+              aria-label={isPaused ? 'Resume' : 'Pause'}
+            >
+              {isPaused ? (
+                <Play className="h-7 w-7 ml-1" />
+              ) : (
+                <Pause className="h-7 w-7" />
+              )}
+            </button>
+
+            <div className="w-12" /> {/* Spacer for symmetry */}
+          </>
+        )}
+      </div>
+    </div>
   );
 
   return (
     <PracticeLayout
       header={renderHeader()}
-      scrollable={true}
-      contentClassName="px-4 flex flex-col"
+      footer={renderFooter()}
+      contentClassName="px-4 pb-6"
     >
-      {/* Timer display */}
-      <div className="text-center mb-4 mt-8">
-        <div className="text-3xl sm:text-4xl font-light text-primary">
-          {formatTime(timeRemaining)}
+      {/* Timer and cycle info - above breathing circle */}
+      <div className="text-center mb-4 mt-4">
+        {/* Cycle count */}
+        {sessionStarted && (
+          <p className="text-xs text-sage-500 mb-2">
+            Cycle {currentCycle} of {totalCycles}
+          </p>
+        )}
+
+        {/* Timer */}
+        <div className="mb-2">
+          <div className="text-2xl sm:text-3xl font-light text-primary">
+            {formatTime(timeRemaining)}
+          </div>
+          <p className="text-xs sm:text-sm text-secondary">remaining</p>
         </div>
-        <p className="text-xs sm:text-sm text-secondary mt-1">remaining</p>
       </div>
 
-      {/* Main breathing guide with integrated controls */}
-      <div className="flex items-center justify-center mb-2 relative group">
+      {/* Breathing guide - replaces PoseImage in yoga practice */}
+      <div className="mx-auto mb-3 flex items-center justify-center">
         <BreathingGuide
           exercise={exercise}
           isActive={isActive}
           onCycleComplete={handleCycleComplete}
           currentCycle={currentCycle}
           totalCycles={totalCycles}
-          onStart={handleStart}
-          onPause={handlePause}
-          onResume={handleResume}
-          onReset={handleReset}
-          sessionStarted={sessionStarted}
-          isPaused={isPaused}
         />
-
-        {/* Exercise description tooltip - shows on hover */}
-        {!sessionStarted && (
-          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
-            <div className="bg-white/95 backdrop-blur-sm rounded-lg p-4 shadow-lg max-w-xs">
-              <p className="text-xs text-secondary">
-                {exercise.description}
-              </p>
-            </div>
-          </div>
-        )}
       </div>
 
-      {/* Spacer to push progress bar to bottom */}
-      <div className="flex-1" />
+      {/* Exercise Info - matches pose info structure */}
+      <div className="text-center">
+        <h2 className="mb-1 text-lg sm:text-xl font-medium text-primary">
+          {exercise.nameEnglish}
+        </h2>
+        <p className="mb-1 text-xs sm:text-sm text-secondary italic">
+          {exercise.nameSanskrit}
+        </p>
 
-      {/* Progress bar - positioned above navbar */}
-      {sessionStarted && (
-        <div className="pb-20 pt-4">
-          <div className="flex justify-between items-center mb-2">
-            <Text variant="caption" className="text-secondary">
-              Cycle {currentCycle} of {totalCycles}
-            </Text>
-            <Text variant="caption" className="text-secondary">
-              {Math.round((currentCycle / totalCycles) * 100)}%
-            </Text>
-          </div>
-          <div className="w-full bg-cream-200 rounded-full h-2">
-            <div
-              className="bg-sage-500 h-2 rounded-full transition-all duration-300 ease-out"
-              style={{ width: `${(currentCycle / totalCycles) * 100}%` }}
-            />
-          </div>
-        </div>
-      )}
-
+        {/* Exercise description - matches pose description */}
+        {exercise.description && (
+          <p className="hidden sm:block mb-3 text-sm text-sage-700 px-4 leading-relaxed">
+            {exercise.description}
+          </p>
+        )}
+      </div>
     </PracticeLayout>
   );
 }

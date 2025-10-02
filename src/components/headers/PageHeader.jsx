@@ -48,10 +48,10 @@ function PageHeader({
       {...props}
     >
       <div className="px-4 h-14 flex items-center">
-        <div className="flex items-center justify-between w-full">
-          {/* Back Button + Title */}
-          <div className="flex items-center gap-3 min-w-0 flex-1">
-            {showBack && (
+        <div className="flex items-center justify-center w-full relative">
+          {/* Back Button - absolute positioned on left */}
+          {showBack && (
+            <div className="absolute left-0">
               <GlassIconButton
                 icon={ArrowLeft}
                 onClick={handleBack}
@@ -59,24 +59,26 @@ function PageHeader({
                 variant="standard"
                 className="print:hidden"
               />
-            )}
-            <div className="min-w-0 flex-1">
-              <h1 className={cn(
-                'text-base font-semibold truncate tracking-tight',
-                // Solid color - cleaner, more minimal
-                'text-sage-800'
-              )}>
-                {title}
-              </h1>
-              {subtitle && (
-                <p className="text-xs text-sage-600/80 truncate mt-0.5">{subtitle}</p>
-              )}
             </div>
+          )}
+
+          {/* Title - truly centered with slight downward shift */}
+          <div className="min-w-0 text-center mt-1">
+            <h1 className={cn(
+              'text-base font-semibold truncate tracking-tight',
+              // Solid color - cleaner, more minimal
+              'text-sage-800'
+            )}>
+              {title}
+            </h1>
+            {subtitle && (
+              <p className="text-xs text-sage-600/80 truncate mt-0.5">{subtitle}</p>
+            )}
           </div>
 
-          {/* Right Actions */}
+          {/* Right Actions - absolute positioned on right */}
           {actions && (
-            <div className="flex-shrink-0 ml-3">
+            <div className="absolute right-0 flex-shrink-0">
               {actions}
             </div>
           )}

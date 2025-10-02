@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from 'react';
-import { Play, Pause, RotateCcw } from 'lucide-react';
 import { Text, CircularProgress } from './design-system';
 import { getBreathingInstruction } from '../data/breathing';
 
@@ -22,14 +21,7 @@ function BreathingGuide({
   onCycleComplete,
   currentCycle = 0,
   totalCycles = 0,
-  className = '',
-  // Control props
-  onStart,
-  onPause,
-  onResume,
-  onReset,
-  sessionStarted = false,
-  isPaused = false
+  className = ''
 }) {
   const [currentPhase, setCurrentPhase] = useState('inhale');
   const [timeInPhase, setTimeInPhase] = useState(0);
@@ -229,31 +221,6 @@ function BreathingGuide({
         >
           {/* Inner circle for depth */}
           <div className="w-24 h-24 rounded-full bg-sage-300 opacity-50" />
-        </div>
-
-        {/* Play/Pause button - centered on the circle */}
-        <div className="absolute flex items-center justify-center z-10">
-          {!sessionStarted ? (
-            <button
-              onClick={onStart}
-              className="flex h-16 w-16 items-center justify-center rounded-full bg-white text-primary shadow-lg hover:bg-cream-50 active:scale-95 transition-transform"
-              aria-label="Start practice"
-            >
-              <Play className="h-7 w-7 ml-1" />
-            </button>
-          ) : (
-            <button
-              onClick={isPaused ? onResume : onPause}
-              className="flex h-16 w-16 items-center justify-center rounded-full bg-white text-primary shadow-lg hover:bg-cream-50 active:scale-95 transition-transform"
-              aria-label={isPaused ? 'Resume' : 'Pause'}
-            >
-              {isPaused ? (
-                <Play className="h-7 w-7 ml-1" />
-              ) : (
-                <Pause className="h-7 w-7" />
-              )}
-            </button>
-          )}
         </div>
       </div>
 

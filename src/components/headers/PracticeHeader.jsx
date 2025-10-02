@@ -54,14 +54,16 @@ function PracticeHeader({
     >
       {/* Main header content - Fixed height */}
       <div className="h-14 px-4 flex items-center">
-        <div className="flex items-center justify-between w-full relative z-[60]">
-          {/* Exit button */}
-          {ExitButton}
+        <div className="flex items-center justify-center w-full relative z-[60]">
+          {/* Exit button - absolute positioned on left */}
+          <div className="absolute left-0">
+            {ExitButton}
+          </div>
 
-          {/* Title area - centered or left-aligned based on context */}
+          {/* Title area - truly centered with slight downward shift */}
           <div className={cn(
-            "min-w-0 flex-1",
-            exitButtonStyle === 'circular' ? "text-center mx-3" : "flex items-center gap-3 ml-3"
+            "min-w-0 mt-1",
+            exitButtonStyle === 'circular' ? "text-center" : "flex items-center gap-3"
           )}>
             {contextBadge && exitButtonStyle === 'circular' && (
               <div className="flex items-center justify-center gap-1 mb-1">
@@ -86,9 +88,9 @@ function PracticeHeader({
             )}
           </div>
 
-          {/* Right actions */}
+          {/* Right actions - absolute positioned on right */}
           {actions && (
-            <div className="flex items-center gap-1.5 flex-shrink-0 ml-3">
+            <div className="absolute right-0 flex items-center gap-1.5 flex-shrink-0">
               {actions}
             </div>
           )}

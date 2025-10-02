@@ -30,7 +30,7 @@ function PracticeLayout({
     <AppLayout
       showHeader={!!header}
       showFooter={!!footer}
-      showBottomNav={true}
+      showBottomNav={false}
       fixedHeader={true}  // Header should stick to top
       fixedFooter={true}  // Footer should stick to bottom
       scrollable={scrollable}
