@@ -580,8 +580,8 @@ test.describe('Multi-Week Programs Flow', () => {
       await startButton.click();
       await page.waitForTimeout(500);
 
-      // Navigate to home
-      await page.getByRole('button', { name: /home/i }).click();
+      // Navigate to home (Today tab in bottom nav)
+      await page.getByRole('button', { name: 'Today', exact: true }).click();
       await page.waitForURL('/');
 
       // Verify active program shows (could be in a card or banner)
