@@ -23,16 +23,17 @@ function PracticeLayout({
   footer,
   className,
   contentClassName,
+  scrollable = true,
   ...props
 }) {
   return (
     <AppLayout
       showHeader={!!header}
       showFooter={!!footer}
-      showBottomNav={false}
+      showBottomNav={true}
       fixedHeader={true}  // Header should stick to top
       fixedFooter={true}  // Footer should stick to bottom
-      scrollable={true}   // Ensure content is scrollable
+      scrollable={scrollable}
       className={className}
       contentClassName={contentClassName}
       header={header}

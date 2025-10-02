@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { Play, Pause, RotateCcw } from 'lucide-react';
 import { Text, CircularProgress } from './design-system';
 import { getBreathingInstruction } from '../data/breathing';
 
@@ -21,7 +22,14 @@ function BreathingGuide({
   onCycleComplete,
   currentCycle = 0,
   totalCycles = 0,
-  className = ''
+  className = '',
+  // Control props
+  onStart,
+  onPause,
+  onResume,
+  onReset,
+  sessionStarted = false,
+  isPaused = false
 }) {
   const [currentPhase, setCurrentPhase] = useState('inhale');
   const [timeInPhase, setTimeInPhase] = useState(0);
@@ -195,27 +203,7 @@ function BreathingGuide({
 
   return (
     <div className={`flex flex-col items-center justify-center ${className}`}>
-      {/* Progress indicator */}
-      {totalCycles > 0 && (
-        <div className="mb-6 w-full max-w-xs">
-          <div className="flex justify-between items-center mb-2">
-            <Text variant="caption" className="text-secondary">
-              Cycle {currentCycle} of {totalCycles}
-            </Text>
-            <Text variant="caption" className="text-secondary">
-              {Math.round(overallProgress)}%
-            </Text>
-          </div>
-          <div className="w-full bg-cream-200 rounded-full h-2">
-            <div
-              className="bg-sage-500 h-2 rounded-full transition-all duration-300 ease-out"
-              style={{ width: `${overallProgress}%` }}
-            />
-          </div>
-        </div>
-      )}
-
-      {/* Main breathing circle */}
+      {/* Main breathing circle with controls */}
       <div className="relative flex items-center justify-center mb-8 w-56 h-56">
         {/* Phase progress ring - positioned absolutely */}
         <div className="absolute inset-0 flex items-center justify-center">
@@ -241,6 +229,31 @@ function BreathingGuide({
         >
           {/* Inner circle for depth */}
           <div className="w-24 h-24 rounded-full bg-sage-300 opacity-50" />
+        </div>
+
+        {/* Play/Pause button - centered on the circle */}
+        <div className="absolute flex items-center justify-center z-10">
+          {!sessionStarted ? (
+            <button
+              onClick={onStart}
+              className="flex h-16 w-16 items-center justify-center rounded-full bg-white text-primary shadow-lg hover:bg-cream-50 active:scale-95 transition-transform"
+              aria-label="Start practice"
+            >
+              <Play className="h-7 w-7 ml-1" />
+            </button>
+          ) : (
+            <button
+              onClick={isPaused ? onResume : onPause}
+              className="flex h-16 w-16 items-center justify-center rounded-full bg-white text-primary shadow-lg hover:bg-cream-50 active:scale-95 transition-transform"
+              aria-label={isPaused ? 'Resume' : 'Pause'}
+            >
+              {isPaused ? (
+                <Play className="h-7 w-7 ml-1" />
+              ) : (
+                <Pause className="h-7 w-7" />
+              )}
+            </button>
+          )}
         </div>
       </div>
 

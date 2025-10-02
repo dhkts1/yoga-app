@@ -801,7 +801,7 @@ test.describe('Multi-Week Programs Flow', () => {
       await expect(progressText).toBeVisible({ timeout: 3000 });
 
       // Verify progress bar is at 0%
-      const progressBar = page.locator('.bg-green-600').first();
+      const progressBar = page.locator('.bg-state-success').first();
       const width = await progressBar.evaluate((el) => el.style.width);
       expect(width).toBe('0%');
 
@@ -882,7 +882,7 @@ test.describe('Multi-Week Programs Flow', () => {
       await expect(progressText).toBeVisible({ timeout: 3000 });
 
       // 5. Progress bar at 25%
-      const progressBar = page.locator('.bg-green-600').first();
+      const progressBar = page.locator('.bg-state-success').first();
       const width = await progressBar.evaluate((el) => el.style.width);
       expect(width).toMatch(/25%/);
 
@@ -920,7 +920,8 @@ test.describe('Multi-Week Programs Flow', () => {
         await page.waitForURL(/\/practice/);
         await skipMoodTrackerIfPresent(page);
 
-        await page.getByRole('button', { name: /play/i }).click();
+        await ensurePracticeStarted(page);
+        await page.waitForTimeout(300);
         await skipMoodTrackerIfPresent(page);
         await page.waitForURL(/\/complete/, { timeout: 15000 });
         await page.waitForTimeout(1000);
@@ -952,7 +953,7 @@ test.describe('Multi-Week Programs Flow', () => {
       let progressText = page.locator('text=/1\\/\\d+\\s+sessions?/i').first();
       await expect(progressText).toBeVisible({ timeout: 3000 });
 
-      let progressBar = page.locator('.bg-green-600').first();
+      let progressBar = page.locator('.bg-state-success').first();
       let width = await progressBar.evaluate((el) => el.style.width);
       expect(width).toMatch(/25%/);
 
@@ -961,7 +962,7 @@ test.describe('Multi-Week Programs Flow', () => {
       progressText = page.locator('text=/2\\/\\d+\\s+sessions?/i').first();
       await expect(progressText).toBeVisible({ timeout: 3000 });
 
-      progressBar = page.locator('.bg-green-600').first();
+      progressBar = page.locator('.bg-state-success').first();
       width = await progressBar.evaluate((el) => el.style.width);
       expect(width).toMatch(/50%/);
 
@@ -970,7 +971,7 @@ test.describe('Multi-Week Programs Flow', () => {
       progressText = page.locator('text=/3\\/\\d+\\s+sessions?/i').first();
       await expect(progressText).toBeVisible({ timeout: 3000 });
 
-      progressBar = page.locator('.bg-green-600').first();
+      progressBar = page.locator('.bg-state-success').first();
       width = await progressBar.evaluate((el) => el.style.width);
       expect(width).toMatch(/75%/);
     });
@@ -997,7 +998,8 @@ test.describe('Multi-Week Programs Flow', () => {
         await page.waitForURL(/\/practice/);
         await skipMoodTrackerIfPresent(page);
 
-        await page.getByRole('button', { name: /play/i }).click();
+        await ensurePracticeStarted(page);
+        await page.waitForTimeout(300);
         await skipMoodTrackerIfPresent(page);
         await page.waitForURL(/\/complete/, { timeout: 15000 });
         await page.waitForTimeout(1000);
@@ -1039,7 +1041,7 @@ test.describe('Multi-Week Programs Flow', () => {
       await expect(progressText).toBeVisible({ timeout: 3000 });
 
       // 2. Progress bar at 100%
-      const progressBar = page.locator('.bg-green-600').first();
+      const progressBar = page.locator('.bg-state-success').first();
       const width = await progressBar.evaluate((el) => el.style.width);
       expect(width).toMatch(/100%/);
 
@@ -1248,7 +1250,8 @@ test.describe('Multi-Week Programs Flow', () => {
         await page.waitForURL(/\/practice/);
         await skipMoodTrackerIfPresent(page);
 
-        await page.getByRole('button', { name: /play/i }).click();
+        await ensurePracticeStarted(page);
+        await page.waitForTimeout(300);
         await skipMoodTrackerIfPresent(page);
         await page.waitForURL(/\/complete/, { timeout: 15000 });
 
@@ -1320,7 +1323,8 @@ test.describe('Multi-Week Programs Flow', () => {
         await page.waitForURL(/\/practice/);
         await skipMoodTrackerIfPresent(page);
 
-        await page.getByRole('button', { name: /play/i }).click();
+        await ensurePracticeStarted(page);
+        await page.waitForTimeout(300);
         await skipMoodTrackerIfPresent(page);
         await page.waitForURL(/\/complete/, { timeout: 15000 });
 
@@ -1387,7 +1391,8 @@ test.describe('Multi-Week Programs Flow', () => {
         await page.waitForURL(/\/practice/);
         await skipMoodTrackerIfPresent(page);
 
-        await page.getByRole('button', { name: /play/i }).click();
+        await ensurePracticeStarted(page);
+        await page.waitForTimeout(300);
         await skipMoodTrackerIfPresent(page);
         await page.waitForURL(/\/complete/, { timeout: 15000 });
 
@@ -1464,7 +1469,8 @@ test.describe('Multi-Week Programs Flow', () => {
         await page.waitForURL(/\/practice/);
         await skipMoodTrackerIfPresent(page);
 
-        await page.getByRole('button', { name: /play/i }).click();
+        await ensurePracticeStarted(page);
+        await page.waitForTimeout(300);
         await skipMoodTrackerIfPresent(page);
         await page.waitForURL(/\/complete/, { timeout: 15000 });
 
@@ -1502,7 +1508,7 @@ test.describe('Multi-Week Programs Flow', () => {
       }
 
       // Verify progress bar is NOT at 100% yet
-      let progressBar = page.locator('.bg-green-600').first();
+      let progressBar = page.locator('.bg-state-success').first();
       let width = await progressBar.evaluate((el) => el.style.width);
       expect(width).not.toBe('100%');
 
@@ -1510,7 +1516,7 @@ test.describe('Multi-Week Programs Flow', () => {
       await completeSession();
 
       // State Verification: Progress bar should now be at 100%
-      progressBar = page.locator('.bg-green-600').first();
+      progressBar = page.locator('.bg-state-success').first();
       width = await progressBar.evaluate((el) => el.style.width);
       expect(width).toBe('100%');
 
@@ -1541,7 +1547,8 @@ test.describe('Multi-Week Programs Flow', () => {
         await page.waitForURL(/\/practice/);
         await skipMoodTrackerIfPresent(page);
 
-        await page.getByRole('button', { name: /play/i }).click();
+        await ensurePracticeStarted(page);
+        await page.waitForTimeout(300);
         await skipMoodTrackerIfPresent(page);
         await page.waitForURL(/\/complete/, { timeout: 15000 });
 

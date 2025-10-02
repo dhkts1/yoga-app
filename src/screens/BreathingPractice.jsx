@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Play, Pause, RotateCcw, Volume2, VolumeX, Heart, HeartOff } from 'lucide-react';
+import { Heart, HeartOff } from 'lucide-react';
 import { Button, Text } from '../components/design-system';
 import { PracticeLayout } from '../components/layouts';
 import BreathingGuide from '../components/BreathingGuide';
@@ -299,6 +299,7 @@ function BreathingPractice() {
           title="How are you feeling before practice?"
           onComplete={handlePreMoodComplete}
           onSkip={handlePreMoodSkip}
+          onDontShowAgain={toggleBreathingMoodCheck}
           isPostPractice={false}
         />
       </div>
@@ -312,6 +313,7 @@ function BreathingPractice() {
           title="How do you feel after your practice?"
           onComplete={handlePostMoodComplete}
           onSkip={handlePostMoodSkip}
+          onDontShowAgain={toggleBreathingMoodCheck}
           isPostPractice={true}
         />
       </div>
@@ -326,115 +328,78 @@ function BreathingPractice() {
       onExit={handleExit}
       exitButtonStyle="circular"
       actions={
-        <>
-          <GlassIconButton
-            icon={breathingPrefs.showMoodCheck ? Heart : HeartOff}
-            onClick={toggleBreathingMoodCheck}
-            label={breathingPrefs.showMoodCheck ? 'Mood check enabled' : 'Mood check disabled'}
-            variant="circular"
-            className={!breathingPrefs.showMoodCheck ? 'opacity-50' : ''}
-          />
-          <GlassIconButton
-            icon={voiceEnabled ? Volume2 : VolumeX}
-            onClick={() => setVoiceEnabled(!voiceEnabled)}
-            label={voiceEnabled ? 'Voice enabled' : 'Voice disabled'}
-            variant="circular"
-            className={!voiceEnabled ? 'opacity-50' : ''}
-          />
-        </>
+        <GlassIconButton
+          icon={breathingPrefs.showMoodCheck ? Heart : HeartOff}
+          onClick={toggleBreathingMoodCheck}
+          label={breathingPrefs.showMoodCheck ? 'Mood check enabled' : 'Mood check disabled'}
+          variant="circular"
+          className={!breathingPrefs.showMoodCheck ? 'opacity-50' : ''}
+        />
       }
     />
-  );
-
-  // Render footer
-  const renderFooter = () => (
-    <div className="p-4">
-      <div className="flex items-center justify-center gap-6 max-w-sm mx-auto">
-        {!sessionStarted ? (
-          <button
-            onClick={handleStart}
-            className="flex h-16 w-16 items-center justify-center rounded-full bg-primary text-white shadow-lg hover:bg-primary/90 active:scale-95 transition-transform"
-            aria-label="Start practice"
-          >
-            <Play className="h-7 w-7 ml-1" />
-          </button>
-        ) : (
-          <>
-            <button
-              onClick={handleReset}
-              className="flex h-12 w-12 items-center justify-center rounded-full backdrop-blur-md bg-sage-50/40 text-sage-700 hover:text-sage-900 hover:bg-sage-100/50 transition-all hover:scale-105 active:scale-95"
-              aria-label="Reset"
-            >
-              <RotateCcw className="h-5 w-5" />
-            </button>
-
-            <button
-              onClick={isPaused ? handleResume : handlePause}
-              className="flex h-16 w-16 items-center justify-center rounded-full bg-primary text-white shadow-lg hover:bg-primary/90 active:scale-95 transition-transform"
-              aria-label={isPaused ? 'Resume' : 'Pause'}
-            >
-              {isPaused ? (
-                <Play className="h-7 w-7 ml-1" />
-              ) : (
-                <Pause className="h-7 w-7" />
-              )}
-            </button>
-
-            <div className="w-12" /> {/* Spacer for symmetry */}
-          </>
-        )}
-      </div>
-
-      {/* Cycle progress */}
-      {sessionStarted && (
-        <div className="mt-3 text-center">
-          <p className="text-xs text-secondary">
-            {currentCycle} of {totalCycles} cycles completed
-          </p>
-        </div>
-      )}
-    </div>
   );
 
   return (
     <PracticeLayout
       header={renderHeader()}
-      footer={renderFooter()}
-      contentClassName="px-4 pb-6"
+      scrollable={true}
+      contentClassName="px-4 flex flex-col"
     >
       {/* Timer display */}
-      <div className="text-center mb-4">
+      <div className="text-center mb-4 mt-8">
         <div className="text-3xl sm:text-4xl font-light text-primary">
           {formatTime(timeRemaining)}
         </div>
         <p className="text-xs sm:text-sm text-secondary mt-1">remaining</p>
       </div>
 
-      {/* Main breathing guide */}
-      <div className="flex items-center justify-center mb-6">
+      {/* Main breathing guide with integrated controls */}
+      <div className="flex items-center justify-center mb-2 relative group">
         <BreathingGuide
           exercise={exercise}
           isActive={isActive}
           onCycleComplete={handleCycleComplete}
           currentCycle={currentCycle}
           totalCycles={totalCycles}
+          onStart={handleStart}
+          onPause={handlePause}
+          onResume={handleResume}
+          onReset={handleReset}
+          sessionStarted={sessionStarted}
+          isPaused={isPaused}
         />
+
+        {/* Exercise description tooltip - shows on hover */}
+        {!sessionStarted && (
+          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
+            <div className="bg-white/95 backdrop-blur-sm rounded-lg p-4 shadow-lg max-w-xs">
+              <p className="text-xs text-secondary">
+                {exercise.description}
+              </p>
+            </div>
+          </div>
+        )}
       </div>
 
-      {/* Exercise description when not active */}
-      {!sessionStarted && (
-        <div className="max-w-md mx-auto text-center">
-          <p className="text-sm text-secondary mb-4">
-            {exercise.description}
-          </p>
+      {/* Spacer to push progress bar to bottom */}
+      <div className="flex-1" />
 
-          <div className="bg-white rounded-lg p-4 shadow-sm">
-            <p className="text-xs font-medium text-primary mb-2">
-              Breathing Pattern:
-            </p>
-            <p className="text-xs text-secondary">
-              {exercise.pattern.inhale}s inhale • {exercise.pattern.holdIn}s hold • {exercise.pattern.exhale}s exhale • {exercise.pattern.holdOut}s rest
-            </p>
+      {/* Progress bar - positioned above navbar */}
+      {sessionStarted && (
+        <div className="pb-20 pt-4">
+          <div className="flex justify-between items-center mb-2">
+            <Text variant="caption" className="text-secondary">
+              Cycle {currentCycle} of {totalCycles}
+            </Text>
+            <Text variant="caption" className="text-secondary">
+              {Math.round((currentCycle / totalCycles) * 100)}%
+            </Text>
+          </div>
+          <div className="w-full bg-cream-200 rounded-full h-2">
+            <div
+              className="bg-sage-500 h-2 rounded-full transition-all duration-300 ease-out"
+              style={{ width: `${(currentCycle / totalCycles) * 100}%` }}
+            />
           </div>
         </div>
       )}
