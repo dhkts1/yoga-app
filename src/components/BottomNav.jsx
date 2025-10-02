@@ -161,7 +161,7 @@ function BottomNav({ className }) {
                 // Active state
                 'relative',
                 // Focus state for accessibility
-                'focus:outline-none focus:ring-2 focus:ring-sage-500 focus:ring-inset'
+                'focus:outline-none focus:ring-2 focus:ring-ring focus:ring-inset'
               )}
               aria-label={tab.label}
               aria-current={isActive ? 'page' : undefined}

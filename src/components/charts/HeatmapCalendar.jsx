@@ -138,7 +138,7 @@ function HeatmapCalendar({
                            ${isClickable ? 'cursor-pointer' : 'cursor-default'}
                            ${isSelected ? 'ring-2 ring-gold-500' : ''}
                            relative group flex items-center justify-center
-                           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage-500`}
+                           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring`}
                 aria-label={`${day.date.toLocaleDateString()} - ${day.sessions} sessions, ${day.totalMinutes} minutes`}
               >
                 {/* Day number displayed inside cell */}

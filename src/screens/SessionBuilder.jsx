@@ -262,7 +262,7 @@ function SessionBuilder() {
         <Card className="p-4">
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-muted-foreground mb-2">
                 Session Name
               </label>
               <input
@@ -270,7 +270,7 @@ function SessionBuilder() {
                 value={sessionName}
                 onChange={(e) => setSessionName(e.target.value)}
                 placeholder="My Custom Session"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent"
                 maxLength={50}
               />
             </div>

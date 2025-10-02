@@ -216,7 +216,7 @@ function MoodTracker({
             type="checkbox"
             checked={dontShowAgain}
             onChange={(e) => setDontShowAgain(e.target.checked)}
-            className="w-4 h-4 text-muted-foreground border-primary rounded focus:ring-sage-500"
+            className="w-4 h-4 text-muted-foreground border-primary rounded focus:ring-ring"
           />
           <span className="text-sm text-secondary">
             Don't show mood tracking again

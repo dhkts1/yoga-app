@@ -176,7 +176,7 @@ function Settings() {
                     value={restDuration}
                     onChange={(e) => setRestDuration(e.target.value)}
                     placeholder="Enter seconds..."
-                    className="w-24 px-3 py-2 border border-border rounded-lg bg-card text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-sage-500 transition-all"
+                    className="w-24 px-3 py-2 border border-border rounded-lg bg-card text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring transition-all"
                   />
                   <Text variant="caption" className="text-muted-foreground">seconds (0-60)</Text>
                 </div>
@@ -267,7 +267,7 @@ function Settings() {
                 type="time"
                 value={reminderTime}
                 onChange={(e) => setReminderTime(e.target.value)}
-                className="w-full px-4 py-3 border border-border rounded-lg bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-sage-500 transition-all"
+                className="w-full px-4 py-3 border border-border rounded-lg bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-ring transition-all"
               />
             </div>
           )}

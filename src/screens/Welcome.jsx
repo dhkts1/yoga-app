@@ -143,7 +143,7 @@ function Welcome() {
 
   return (
     <DefaultLayout
-      header={<PageHeader title="Welcome Back" subtitle="Ready to practice?" showBack={false} />}
+      header={<PageHeader title="" subtitle="" showBack={false} />}
     >
       <ContentBody size="sm" spacing="none">
         {/* Time-based greeting */}

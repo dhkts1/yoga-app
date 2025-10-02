@@ -162,7 +162,7 @@ const SelectablePoseCard = ({
 
         {/* Duration Selector */}
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-700">
+          <label className="block text-sm font-medium text-muted-foreground">
             Duration: {formatDuration(duration)}
           </label>
           <div className="flex flex-wrap gap-2">

@@ -155,7 +155,7 @@ const Onboarding = () => {
             text-muted-foreground hover:text-foreground
             hover:bg-muted
             transition-all duration-200
-            focus:outline-none focus:ring-2 focus:ring-sage-500
+            focus:outline-none focus:ring-2 focus:ring-ring
           "
           aria-label="Skip onboarding"
         >
@@ -193,7 +193,7 @@ const Onboarding = () => {
                 className={`
                   transition-all duration-300
                   rounded-full
-                  focus:outline-none focus:ring-2 focus:ring-sage-500 focus:ring-offset-2
+                  focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2
                   ${index === currentStep
                     ? 'w-8 h-2 bg-secondary'
                     : 'w-2 h-2 bg-muted hover:bg-sage-400'

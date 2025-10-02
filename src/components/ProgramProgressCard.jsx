@@ -49,7 +49,7 @@ function ProgramProgressCard() {
       hatha: 'bg-muted text-foreground',
       restorative: 'bg-purple-50 text-purple-700',
     };
-    return styleColors[style.toLowerCase()] || 'bg-gray-100 text-gray-700';
+    return styleColors[style.toLowerCase()] || 'bg-muted text-muted-foreground';
   };
 
   // Handle navigation to program

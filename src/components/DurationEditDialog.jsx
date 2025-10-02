@@ -78,7 +78,7 @@ const DurationEditDialog = ({
 
           {/* Slider */}
           <div className="space-y-3">
-            <label className="text-sm font-medium text-gray-700">
+            <label className="text-sm font-medium text-muted-foreground">
               Adjust Duration
             </label>
             <Slider
@@ -97,7 +97,7 @@ const DurationEditDialog = ({
 
           {/* Quick Options */}
           <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700">
+            <label className="text-sm font-medium text-muted-foreground">
               Quick Select
             </label>
             <div className="grid grid-cols-3 gap-2">

@@ -262,7 +262,7 @@ const Badge = React.forwardRef(({
     success: 'bg-green-100 text-green-800 border-green-200',
     warning: 'bg-yellow-100 text-yellow-800 border-yellow-200',
     error: 'bg-red-100 text-red-800 border-red-200',
-    secondary: 'bg-gray-100 text-gray-800 border-gray-200',
+    secondary: 'bg-muted text-gray-800 border-gray-200',
     gold: 'bg-accent/10 text-accent border-accent/30'
   };
 
@@ -308,7 +308,7 @@ const Link = React.forwardRef(({
   };
 
   const linkStyles = cn(
-    'transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage-500 focus-visible:ring-offset-2 rounded-sm',
+    'transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm',
     variants[variant],
     className
   );

@@ -91,7 +91,7 @@ const Card = React.forwardRef(({
     'cursor-pointer',
     'hover:shadow-lg hover:scale-[1.02]',
     'active:scale-[0.98]',
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage-500 focus-visible:ring-offset-2',
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
   ] : [];
 
   // Hover-only styles (for cards that aren't clickable but should respond to hover)

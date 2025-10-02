@@ -88,7 +88,7 @@ const AddPosesDialog = ({
           {/* Show side options for asymmetric poses */}
           {asymmetricPosesInSelection.length > 0 && (
             <div className="space-y-3">
-              <h4 className="text-sm font-medium text-gray-700">
+              <h4 className="text-sm font-medium text-muted-foreground">
                 Side Options (Asymmetric Poses)
               </h4>
               {asymmetricPosesInSelection.map(poseId => {
