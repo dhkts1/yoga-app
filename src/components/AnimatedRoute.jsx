@@ -17,7 +17,7 @@ import { useReducedMotion } from '../hooks/useReducedMotion';
 function AnimatedRoute({ component: Component }) {
   const shouldReduceMotion = useReducedMotion();
 
-  // Page transition variants - using only 2 keyframes for spring compatibility
+  // Page transition variants - slide from right
   const pageVariants = shouldReduceMotion
     ? {
         initial: { opacity: 1 },
@@ -25,15 +25,15 @@ function AnimatedRoute({ component: Component }) {
         exit: { opacity: 1 },
       }
     : {
-        initial: { opacity: 0 },
-        animate: { opacity: 1 },
-        exit: { opacity: 0 },
+        initial: { opacity: 0, x: 20 },
+        animate: { opacity: 1, x: 0 },
+        exit: { opacity: 0, x: -20 },
       };
 
   const pageTransition = {
     type: "tween",
-    ease: "easeInOut",
-    duration: 0.3,
+    ease: "easeOut",
+    duration: 0.1,
   };
 
   return (

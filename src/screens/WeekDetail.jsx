@@ -293,7 +293,7 @@ function WeekDetail() {
       </div>
 
       {/* Personal Notes Section */}
-      <div className="bg-white rounded-xl p-5 mb-24 shadow-sm border border-sage-100">
+      <div className="bg-white rounded-xl p-5 mb-36 shadow-sm border border-sage-100">
         <div className="flex items-center gap-2 mb-3">
           <MessageSquare className="h-5 w-5 text-sage-600" />
           <h3 className="text-base font-medium text-sage-900">
@@ -323,7 +323,7 @@ function WeekDetail() {
 
       {/* Complete Week Button (Fixed at bottom) */}
       {!completed && (
-        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-sage-200 p-4 shadow-lg">
+        <div className="fixed bottom-[calc(48px+env(safe-area-inset-bottom))] left-0 right-0 bg-white border-t border-sage-200 p-4 shadow-lg">
           <div className="max-w-md mx-auto">
             <Button
               onClick={handleCompleteWeek}

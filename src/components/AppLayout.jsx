@@ -79,7 +79,7 @@ function AppLayout({
       {showFooter && footer && (
         <div
           className={cn(
-            'flex-shrink-0 z-40 bg-background',
+            'flex-shrink-0 z-40 bg-background border-t border-border',
             fixedFooter && 'sticky bottom-0',
             // Add safe area padding to footer
             handleSafeArea && !showBottomNav && 'pb-safe-bottom'

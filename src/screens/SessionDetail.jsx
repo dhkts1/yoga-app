@@ -415,7 +415,7 @@ function SessionDetail() {
       </div>
 
       {/* Fixed Footer CTA */}
-      <div className="fixed bottom-[60px] left-0 right-0 bg-white border-t border-sage-200 p-4 shadow-lg">
+      <div className="fixed bottom-[calc(48px+env(safe-area-inset-bottom))] left-0 right-0 bg-white border-t border-sage-200 p-4 shadow-lg">
         <div className="mx-auto max-w-sm">
           <Button
             onClick={handleStartPractice}

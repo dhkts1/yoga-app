@@ -127,8 +127,8 @@ function BottomNav({ className }) {
       className={cn(
         // Layout
         'fixed bottom-0 left-0 right-0 z-40',
-        // Styling with gradient
-        'bg-gradient-to-t from-white to-sage-50/20',
+        // Styling - solid background (no transparency)
+        'bg-white',
         'border-t border-sage-100',
         // Safe area handling for iOS
         'pb-safe-bottom',
