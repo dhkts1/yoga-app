@@ -294,10 +294,10 @@ function Practice() {
       >
         {/* Program context badge - moved from header */}
         {programContext && (
-          <div className="flex items-center justify-center gap-1.5 mb-3 mt-2">
-            <div className="inline-flex items-center gap-1.5 bg-sage-50 border border-sage-200 rounded-full px-3 py-1.5">
-              <BookMarked className="h-3.5 w-3.5 text-sage-600" />
-              <p className="text-xs text-sage-600">
+          <div className="flex items-center justify-center mb-3 mt-2 px-4">
+            <div className="flex items-center gap-1.5 bg-sage-50 border border-sage-200 rounded-full px-3 py-1.5 max-w-full">
+              <BookMarked className="h-3.5 w-3.5 text-sage-600 flex-shrink-0" />
+              <p className="text-xs sm:text-sm text-sage-600 truncate">
                 {programName} • Week {weekNumber}, Day {dayNumber}
               </p>
             </div>
@@ -364,10 +364,10 @@ function Practice() {
     >
       {/* Program context badge - moved from header */}
       {programContext && (
-        <div className="flex items-center justify-center gap-1.5 mb-3 mt-2">
-          <div className="inline-flex items-center gap-1.5 bg-sage-50 border border-sage-200 rounded-full px-3 py-1.5">
-            <BookMarked className="h-3.5 w-3.5 text-sage-600" />
-            <p className="text-xs text-sage-600">
+        <div className="flex items-center justify-center mb-3 mt-2 px-4">
+          <div className="flex items-center gap-1.5 bg-sage-50 border border-sage-200 rounded-full px-3 py-1.5 max-w-full">
+            <BookMarked className="h-3.5 w-3.5 text-sage-600 flex-shrink-0" />
+            <p className="text-xs sm:text-sm text-sage-600 truncate">
               {programName} • Week {weekNumber}, Day {dayNumber}
             </p>
           </div>

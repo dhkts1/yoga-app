@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { motion, useAnimation } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Text, CircularProgress } from './design-system';
 import { getBreathingInstruction } from '../data/breathing';
 
@@ -27,9 +27,10 @@ function BreathingGuide({
   const [currentPhase, setCurrentPhase] = useState('inhale');
   const [timeInPhase, setTimeInPhase] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [circleScale, setCircleScale] = useState(0.5);
+  const phaseStartScaleRef = useRef(0.5); // Track scale at phase start
   const intervalRef = useRef(null);
   const timeoutRef = useRef(null);
-  const breathControls = useAnimation();
 
   // Get current phase duration from exercise pattern
   const getCurrentPhaseDuration = () => {
@@ -97,46 +98,42 @@ function BreathingGuide({
     }
   }, [isActive]);
 
-  // Animate breathing circle based on phase with framer-motion
+  // Save the scale when entering a new phase
   useEffect(() => {
-    if (!isActive || !exercise) return;
+    if (timeInPhase === 0) {
+      phaseStartScaleRef.current = circleScale;
+    }
+  }, [currentPhase, timeInPhase, circleScale]);
 
-    const phaseDuration = exercise.pattern[currentPhase];
+  // Calculate circle scale based on current phase and time progress
+  useEffect(() => {
+    if (!isActive || !exercise) {
+      setCircleScale(0.5);
+      phaseStartScaleRef.current = 0.5;
+      return;
+    }
 
-    // Calculate target scale and easing based on phase
-    let targetScale = 0.5;
-    let easingType = 'easeInOut';
+    const phaseDuration = getCurrentPhaseDuration();
+    const progress = phaseDuration > 0 ? Math.min(timeInPhase / phaseDuration, 1) : 0;
+    const startScale = phaseStartScaleRef.current;
 
     switch (currentPhase) {
       case 'inhale':
-        targetScale = 1.0;
-        easingType = 'easeIn';
+        // Expand from start scale to 1.0
+        setCircleScale(startScale + ((1.0 - startScale) * progress));
         break;
       case 'holdIn':
-        targetScale = 1.0;
-        easingType = 'linear';
+        // Stay at current scale (already at 1.0 from inhale)
         break;
       case 'exhale':
-        targetScale = 0.5;
-        easingType = 'easeOut';
+        // Contract from start scale to 0.5
+        setCircleScale(startScale - ((startScale - 0.5) * progress));
         break;
       case 'holdOut':
-        targetScale = 0.5;
-        easingType = 'linear';
+        // Stay at current scale (already at 0.5 from exhale)
         break;
     }
-
-    // Check for prefers-reduced-motion
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    breathControls.start({
-      scale: targetScale,
-      transition: {
-        duration: prefersReducedMotion ? 0 : phaseDuration,
-        ease: easingType
-      }
-    });
-  }, [currentPhase, isActive, exercise, breathControls]);
+  }, [currentPhase, timeInPhase, isActive, exercise]);
 
   if (!exercise) {
     return null;
@@ -194,6 +191,9 @@ function BreathingGuide({
   const phaseDuration = getCurrentPhaseDuration();
   const phaseProgress = phaseDuration > 0 ? Math.min(timeInPhase / phaseDuration, 1) : 0;
 
+  // For exhale, reverse the progress (100 to 0 instead of 0 to 100)
+  const displayProgress = currentPhase === 'exhale' ? (1 - phaseProgress) * 100 : phaseProgress * 100;
+
   return (
     <div className={`flex flex-col items-center justify-center ${className}`}>
       {/* Progress indicator */}
@@ -221,7 +221,7 @@ function BreathingGuide({
         {/* Phase progress ring - positioned absolutely */}
         <div className="absolute inset-0 flex items-center justify-center">
           <CircularProgress
-            value={phaseProgress * 100}
+            value={displayProgress}
             size={224}
             className="text-accent"
             strokeWidth={3}
@@ -232,18 +232,17 @@ function BreathingGuide({
         {/* Outer ring for reference - centered */}
         <div className="absolute w-48 h-48 rounded-full border-2 border-sage-200 opacity-30" />
 
-        {/* Animated breathing circle - centered with framer-motion */}
-        <motion.div
-          animate={breathControls}
-          initial={{ scale: 0.5 }}
-          className="absolute w-48 h-48 rounded-full bg-gradient-to-br from-sage-400 to-sage-600 shadow-lg flex items-center justify-center"
+        {/* Animated breathing circle - synced with timer */}
+        <div
+          className="absolute w-48 h-48 rounded-full bg-gradient-to-br from-sage-400 to-sage-600 shadow-lg flex items-center justify-center transition-transform duration-75 ease-linear"
           style={{
+            transform: `scale(${circleScale})`,
             opacity: isAnimating ? 0.8 : 0.6
           }}
         >
           {/* Inner circle for depth */}
           <div className="w-24 h-24 rounded-full bg-sage-300 opacity-50" />
-        </motion.div>
+        </div>
       </div>
 
       {/* Phase text and instructions */}

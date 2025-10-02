@@ -1,13 +1,14 @@
 import { Wind, Star } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { DefaultLayout } from '../components/layouts';
 import { PageHeader } from '../components/headers';
-import { Button, Card, Heading, Text } from '../components/design-system';
+import { Button, Card, Text } from '../components/design-system';
 import { breathingDurations, breathingExercises } from '../data/breathing';
 import usePreferencesStore from '../stores/preferences';
-import FavoriteButton from '../components/FavoriteButton';
-import { getCategoryColors } from '../utils/badges';
+import ExerciseCard from '../components/ExerciseCard';
+import { LIST_ANIMATION } from '../utils/animations';
 
 /**
  * Breathing Screen
@@ -40,12 +41,11 @@ function Breathing() {
           showBack={false}
         />
       }
-      contentClassName="px-4"
+      contentClassName="px-4 py-6"
     >
-
       {/* Duration Selector */}
-      <div className="mb-6 mt-6">
-        <Text variant="body" className="mb-3 font-medium">
+      <div className="mb-6">
+        <Text variant="body" className="mb-3 font-medium text-primary">
           Session Duration
         </Text>
         <div className="flex gap-2 w-full overflow-x-auto">
@@ -69,103 +69,53 @@ function Breathing() {
       {/* Favorite Exercise Cards */}
       {favoriteExercises.length > 0 && (
         <div className="mb-6">
-          <h2 className="text-lg font-medium text-sage-900 mb-4 flex items-center gap-2">
+          <h2 className="text-lg font-medium text-primary mb-4 flex items-center gap-2">
             <Star className="h-5 w-5 text-gold fill-gold" />
             Favorite Exercises
           </h2>
-          <div className="space-y-4">
-            {favoriteExercises.map((exercise) => {
-              const categoryStyle = getCategoryColors(exercise.category);
-
-              return (
-                <Card
-                  key={exercise.id}
-                  className="p-0 overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-md hover:scale-[1.01] active:scale-[0.99] relative border-l-4 border-gold"
+          <motion.div
+            className="space-y-4"
+            variants={LIST_ANIMATION.container}
+            initial="hidden"
+            animate="visible"
+          >
+            {favoriteExercises.map((exercise) => (
+              <motion.div key={exercise.id} variants={LIST_ANIMATION.item}>
+                <ExerciseCard
+                  exercise={exercise}
+                  selectedDuration={selectedDuration}
                   onClick={() => handleExerciseSelect(exercise.id)}
-                >
-                  <div className="p-4">
-                    <div className="flex items-center justify-between gap-3">
-                      <div className="flex items-center gap-3 flex-1 min-w-0">
-                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-sage-100 flex-shrink-0">
-                          <span className="text-2xl">{exercise.emoji}</span>
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <Heading level={3} className="text-base truncate">
-                            {exercise.nameEnglish}
-                          </Heading>
-                          <div className="flex items-center gap-2 text-xs text-secondary flex-wrap">
-                            <span>{exercise.defaultDuration} min</span>
-                            <span>•</span>
-                            <span className={`capitalize px-2 py-0.5 rounded-full ${categoryStyle.bg} ${categoryStyle.text} font-medium`}>
-                              {exercise.category}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-2 flex-shrink-0">
-                        <div className="text-right">
-                          <div className="text-lg font-bold text-sage-700">{selectedDuration}</div>
-                          <div className="text-[10px] text-secondary">min</div>
-                        </div>
-                        <FavoriteButton itemId={exercise.id} type="breathing" size="sm" />
-                      </div>
-                    </div>
-                  </div>
-                </Card>
-              );
-            })}
-          </div>
+                  isFavorite={true}
+                />
+              </motion.div>
+            ))}
+          </motion.div>
         </div>
       )}
 
       {/* Non-favorite Exercise Cards */}
-      <div className="space-y-4 mb-8">
+      <motion.div
+        className="space-y-4 mb-6"
+        variants={LIST_ANIMATION.container}
+        initial="hidden"
+        animate="visible"
+      >
         {favoriteExercises.length > 0 && (
-          <h2 className="text-lg font-medium text-sage-900 mb-4">
+          <h2 className="text-lg font-medium text-primary mb-4">
             More Exercises
           </h2>
         )}
-        {nonFavoriteExercises.map((exercise) => {
-          const categoryStyle = getCategoryColors(exercise.category);
-
-          return (
-            <Card
-              key={exercise.id}
-              className="p-0 overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-md hover:scale-[1.01] active:scale-[0.99] relative"
+        {nonFavoriteExercises.map((exercise) => (
+          <motion.div key={exercise.id} variants={LIST_ANIMATION.item}>
+            <ExerciseCard
+              exercise={exercise}
+              selectedDuration={selectedDuration}
               onClick={() => handleExerciseSelect(exercise.id)}
-            >
-              <div className="p-4">
-                <div className="flex items-center justify-between gap-3">
-                  <div className="flex items-center gap-3 flex-1 min-w-0">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-sage-100 flex-shrink-0">
-                      <span className="text-2xl">{exercise.emoji}</span>
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <Heading level={3} className="text-base truncate">
-                        {exercise.nameEnglish}
-                      </Heading>
-                      <div className="flex items-center gap-2 text-xs text-secondary flex-wrap">
-                        <span>{exercise.defaultDuration} min</span>
-                        <span>•</span>
-                        <span className={`capitalize px-2 py-0.5 rounded-full ${categoryStyle.bg} ${categoryStyle.text} font-medium`}>
-                          {exercise.category}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2 flex-shrink-0">
-                    <div className="text-right">
-                      <div className="text-lg font-bold text-sage-700">{selectedDuration}</div>
-                      <div className="text-[10px] text-secondary">min</div>
-                    </div>
-                    <FavoriteButton itemId={exercise.id} type="breathing" size="sm" />
-                  </div>
-                </div>
-              </div>
-            </Card>
-          );
-        })}
-      </div>
+              isFavorite={false}
+            />
+          </motion.div>
+        ))}
+      </motion.div>
 
       {/* Quick info about breathing exercises */}
       <Card className="p-4 mb-24 bg-sage-50 border-sage-200">
@@ -174,7 +124,7 @@ function Breathing() {
             <Wind className="h-4 w-4 text-sage-700" />
           </div>
           <div>
-            <Text variant="body" className="font-medium mb-1">
+            <Text variant="body" className="font-medium text-primary mb-1">
               Why practice breathing exercises?
             </Text>
             <Text variant="caption" className="text-secondary">

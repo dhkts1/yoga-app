@@ -5,6 +5,7 @@ import { Button, Text, Heading } from '../components/design-system';
 import { PracticeLayout } from '../components/layouts';
 import BreathingGuide from '../components/BreathingGuide';
 import { PracticeHeader } from '../components/headers';
+import GlassIconButton from '../components/ui/GlassIconButton';
 import { getBreathingExerciseById, calculateBreathingCycles } from '../data/breathing';
 import useProgressStore from '../stores/progress';
 import usePreferencesStore from '../stores/preferences';
@@ -317,59 +318,100 @@ function BreathingPractice() {
     );
   }
 
+  // Render header
+  const renderHeader = () => (
+    <PracticeHeader
+      title={exercise.nameEnglish}
+      subtitle={exercise.nameSanskrit}
+      onExit={handleExit}
+      exitButtonStyle="circular"
+      actions={
+        <>
+          <GlassIconButton
+            icon={breathingPrefs.showMoodCheck ? Heart : HeartOff}
+            onClick={toggleBreathingMoodCheck}
+            label={breathingPrefs.showMoodCheck ? 'Mood check enabled' : 'Mood check disabled'}
+            variant="circular"
+            className={!breathingPrefs.showMoodCheck ? 'opacity-50' : ''}
+          />
+          <GlassIconButton
+            icon={voiceEnabled ? Volume2 : VolumeX}
+            onClick={() => setVoiceEnabled(!voiceEnabled)}
+            label={voiceEnabled ? 'Voice enabled' : 'Voice disabled'}
+            variant="circular"
+            className={!voiceEnabled ? 'opacity-50' : ''}
+          />
+        </>
+      }
+    />
+  );
+
+  // Render footer
+  const renderFooter = () => (
+    <div className="p-4">
+      <div className="flex items-center justify-center gap-6 max-w-sm mx-auto">
+        {!sessionStarted ? (
+          <button
+            onClick={handleStart}
+            className="flex h-16 w-16 items-center justify-center rounded-full bg-primary text-white shadow-lg hover:bg-primary/90 active:scale-95 transition-transform"
+            aria-label="Start practice"
+          >
+            <Play className="h-7 w-7 ml-1" />
+          </button>
+        ) : (
+          <>
+            <button
+              onClick={handleReset}
+              className="flex h-12 w-12 items-center justify-center rounded-full backdrop-blur-md bg-sage-50/40 text-sage-700 hover:text-sage-900 hover:bg-sage-100/50 transition-all hover:scale-105 active:scale-95"
+              aria-label="Reset"
+            >
+              <RotateCcw className="h-5 w-5" />
+            </button>
+
+            <button
+              onClick={isPaused ? handleResume : handlePause}
+              className="flex h-16 w-16 items-center justify-center rounded-full bg-primary text-white shadow-lg hover:bg-primary/90 active:scale-95 transition-transform"
+              aria-label={isPaused ? 'Resume' : 'Pause'}
+            >
+              {isPaused ? (
+                <Play className="h-7 w-7 ml-1" />
+              ) : (
+                <Pause className="h-7 w-7" />
+              )}
+            </button>
+
+            <div className="w-12" /> {/* Spacer for symmetry */}
+          </>
+        )}
+      </div>
+
+      {/* Cycle progress */}
+      {sessionStarted && (
+        <div className="mt-3 text-center">
+          <p className="text-xs text-secondary">
+            {currentCycle} of {totalCycles} cycles completed
+          </p>
+        </div>
+      )}
+    </div>
+  );
+
   return (
     <PracticeLayout
-      header={
-        <PracticeHeader
-          title={exercise.nameEnglish}
-          subtitle={exercise.nameSanskrit}
-          onExit={handleExit}
-          exitButtonStyle="standard"
-          actions={
-            <>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={toggleBreathingMoodCheck}
-                className={`p-2 ${breathingPrefs.showMoodCheck ? 'text-sage-600' : 'text-sage-400'}`}
-                title={breathingPrefs.showMoodCheck ? 'Mood check enabled' : 'Mood check disabled'}
-              >
-                {breathingPrefs.showMoodCheck ? <Heart className="h-5 w-5" /> : <HeartOff className="h-5 w-5" />}
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setVoiceEnabled(!voiceEnabled)}
-                className={`p-2 ${voiceEnabled ? 'text-sage-600' : 'text-sage-400'}`}
-              >
-                {voiceEnabled ? <Volume2 className="h-5 w-5" /> : <VolumeX className="h-5 w-5" />}
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleReset}
-                className="p-2 text-sage-600"
-              >
-                <RotateCcw className="h-5 w-5" />
-              </Button>
-            </>
-          }
-        />
-      }
-      contentClassName="flex flex-col bg-gradient-to-br from-sage-50 to-cream-50"
+      header={renderHeader()}
+      footer={renderFooter()}
+      contentClassName="px-4 pb-6"
     >
       {/* Timer display */}
-      <div className="text-center pt-6 pb-4">
-        <Text variant="h1" className="text-3xl font-light text-sage-800">
+      <div className="text-center mb-4">
+        <div className="text-3xl sm:text-4xl font-light text-primary">
           {formatTime(timeRemaining)}
-        </Text>
-        <Text variant="caption" className="text-secondary">
-          {currentCycle} of {totalCycles} cycles completed
-        </Text>
+        </div>
+        <p className="text-xs sm:text-sm text-secondary mt-1">remaining</p>
       </div>
 
       {/* Main breathing guide */}
-      <div className="flex-1 flex items-center justify-center px-4">
+      <div className="flex items-center justify-center mb-6">
         <BreathingGuide
           exercise={exercise}
           isActive={isActive}
@@ -381,80 +423,22 @@ function BreathingPractice() {
 
       {/* Exercise description when not active */}
       {!sessionStarted && (
-        <div className="px-4 pb-6">
-          <div className="max-w-md mx-auto text-center">
-            <Text variant="body" className="text-secondary mb-4">
-              {exercise.description}
-            </Text>
+        <div className="max-w-md mx-auto text-center">
+          <p className="text-sm text-secondary mb-4">
+            {exercise.description}
+          </p>
 
-            <div className="bg-white rounded-lg p-4 shadow-sm">
-              <Text variant="caption" className="font-medium mb-2 block">
-                Breathing Pattern:
-              </Text>
-              <Text variant="caption" className="text-secondary">
-                {exercise.pattern.inhale}s inhale • {exercise.pattern.holdIn}s hold • {exercise.pattern.exhale}s exhale • {exercise.pattern.holdOut}s rest
-              </Text>
-            </div>
+          <div className="bg-white rounded-lg p-4 shadow-sm">
+            <p className="text-xs font-medium text-primary mb-2">
+              Breathing Pattern:
+            </p>
+            <p className="text-xs text-secondary">
+              {exercise.pattern.inhale}s inhale • {exercise.pattern.holdIn}s hold • {exercise.pattern.exhale}s exhale • {exercise.pattern.holdOut}s rest
+            </p>
           </div>
         </div>
       )}
 
-      {/* Pause overlay */}
-      {isPaused && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-2xl p-6 max-w-sm w-full mx-4 text-center">
-            <Heading level={3} className="mb-4">
-              Practice Paused
-            </Heading>
-            <Text variant="body" className="text-secondary mb-6">
-              Take your time. Resume when you're ready to continue.
-            </Text>
-            <div className="flex gap-3">
-              <Button
-                variant="primary"
-                onClick={handleResume}
-                className="flex-1"
-              >
-                Resume
-              </Button>
-              <Button
-                variant="secondary"
-                onClick={handleExit}
-                className="flex-1"
-              >
-                Exit
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Fixed action buttons at bottom */}
-      <div className="fixed bottom-[60px] left-0 right-0 p-4 bg-gradient-to-t from-background to-transparent pointer-events-none">
-        <div className="max-w-sm mx-auto pointer-events-auto">
-          {!sessionStarted ? (
-            <Button
-              variant="primary"
-              size="lg"
-              onClick={handleStart}
-              className="w-full shadow-lg"
-            >
-              <Play className="h-5 w-5 mr-2" />
-              Start Practice
-            </Button>
-          ) : !isPaused && (
-            <Button
-              variant="secondary"
-              size="lg"
-              onClick={handlePause}
-              className="w-full shadow-lg"
-            >
-              <Pause className="h-5 w-5 mr-2" />
-              Pause
-            </Button>
-          )}
-        </div>
-      </div>
     </PracticeLayout>
   );
 }

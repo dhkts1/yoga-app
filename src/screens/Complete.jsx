@@ -9,6 +9,7 @@ import useProgressStore from '../stores/progress';
 import useProgramProgressStore from '../stores/programProgress';
 import { FullscreenLayout } from '../components/layouts';
 import { calculateMoodImprovement } from '../utils/moodCalculator.jsx';
+import { useReducedMotion } from '../hooks/useReducedMotion';
 
 function Complete() {
   const navigate = useNavigate();
@@ -36,20 +37,7 @@ function Complete() {
   const [sessionRecord, setSessionRecord] = useState(null);
   const [streakStatus, setStreakStatus] = useState(null);
   const [weekCompletionInfo, setWeekCompletionInfo] = useState(null);
-  const [shouldReduceMotion, setShouldReduceMotion] = useState(false);
-
-  // Check for prefers-reduced-motion
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    setShouldReduceMotion(mediaQuery.matches);
-
-    const handleChange = (e) => {
-      setShouldReduceMotion(e.matches);
-    };
-
-    mediaQuery.addEventListener('change', handleChange);
-    return () => mediaQuery.removeEventListener('change', handleChange);
-  }, []);
+  const shouldReduceMotion = useReducedMotion();
 
   // Confetti celebration when component mounts
   useEffect(() => {

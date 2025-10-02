@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useReducedMotion } from '../hooks/useReducedMotion';
 
 /**
  * AnimatedRoute - Reusable wrapper for route animations
@@ -15,20 +15,7 @@ import { useEffect, useState } from 'react';
  * @returns {JSX.Element} Animated wrapper around the component
  */
 function AnimatedRoute({ component: Component }) {
-  const [shouldReduceMotion, setShouldReduceMotion] = useState(false);
-
-  // Check for prefers-reduced-motion
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    setShouldReduceMotion(mediaQuery.matches);
-
-    const handleChange = (e) => {
-      setShouldReduceMotion(e.matches);
-    };
-
-    mediaQuery.addEventListener('change', handleChange);
-    return () => mediaQuery.removeEventListener('change', handleChange);
-  }, []);
+  const shouldReduceMotion = useReducedMotion();
 
   // Page transition variants - using only 2 keyframes for spring compatibility
   const pageVariants = shouldReduceMotion

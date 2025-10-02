@@ -363,8 +363,8 @@ test.describe('Multi-Week Programs Flow', () => {
       const sessionButton = page.locator('button:has-text("Iyengar Foundation")').first();
       await sessionButton.click();
 
-      // Should navigate to practice screen
-      await expect(page).toHaveURL(/\/practice/);
+      // Should navigate to session preview screen (sessions flow: week → preview → practice)
+      await expect(page).toHaveURL(/\/sessions\/.+\/preview/);
     });
   });
 

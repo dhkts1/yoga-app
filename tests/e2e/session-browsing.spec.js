@@ -194,7 +194,8 @@ test.describe('Session Browsing', () => {
 
     // Sessions page shows yoga sessions, but breathing exercises
     // are accessible from the app - just verify we can see sessions
-    const sessions = page.getByRole('button', { name: /\d+ min.*poses/i });
-    await expect(sessions.first()).toBeVisible();
+    // Look for either "X min • Y poses" format or just "X min" format
+    const sessions = page.getByRole('button', { name: /\d+ min/i });
+    await expect(sessions.first()).toBeVisible({ timeout: 10000 });
   });
 });

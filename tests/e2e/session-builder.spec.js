@@ -21,8 +21,9 @@ test.describe('Session Builder', () => {
     await page.getByRole('button', { name: 'Discover', exact: true }).click();
     await page.waitForURL(/\/sessions/);
 
-    // Click create/build button
-    const createButton = page.getByRole('button', { name: /create|build|custom|\+/i }).first();
+    // Click create custom session button (aria-label is "Create custom session")
+    const createButton = page.getByRole('button', { name: /create custom session/i });
+    await createButton.waitFor({ state: 'visible', timeout: 5000 });
     await createButton.click();
 
     // Should be on builder page
