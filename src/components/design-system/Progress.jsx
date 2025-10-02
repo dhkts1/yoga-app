@@ -23,20 +23,20 @@ const ProgressBar = React.forwardRef(({
 
   const variants = {
     default: {
-      track: 'bg-sage-100',
-      fill: 'bg-sage-500'
+      track: 'bg-muted',
+      fill: 'bg-primary'
     },
     gold: {
-      track: 'bg-gold-100',
-      fill: 'bg-gold-500'
+      track: 'bg-accent/20',
+      fill: 'bg-accent'
     },
     success: {
-      track: 'bg-green-100',
-      fill: 'bg-green-500'
+      track: 'bg-state-success/20',
+      fill: 'bg-state-success'
     },
     subtle: {
-      track: 'bg-gray-200',
-      fill: 'bg-gray-400'
+      track: 'bg-muted',
+      fill: 'bg-muted-foreground/50'
     }
   };
 
@@ -76,7 +76,7 @@ const ProgressBar = React.forwardRef(({
         />
       </div>
       {showValue && (
-        <div className="flex justify-between mt-1 text-sm text-secondary">
+        <div className="flex justify-between mt-1 text-sm text-muted-foreground">
           <span>{value}</span>
           <span>{max}</span>
         </div>
@@ -108,16 +108,16 @@ const CircularProgress = React.forwardRef(({
 
   const variants = {
     default: {
-      track: 'stroke-sage-200',
-      fill: 'stroke-sage-500'
+      track: 'stroke-muted',
+      fill: 'stroke-primary'
     },
     gold: {
-      track: 'stroke-gold-200',
-      fill: 'stroke-gold-500'
+      track: 'stroke-accent/30',
+      fill: 'stroke-accent'
     },
     timer: {
-      track: 'stroke-cream-300',
-      fill: 'stroke-sage-500'
+      track: 'stroke-muted',
+      fill: 'stroke-primary'
     }
   };
 
@@ -169,11 +169,11 @@ const CircularProgress = React.forwardRef(({
       <div className="absolute inset-0 flex items-center justify-center">
         {children || (showValue && (
           <div className="text-center">
-            <div className="text-2xl font-semibold text-primary">
+            <div className="text-2xl font-semibold text-foreground">
               {value}
             </div>
             {max !== 100 && (
-              <div className="text-sm text-secondary">
+              <div className="text-sm text-muted-foreground">
                 / {max}
               </div>
             )}
@@ -217,10 +217,10 @@ const Timer = React.forwardRef(({
         animated={!paused && remainingSeconds > 0}
       >
         <div className="text-center">
-          <div className="text-3xl font-semibold text-sage-600 font-mono">
+          <div className="text-3xl font-semibold text-foreground font-mono">
             {formatTime(minutes, seconds)}
           </div>
-          <div className="text-sm text-secondary mt-1">
+          <div className="text-sm text-muted-foreground mt-1">
             {paused ? 'Paused' : 'Remaining'}
           </div>
         </div>
@@ -229,7 +229,7 @@ const Timer = React.forwardRef(({
       {/* Breathing animation indicator */}
       {!paused && remainingSeconds > 0 && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <div className="w-full h-full rounded-full border-2 border-sage-300 opacity-30 animate-breathe" />
+          <div className="w-full h-full rounded-full border-2 border-primary opacity-30 animate-breathe" />
         </div>
       )}
     </div>
@@ -259,10 +259,10 @@ const SessionProgress = React.forwardRef(({
 
       {/* Progress info */}
       <div className="flex justify-between items-center text-sm">
-        <span className="text-secondary">
+        <span className="text-muted-foreground">
           Pose {currentPose} of {totalPoses}
         </span>
-        <span className="text-sage-600 font-medium">
+        <span className="text-muted-foreground font-medium">
           {Math.round((currentPose / totalPoses) * 100)}%
         </span>
       </div>
@@ -276,10 +276,10 @@ const SessionProgress = React.forwardRef(({
               className={cn(
                 'flex-1 h-1 rounded-full transition-colors duration-300',
                 index < currentPose
-                  ? 'bg-sage-500'
+                  ? 'bg-primary'
                   : index === currentPose
-                  ? 'bg-sage-300'
-                  : 'bg-sage-100'
+                  ? 'bg-primary/50'
+                  : 'bg-muted'
               )}
             />
           ))}
@@ -306,7 +306,7 @@ const Spinner = React.forwardRef(({
   };
 
   const variants = {
-    default: 'text-sage-500',
+    default: 'text-muted-foreground',
     light: 'text-white',
     muted: 'text-muted'
   };
@@ -353,13 +353,13 @@ const Skeleton = React.forwardRef(({
   ...props
 }, ref) => {
   const variants = {
-    default: 'h-4 bg-sage-200 rounded',
-    text: 'h-4 bg-sage-200 rounded',
-    title: 'h-6 bg-sage-200 rounded',
-    button: 'h-12 bg-sage-200 rounded-lg',
-    card: 'h-32 bg-sage-200 rounded-xl',
-    circle: 'w-12 h-12 bg-sage-200 rounded-full',
-    avatar: 'w-10 h-10 bg-sage-200 rounded-full'
+    default: 'h-4 bg-muted rounded',
+    text: 'h-4 bg-muted rounded',
+    title: 'h-6 bg-muted rounded',
+    button: 'h-12 bg-muted rounded-lg',
+    card: 'h-32 bg-muted rounded-xl',
+    circle: 'w-12 h-12 bg-muted rounded-full',
+    avatar: 'w-10 h-10 bg-muted rounded-full'
   };
 
   const skeletonStyles = cn(

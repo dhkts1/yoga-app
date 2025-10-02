@@ -174,7 +174,7 @@ function Practice() {
           <p className="text-lg text-primary mb-2">Session not found</p>
           <button
             onClick={() => navigate('/sessions')}
-            className="text-sage-600 hover:text-sage-700"
+            className="text-muted-foreground hover:text-muted-foreground"
           >
             ← Back to Sessions
           </button>
@@ -240,7 +240,7 @@ function Practice() {
               }
               setShowTips(!showTips);
             }}
-            className="flex h-10 w-10 items-center justify-center rounded-full bg-sage-100 text-sage-700 hover:bg-sage-200 transition-colors"
+            className="flex h-10 w-10 items-center justify-center rounded-full bg-muted text-muted-foreground hover:bg-muted transition-colors"
             aria-label={showTips ? 'Close tips' : 'Show tips'}
           >
             <HelpCircle className="h-5 w-5" />
@@ -259,7 +259,7 @@ function Practice() {
         </>
       }
       progressBar={
-        <div className="h-1.5 rounded-full bg-cream-200">
+        <div className="h-1.5 rounded-full bg-muted">
           <div
             className="h-full rounded-full bg-primary transition-all duration-1000 ease-linear"
             style={{ width: `${progressPercent}%` }}
@@ -295,9 +295,9 @@ function Practice() {
         <ContentBody size="sm" centered padding="md">
           {programContext && (
             <div className="flex items-center justify-center mb-4">
-              <div className="flex items-center gap-1.5 bg-sage-50 border border-sage-200 rounded-full px-3 py-1.5 max-w-full">
-                <BookMarked className="h-3.5 w-3.5 text-sage-600 flex-shrink-0" />
-                <p className="text-xs sm:text-sm text-sage-600 truncate">
+              <div className="flex items-center gap-1.5 bg-muted border border-border rounded-full px-3 py-1.5 max-w-full">
+                <BookMarked className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0" />
+                <p className="text-xs sm:text-sm text-muted-foreground truncate">
                   {programName} • Week {weekNumber}, Day {dayNumber}
                 </p>
               </div>
@@ -309,10 +309,10 @@ function Practice() {
           <div className="text-center space-y-6">
             {/* Rest Message */}
             <div>
-              <h2 className="text-2xl sm:text-3xl font-light text-sage-700 mb-2">
+              <h2 className="text-2xl sm:text-3xl font-light text-muted-foreground mb-2">
                 Rest & Transition
               </h2>
-              <p className="text-sm sm:text-base text-sage-600">
+              <p className="text-sm sm:text-base text-muted-foreground">
                 Take a moment to prepare for the next pose
               </p>
             </div>
@@ -327,17 +327,17 @@ function Practice() {
 
             {/* Next Pose Preview */}
             {nextPose && (
-              <div className="bg-sage-50 rounded-xl p-4 border border-sage-200">
-                <p className="text-xs sm:text-sm text-sage-600 mb-1">Next Pose:</p>
-                <p className="text-lg sm:text-xl font-medium text-sage-800">
+              <div className="bg-muted rounded-xl p-4 border border-border">
+                <p className="text-xs sm:text-sm text-muted-foreground mb-1">Next Pose:</p>
+                <p className="text-lg sm:text-xl font-medium text-foreground">
                   {nextPose.nameEnglish}
                   {nextPoseData?.side && (
-                    <span className="ml-2 text-base font-normal text-sage-600">
+                    <span className="ml-2 text-base font-normal text-muted-foreground">
                       ({nextPoseData.side === 'right' ? 'Right Side' : 'Left Side'})
                     </span>
                   )}
                 </p>
-                <p className="text-xs sm:text-sm text-sage-500 italic">
+                <p className="text-xs sm:text-sm text-muted-foreground italic">
                   {nextPose.nameSanskrit}
                 </p>
               </div>
@@ -346,7 +346,7 @@ function Practice() {
             {/* Skip Rest Button */}
             <button
               onClick={handleNextPose}
-              className="mt-6 px-8 py-3 rounded-full bg-sage-600 hover:bg-sage-700 text-white font-medium transition-all duration-300 shadow-lg hover:shadow-xl active:scale-95"
+              className="mt-6 px-8 py-3 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium transition-all duration-300 shadow-lg hover:shadow-xl active:scale-95"
             >
               Skip Rest
             </button>
@@ -366,9 +366,9 @@ function Practice() {
         {/* Program context badge - moved from header */}
         {programContext && (
           <div className="flex items-center justify-center mb-4">
-            <div className="flex items-center gap-1.5 bg-sage-50 border border-sage-200 rounded-full px-3 py-1.5 max-w-full">
-              <BookMarked className="h-3.5 w-3.5 text-sage-600 flex-shrink-0" />
-              <p className="text-xs sm:text-sm text-sage-600 truncate">
+            <div className="flex items-center gap-1.5 bg-muted border border-border rounded-full px-3 py-1.5 max-w-full">
+              <BookMarked className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0" />
+              <p className="text-xs sm:text-sm text-muted-foreground truncate">
                 {programName} • Week {weekNumber}, Day {dayNumber}
               </p>
             </div>
@@ -378,8 +378,8 @@ function Practice() {
         {/* Pose illustration with beautiful SVG */}
         <div className="mx-auto mb-3 flex items-center justify-center">
           <PoseImage
-            pose={pose}
-            size="large"
+            poseId={pose.id}
+            size="xl"
             className="drop-shadow-lg"
           />
         </div>
@@ -389,7 +389,7 @@ function Practice() {
           <h2 className="mb-1 text-lg sm:text-xl font-medium text-primary">
             {pose.nameEnglish}
             {currentPoseData?.side && (
-              <span className="ml-2 text-base font-normal text-sage-600">
+              <span className="ml-2 text-base font-normal text-muted-foreground">
                 ({currentPoseData.side === 'right' ? 'Right Side' : 'Left Side'})
               </span>
             )}
@@ -398,7 +398,7 @@ function Practice() {
             {pose.nameSanskrit}
           </p>
           {/* Pose count - moved from header */}
-          <p className="text-xs text-sage-500 mb-1">
+          <p className="text-xs text-muted-foreground mb-1">
             Pose {currentPoseIndex + 1} of {session?.poses?.length || 0}
           </p>
 
@@ -412,7 +412,7 @@ function Practice() {
 
           {/* Pose description - hidden on very small screens */}
           {pose.description && (
-            <p className="hidden sm:block mb-3 text-sm text-sage-700 px-4 leading-relaxed">
+            <p className="hidden sm:block mb-3 text-sm text-muted-foreground px-4 leading-relaxed">
               {pose.description}
             </p>
           )}

@@ -27,7 +27,7 @@ const Icon = React.forwardRef(({
 
   const variants = {
     default: 'text-current',
-    primary: 'text-sage-600',
+    primary: 'text-muted-foreground',
     secondary: 'text-secondary',
     muted: 'text-muted',
     white: 'text-white',

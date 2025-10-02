@@ -60,9 +60,9 @@ function SimpleBarChart({
               </div>
 
               {/* Bar */}
-              <div className="w-full bg-cream-200 rounded-full h-2">
+              <div className="w-full bg-muted rounded-full h-2">
                 <div
-                  className="bg-sage-500 h-2 rounded-full transition-all duration-500 ease-out"
+                  className="bg-muted0 h-2 rounded-full transition-all duration-500 ease-out"
                   style={{ width: `${percentage}%` }}
                 />
               </div>

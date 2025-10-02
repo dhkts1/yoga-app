@@ -147,8 +147,8 @@ function Welcome() {
     >
       <ContentBody size="sm" spacing="none">
         {/* Time-based greeting */}
-        <div className="min-h-[30vh] flex flex-col items-center justify-center mb-0 text-center">
-          <GreetingIcon className="mx-auto mb-4 h-16 w-16 text-sage-600" />
+        <div className="min-h-[20vh] flex flex-col items-center justify-center mb-0 text-center">
+          <GreetingIcon className="mx-auto mb-3 h-12 w-12 text-muted-foreground" />
           <Heading level={1}>
             {greeting.text}
           </Heading>
@@ -163,7 +163,7 @@ function Welcome() {
               rotate: [0, 5, -5, 0]
             } : {}}
             transition={{ duration: 0.6, times: [0, 0.5, 1] }}
-            className="mb-6 -mt-4 inline-flex items-center gap-2 px-4 py-2 bg-accent/10 rounded-full relative"
+            className="mb-4 -mt-4 inline-flex items-center gap-2 px-4 py-2 bg-accent/10 rounded-full relative"
           >
             <Flame className="h-4 w-4 text-accent" />
             <Text variant="caption" className="font-medium text-accent">
@@ -186,7 +186,7 @@ function Welcome() {
                     transition={{ duration: 0.6 }}
                     className="absolute -top-2 -right-2"
                   >
-                    <Sparkles className="h-5 w-5 text-gold" />
+                    <Sparkles className="h-5 w-5 text-accent" />
                   </motion.div>
                   <motion.div
                     initial={{ opacity: 0, scale: 0.5, rotate: 0 }}
@@ -195,7 +195,7 @@ function Welcome() {
                     transition={{ duration: 0.6, delay: 0.1 }}
                     className="absolute -bottom-2 -left-2"
                   >
-                    <Sparkles className="h-5 w-5 text-gold" />
+                    <Sparkles className="h-5 w-5 text-accent" />
                   </motion.div>
                 </>
               )}
@@ -211,9 +211,9 @@ function Welcome() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.3 }}
-              className="mb-4 px-4 py-2 bg-gold/20 rounded-lg"
+              className="mb-3 px-4 py-2 bg-gold/20 rounded-lg"
             >
-              <Text variant="body" className="text-center font-medium text-gold-700">
+              <Text variant="body" className="text-center font-medium text-accent">
                 🎉 {celebratedMilestone} Day Streak!
               </Text>
             </motion.div>
@@ -221,7 +221,7 @@ function Welcome() {
         </AnimatePresence>
 
         {/* Main CTA - ONE dominant action */}
-        <div className="w-full mb-6">
+        <div className="w-full mb-4">
           <div ref={quickStartRef} className="relative">
             <Button
               onClick={handleQuickStart}
@@ -255,7 +255,7 @@ function Welcome() {
         {/* Secondary CTA - Browse All */}
         <button
           onClick={() => navigate('/sessions')}
-          className="mb-8 text-sage-600 hover:text-sage-700 font-medium text-sm flex items-center gap-1 transition-colors"
+          className="mb-6 text-muted-foreground hover:text-muted-foreground font-medium text-sm flex items-center gap-1 transition-colors"
         >
           Browse All Sessions
           <ChevronRight className="h-4 w-4" />
@@ -264,7 +264,7 @@ function Welcome() {
         {/* Program Discovery Section */}
         {activeProgram ? (
           // Active Program Card
-          <div className="w-full mb-8">
+          <div className="w-full mb-6">
             <Text variant="body" className="text-secondary font-medium mb-4 block">
               Your Program
             </Text>
@@ -276,12 +276,12 @@ function Welcome() {
                   navigate(`/programs/${activeProgram.programId}/week/${currentWeek}`);
                 }
               }}
-              className="w-full p-5 bg-gradient-to-br from-sage-50 to-cream-50 rounded-xl shadow-sm hover:shadow-md transition-all text-left border border-sage-200 hover:border-sage-300"
+              className="w-full p-4 bg-card rounded-xl shadow-sm hover:shadow-md transition-all text-left border border-border hover:border-primary"
             >
-              <div className="flex items-start justify-between mb-3">
+              <div className="flex items-start justify-between mb-2">
                 <div className="flex-1 min-w-0 mr-3">
                   <div className="flex items-center gap-2 mb-2">
-                    <BookOpen className="h-5 w-5 text-sage-600 flex-shrink-0" />
+                    <BookOpen className="h-5 w-5 text-muted-foreground flex-shrink-0" />
                     <Text variant="body" className="font-medium text-primary">
                       {getProgramById(activeProgram.programId)?.name}
                     </Text>
@@ -293,34 +293,34 @@ function Welcome() {
                 </div>
               </div>
 
-              <div className="flex items-center justify-between mt-4">
-                <Text variant="caption" className="text-sage-600">
+              <div className="flex items-center justify-between mt-3">
+                <Text variant="caption" className="text-muted-foreground">
                   Continue your journey
                 </Text>
-                <ChevronRight className="h-5 w-5 text-sage-600" />
+                <ChevronRight className="h-5 w-5 text-muted-foreground" />
               </div>
             </button>
           </div>
         ) : (
           // Discover Programs CTA
-          <div className="w-full mb-8">
+          <div className="w-full mb-6">
             <button
               onClick={() => navigate('/programs')}
-              className="w-full p-5 bg-gradient-to-br from-purple-50 to-blue-50 rounded-xl shadow-sm hover:shadow-md transition-all text-left border border-purple-200 hover:border-purple-300"
+              className="w-full p-4 bg-card rounded-xl shadow-sm hover:shadow-md transition-all text-left border border-border hover:border-primary"
             >
               <div className="flex items-start justify-between">
                 <div className="flex-1 min-w-0 mr-3">
                   <div className="flex items-center gap-2 mb-2">
-                    <BookOpen className="h-5 w-5 text-purple-600 flex-shrink-0" />
+                    <BookOpen className="h-5 w-5 text-accent flex-shrink-0" />
                     <Text variant="body" className="font-medium text-primary">
                       Discover Multi-Week Programs
                     </Text>
                   </div>
-                  <Text variant="caption" className="text-secondary leading-relaxed">
+                  <Text variant="caption" className="text-muted-foreground leading-relaxed">
                     Build a deeper practice with structured 8-13 week yoga journeys
                   </Text>
                 </div>
-                <ChevronRight className="h-5 w-5 text-purple-600 flex-shrink-0 mt-1" />
+                <ChevronRight className="h-5 w-5 text-accent flex-shrink-0 mt-1" />
               </div>
             </button>
           </div>
@@ -329,10 +329,10 @@ function Welcome() {
         {/* Recently Practiced - only show if user has history */}
         {recentSessions.length > 0 && (
           <div className="w-full">
-            <Text variant="body" className="text-secondary font-medium mb-4 block">
+            <Text variant="body" className="text-secondary font-medium mb-3 block">
               Recently Practiced
             </Text>
-            <div className="space-y-3">
+            <div className="space-y-2">
               {recentSessions.map((session, index) => {
                 const sessionData = getSessionById(session.sessionId) || getBreathingExerciseById(session.exerciseId);
                 if (!sessionData) return null;
@@ -348,7 +348,7 @@ function Welcome() {
                   <button
                     key={`recent-${index}`}
                     onClick={() => handleRecentSessionClick(session)}
-                    className="w-full p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-all text-left border border-sage-100 hover:border-sage-200"
+                    className="w-full p-3 bg-card rounded-xl shadow-sm hover:shadow-md transition-all text-left border border-border hover:border-primary"
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex-1 min-w-0 mr-3">

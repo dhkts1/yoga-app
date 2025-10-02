@@ -9,6 +9,7 @@ import FavoriteButton from '../components/FavoriteButton';
 import CategoryTabs from '../components/CategoryTabs';
 import SessionList, { FavoriteSessionList } from '../components/SessionList';
 import ConfirmDialog from '../components/ConfirmDialog';
+import PoseImage from '../components/PoseImage';
 import useProgressStore from '../stores/progress';
 import useCustomSessions from '../hooks/useCustomSessions';
 import useFavorites from '../hooks/useFavorites';
@@ -22,6 +23,7 @@ import {
   getCategoryCounts
 } from '../utils/sessionCategories';
 import { LIST_ANIMATION } from '../utils/animations';
+import { getSessionGradient } from '../utils/sessionGradients';
 
 function Sessions() {
   const navigate = useNavigate();
@@ -99,9 +101,9 @@ function Sessions() {
           e.stopPropagation();
           handleEditSession(session.id);
         }}
-        className="p-2 hover:bg-sage-100"
+        className="p-2 hover:bg-muted"
       >
-        <Edit2 className="h-4 w-4 text-sage-600" />
+        <Edit2 className="h-4 w-4 text-muted-foreground" />
       </Button>
       <Button
         variant="ghost"
@@ -125,7 +127,6 @@ function Sessions() {
   return (
     <DefaultLayout
       header={<PageHeader title="Choose Your Practice" subtitle="Yoga sessions for every moment" showBack={false} />}
-      className="bg-cream"
     >
       <ContentBody size="md" spacing="lg">
         {/* Category Tabs & Create Button */}
@@ -141,7 +142,7 @@ function Sessions() {
           </div>
           <button
             onClick={handleCreateSession}
-            className="ml-3 flex items-center justify-center w-10 h-10 rounded-full bg-sage-600 hover:bg-sage-700 text-white transition-colors flex-shrink-0"
+            className="ml-3 flex items-center justify-center w-10 h-10 rounded-full bg-primary hover:bg-primary/90 text-white transition-colors flex-shrink-0"
             aria-label="Create custom session"
           >
             <Plus className="h-5 w-5" />
@@ -154,7 +155,7 @@ function Sessions() {
         <div className="mb-8">
           <div className="flex items-center justify-center gap-2 mb-4">
             <Sparkles className="h-5 w-5 text-accent" />
-            <h2 className="text-lg font-medium text-sage-900">
+            <h2 className="text-lg font-medium text-card-foreground">
               Recommended for You
             </h2>
           </div>
@@ -164,7 +165,7 @@ function Sessions() {
             initial="hidden"
             animate="visible"
           >
-            {recommendations.map((rec) => {
+            {recommendations.map((rec, index) => {
               const sessionData = getSessionById(rec.sessionId) || getBreathingExerciseById(rec.sessionId);
               if (!sessionData) return null;
 
@@ -172,6 +173,15 @@ function Sessions() {
               const sessionName = isBreathing ? sessionData.nameEnglish : sessionData.name;
               const duration = sessionData.duration || sessionData.defaultDuration;
               const Icon = isBreathing ? Zap : (sessionIcons[rec.sessionId] || Clock);
+
+              // Get first pose for image (if yoga session)
+              const firstPoseId = !isBreathing && sessionData.poses?.[0]?.poseId;
+
+              // Use bg-card for consistent theming
+              const gradient = 'bg-card';
+
+              // Hero size for first recommendation
+              const isHero = index === 0 && rec.isPrimary;
 
               return (
                 <motion.button
@@ -184,15 +194,24 @@ function Sessions() {
                       handleSessionSelect(rec.sessionId);
                     }
                   }}
-                  className={`w-full rounded-xl bg-gradient-to-br from-accent/10 to-sage/10 p-4 text-left shadow-sm transition-all duration-300 hover:shadow-md hover:scale-[1.02] active:scale-[0.98] border-2 ${
+                  className={`w-full rounded-xl p-4 text-left shadow-sm transition-all duration-300 hover:shadow-md hover:scale-[1.02] active:scale-[0.98] border-2 ${
                     rec.isPrimary ? 'border-accent' : 'border-transparent'
-                  }`}
+                  } ${gradient} ${isHero ? 'p-5 min-h-[160px]' : ''}`}
                 >
-                  <div className="flex items-start justify-between">
+                  <div className="flex items-start justify-between gap-3">
+                    {/* Pose Image */}
+                    {firstPoseId && (
+                      <PoseImage
+                        poseId={firstPoseId}
+                        size={isHero ? 'lg' : 'md'}
+                        shape="circular"
+                      />
+                    )}
+
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
-                        <Icon className="h-5 w-5 text-accent flex-shrink-0" />
-                        <h3 className="text-base font-medium text-sage-900 truncate">
+                        {!firstPoseId && <Icon className="h-5 w-5 text-accent flex-shrink-0" />}
+                        <h3 className={`${isHero ? 'text-lg' : 'text-base'} font-medium text-card-foreground truncate`}>
                           {sessionName}
                         </h3>
                         {rec.isPrimary && (
@@ -204,7 +223,7 @@ function Sessions() {
                           {getRecommendationTag(rec)}
                         </span>
                       </div>
-                      <div className="flex items-center gap-4 text-sm text-sage-600 flex-wrap">
+                      <div className="flex items-center gap-4 text-sm text-muted-foreground flex-wrap">
                         <div className="flex items-center gap-1">
                           <Clock className="h-4 w-4" />
                           <span>{duration} min</span>
@@ -234,7 +253,13 @@ function Sessions() {
 
       {/* Favorite Custom Sessions */}
       <FavoriteSessionList
-        sessions={favoriteCustomSessionsList}
+        sessions={favoriteCustomSessionsList.map(session => ({
+          ...session,
+          poseImage: session.poses?.[0]?.poseId ? (
+            <PoseImage poseId={session.poses[0].poseId} size="md" shape="circular" />
+          ) : null,
+          gradient: 'bg-card'
+        }))}
         title="Favorite Custom Sessions"
         type="custom"
         onSessionClick={(session) => handleSessionSelect(session.id, true)}
@@ -244,7 +269,13 @@ function Sessions() {
 
       {/* Non-favorite Custom Sessions */}
       <SessionList
-        sessions={nonFavoriteCustomSessionsList}
+        sessions={nonFavoriteCustomSessionsList.map(session => ({
+          ...session,
+          poseImage: session.poses?.[0]?.poseId ? (
+            <PoseImage poseId={session.poses[0].poseId} size="md" shape="circular" />
+          ) : null,
+          gradient: 'bg-card'
+        }))}
         title="Your Custom Sessions"
         variant="custom"
         type="custom"
@@ -255,7 +286,13 @@ function Sessions() {
 
       {/* Favorite Pre-built Sessions */}
       <FavoriteSessionList
-        sessions={favoriteSessionsList}
+        sessions={favoriteSessionsList.map(session => ({
+          ...session,
+          poseImage: session.poses?.[0]?.poseId ? (
+            <PoseImage poseId={session.poses[0].poseId} size="md" shape="circular" />
+          ) : null,
+          gradient: 'bg-card'
+        }))}
         title="Favorite Sessions"
         type="yoga"
         onSessionClick={(session) => handleSessionSelect(session.id)}
@@ -266,7 +303,13 @@ function Sessions() {
 
       {/* Non-favorite Pre-built Sessions */}
       <SessionList
-        sessions={nonFavoriteSessionsList}
+        sessions={nonFavoriteSessionsList.map(session => ({
+          ...session,
+          poseImage: session.poses?.[0]?.poseId ? (
+            <PoseImage poseId={session.poses[0].poseId} size="md" shape="circular" />
+          ) : null,
+          gradient: 'bg-card'
+        }))}
         title={(customSessions.length > 0 || favoriteSessionsList.length > 0) && nonFavoriteSessionsList.length > 0
           ? (favoriteSessionsList.length > 0 ? 'More Sessions' : 'Pre-built Sessions')
           : ''}

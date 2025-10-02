@@ -208,7 +208,7 @@ function Complete() {
           </p>
           {streakStatus && (
             <motion.div
-              className="mt-3 p-3 bg-cream-100 rounded-lg"
+              className="mt-3 p-3 bg-muted rounded-lg"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.4, delay: 0.6 }}

@@ -295,7 +295,7 @@ function BreathingPractice() {
       exitButtonStyle="circular"
       progressBar={
         sessionStarted && (
-          <div className="h-1.5 rounded-full bg-cream-200">
+          <div className="h-1.5 rounded-full bg-muted">
             <div
               className="h-full rounded-full bg-primary transition-all duration-1000 ease-linear"
               style={{ width: `${progressPercent}%` }}
@@ -308,7 +308,7 @@ function BreathingPractice() {
 
   // Render footer with controls
   const renderFooter = () => (
-    <div className="px-4 pt-6 pb-4 bg-background border-t border-cream-200">
+    <div className="px-4 pt-6 pb-4 bg-background border-t border-border">
       <div className="flex items-center justify-center gap-6 max-w-sm mx-auto">
         {!sessionStarted ? (
           <button
@@ -322,7 +322,7 @@ function BreathingPractice() {
           <>
             <button
               onClick={handleReset}
-              className="flex h-12 w-12 items-center justify-center rounded-full backdrop-blur-md bg-sage-50/40 text-sage-700 hover:text-sage-900 hover:bg-sage-100/50 transition-all hover:scale-105 active:scale-95"
+              className="flex h-12 w-12 items-center justify-center rounded-full backdrop-blur-md bg-muted/40 text-muted-foreground hover:text-card-foreground hover:bg-muted/50 transition-all hover:scale-105 active:scale-95"
               aria-label="Reset"
             >
               <RotateCcw className="h-5 w-5" />
@@ -357,7 +357,7 @@ function BreathingPractice() {
       <div className="text-center mb-4 mt-4">
         {/* Cycle count */}
         {sessionStarted && (
-          <p className="text-xs text-sage-500 mb-2">
+          <p className="text-xs text-muted-foreground mb-2">
             Cycle {currentCycle} of {totalCycles}
           </p>
         )}

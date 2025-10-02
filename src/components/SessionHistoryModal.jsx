@@ -80,7 +80,7 @@ function SessionHistoryModal({
     const sessionData = getSessionById(session.sessionId);
     if (!sessionData) {
       return (
-        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-sage-100 text-sage-800">
+        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-muted text-foreground">
           <Activity className="w-3 h-3 mr-1" />
           Yoga
         </span>
@@ -98,7 +98,7 @@ function SessionHistoryModal({
     }
 
     return (
-      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-sage-100 text-sage-800">
+      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-muted text-foreground">
         <Activity className="w-3 h-3 mr-1" />
         Yoga
       </span>
@@ -114,7 +114,7 @@ function SessionHistoryModal({
     >
       <div className="space-y-6">
         {/* Header */}
-        <div className="text-center border-b border-cream-200 pb-4">
+        <div className="text-center border-b border-border pb-4">
           <Heading level={2} className="mb-2">
             Practice History
           </Heading>
@@ -124,10 +124,10 @@ function SessionHistoryModal({
         </div>
 
         {/* Day Summary Stats */}
-        <div className="grid grid-cols-2 gap-3 bg-sage-50 rounded-lg p-4">
+        <div className="grid grid-cols-2 gap-3 bg-muted rounded-lg p-4">
           <div className="text-center">
             <div className="flex items-center justify-center mb-1">
-              <Activity className="w-4 h-4 text-sage-600 mr-1" />
+              <Activity className="w-4 h-4 text-muted-foreground mr-1" />
               <Text variant="caption" className="text-secondary">
                 Total Sessions
               </Text>
@@ -143,7 +143,7 @@ function SessionHistoryModal({
           </div>
           <div className="text-center">
             <div className="flex items-center justify-center mb-1">
-              <Clock className="w-4 h-4 text-sage-600 mr-1" />
+              <Clock className="w-4 h-4 text-muted-foreground mr-1" />
               <Text variant="caption" className="text-secondary">
                 Total Time
               </Text>
@@ -159,28 +159,28 @@ function SessionHistoryModal({
 
         {/* Mood Improvement Summary */}
         {avgMoodImprovement && (
-          <div className="bg-gold-50 rounded-lg p-4">
+          <div className="bg-accent/10 rounded-lg p-4 border border-accent/20">
             <div className="flex items-center justify-center mb-2">
-              <TrendingUp className="w-5 h-5 text-gold-600 mr-2" />
-              <Heading level={4} className="text-gold-900">
+              <TrendingUp className="w-5 h-5 text-accent mr-2" />
+              <Heading level={4} className="text-foreground">
                 Wellbeing Impact
               </Heading>
             </div>
             <div className="grid grid-cols-2 gap-3 text-center">
               <div>
-                <Text variant="body" className="font-semibold text-gold-900">
+                <Text variant="body" className="font-semibold text-accent">
                   +{avgMoodImprovement}
                 </Text>
-                <Text variant="caption" className="text-gold-700 text-xs">
+                <Text variant="caption" className="text-muted-foreground text-xs">
                   Avg Mood
                 </Text>
               </div>
               {avgEnergyImprovement && (
                 <div>
-                  <Text variant="body" className="font-semibold text-gold-900">
+                  <Text variant="body" className="font-semibold text-accent">
                     +{avgEnergyImprovement}
                   </Text>
-                  <Text variant="caption" className="text-gold-700 text-xs">
+                  <Text variant="caption" className="text-muted-foreground text-xs">
                     Avg Energy
                   </Text>
                 </div>
@@ -203,7 +203,7 @@ function SessionHistoryModal({
               return (
                 <div
                   key={`${session.id}-${index}`}
-                  className="bg-white border border-cream-200 rounded-lg p-3 hover:border-sage-300 transition-colors"
+                  className="bg-card border border-border rounded-lg p-3 hover:border-primary transition-colors"
                 >
                   {/* Session Header */}
                   <div className="flex items-start justify-between mb-2">
@@ -228,7 +228,7 @@ function SessionHistoryModal({
 
                   {/* Mood Data */}
                   {session.moodImprovement !== null && (
-                    <div className="flex items-center gap-4 text-xs mb-2 bg-sage-50 rounded px-2 py-1">
+                    <div className="flex items-center gap-4 text-xs mb-2 bg-muted rounded px-2 py-1">
                       <span className={`font-medium ${session.moodImprovement >= 0 ? 'text-state-success' : 'text-state-error'}`}>
                         {session.moodImprovement >= 0 ? '+' : ''}{session.moodImprovement} mood
                       </span>
@@ -257,7 +257,7 @@ function SessionHistoryModal({
         </div>
 
         {/* Close Button */}
-        <div className="pt-4 border-t border-cream-200">
+        <div className="pt-4 border-t border-border">
           <Button
             variant="primary"
             onClick={onClose}

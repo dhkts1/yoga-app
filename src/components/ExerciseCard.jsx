@@ -34,7 +34,7 @@ function ExerciseCard({ exercise, selectedDuration, onClick, isFavorite = false 
   return (
     <Card
       className={`p-0 overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-md hover:scale-[1.01] active:scale-[0.99] relative ${
-        isFavorite ? 'border-l-4 border-gold' : ''
+        isFavorite ? 'border-l-4 border-accent' : ''
       }`}
       onClick={onClick}
     >
@@ -42,14 +42,14 @@ function ExerciseCard({ exercise, selectedDuration, onClick, isFavorite = false 
         <div className="flex items-center justify-between gap-3">
           {/* Left: Exercise Info */}
           <div className="flex items-center gap-3 flex-1 min-w-0">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-sage-100 flex-shrink-0">
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-muted flex-shrink-0">
               <span className="text-2xl">{exercise.emoji}</span>
             </div>
             <div className="flex-1 min-w-0">
               <Heading level={3} className="text-base truncate">
                 {exercise.nameEnglish}
               </Heading>
-              <div className="flex items-center gap-2 text-xs text-secondary flex-wrap">
+              <div className="flex items-center gap-2 text-xs text-muted-foreground flex-wrap">
                 <span>{exercise.defaultDuration} min</span>
                 <span>•</span>
                 <span className={`capitalize px-2 py-0.5 rounded-full ${categoryStyle.bg} ${categoryStyle.text} font-medium`}>
@@ -62,8 +62,8 @@ function ExerciseCard({ exercise, selectedDuration, onClick, isFavorite = false 
           {/* Right: Duration & Favorite Button */}
           <div className="flex items-center gap-2 flex-shrink-0">
             <div className="text-right">
-              <div className="text-lg font-bold text-sage-700">{selectedDuration}</div>
-              <div className="text-[10px] text-secondary">min</div>
+              <div className="text-lg font-bold text-foreground">{selectedDuration}</div>
+              <div className="text-[10px] text-muted-foreground">min</div>
             </div>
             <FavoriteButton itemId={exercise.id} type="breathing" size="sm" />
           </div>

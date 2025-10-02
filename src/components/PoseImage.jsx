@@ -1,109 +1,160 @@
+import PropTypes from 'prop-types';
+import { cn } from '../lib/utils';
 
 /**
  * PoseImage Component
  *
- * Displays abstract SVG illustrations for yoga poses with proper styling
- * and responsive behavior. Follows the app's design system principles.
+ * Dynamically displays yoga pose SVG illustrations from /src/assets/poses
+ * with configurable size and shape variants.
+ *
+ * Features:
+ * - Dynamic SVG imports for all poses
+ * - Size variants: sm (48px), md (64px), lg (96px), xl (128px)
+ * - Shape variants: circular, rounded, square
+ * - Dark mode support
+ * - Fallback icon when pose image unavailable
+ *
+ * @example
+ * <PoseImage poseId="mountain-pose" size="md" shape="circular" />
  */
+
+// Import all pose SVGs statically for performance
+import mountainPose from '../assets/poses/mountain-pose.svg';
+import downwardDog from '../assets/poses/downward-dog.svg';
+import warriorOne from '../assets/poses/warrior-one.svg';
+import warriorTwo from '../assets/poses/warrior-two.svg';
+import treePose from '../assets/poses/tree-pose.svg';
+import childPose from '../assets/poses/child-pose.svg';
+import cobraPose from '../assets/poses/cobra-pose.svg';
+import trianglePose from '../assets/poses/triangle-pose.svg';
+import catCow from '../assets/poses/cat-cow.svg';
+import plankPose from '../assets/poses/plank-pose.svg';
+import bridgePose from '../assets/poses/bridge-pose.svg';
+import corpsePose from '../assets/poses/corpse-pose.svg';
+import boatPose from '../assets/poses/boat-pose.svg';
+import eaglePose from '../assets/poses/eagle-pose.svg';
+import extendedSideAngle from '../assets/poses/extended-side-angle.svg';
+import halfMoon from '../assets/poses/half-moon.svg';
+import happyBaby from '../assets/poses/happy-baby.svg';
+import legsUpWall from '../assets/poses/legs-up-wall.svg';
+import pigeonPose from '../assets/poses/pigeon-pose.svg';
+import pyramidPose from '../assets/poses/pyramid-pose.svg';
+import seatedForwardFold from '../assets/poses/seated-forward-fold.svg';
+import supineTwist from '../assets/poses/supine-twist.svg';
+
+// Pose image mapping
+const POSE_IMAGES = {
+  'mountain-pose': mountainPose,
+  'downward-dog': downwardDog,
+  'warrior-one': warriorOne,
+  'warrior-two': warriorTwo,
+  'tree-pose': treePose,
+  'child-pose': childPose,
+  'cobra-pose': cobraPose,
+  'triangle-pose': trianglePose,
+  'cat-cow': catCow,
+  'plank-pose': plankPose,
+  'bridge-pose': bridgePose,
+  'corpse-pose': corpsePose,
+  'boat-pose': boatPose,
+  'eagle-pose': eaglePose,
+  'extended-side-angle': extendedSideAngle,
+  'half-moon': halfMoon,
+  'happy-baby': happyBaby,
+  'legs-up-wall': legsUpWall,
+  'pigeon-pose': pigeonPose,
+  'pyramid-pose': pyramidPose,
+  'seated-forward-fold': seatedForwardFold,
+  'supine-twist': supineTwist,
+};
+
 const PoseImage = ({
-  pose,
-  size = 'medium',
+  poseId,
+  size = 'md',
+  shape = 'circular',
   className = '',
-  showName = false
+  showBorder = false,
+  ...props
 }) => {
-  // Size variants
-  const sizeClasses = {
-    small: 'w-12 h-12',
-    medium: 'w-32 h-32',
-    large: 'w-48 h-48',
-    full: 'w-full h-full'
+  // Get pose image URL
+  const imageUrl = POSE_IMAGES[poseId];
+
+  // Size variants (mobile-first)
+  const sizes = {
+    sm: 'w-12 h-12',  // 48px
+    md: 'w-16 h-16',  // 64px
+    lg: 'w-24 h-24',  // 96px
+    xl: 'w-32 h-32',  // 128px
   };
 
-  if (!pose || !pose.imageUrl) {
+  // Shape variants
+  const shapes = {
+    circular: 'rounded-full',
+    rounded: 'rounded-xl',
+    square: 'rounded-md',
+  };
+
+  // Border styles (optional)
+  const borderStyles = showBorder ? 'border-2 border-border dark:border-sage-700' : '';
+
+  // Base styles
+  const baseStyles = cn(
+    // Size
+    sizes[size],
+    // Shape
+    shapes[shape],
+    // Common styles
+    'flex items-center justify-center',
+    'bg-muted dark:bg-sage-900/20',
+    'overflow-hidden',
+    'flex-shrink-0',
+    // Border
+    borderStyles,
+    // Dark mode image adjustment
+    '[&_img]:dark:opacity-80',
+    // Custom classes
+    className
+  );
+
+  // Fallback if no image found
+  if (!imageUrl) {
     return (
-      <div
-        className={`
-          ${sizeClasses[size]}
-          bg-sage-100
-          rounded-lg
-          flex items-center justify-center
-          ${className}
-        `}
-      >
-        <div className={`text-sage-400 ${size === 'small' ? 'text-xl' : 'text-2xl'}`}>
-          {pose?.emoji || '🧘'}
-        </div>
+      <div className={baseStyles} {...props}>
+        <svg
+          className="w-1/2 h-1/2 text-muted-foreground dark:text-muted-foreground"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+          />
+        </svg>
       </div>
     );
   }
 
   return (
-    <div className={`pose-image-container ${className}`}>
-      <div
-        className={`
-          ${sizeClasses[size]}
-          relative
-          rounded-lg
-          overflow-hidden
-          transition-all duration-300 ease-out
-          hover:scale-105
-          hover:shadow-lg
-        `}
-      >
-        <img
-          src={pose.imageUrl}
-          alt={`${pose.nameEnglish} (${pose.nameSanskrit})`}
-          className="
-            w-full
-            h-full
-            object-contain
-            transition-opacity duration-300
-          "
-          onError={(e) => {
-            // Fallback to emoji if SVG fails to load
-            e.target.style.display = 'none';
-            const fallback = e.target.parentElement.querySelector('.fallback-emoji');
-            if (fallback) fallback.style.display = 'flex';
-          }}
-        />
-
-        {/* Fallback emoji if SVG fails */}
-        <div
-          className="
-            fallback-emoji
-            hidden
-            absolute inset-0
-            bg-sage-50
-            rounded-lg
-            flex items-center justify-center
-            text-4xl
-          "
-        >
-          {pose.emoji}
-        </div>
-
-        {/* Optional gentle gradient overlay for depth */}
-        <div className="
-          absolute inset-0
-          bg-gradient-to-t
-          from-black/5
-          to-transparent
-          pointer-events-none
-        " />
-      </div>
-
-      {showName && (
-        <div className="mt-2 text-center">
-          <div className="text-sm font-medium text-sage-800">
-            {pose.nameEnglish}
-          </div>
-          <div className="text-xs text-sage-600 font-light">
-            {pose.nameSanskrit}
-          </div>
-        </div>
-      )}
+    <div className={baseStyles} {...props}>
+      <img
+        src={imageUrl}
+        alt={`${poseId} pose`}
+        className="w-full h-full object-contain p-2"
+        loading="lazy"
+      />
     </div>
   );
+};
+
+PoseImage.propTypes = {
+  poseId: PropTypes.string.isRequired,
+  size: PropTypes.oneOf(['sm', 'md', 'lg', 'xl']),
+  shape: PropTypes.oneOf(['circular', 'rounded', 'square']),
+  className: PropTypes.string,
+  showBorder: PropTypes.bool,
 };
 
 export default PoseImage;

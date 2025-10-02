@@ -44,9 +44,9 @@ function ProgramProgressCard() {
   // Style badge color mapping
   const getStyleColor = (style) => {
     const styleColors = {
-      iyengar: 'bg-sage-100 text-sage-800',
+      iyengar: 'bg-muted text-foreground',
       vinyasa: 'bg-accent/20 text-accent',
-      hatha: 'bg-cream-200 text-sage-800',
+      hatha: 'bg-muted text-foreground',
       restorative: 'bg-purple-50 text-purple-700',
     };
     return styleColors[style.toLowerCase()] || 'bg-gray-100 text-gray-700';
@@ -67,8 +67,8 @@ function ProgramProgressCard() {
         <div className="flex items-start space-x-3 flex-1 min-w-0">
           {/* Icon */}
           <div className="flex-shrink-0 mt-1">
-            <div className="w-10 h-10 rounded-full bg-sage-200 flex items-center justify-center">
-              <BookOpen className="h-5 w-5 text-sage-700" />
+            <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center">
+              <BookOpen className="h-5 w-5 text-muted-foreground" />
             </div>
           </div>
 
@@ -89,7 +89,7 @@ function ProgramProgressCard() {
                 Week {currentWeek} of {totalWeeks}
               </span>
               {currentWeekData?.isMilestone && (
-                <span className="text-gold-600 font-medium">Milestone Week</span>
+                <span className="text-accent font-medium">Milestone Week</span>
               )}
             </div>
           </div>
@@ -99,7 +99,7 @@ function ProgramProgressCard() {
       {/* Current Week Name */}
       {currentWeekData && (
         <div className="mb-4">
-          <Text variant="body" className="text-sage-900 font-medium">
+          <Text variant="body" className="text-card-foreground font-medium">
             {currentWeekData.name}
           </Text>
           <Text variant="caption" className="text-secondary mt-1">
@@ -120,7 +120,7 @@ function ProgramProgressCard() {
           <Text variant="caption" className="text-secondary">
             {progressPercentage}% Complete
           </Text>
-          <Text variant="caption" className="text-sage-600 font-medium">
+          <Text variant="caption" className="text-muted-foreground font-medium">
             {currentWeek - 1} / {totalWeeks} weeks completed
           </Text>
         </div>

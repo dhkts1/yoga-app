@@ -43,7 +43,7 @@ function Breathing() {
       <ContentBody size="md" spacing="md">
         {/* Duration Selector */}
       <div className="mb-6">
-        <Text variant="body" className="mb-3 font-medium text-primary">
+        <Text variant="body" className="mb-3 font-medium text-foreground">
           Session Duration
         </Text>
         <div className="flex gap-2 w-full overflow-x-auto">
@@ -67,8 +67,8 @@ function Breathing() {
       {/* Favorite Exercise Cards */}
       {favoriteExercises.length > 0 && (
         <div className="mb-6">
-          <h2 className="text-lg font-medium text-primary mb-4 flex items-center gap-2">
-            <Star className="h-5 w-5 text-gold fill-gold" />
+          <h2 className="text-lg font-medium text-foreground mb-4 flex items-center gap-2">
+            <Star className="h-5 w-5 text-accent fill-accent" />
             Favorite Exercises
           </h2>
           <motion.div
@@ -99,7 +99,7 @@ function Breathing() {
         animate="visible"
       >
         {favoriteExercises.length > 0 && (
-          <h2 className="text-lg font-medium text-primary mb-4">
+          <h2 className="text-lg font-medium text-foreground mb-4">
             More Exercises
           </h2>
         )}
@@ -116,16 +116,16 @@ function Breathing() {
       </motion.div>
 
       {/* Quick info about breathing exercises */}
-      <Card className="p-4 mb-24 bg-sage-50 border-sage-200">
+      <Card className="p-4 mb-24 bg-muted border-border">
         <div className="flex items-start gap-3">
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-sage-200 flex-shrink-0">
-            <Wind className="h-4 w-4 text-sage-700" />
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-muted flex-shrink-0">
+            <Wind className="h-4 w-4 text-muted-foreground" />
           </div>
           <div>
-            <Text variant="body" className="font-medium text-primary mb-1">
+            <Text variant="body" className="font-medium text-foreground mb-1">
               Why practice breathing exercises?
             </Text>
-            <Text variant="caption" className="text-secondary">
+            <Text variant="caption" className="text-muted-foreground">
               Pranayama helps regulate your nervous system, reduce stress, and improve focus.
               These exercises can be done anywhere - perfect for a quick reset during your workday.
             </Text>

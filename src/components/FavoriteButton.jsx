@@ -91,7 +91,7 @@ function FavoriteButton({
         ${buttonSizeClasses[size]}
         rounded-full
         transition-all duration-200
-        hover:bg-sage-50
+        hover:bg-muted
         active:scale-95
         focus:outline-none focus:ring-2 focus:ring-sage-300 focus:ring-offset-1
         ${className}
@@ -104,7 +104,7 @@ function FavoriteButton({
         className={`
           ${sizeClasses[size]}
           transition-all duration-150
-          ${isFavorited ? 'fill-gold text-gold' : 'text-sage-400'}
+          ${isFavorited ? 'fill-accent text-accent' : 'text-muted-foreground'}
           ${isAnimating ? 'animate-bounce-scale' : ''}
         `}
       />

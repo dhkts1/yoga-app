@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Bell, Download, Trash2, Info, RefreshCw, Clock } from 'lucide-react';
+import { Bell, Download, Trash2, Info, RefreshCw, Clock, Palette } from 'lucide-react';
 import { DefaultLayout } from '../components/layouts';
 import { PageHeader } from '../components/headers';
 import { Text } from '../components/design-system/Typography';
@@ -7,6 +7,7 @@ import { ContentBody } from '../components/design-system';
 import { Switch } from '../components/ui/switch';
 import SettingsSection from '../components/SettingsSection';
 import ConfirmDialog from '../components/ConfirmDialog';
+import { ThemeToggleWithLabel } from '../components/ThemeToggle';
 import usePreferencesStore from '../stores/preferences';
 import useProgressStore from '../stores/progress';
 import useCollapsibleSections from '../hooks/useCollapsibleSections';
@@ -21,6 +22,7 @@ function Settings() {
 
   // Collapsible sections state - all closed by default
   const { openSections, toggleSection } = useCollapsibleSections({
+    appearance: false,
     practice: false,
     popups: false,
     notifications: false,
@@ -93,21 +95,36 @@ function Settings() {
       header={<PageHeader title="Settings" showBack={false} />}
     >
       <ContentBody size="lg" spacing="md">
+        {/* Appearance Section */}
+        <SettingsSection
+          id="appearance"
+          title="Appearance"
+          subtitle="Choose your preferred theme"
+          icon={Palette}
+          iconBgColor="bg-muted"
+          isOpen={openSections.appearance}
+          onToggle={() => toggleSection('appearance')}
+        >
+          <div className="py-2">
+            <ThemeToggleWithLabel />
+          </div>
+        </SettingsSection>
+
         {/* Practice Settings Section */}
         <SettingsSection
           id="practice"
           title="Practice Settings"
           subtitle="Customize your practice experience"
           icon={Clock}
-          iconBgColor="bg-cream-100"
+          iconBgColor="bg-muted"
           isOpen={openSections.practice}
           onToggle={() => toggleSection('practice')}
         >
           {/* Rest Duration Setting */}
           <div className="py-2">
             <div className="mb-3">
-              <Text className="text-sage-800 font-medium">Rest Time Between Poses</Text>
-              <Text variant="caption" className="text-sage-600">Time to transition between poses</Text>
+              <Text className="text-foreground font-medium">Rest Time Between Poses</Text>
+              <Text variant="caption" className="text-muted-foreground">Time to transition between poses</Text>
             </div>
 
             {/* Preset buttons */}
@@ -126,8 +143,8 @@ function Settings() {
                   }}
                   className={`py-3 px-3 rounded-lg text-sm font-medium transition-all duration-300 ${
                     restDuration === option.value && !showCustomRest
-                      ? 'bg-sage-600 text-white shadow-md scale-105'
-                      : 'bg-sage-50 text-sage-700 hover:bg-sage-100 hover:scale-105'
+                      ? 'bg-primary text-primary-foreground shadow-md scale-105'
+                      : 'bg-muted text-muted-foreground hover:bg-muted hover:scale-105'
                   }`}
                 >
                   {option.label}
@@ -140,8 +157,8 @@ function Settings() {
               onClick={() => setShowCustomRest(!showCustomRest)}
               className={`w-full py-3 px-3 rounded-lg text-sm font-medium transition-all duration-300 ${
                 showCustomRest
-                  ? 'bg-sage-600 text-white shadow-md'
-                  : 'bg-sage-50 text-sage-700 hover:bg-sage-100'
+                  ? 'bg-primary text-primary-foreground shadow-md'
+                  : 'bg-muted text-muted-foreground hover:bg-muted'
               }`}
             >
               Custom
@@ -149,8 +166,8 @@ function Settings() {
 
             {/* Custom Rest Duration Input - shown when Custom is selected */}
             {showCustomRest && (
-              <div className="mt-3 p-3 bg-cream-50 rounded-lg border border-cream-200 animate-in fade-in slide-in-from-top-2 duration-300">
-                <Text className="text-sage-800 font-medium mb-2 text-sm">Enter Custom Duration</Text>
+              <div className="mt-3 p-3 bg-muted rounded-lg border border-border animate-in fade-in slide-in-from-top-2 duration-300">
+                <Text className="text-foreground font-medium mb-2 text-sm">Enter Custom Duration</Text>
                 <div className="flex items-center gap-3">
                   <input
                     type="number"
@@ -159,16 +176,16 @@ function Settings() {
                     value={restDuration}
                     onChange={(e) => setRestDuration(e.target.value)}
                     placeholder="Enter seconds..."
-                    className="w-24 px-3 py-2 border border-sage-200 rounded-lg bg-white text-sage-800 text-sm focus:outline-none focus:ring-2 focus:ring-sage-500 transition-all"
+                    className="w-24 px-3 py-2 border border-border rounded-lg bg-card text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-sage-500 transition-all"
                   />
-                  <Text variant="caption" className="text-sage-600">seconds (0-60)</Text>
+                  <Text variant="caption" className="text-muted-foreground">seconds (0-60)</Text>
                 </div>
               </div>
             )}
 
             {/* Description */}
-            <div className="mt-3 p-3 bg-cream-50 rounded-lg border border-cream-200">
-              <Text variant="caption" className="text-sage-600">
+            <div className="mt-3 p-3 bg-muted rounded-lg border border-border">
+              <Text variant="caption" className="text-muted-foreground">
                 {restDuration === 0 && !showCustomRest && 'Poses will transition immediately without rest periods.'}
                 {restDuration === 5 && !showCustomRest && 'Short rest periods - great for faster-paced practices.'}
                 {restDuration === 10 && !showCustomRest && 'Medium rest periods - balanced for most practices.'}
@@ -185,15 +202,15 @@ function Settings() {
           title="Popup Preferences"
           subtitle="Mood tracking and prompts"
           icon={Info}
-          iconBgColor="bg-cream-100"
+          iconBgColor="bg-muted"
           isOpen={openSections.popups}
           onToggle={() => toggleSection('popups')}
         >
           {/* Yoga Mood Tracking Toggle */}
           <div className="flex items-center justify-between py-2">
             <div>
-              <Text className="text-sage-800 font-medium">Yoga Mood Tracking</Text>
-              <Text variant="caption" className="text-sage-600">Show mood check before/after yoga practice</Text>
+              <Text className="text-foreground font-medium">Yoga Mood Tracking</Text>
+              <Text variant="caption" className="text-muted-foreground">Show mood check before/after yoga practice</Text>
             </div>
             <Switch
               checked={yoga.showMoodCheck}
@@ -201,13 +218,13 @@ function Settings() {
             />
           </div>
 
-          <div className="border-t border-sage-100" />
+          <div className="border-t border-border" />
 
           {/* Breathing Mood Tracking Toggle */}
           <div className="flex items-center justify-between py-2">
             <div>
-              <Text className="text-sage-800 font-medium">Breathing Mood Tracking</Text>
-              <Text variant="caption" className="text-sage-600">Show mood check before/after breathing exercises</Text>
+              <Text className="text-foreground font-medium">Breathing Mood Tracking</Text>
+              <Text variant="caption" className="text-muted-foreground">Show mood check before/after breathing exercises</Text>
             </div>
             <Switch
               checked={breathing.showMoodCheck}
@@ -222,19 +239,19 @@ function Settings() {
           title="Notifications"
           subtitle="Reminders and alerts"
           icon={Bell}
-          iconBgColor="bg-gold-100 text-gold-700"
+          iconBgColor="bg-gold-100 text-accent"
           isOpen={openSections.notifications}
           onToggle={() => toggleSection('notifications')}
         >
-          <div className="text-sm text-gold-700 bg-gold-50 p-3 rounded-lg border border-gold-200">
+          <div className="text-sm text-accent bg-gold-50 p-3 rounded-lg border border-gold-200">
             Note: Notifications are coming in a future update. These settings will be saved for when they are available.
           </div>
 
           {/* Practice Reminders */}
           <div className="flex items-center justify-between py-2">
             <div>
-              <Text className="text-sage-800 font-medium">Practice Reminders</Text>
-              <Text variant="caption" className="text-sage-600">Daily reminder to practice</Text>
+              <Text className="text-foreground font-medium">Practice Reminders</Text>
+              <Text variant="caption" className="text-muted-foreground">Daily reminder to practice</Text>
             </div>
             <Switch
               checked={practiceReminders}
@@ -245,23 +262,23 @@ function Settings() {
           {/* Reminder Time */}
           {practiceReminders && (
             <div className="py-2">
-              <Text className="text-sage-800 font-medium mb-2">Reminder Time</Text>
+              <Text className="text-foreground font-medium mb-2">Reminder Time</Text>
               <input
                 type="time"
                 value={reminderTime}
                 onChange={(e) => setReminderTime(e.target.value)}
-                className="w-full px-4 py-3 border border-sage-200 rounded-lg bg-white text-sage-800 focus:outline-none focus:ring-2 focus:ring-sage-500 transition-all"
+                className="w-full px-4 py-3 border border-border rounded-lg bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-sage-500 transition-all"
               />
             </div>
           )}
 
-          <div className="border-t border-sage-100" />
+          <div className="border-t border-border" />
 
           {/* Streak Alerts */}
           <div className="flex items-center justify-between py-2">
             <div>
-              <Text className="text-sage-800 font-medium">Streak Alerts</Text>
-              <Text variant="caption" className="text-sage-600">Get notified about your streak</Text>
+              <Text className="text-foreground font-medium">Streak Alerts</Text>
+              <Text variant="caption" className="text-muted-foreground">Get notified about your streak</Text>
             </div>
             <Switch
               checked={streakAlerts}
@@ -276,28 +293,28 @@ function Settings() {
           title="Data & Privacy"
           subtitle="Manage your practice data"
           icon={Info}
-          iconBgColor="bg-cream-100"
+          iconBgColor="bg-muted"
           isOpen={openSections.data}
           onToggle={() => toggleSection('data')}
         >
           {/* Export Data */}
           <button
             onClick={handleExportData}
-            className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-sage-50 transition-all duration-300 group border border-sage-200"
+            className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-muted transition-all duration-300 group border border-border"
           >
-            <div className="p-2 rounded-lg bg-sage-100 text-sage-700 group-hover:bg-sage-200 transition-colors">
+            <div className="p-2 rounded-lg bg-muted text-muted-foreground group-hover:bg-muted transition-colors">
               <Download className="h-4 w-4" />
             </div>
             <div className="text-left flex-1">
-              <Text className="text-sage-800 font-medium">Export Practice Data</Text>
-              <Text variant="caption" className="text-sage-600">Download your history as JSON</Text>
+              <Text className="text-foreground font-medium">Export Practice Data</Text>
+              <Text variant="caption" className="text-muted-foreground">Download your history as JSON</Text>
             </div>
           </button>
 
           {/* Storage Info */}
-          <div className="p-3 bg-cream-50 rounded-lg border border-cream-200">
-            <Text className="text-sage-800 font-medium">Storage Used</Text>
-            <Text variant="caption" className="text-sage-600">{getStorageSize()} KB of local storage</Text>
+          <div className="p-3 bg-muted rounded-lg border border-border">
+            <Text className="text-foreground font-medium">Storage Used</Text>
+            <Text variant="caption" className="text-muted-foreground">{getStorageSize()} KB of local storage</Text>
           </div>
 
           {/* Clear Data */}
@@ -321,44 +338,44 @@ function Settings() {
           title="About"
           subtitle="App information and credits"
           icon={Info}
-          iconBgColor="bg-sage-100 text-sage-700"
+          iconBgColor="bg-muted text-muted-foreground"
           isOpen={openSections.about}
           onToggle={() => toggleSection('about')}
         >
-          <div className="p-3 bg-sage-50 rounded-lg border border-sage-200">
-            <Text className="text-sage-800 font-medium">Mindful Yoga App</Text>
-            <Text variant="caption" className="text-sage-600">Version 1.0.0 (Beta)</Text>
+          <div className="p-3 bg-muted rounded-lg border border-border">
+            <Text className="text-foreground font-medium">Mindful Yoga App</Text>
+            <Text variant="caption" className="text-muted-foreground">Version 1.0.0 (Beta)</Text>
           </div>
 
-          <div className="p-3 bg-cream-50 rounded-lg border border-cream-200">
-            <Text className="text-sage-800 font-medium">Build Date</Text>
-            <Text variant="caption" className="text-sage-600">October 2024</Text>
+          <div className="p-3 bg-muted rounded-lg border border-border">
+            <Text className="text-foreground font-medium">Build Date</Text>
+            <Text variant="caption" className="text-muted-foreground">October 2024</Text>
           </div>
 
           <button
             onClick={handleFeedback}
-            className="w-full p-3 rounded-lg hover:bg-sage-50 transition-all duration-300 text-left border border-sage-200 group"
+            className="w-full p-3 rounded-lg hover:bg-muted transition-all duration-300 text-left border border-border group"
           >
-            <Text className="text-sage-800 font-medium group-hover:text-sage-900">Send Feedback</Text>
-            <Text variant="caption" className="text-sage-600">Help us improve the app</Text>
+            <Text className="text-foreground font-medium group-hover:text-card-foreground">Send Feedback</Text>
+            <Text variant="caption" className="text-muted-foreground">Help us improve the app</Text>
           </button>
 
           <button
             onClick={handleResetTutorial}
-            className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-sage-50 transition-all duration-300 group border border-sage-200"
+            className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-muted transition-all duration-300 group border border-border"
           >
-            <div className="p-2 rounded-lg bg-sage-100 text-sage-700 group-hover:bg-sage-200 transition-colors">
+            <div className="p-2 rounded-lg bg-muted text-muted-foreground group-hover:bg-muted transition-colors">
               <RefreshCw className="h-4 w-4" />
             </div>
             <div className="text-left flex-1">
-              <Text className="text-sage-800 font-medium">Show Tutorial Again</Text>
-              <Text variant="caption" className="text-sage-600">Replay the welcome guide</Text>
+              <Text className="text-foreground font-medium">Show Tutorial Again</Text>
+              <Text variant="caption" className="text-muted-foreground">Replay the welcome guide</Text>
             </div>
           </button>
 
-          <div className="p-3 bg-cream-50 rounded-lg border border-cream-200">
-            <Text className="text-sage-800 font-medium">Credits</Text>
-            <Text variant="caption" className="text-sage-600">
+          <div className="p-3 bg-muted rounded-lg border border-border">
+            <Text className="text-foreground font-medium">Credits</Text>
+            <Text variant="caption" className="text-muted-foreground">
               Built with React, Tailwind CSS, and love for yoga
             </Text>
           </div>

@@ -35,7 +35,7 @@ export function PracticeControls({
         <button
           onClick={onPreviousPose}
           disabled={isFirstPose}
-          className="flex h-12 w-12 items-center justify-center rounded-full bg-sage-100 text-sage-700 hover:bg-sage-200 disabled:opacity-30 disabled:hover:bg-sage-100 transition-colors"
+          className="flex h-12 w-12 items-center justify-center rounded-full bg-muted text-muted-foreground hover:bg-muted disabled:opacity-30 disabled:hover:bg-muted transition-colors"
           aria-label="Previous pose"
         >
           <SkipBack className="h-5 w-5" />
@@ -56,7 +56,7 @@ export function PracticeControls({
         <button
           onClick={onNextPose}
           disabled={isLastPose}
-          className="flex h-12 w-12 items-center justify-center rounded-full bg-sage-100 text-sage-700 hover:bg-sage-200 disabled:opacity-30 disabled:hover:bg-sage-100 transition-colors"
+          className="flex h-12 w-12 items-center justify-center rounded-full bg-muted text-muted-foreground hover:bg-muted disabled:opacity-30 disabled:hover:bg-muted transition-colors"
           aria-label="Skip to next pose"
         >
           <SkipForward className="h-5 w-5" />
@@ -79,7 +79,7 @@ export function PracticeControls({
         <div className="mt-3 flex justify-center">
           <button
             onClick={onNextPose}
-            className="px-6 py-2.5 rounded-full bg-sage-600 hover:bg-sage-700 text-white text-sm font-medium transition-colors"
+            className="px-6 py-2.5 rounded-full bg-secondary hover:bg-primary text-white text-sm font-medium transition-colors"
           >
             End Session
           </button>

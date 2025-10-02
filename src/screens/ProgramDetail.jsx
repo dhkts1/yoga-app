@@ -5,7 +5,7 @@ import { Award, RotateCcw, ChevronRight, BookOpen, Clock, Calendar, Play, Pause,
 import { DefaultLayout } from '../components/layouts';
 import { PageHeader } from '../components/headers';
 import { Button, StatusBadge } from '../components/design-system';
-import { Progress } from '../components/ui/progress';
+import { ProgressBar } from '../components/design-system/Progress';
 import { getProgramById } from '../data/programs';
 import useProgramProgressStore from '../stores/programProgress';
 import { LIST_ANIMATION_SUBTLE } from '../utils/animations';
@@ -33,7 +33,7 @@ function ProgramDetail() {
     return (
       <DefaultLayout header={<PageHeader title="Program Not Found" backPath="/programs" />}>
         <div className="px-4 py-8 text-center">
-          <p className="text-sage-700">This program could not be found.</p>
+          <p className="text-muted-foreground">This program could not be found.</p>
           <Button onClick={() => navigate('/programs')} variant="primary" className="mt-4">
             Back to Programs
           </Button>
@@ -104,29 +104,28 @@ function ProgramDetail() {
           backPath="/programs"
         />
       }
-      className="bg-cream"
       contentClassName="px-4 py-6"
     >
       {/* Program Overview Card */}
-      <div className="bg-white rounded-xl p-5 mb-6 shadow-sm border border-sage-100">
+      <div className="bg-card rounded-xl p-5 mb-6 shadow-sm border border-border">
         {/* Progress */}
         {status !== 'not-started' && (
           <div className="mb-5">
-            <div className="flex items-center justify-between text-sm text-sage-600 mb-2">
+            <div className="flex items-center justify-between text-sm text-muted-foreground mb-2">
               <span className="font-medium">Week {currentWeek} of {program.totalWeeks}</span>
               <span className="font-medium">{progress}% Complete</span>
             </div>
-            <Progress value={progress} className="h-2.5 bg-sage-100" />
+            <ProgressBar value={progress} max={100} size="default" />
           </div>
         )}
 
         {/* Description */}
-        <p className="text-sm text-sage-700 leading-relaxed mb-5">
+        <p className="text-sm text-muted-foreground leading-relaxed mb-5">
           {program.description}
         </p>
 
         {/* Metadata */}
-        <div className="flex items-center gap-4 text-sm text-sage-600 mb-5 flex-wrap">
+        <div className="flex items-center gap-4 text-sm text-muted-foreground mb-5 flex-wrap">
           <div className="flex items-center gap-1.5">
             <Calendar className="h-4 w-4 flex-shrink-0" />
             <span>{program.totalWeeks} weeks</span>
@@ -139,7 +138,7 @@ function ProgramDetail() {
           {program.author && (
             <>
               <span>•</span>
-              <span className="text-sage-500">by {program.author}</span>
+              <span className="text-muted-foreground">by {program.author}</span>
             </>
           )}
         </div>
@@ -200,7 +199,7 @@ function ProgramDetail() {
 
       {/* Weeks List */}
       <div className="mb-6">
-        <h2 className="text-lg font-medium text-sage-900 mb-4 px-1">
+        <h2 className="text-lg font-medium text-card-foreground mb-4 px-1">
           Program Schedule
         </h2>
 
@@ -221,9 +220,9 @@ function ProgramDetail() {
                 variants={LIST_ANIMATION_SUBTLE.item}
                 onClick={() => handleWeekClick(week.weekNumber)}
                 disabled={!unlocked}
-                className={`w-full text-left bg-white rounded-xl p-4 shadow-sm border transition-all duration-300 ${
+                className={`w-full text-left bg-card rounded-xl p-4 shadow-sm border transition-all duration-300 ${
                   unlocked
-                    ? 'border-sage-100 hover:shadow-md hover:scale-[1.01] active:scale-[0.99]'
+                    ? 'border-border hover:shadow-md hover:scale-[1.01] active:scale-[0.99]'
                     : 'border-gray-200 opacity-60 cursor-not-allowed'
                 } ${
                   completed ? 'border-l-4 border-l-green-500' : ''
@@ -235,7 +234,7 @@ function ProgramDetail() {
                   <div className="flex-1 min-w-0">
                     {/* Week number and milestone */}
                     <div className="flex items-center gap-2 mb-2">
-                      <span className="text-xs font-medium text-sage-500 uppercase tracking-wide">
+                      <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
                         Week {week.weekNumber}
                       </span>
                       {week.isMilestone && (
@@ -245,17 +244,17 @@ function ProgramDetail() {
                     </div>
 
                     {/* Week name */}
-                    <h3 className="text-base font-medium text-sage-900 mb-1 line-clamp-1">
+                    <h3 className="text-base font-medium text-card-foreground mb-1 line-clamp-1">
                       {week.name}
                     </h3>
 
                     {/* Focus */}
-                    <p className="text-sm text-sage-600 mb-2 line-clamp-1">
+                    <p className="text-sm text-muted-foreground mb-2 line-clamp-1">
                       {week.focus}
                     </p>
 
                     {/* Metadata */}
-                    <div className="flex items-center gap-3 text-xs text-sage-500 flex-wrap">
+                    <div className="flex items-center gap-3 text-xs text-muted-foreground flex-wrap">
                       <div className="flex items-center gap-1">
                         <Clock className="h-3 w-3 flex-shrink-0" />
                         <span>{week.practiceFrequency}</span>
@@ -268,7 +267,7 @@ function ProgramDetail() {
                   {/* Arrow or Lock Icon */}
                   <div className="flex-shrink-0 flex items-center">
                     {unlocked ? (
-                      <ChevronRight className="h-5 w-5 text-sage-400" />
+                      <ChevronRight className="h-5 w-5 text-muted-foreground" />
                     ) : (
                       <Lock className="h-5 w-5 text-gray-400" />
                     )}

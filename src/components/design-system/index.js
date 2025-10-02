@@ -27,7 +27,7 @@ export { default as ConfirmDialog } from '../ConfirmDialog';
 
 // Default exports for common patterns
 export { Button } from './Button';
-export { Card, PoseCard, SessionCard } from './Card';
+export { Card } from './Card';
 export { Heading, Text, Timer } from './Typography';
 export { Container, Stack, Grid, PageWrapper, PracticeLayout } from './Container';
 export { default as ContentBody } from './ContentBody';

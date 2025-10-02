@@ -24,106 +24,64 @@ module.exports = {
       },
     },
     extend: {
-      // Complete color system for yoga app
+      // Complete color system for yoga app using CSS variables
       colors: {
-        // Primary sage palette
+        // Use CSS variables for theme-aware colors
+        background: 'hsl(var(--background))',
+        foreground: 'hsl(var(--foreground))',
+
+        // Primary sage palette - CSS variables
         sage: {
-          50: '#F7F8F7',
-          100: '#E8ECE8',
-          200: '#D1DAD0',
-          300: '#B5C4B4',
-          400: '#9BB29A',
-          500: '#8FA68E',   // Primary sage
-          600: '#758974',
-          700: '#5C6E5B',
-          800: '#3F4A3F',
-          900: '#2A332A',
-          DEFAULT: '#8FA68E'
+          50: 'hsl(var(--sage-50))',
+          100: 'hsl(var(--sage-100))',
+          200: 'hsl(var(--sage-200))',
+          300: 'hsl(var(--sage-300))',
+          400: 'hsl(var(--sage-400))',
+          500: 'hsl(var(--sage-500))',
+          600: 'hsl(var(--sage-600))',
+          700: 'hsl(var(--sage-700))',
+          800: 'hsl(var(--sage-800))',
+          900: 'hsl(var(--sage-900))',
+          DEFAULT: 'hsl(var(--sage-500))'
         },
 
-        // Warm cream palette
+        // Warm cream palette - CSS variables
         cream: {
-          50: '#FDFBF7',
-          100: '#F5F3F0',   // Primary cream
-          200: '#F0EDE9',
-          300: '#E8E6E3',
-          400: '#DDD9D5',
-          500: '#D1CCC7',
-          600: '#B8B2AD',
-          700: '#9A9590',
-          800: '#716B66',
-          900: '#4A453F',
-          DEFAULT: '#F5F3F0'
+          50: 'hsl(var(--cream-50))',
+          100: 'hsl(var(--cream-100))',
+          200: 'hsl(var(--cream-200))',
+          300: 'hsl(var(--cream-300))',
+          400: 'hsl(var(--cream-400))',
+          500: 'hsl(var(--cream-500))',
+          600: 'hsl(var(--cream-600))',
+          700: 'hsl(var(--cream-700))',
+          800: 'hsl(var(--cream-800))',
+          900: 'hsl(var(--cream-900))',
+          DEFAULT: 'hsl(var(--cream-100))'
         },
 
-        // Muted gold palette
+        // Muted gold palette - CSS variables
         gold: {
-          50: '#FDFBF5',
-          100: '#F7F2E6',
-          200: '#F0E5CC',
-          300: '#E6D6B3',
-          400: '#DCC799',
-          500: '#D4AF37',   // Primary gold
-          600: '#B89A2F',
-          700: '#9C8427',
-          800: '#806E1F',
-          900: '#665917',
-          DEFAULT: '#D4AF37'
+          50: 'hsl(var(--gold-50))',
+          100: 'hsl(var(--gold-100))',
+          200: 'hsl(var(--gold-200))',
+          300: 'hsl(var(--gold-300))',
+          400: 'hsl(var(--gold-400))',
+          500: 'hsl(var(--gold-500))',
+          600: 'hsl(var(--gold-600))',
+          700: 'hsl(var(--gold-700))',
+          800: 'hsl(var(--gold-800))',
+          900: 'hsl(var(--gold-900))',
+          DEFAULT: 'hsl(var(--gold-500))'
         },
 
-        // Semantic colors
-        primary: '#8FA68E',         // Sage green
-        secondary: '#5C6E5B',       // Darker sage for text (was cream #F5F3F0)
-        accent: '#D4AF37',          // Muted gold
+        // Semantic color tokens using CSS variables
+        primary: 'hsl(var(--primary))',
+        secondary: 'hsl(var(--secondary))',
+        accent: 'hsl(var(--accent))',
+        border: 'hsl(var(--border))',
 
-        // Additional text colors
-        text: {
-          primary: '#2C2C2C',       // Deep charcoal
-          secondary: '#5C6E5B',     // Darker sage (was #6B6B6B - too light)
-          muted: '#9CA3AF',         // Muted gray
-          inverse: '#FFFFFF',       // White
-          sage: '#758974',          // Sage text
-          cream: '#5A5550',         // Warm dark
-        },
-
-        // Background colors
-        background: {
-          DEFAULT: '#F5F3F0',          // Main background (cream)
-          secondary: '#F5F3F0',        // Secondary background
-          sage: '#8FA68E',             // Sage background
-          cream: '#F5F3F0',            // Cream background
-          overlay: 'rgba(245, 243, 240, 0.95)', // Modal overlay
-          glass: 'rgba(255, 255, 255, 0.8)'     // Glass effect
-        },
-
-        // Border colors
-        border: {
-          DEFAULT: '#E5E7EB',         // Default border
-          light: '#E5E7EB',           // Light border
-          medium: '#D1D5DB',          // Medium border
-          sage: '#B5C4B4',            // Sage border
-          focus: '#8FA68E'            // Focus border
-        },
-
-        // State colors
-        state: {
-          success: '#10B981',         // Success green
-          warning: '#F59E0B',         // Warning amber
-          error: '#E8B4B8',           // Soft error pink
-          info: '#3B82F6'             // Info blue
-        },
-
-        // Interactive colors
-        interactive: {
-          primary: '#8FA68E',
-          'primary-hover': '#758974',
-          'primary-active': '#5C6E5B',
-          secondary: 'transparent',
-          'secondary-hover': '#F7F8F7',
-          'secondary-active': '#E8ECE8'
-        },
-
-        // Keep shadcn/ui compatibility
+        // shadcn/ui compatibility
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         foreground: "hsl(var(--foreground))",

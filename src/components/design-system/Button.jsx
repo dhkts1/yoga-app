@@ -47,7 +47,7 @@ const Button = React.forwardRef(({
 
     // Accessibility
     'focus-visible:outline-none',
-    'focus-visible:ring-2 focus-visible:ring-sage-500 focus-visible:ring-offset-2',
+    'focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
     'disabled:pointer-events-none disabled:opacity-50',
 
     // Smooth transitions
@@ -75,41 +75,41 @@ const Button = React.forwardRef(({
   // Variant styles
   const variants = {
     primary: [
-      'bg-sage-500 text-white',
-      'hover:bg-sage-600 hover:shadow-sage',
-      'active:bg-sage-700 active:scale-[0.98]',
+      'bg-primary text-primary-foreground',
+      'hover:bg-secondary hover:shadow-md',
+      'active:bg-secondary active:scale-[0.98]',
       'shadow-sm hover:shadow-md',
     ],
 
     secondary: [
-      'bg-transparent text-sage-600 border-2 border-sage-300',
-      'hover:bg-sage-50 hover:border-sage-400',
-      'active:bg-sage-100 active:scale-[0.98]',
+      'bg-transparent text-muted-foreground border-2 border-primary',
+      'hover:bg-muted hover:border-primary',
+      'active:bg-muted active:scale-[0.98]',
       'shadow-sm hover:shadow-md',
     ],
 
     ghost: [
-      'bg-transparent text-sage-600',
-      'hover:bg-sage-50',
-      'active:bg-sage-100 active:scale-[0.98]',
+      'bg-transparent text-muted-foreground',
+      'hover:bg-muted',
+      'active:bg-muted active:scale-[0.98]',
     ],
 
     outline: [
-      'bg-transparent text-primary border-2 border-medium',
-      'hover:bg-cream-100 hover:border-sage-300',
-      'active:bg-cream-200 active:scale-[0.98]',
+      'bg-transparent text-primary border-2 border-border',
+      'hover:bg-muted hover:border-primary',
+      'active:bg-muted active:scale-[0.98]',
     ],
 
     destructive: [
-      'bg-state-error text-white',
-      'hover:bg-red-500 hover:shadow-lg',
-      'active:bg-red-600 active:scale-[0.98]',
+      'bg-destructive text-destructive-foreground',
+      'hover:bg-destructive/90 hover:shadow-lg',
+      'active:bg-destructive/80 active:scale-[0.98]',
     ],
 
     link: [
-      'text-sage-600 underline-offset-4',
-      'hover:underline hover:text-sage-700',
-      'active:text-sage-800',
+      'text-muted-foreground underline-offset-4',
+      'hover:underline hover:text-foreground',
+      'active:text-foreground',
       'h-auto p-0 font-normal',
     ]
   };

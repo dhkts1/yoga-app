@@ -17,6 +17,7 @@ import WeekDetail from './screens/WeekDetail';
 import OfflineIndicator from './components/design-system/OfflineIndicator';
 import Onboarding from './components/Onboarding';
 import AnimatedRoute from './components/AnimatedRoute';
+import ThemeProvider from './components/ThemeProvider';
 
 // Animated routes wrapper component
 function AnimatedRoutes() {
@@ -47,13 +48,15 @@ function AnimatedRoutes() {
 
 function App() {
   return (
-    <Router>
-      <div className="min-h-screen bg-background text-primary overflow-x-hidden">
-        <OfflineIndicator />
-        <Onboarding />
-        <AnimatedRoutes />
-      </div>
-    </Router>
+    <ThemeProvider>
+      <Router>
+        <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
+          <OfflineIndicator />
+          <Onboarding />
+          <AnimatedRoutes />
+        </div>
+      </Router>
+    </ThemeProvider>
   );
 }
 

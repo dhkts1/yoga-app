@@ -67,12 +67,12 @@ function PageHeader({
             <h1 className={cn(
               'text-base font-semibold truncate tracking-tight',
               // Solid color - cleaner, more minimal
-              'text-sage-800'
+              'text-foreground'
             )}>
               {title}
             </h1>
             {subtitle && (
-              <p className="text-xs text-sage-600/80 truncate mt-0.5">{subtitle}</p>
+              <p className="text-xs text-muted-foreground/80 truncate mt-0.5">{subtitle}</p>
             )}
           </div>
 

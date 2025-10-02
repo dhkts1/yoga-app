@@ -49,7 +49,7 @@ function WeekDetail() {
     return (
       <DefaultLayout header={<PageHeader title="Week Not Found" backPath={`/programs/${programId}`} />}>
         <div className="px-4 py-8 text-center">
-          <p className="text-sage-700">This week could not be found.</p>
+          <p className="text-muted-foreground">This week could not be found.</p>
           <Button onClick={() => navigate(`/programs/${programId}`)} variant="primary" className="mt-4">
             Back to Program
           </Button>
@@ -123,11 +123,10 @@ function WeekDetail() {
           backPath={`/programs/${programId}`}
         />
       }
-      className="bg-cream"
       contentClassName="px-4 py-6"
     >
       {/* Week Info Card */}
-      <div className="bg-white rounded-xl p-5 mb-6 shadow-sm border border-sage-100">
+      <div className="bg-card rounded-xl p-5 mb-6 shadow-sm border border-border">
         {/* Status Badge */}
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
@@ -148,41 +147,41 @@ function WeekDetail() {
 
         {/* Focus */}
         <div className="mb-4">
-          <h3 className="text-sm font-medium text-sage-500 uppercase tracking-wide mb-2">
+          <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wide mb-2">
             Focus
           </h3>
-          <p className="text-base text-sage-900 font-medium">
+          <p className="text-base text-card-foreground font-medium">
             {week.focus}
           </p>
         </div>
 
         {/* Description */}
         <div className="mb-4">
-          <h3 className="text-sm font-medium text-sage-500 uppercase tracking-wide mb-2">
+          <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wide mb-2">
             Description
           </h3>
-          <p className="text-sm text-sage-700 leading-relaxed">
+          <p className="text-sm text-muted-foreground leading-relaxed">
             {week.description}
           </p>
         </div>
 
         {/* Practice Frequency */}
-        <div className="flex items-center gap-2 text-sm text-sage-600 mb-4">
+        <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
           <Clock className="h-4 w-4 flex-shrink-0" />
           <span>{week.practiceFrequency}</span>
         </div>
 
         {/* Week Progress */}
-        <div className="pt-4 border-t border-sage-100">
+        <div className="pt-4 border-t border-border">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm font-medium text-sage-700">
+            <span className="text-sm font-medium text-muted-foreground">
               Week Progress
             </span>
-            <span className="text-sm font-medium text-sage-900">
+            <span className="text-sm font-medium text-card-foreground">
               {completedSessionsCount}/{totalSessions} sessions
             </span>
           </div>
-          <div className="w-full bg-sage-100 rounded-full h-2 overflow-hidden">
+          <div className="w-full bg-muted rounded-full h-2 overflow-hidden">
             <div
               className="bg-state-success h-full rounded-full transition-all duration-500 ease-out"
               style={{ width: `${progressPercentage}%` }}
@@ -199,14 +198,14 @@ function WeekDetail() {
 
       {/* Guidance Notes (if present) */}
       {week.notes && (
-        <div className="bg-sage-50 rounded-xl p-5 mb-6 border border-sage-100">
+        <div className="bg-muted rounded-xl p-5 mb-6 border border-border">
           <div className="flex items-start gap-3">
-            <Lightbulb className="h-5 w-5 text-sage-600 flex-shrink-0 mt-0.5" />
+            <Lightbulb className="h-5 w-5 text-muted-foreground flex-shrink-0 mt-0.5" />
             <div>
-              <h3 className="text-sm font-medium text-sage-900 mb-2">
+              <h3 className="text-sm font-medium text-card-foreground mb-2">
                 Guidance for This Week
               </h3>
-              <p className="text-sm text-sage-700 leading-relaxed">
+              <p className="text-sm text-muted-foreground leading-relaxed">
                 {week.notes}
               </p>
             </div>
@@ -216,7 +215,7 @@ function WeekDetail() {
 
       {/* Recommended Sessions */}
       <div className="mb-6">
-        <h2 className="text-lg font-medium text-sage-900 mb-4 px-1">
+        <h2 className="text-lg font-medium text-card-foreground mb-4 px-1">
           Recommended Sessions
         </h2>
 
@@ -238,14 +237,14 @@ function WeekDetail() {
                 className={`w-full text-left rounded-xl p-4 shadow-sm border transition-all duration-300 hover:shadow-md hover:scale-[1.01] active:scale-[0.99] ${
                   isCompleted
                     ? 'bg-state-success/10 border-state-success/30'
-                    : 'bg-white border-sage-100'
+                    : 'bg-card border-border'
                 }`}
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex-1 min-w-0">
                     {/* Session number and completion badge */}
                     <div className="flex items-center gap-2 mb-2">
-                      <span className="text-xs font-medium text-sage-500 uppercase tracking-wide">
+                      <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
                         Session {index + 1}
                       </span>
                       {isCompleted && (
@@ -257,12 +256,12 @@ function WeekDetail() {
                     </div>
 
                     {/* Session name */}
-                    <h3 className="text-base font-medium text-sage-900 mb-2 line-clamp-1">
+                    <h3 className="text-base font-medium text-card-foreground mb-2 line-clamp-1">
                       {session.name}
                     </h3>
 
                     {/* Metadata */}
-                    <div className="flex items-center gap-3 text-sm text-sage-600 flex-wrap">
+                    <div className="flex items-center gap-3 text-sm text-muted-foreground flex-wrap">
                       <div className="flex items-center gap-1">
                         <Clock className="h-4 w-4 flex-shrink-0" />
                         <span>{session.duration} min</span>
@@ -273,7 +272,7 @@ function WeekDetail() {
                         <span>{session.poses?.length || 0} poses</span>
                       </div>
                       <span>•</span>
-                      <span className="capitalize text-sage-500">{session.difficulty}</span>
+                      <span className="capitalize text-muted-foreground">{session.difficulty}</span>
                     </div>
                   </div>
 
@@ -282,7 +281,7 @@ function WeekDetail() {
                     {isCompleted ? (
                       <CheckCircle2 className="h-6 w-6 text-state-success" />
                     ) : (
-                      <ChevronRight className="h-5 w-5 text-sage-400" />
+                      <ChevronRight className="h-5 w-5 text-muted-foreground" />
                     )}
                   </div>
                 </div>
@@ -293,15 +292,15 @@ function WeekDetail() {
       </div>
 
       {/* Personal Notes Section */}
-      <div className="bg-white rounded-xl p-5 mb-36 shadow-sm border border-sage-100">
+      <div className="bg-card rounded-xl p-5 mb-36 shadow-sm border border-border">
         <div className="flex items-center gap-2 mb-3">
-          <MessageSquare className="h-5 w-5 text-sage-600" />
-          <h3 className="text-base font-medium text-sage-900">
+          <MessageSquare className="h-5 w-5 text-muted-foreground" />
+          <h3 className="text-base font-medium text-card-foreground">
             Your Notes
           </h3>
         </div>
 
-        <p className="text-sm text-sage-600 mb-3">
+        <p className="text-sm text-muted-foreground mb-3">
           Reflect on your practice this week. What did you learn? How do you feel?
         </p>
 
@@ -310,12 +309,12 @@ function WeekDetail() {
           onChange={(e) => setNote(e.target.value)}
           onBlur={handleSaveNote}
           placeholder="Write your thoughts here..."
-          className="w-full min-h-[120px] px-4 py-3 rounded-lg border border-sage-200 focus:border-sage-400 focus:ring-2 focus:ring-sage-400/20 outline-none text-sm text-sage-900 placeholder-sage-400 resize-none"
+          className="w-full min-h-[120px] px-4 py-3 rounded-lg border border-border focus:border-primary focus:ring-2 focus:ring-sage-400/20 outline-none text-sm text-card-foreground placeholder-sage-400 resize-none"
           disabled={completed}
         />
 
         {note && !completed && (
-          <p className="text-xs text-sage-500 mt-2">
+          <p className="text-xs text-muted-foreground mt-2">
             Note saved automatically
           </p>
         )}
@@ -323,7 +322,7 @@ function WeekDetail() {
 
       {/* Complete Week Button (Fixed at bottom) */}
       {!completed && (
-        <div className="fixed bottom-[calc(48px+env(safe-area-inset-bottom))] left-0 right-0 bg-white border-t border-sage-200 p-4 shadow-lg">
+        <div className="fixed bottom-[calc(48px+env(safe-area-inset-bottom))] left-0 right-0 bg-card border-t border-border p-4 shadow-lg">
           <div className="max-w-md mx-auto">
             <Button
               onClick={handleCompleteWeek}
@@ -335,7 +334,7 @@ function WeekDetail() {
             </Button>
 
             {showCompleteConfirm && (
-              <p className="text-xs text-sage-600 mt-2 text-center">
+              <p className="text-xs text-muted-foreground mt-2 text-center">
                 Click again to confirm completion and unlock next week
               </p>
             )}

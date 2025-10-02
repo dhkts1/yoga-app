@@ -52,12 +52,12 @@ function HeatmapCalendar({
   // Get color class for intensity level
   const getIntensityColor = (intensity) => {
     switch (intensity) {
-      case 0: return 'bg-cream-200'; // No practice
-      case 1: return 'bg-sage-200'; // Light practice
-      case 2: return 'bg-sage-300'; // Moderate practice
-      case 3: return 'bg-sage-500'; // Good practice
-      case 4: return 'bg-sage-700'; // Intense practice
-      default: return 'bg-cream-200';
+      case 0: return 'bg-muted'; // No practice
+      case 1: return 'bg-muted'; // Light practice
+      case 2: return 'bg-muted'; // Moderate practice
+      case 3: return 'bg-muted0'; // Good practice
+      case 4: return 'bg-secondary'; // Intense practice
+      default: return 'bg-muted';
     }
   };
 
@@ -88,7 +88,7 @@ function HeatmapCalendar({
             const monthLabel = getMonthLabel(day, index);
             if (monthLabel && (index === 0 || day.day === 1)) {
               return (
-                <Text key={`month-${index}`} variant="caption" className="text-sage-700 font-medium text-xs">
+                <Text key={`month-${index}`} variant="caption" className="text-muted-foreground font-medium text-xs">
                   {monthLabel}
                 </Text>
               );
@@ -142,7 +142,7 @@ function HeatmapCalendar({
                 aria-label={`${day.date.toLocaleDateString()} - ${day.sessions} sessions, ${day.totalMinutes} minutes`}
               >
                 {/* Day number displayed inside cell */}
-                <span className="text-[10px] font-medium text-sage-700 opacity-70">
+                <span className="text-[10px] font-medium text-muted-foreground opacity-70">
                   {day.day}
                 </span>
 
@@ -154,7 +154,7 @@ function HeatmapCalendar({
                   {day.date.toLocaleDateString()}<br />
                   {day.sessions} session{day.sessions !== 1 ? 's' : ''}<br />
                   {day.totalMinutes} min
-                  {day.sessions > 0 && <><br /><span className="text-gold-300">Click to view details</span></>}
+                  {day.sessions > 0 && <><br /><span className="text-accent">Click to view details</span></>}
                 </div>
               </button>
             );
@@ -180,7 +180,7 @@ function HeatmapCalendar({
         </div>
 
         {/* Summary stats */}
-        <div className="flex justify-between pt-2 border-t border-cream-300">
+        <div className="flex justify-between pt-2 border-t border-border">
           <div className="text-center">
             <Text variant="caption" className="text-secondary">
               Practice Days

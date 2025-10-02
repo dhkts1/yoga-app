@@ -94,7 +94,7 @@ const AddPosesDialog = ({
               {asymmetricPosesInSelection.map(poseId => {
                 const pose = getPoseById(poseId);
                 return (
-                  <div key={poseId} className="flex items-center space-x-2 p-2 bg-sage-50 rounded-lg">
+                  <div key={poseId} className="flex items-center space-x-2 p-2 bg-muted rounded-lg">
                     <Checkbox
                       id={`both-${poseId}`}
                       checked={bothSides[poseId] || false}
@@ -134,7 +134,7 @@ const AddPosesDialog = ({
           </Button>
           <Button
             onClick={handleAdd}
-            className="bg-sage-600 hover:bg-sage-700"
+            className="bg-secondary hover:bg-primary"
           >
             Add to Sequence
           </Button>

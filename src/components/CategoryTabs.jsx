@@ -44,7 +44,7 @@ function CategoryTabs({ categories, selectedCategory, onCategoryChange, counts =
       {/* Selected Category Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between gap-3 px-4 py-3 bg-white rounded-xl border-2 border-sage-200 hover:border-sage-400 transition-colors min-h-[56px] shadow-sm"
+        className="w-full flex items-center justify-between gap-3 px-4 py-3 bg-card rounded-xl border-2 border-border hover:border-primary transition-colors min-h-[56px] shadow-sm"
         aria-expanded={isOpen}
         aria-haspopup="true"
       >
@@ -52,21 +52,21 @@ function CategoryTabs({ categories, selectedCategory, onCategoryChange, counts =
           <span className="text-xl flex-shrink-0" aria-hidden="true">
             {selectedCat.icon}
           </span>
-          <span className="text-base font-medium text-sage-900 truncate">
+          <span className="text-base font-medium text-card-foreground truncate">
             {selectedCat.label}
           </span>
-          <span className="text-xs px-2 py-1 rounded-full bg-sage-100 text-sage-700 font-medium">
+          <span className="text-xs px-2 py-1 rounded-full bg-muted text-muted-foreground font-medium">
             {selectedCount}
           </span>
         </div>
         <ChevronDown
-          className={`h-5 w-5 text-sage-600 transition-transform flex-shrink-0 ${isOpen ? 'rotate-180' : ''}`}
+          className={`h-5 w-5 text-muted-foreground transition-transform flex-shrink-0 ${isOpen ? 'rotate-180' : ''}`}
         />
       </button>
 
       {/* Dropdown Menu */}
       {isOpen && (
-        <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl border-2 border-sage-200 shadow-lg z-[9999] overflow-hidden">
+        <div className="absolute top-full left-0 right-0 mt-2 bg-card rounded-xl border-2 border-border shadow-lg z-[9999] overflow-hidden">
           <div className="max-h-[60vh] overflow-y-auto">
             {categories.map((category) => {
               const isActive = selectedCategory === category.id;
@@ -80,13 +80,13 @@ function CategoryTabs({ categories, selectedCategory, onCategoryChange, counts =
                   disabled={!hasContent && category.id !== 'all'}
                   className={`
                     w-full flex items-center justify-between gap-3 px-4 py-3 text-left min-h-[56px]
-                    transition-colors border-b border-sage-100 last:border-b-0
+                    transition-colors border-b border-border last:border-b-0
                     ${
                       isActive
-                        ? 'bg-sage-700 text-white'
+                        ? 'bg-primary text-white'
                         : hasContent || category.id === 'all'
-                        ? 'hover:bg-sage-50 active:bg-sage-100 text-sage-900'
-                        : 'opacity-40 cursor-not-allowed text-sage-400'
+                        ? 'hover:bg-muted active:bg-muted text-card-foreground'
+                        : 'opacity-40 cursor-not-allowed text-muted-foreground'
                     }
                   `}
                   aria-label={`${category.label} category${hasContent ? ` (${count} items)` : ''}`}
@@ -105,8 +105,8 @@ function CategoryTabs({ categories, selectedCategory, onCategoryChange, counts =
                         text-xs px-2 py-1 rounded-full font-medium flex-shrink-0
                         ${
                           isActive
-                            ? 'bg-sage-600 text-white'
-                            : 'bg-sage-100 text-sage-700'
+                            ? 'bg-primary text-white'
+                            : 'bg-muted text-muted-foreground'
                         }
                       `}
                     >

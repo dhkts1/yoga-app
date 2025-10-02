@@ -189,7 +189,7 @@ function FeatureTooltip({
       aria-label={content}
       style={getTooltipStyle()}
       className={cn(
-        'bg-white rounded-lg p-3 shadow-lg border-2 border-sage-600',
+        'bg-card rounded-lg p-3 shadow-lg border-2 border-sage-600',
         'animate-fade-in',
         className
       )}
@@ -199,15 +199,15 @@ function FeatureTooltip({
 
       {/* Content */}
       <div className="flex items-start justify-between gap-2">
-        <p className="text-sm text-sage-900 leading-relaxed flex-1">
+        <p className="text-sm text-card-foreground leading-relaxed flex-1">
           {content}
         </p>
         <button
           onClick={handleDismiss}
-          className="flex-shrink-0 w-5 h-5 flex items-center justify-center rounded-full hover:bg-sage-100 transition-colors"
+          className="flex-shrink-0 w-5 h-5 flex items-center justify-center rounded-full hover:bg-muted transition-colors"
           aria-label="Dismiss tooltip"
         >
-          <X className="h-3 w-3 text-sage-600" />
+          <X className="h-3 w-3 text-muted-foreground" />
         </button>
       </div>
 

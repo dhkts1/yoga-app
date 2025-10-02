@@ -139,7 +139,7 @@ const Onboarding = () => {
         className={`
           relative
           w-full max-w-md mx-4
-          bg-cream-50 rounded-2xl
+          bg-muted rounded-2xl
           shadow-2xl
           overflow-hidden
           transition-all duration-300
@@ -152,8 +152,8 @@ const Onboarding = () => {
           className="
             absolute top-4 right-4 z-10
             p-2 rounded-full
-            text-sage-600 hover:text-sage-800
-            hover:bg-sage-100
+            text-muted-foreground hover:text-foreground
+            hover:bg-muted
             transition-all duration-200
             focus:outline-none focus:ring-2 focus:ring-sage-500
           "
@@ -195,8 +195,8 @@ const Onboarding = () => {
                   rounded-full
                   focus:outline-none focus:ring-2 focus:ring-sage-500 focus:ring-offset-2
                   ${index === currentStep
-                    ? 'w-8 h-2 bg-sage-600'
-                    : 'w-2 h-2 bg-sage-300 hover:bg-sage-400'
+                    ? 'w-8 h-2 bg-secondary'
+                    : 'w-2 h-2 bg-muted hover:bg-sage-400'
                   }
                 `}
                 aria-label={`Go to step ${index + 1}`}
@@ -241,7 +241,7 @@ const Onboarding = () => {
         </div>
 
         {/* Decorative Elements */}
-        <div className="absolute top-0 right-0 w-32 h-32 bg-sage-100 rounded-full -translate-y-16 translate-x-16 opacity-50" />
+        <div className="absolute top-0 right-0 w-32 h-32 bg-muted rounded-full -translate-y-16 translate-x-16 opacity-50" />
         <div className="absolute bottom-0 left-0 w-24 h-24 bg-accent/20 rounded-full translate-y-12 -translate-x-12 opacity-50" />
       </div>
     </div>

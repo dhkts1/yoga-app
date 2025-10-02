@@ -38,8 +38,8 @@ const SessionList = ({
   if (!sessions || sessions.length === 0) return null;
 
   const headerContent = showHeader && title && (
-    <h2 className="text-lg font-medium text-sage-900 mb-4 text-center flex items-center justify-center gap-2">
-      {TitleIcon && <TitleIcon className="h-5 w-5 text-gold fill-gold" />}
+    <h2 className="text-lg font-medium text-foreground mb-4 text-center flex items-center justify-center gap-2">
+      {TitleIcon && <TitleIcon className="h-5 w-5 text-accent fill-accent" />}
       {title}
     </h2>
   );
@@ -64,6 +64,8 @@ const SessionList = ({
             type={type}
             onClick={() => onSessionClick(session)}
             icon={getIcon ? getIcon(session) : undefined}
+            poseImage={session.poseImage}
+            gradient={session.gradient}
             description={getDescription ? getDescription(session) : session.description}
             difficulty={getDifficulty ? getDifficulty(session) : session.difficulty || session.category}
             showPoseCount={showPoseCount}

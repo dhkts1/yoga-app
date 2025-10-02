@@ -249,14 +249,13 @@ function SessionBuilder() {
             <Button
               variant="ghost"
               onClick={() => navigate('/sessions')}
-              className="text-sage-600 text-sm"
+              className="text-muted-foreground text-sm"
             >
               Cancel
             </Button>
           }
         />
       }
-      className="bg-cream"
     >
       <ContentBody size="lg" spacing="md">
         {/* Session Details */}
@@ -278,12 +277,12 @@ function SessionBuilder() {
 
             <div className="flex items-center justify-between text-sm flex-wrap gap-2">
               <div className="flex items-center gap-4">
-                <div className="flex items-center gap-1 text-sage-600">
+                <div className="flex items-center gap-1 text-muted-foreground">
                   <Clock className="h-4 w-4" />
                   <span>{formatDuration(totalDuration)}</span>
                 </div>
                 <span className="text-gray-400">•</span>
-                <span className="text-sage-600">{sequencePoses.length} poses</span>
+                <span className="text-muted-foreground">{sequencePoses.length} poses</span>
               </div>
               {sequencePoses.length > 0 && (
                 <Button
@@ -318,16 +317,16 @@ function SessionBuilder() {
 
         {/* Tab Navigation */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-2 bg-sage-50">
+          <TabsList className="grid w-full grid-cols-2 bg-muted">
             <TabsTrigger
               value="sequence"
-              className="data-[state=active]:bg-white data-[state=active]:text-sage-900"
+              className="data-[state=active]:bg-card data-[state=active]:text-card-foreground"
             >
               Your Sequence ({sequencePoses.length})
             </TabsTrigger>
             <TabsTrigger
               value="library"
-              className="data-[state=active]:bg-white data-[state=active]:text-sage-900"
+              className="data-[state=active]:bg-card data-[state=active]:text-card-foreground"
             >
               Add Poses
             </TabsTrigger>
@@ -371,8 +370,9 @@ function SessionBuilder() {
             {selectedPoseIds.length > 0 && (
               <div className="sticky top-0 z-10 bg-cream pb-2">
                 <Button
+                  variant="primary"
                   onClick={handleOpenAddDialog}
-                  className="w-full bg-sage-600 hover:bg-sage-700 text-white"
+                  className="w-full"
                 >
                   Add {selectedPoseIds.length} Selected Pose{selectedPoseIds.length !== 1 ? 's' : ''}
                 </Button>
@@ -401,8 +401,9 @@ function SessionBuilder() {
         {sequencePoses.length > 0 && (
           <div className="sticky bottom-0 left-0 right-0 pt-4 pb-2 bg-gradient-to-t from-cream via-cream to-transparent">
             <Button
+              variant="primary"
               onClick={handleSaveSession}
-              className="w-full bg-sage-600 hover:bg-sage-700 text-white py-4 rounded-2xl shadow-lg text-base font-medium"
+              className="w-full py-4 rounded-2xl shadow-lg text-base font-medium"
             >
               Save & Preview Session
             </Button>

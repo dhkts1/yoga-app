@@ -10,11 +10,10 @@ import {
   Smile,
   Zap
 } from 'lucide-react';
-import { Button, Heading, Text, ContentBody } from '../components/design-system';
+import { Button, Heading, Text, ContentBody, Stat } from '../components/design-system';
 import { DefaultLayout } from '../components/layouts';
 import { PageHeader } from '../components/headers';
 import useProgressStore from '../stores/progress';
-import StatCard from '../components/charts/StatCard';
 import SimpleBarChart from '../components/charts/SimpleBarChart';
 import HeatmapCalendar from '../components/charts/HeatmapCalendar';
 import SessionHistoryModal from '../components/SessionHistoryModal';
@@ -135,7 +134,7 @@ function Insights() {
             actions={
               <button
                 onClick={handleExportPDF}
-                className="print:hidden text-sage-600 hover:text-sage-700 p-2 rounded-lg hover:bg-sage-50 transition-colors"
+                className="print:hidden text-muted-foreground hover:text-muted-foreground p-2 rounded-lg hover:bg-muted transition-colors"
                 aria-label="Export PDF"
               >
                 <Download className="h-5 w-5" />
@@ -148,33 +147,34 @@ function Insights() {
         <ContentBody size="lg" spacing="lg" className="print:p-4">
           {/* Key Metrics Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8 w-full min-w-0">
-            <StatCard
-              title="Total Sessions"
+            <Stat
+              label="Total Sessions"
               value={summary.overall.totalSessions}
-              icon={Target}
-              trend={`${summary.thisWeek.sessions} this week`}
-              trendDirection={weeklyTrend}
+              icon={<Target className="h-5 w-5" />}
+              description={`${summary.thisWeek.sessions} this week`}
+              trend={weeklyTrend}
+              variant="compact"
             />
-            <StatCard
-              title="Total Minutes"
-              value={summary.overall.totalMinutes}
-              subtitle="min"
-              icon={Clock}
-              trend={`${summary.thisMonth.minutes} this month`}
+            <Stat
+              label="Total Minutes"
+              value={`${summary.overall.totalMinutes} min`}
+              icon={<Clock className="h-5 w-5" />}
+              description={`${summary.thisMonth.minutes} this month`}
+              variant="compact"
             />
-            <StatCard
-              title="Average Length"
-              value={averageSessionLength}
-              subtitle="min"
-              icon={Activity}
-              trend="Per session"
+            <Stat
+              label="Average Length"
+              value={`${averageSessionLength} min`}
+              icon={<Activity className="h-5 w-5" />}
+              description="Per session"
+              variant="compact"
             />
-            <StatCard
-              title="Current Streak"
-              value={summary.overall.currentStreak}
-              subtitle="days"
-              icon={Activity}
-              trend={`Best: ${summary.overall.longestStreak} days`}
+            <Stat
+              label="Current Streak"
+              value={`${summary.overall.currentStreak} days`}
+              icon={<Activity className="h-5 w-5" />}
+              description={`Best: ${summary.overall.longestStreak} days`}
+              variant="compact"
             />
           </div>
 
@@ -236,35 +236,35 @@ function Insights() {
           {/* Wellbeing Insights */}
           {moodAnalytics.sessionsWithMoodData > 0 && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8 w-full min-w-0">
-              <StatCard
-                title="Mood Improvement"
+              <Stat
+                label="Mood Improvement"
                 value={`+${moodAnalytics.averageMoodImprovement}`}
-                subtitle="avg per session"
-                icon={Smile}
-                trend={getMoodTrendText()}
-                trendDirection={moodAnalytics.moodTrend === 'improving' ? 'up' : 'neutral'}
+                icon={<Smile className="h-5 w-5" />}
+                description={getMoodTrendText()}
+                trend={moodAnalytics.moodTrend === 'improving' ? 'up' : 'neutral'}
+                variant="compact"
               />
-              <StatCard
-                title="Energy Boost"
+              <Stat
+                label="Energy Boost"
                 value={`+${moodAnalytics.averageEnergyImprovement}`}
-                subtitle="avg per session"
-                icon={Zap}
-                trend={`${moodAnalytics.improvementRate}% sessions improved mood`}
+                icon={<Zap className="h-5 w-5" />}
+                description={`${moodAnalytics.improvementRate}% sessions improved mood`}
+                variant="compact"
               />
-              <StatCard
-                title="Wellbeing Sessions"
-                value={moodAnalytics.sessionsWithMoodData}
-                subtitle={`of ${moodAnalytics.totalSessions}`}
-                icon={Heart}
-                trend="Sessions with mood tracking"
+              <Stat
+                label="Wellbeing Sessions"
+                value={`${moodAnalytics.sessionsWithMoodData} of ${moodAnalytics.totalSessions}`}
+                icon={<Heart className="h-5 w-5" />}
+                description="Sessions with mood tracking"
+                variant="compact"
               />
             </div>
           )}
 
           {/* Insights & Encouragement */}
-          <div className="bg-sage-50 rounded-lg p-6 w-full">
+          <div className="bg-muted rounded-lg p-6 w-full">
             <div className="flex items-start space-x-3">
-              <BarChart3 className="h-6 w-6 text-sage-600 mt-1 flex-shrink-0" />
+              <BarChart3 className="h-6 w-6 text-muted-foreground mt-1 flex-shrink-0" />
               <div className="min-w-0 flex-1">{/* Prevent text overflow */}
                 <Heading level={3} className="mb-2">
                   Your Practice Insights
@@ -337,8 +337,8 @@ function Insights() {
             .mb-8 { page-break-inside: avoid; }
 
             /* Color adjustments for print */
-            .bg-sage-50 { background-color: #f9f9f9 !important; }
-            .text-sage-600 { color: #333 !important; }
+            .bg-muted { background-color: #f9f9f9 !important; }
+            .text-muted-foreground { color: #333 !important; }
 
             /* Hide footer on print */
             [data-footer] { display: none !important; }

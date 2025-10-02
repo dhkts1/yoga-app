@@ -37,7 +37,7 @@ const SequenceItem = ({
       onDragEnd={onDragEnd}
       onDragOver={(e) => onDragOver?.(e, index)}
       onDrop={(e) => onDrop?.(e, index)}
-      className={`flex items-center gap-2 p-2 bg-white border border-gray-200 rounded-lg hover:border-sage-300 transition-all cursor-move ${
+      className={`flex items-center gap-2 p-2 bg-card border border-gray-200 rounded-lg hover:border-primary transition-all cursor-move ${
         isDragging ? 'opacity-50 scale-95' : ''
       } ${className}`}
     >
@@ -53,7 +53,7 @@ const SequenceItem = ({
         <p className="text-sm font-medium text-gray-900 truncate">
           {pose.nameEnglish}
           {side && (
-            <span className="ml-1 text-xs font-normal text-sage-600">
+            <span className="ml-1 text-xs font-normal text-muted-foreground">
               ({side})
             </span>
           )}
@@ -66,7 +66,7 @@ const SequenceItem = ({
       {/* Duration Badge - Clickable */}
       <Badge
         variant="secondary"
-        className="cursor-pointer hover:bg-sage-100 transition-colors flex-shrink-0"
+        className="cursor-pointer hover:bg-muted transition-colors flex-shrink-0"
         onClick={() => onDurationClick?.(index, poseId, duration)}
       >
         {formatDuration(duration)}

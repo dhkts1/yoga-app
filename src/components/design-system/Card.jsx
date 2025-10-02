@@ -20,7 +20,7 @@ const Card = React.forwardRef(({
 }, ref) => {
   const baseStyles = [
     // Basic card structure
-    'bg-white',
+    'bg-card',
     'relative overflow-hidden',
 
     // Smooth transitions for all interactive states
@@ -50,7 +50,7 @@ const Card = React.forwardRef(({
     ],
 
     outlined: [
-      'border-2 border-sage-200',
+      'border-2 border-border',
       'rounded-xl',
       'shadow-none',
     ],
@@ -63,13 +63,13 @@ const Card = React.forwardRef(({
     ],
 
     sage: [
-      'bg-sage-50 border border-sage-200',
+      'bg-muted border border-border',
       'rounded-xl',
       'shadow-sm',
     ],
 
     cream: [
-      'bg-cream-100 border border-cream-300',
+      'bg-muted border border-border',
       'rounded-xl',
       'shadow-sm',
     ]
@@ -220,127 +220,11 @@ const CardFooter = React.forwardRef(({
 
 CardFooter.displayName = 'CardFooter';
 
-// Specialized card variants for yoga app
-const PoseCard = React.forwardRef(({
-  className,
-  pose,
-  onClick,
-  children,
-  ...props
-}, ref) => {
-  return (
-    <Card
-      className={cn('aspect-[4/3] group w-full', className)}
-      variant="default"
-      interactive={!!onClick}
-      padding="none"
-      ref={ref}
-      onClick={onClick}
-      {...props}
-    >
-      <div className="flex flex-col h-full">
-        {/* Pose image area */}
-        <div className="flex-1 bg-sage-50 rounded-t-lg overflow-hidden">
-          {pose?.imageUrl ? (
-            <img
-              src={pose.imageUrl}
-              alt={pose.nameEnglish}
-              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-            />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center bg-sage-100">
-              <div className="w-16 h-16 bg-sage-200 rounded-full animate-pulse" />
-            </div>
-          )}
-        </div>
-
-        {/* Pose details */}
-        <div className="p-3 sm:p-4">
-          <h3 className="font-medium text-base sm:text-lg text-primary leading-tight">
-            {pose?.nameEnglish || 'Pose Name'}
-          </h3>
-          {pose?.nameSanskrit && (
-            <p className="text-xs sm:text-sm text-secondary italic mt-1 leading-tight">
-              {pose.nameSanskrit}
-            </p>
-          )}
-          {pose?.duration && (
-            <p className="text-xs sm:text-sm text-sage-600 mt-2">
-              {pose.duration}s hold
-            </p>
-          )}
-        </div>
-      </div>
-      {children}
-    </Card>
-  );
-});
-
-PoseCard.displayName = 'PoseCard';
-
-const SessionCard = React.forwardRef(({
-  className,
-  session,
-  onClick,
-  children,
-  ...props
-}, ref) => {
-  return (
-    <Card
-      className={cn('group w-full', className)}
-      variant="default"
-      interactive={!!onClick}
-      padding="mobile"
-      ref={ref}
-      onClick={onClick}
-      {...props}
-    >
-      <div className="space-y-3 sm:space-y-4">
-        <div>
-          <h3 className="font-medium text-lg sm:text-xl text-primary leading-tight">
-            {session?.name || 'Session Name'}
-          </h3>
-          <div className="flex flex-wrap items-center gap-2 sm:gap-3 mt-2 text-xs sm:text-sm text-secondary">
-            {session?.duration && (
-              <span>{session.duration} min</span>
-            )}
-            {session?.focus && (
-              <span className="capitalize">{session.focus}</span>
-            )}
-            {session?.difficulty && (
-              <span className="px-2 py-1 bg-sage-100 text-sage-700 rounded-md text-xs">
-                {session.difficulty}
-              </span>
-            )}
-          </div>
-        </div>
-
-        {session?.description && (
-          <p className="text-sm sm:text-base text-secondary leading-relaxed">
-            {session.description}
-          </p>
-        )}
-
-        {session?.poses && (
-          <p className="text-xs sm:text-sm text-secondary">
-            {session.poses.length} poses
-          </p>
-        )}
-      </div>
-      {children}
-    </Card>
-  );
-});
-
-SessionCard.displayName = 'SessionCard';
-
 export {
   Card,
   CardHeader,
   CardTitle,
   CardDescription,
   CardContent,
-  CardFooter,
-  PoseCard,
-  SessionCard
+  CardFooter
 };

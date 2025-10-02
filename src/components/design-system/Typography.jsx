@@ -142,9 +142,9 @@ const Timer = React.forwardRef(({
   ...props
 }, ref) => {
   const variants = {
-    default: 'text-2xl sm:text-3xl font-semibold text-sage-600 leading-none tracking-wide',
-    large: 'text-3xl sm:text-4xl font-semibold text-sage-600 leading-none tracking-wide',
-    small: 'text-lg sm:text-xl font-medium text-sage-600 leading-none tracking-wide'
+    default: 'text-2xl sm:text-3xl font-semibold text-muted-foreground leading-none tracking-wide',
+    large: 'text-3xl sm:text-4xl font-semibold text-muted-foreground leading-none tracking-wide',
+    small: 'text-lg sm:text-xl font-medium text-muted-foreground leading-none tracking-wide'
   };
 
   const timerStyles = cn(
@@ -228,8 +228,8 @@ const Quote = React.forwardRef(({
   return (
     <blockquote
       className={cn(
-        'border-l-4 border-sage-300 pl-4 py-2',
-        'bg-sage-50 rounded-r-lg',
+        'border-l-4 border-primary pl-4 py-2',
+        'bg-muted rounded-r-lg',
         className
       )}
       ref={ref}
@@ -258,12 +258,12 @@ const Badge = React.forwardRef(({
   ...props
 }, ref) => {
   const variants = {
-    default: 'bg-sage-100 text-sage-800 border-sage-200',
+    default: 'bg-muted text-foreground border-border',
     success: 'bg-green-100 text-green-800 border-green-200',
     warning: 'bg-yellow-100 text-yellow-800 border-yellow-200',
     error: 'bg-red-100 text-red-800 border-red-200',
     secondary: 'bg-gray-100 text-gray-800 border-gray-200',
-    gold: 'bg-gold-100 text-gold-800 border-gold-200'
+    gold: 'bg-accent/10 text-accent border-accent/30'
   };
 
   const sizes = {
@@ -302,9 +302,9 @@ const Link = React.forwardRef(({
   ...props
 }, ref) => {
   const variants = {
-    default: 'text-sage-600 hover:text-sage-700 underline underline-offset-2',
-    subtle: 'text-primary hover:text-sage-600 hover:underline underline-offset-2',
-    button: 'text-sage-600 hover:text-sage-700 font-medium no-underline hover:underline underline-offset-2'
+    default: 'text-muted-foreground hover:text-muted-foreground underline underline-offset-2',
+    subtle: 'text-primary hover:text-muted-foreground hover:underline underline-offset-2',
+    button: 'text-muted-foreground hover:text-muted-foreground font-medium no-underline hover:underline underline-offset-2'
   };
 
   const linkStyles = cn(

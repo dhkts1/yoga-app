@@ -80,10 +80,10 @@ import { Heart, TrendingUp, Star } from 'lucide-react';
  *   { mood: { emoji: '😐', value: 2 }, energy: { value: 2 } }
  * )
  * // => {
- * //   icon: <Heart className="h-5 w-5 text-sage-600" />,
+ * //   icon: <Heart className="h-5 w-5 text-muted-foreground" />,
  * //   message: "Thank you for taking time for yourself",
  * //   detail: "Every practice is valuable for your wellbeing",
- * //   color: "bg-sage-50 border-sage-200 text-sage-800"
+ * //   color: "bg-muted border-border text-foreground"
  * // }
  *
  * @example
@@ -150,10 +150,10 @@ export function calculateMoodImprovement(preMoodData, postMoodData) {
 
   // State 5: Decline or negative change (fallback)
   return {
-    icon: <Heart className="h-5 w-5 text-sage-600" />,
+    icon: <Heart className="h-5 w-5 text-muted-foreground" />,
     message: "Thank you for taking time for yourself",
     detail: "Every practice is valuable for your wellbeing",
-    color: "bg-sage-50 border-sage-200 text-sage-800"
+    color: "bg-muted border-border text-foreground"
   };
 }
 

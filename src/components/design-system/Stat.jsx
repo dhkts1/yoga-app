@@ -34,8 +34,8 @@ const Stat = React.forwardRef(({
     },
     highlight: {
       card: 'variant-sage',
-      valueColor: 'text-sage-700',
-      labelColor: 'text-sage-600',
+      valueColor: 'text-muted-foreground',
+      labelColor: 'text-muted-foreground',
     },
     compact: {
       card: 'variant-default padding-sm',
@@ -108,7 +108,7 @@ const Stat = React.forwardRef(({
         {/* Header with icon and trend */}
         <div className="flex items-start justify-between mb-2">
           {icon && (
-            <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-sage-100 flex items-center justify-center text-sage-600">
+            <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-muted flex items-center justify-center text-muted-foreground">
               {icon}
             </div>
           )}

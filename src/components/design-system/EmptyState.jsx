@@ -55,7 +55,7 @@ const EmptyState = React.forwardRef(({
   // Variant styles
   const variants = {
     default: 'text-text-secondary',
-    sage: 'text-sage-600',
+    sage: 'text-muted-foreground',
     muted: 'text-text-muted',
   };
 
@@ -132,7 +132,7 @@ const EmptyState = React.forwardRef(({
               <div
                 className={cn(
                   sizeConfig.iconSize,
-                  'rounded-full bg-sage-100 flex items-center justify-center text-sage-600'
+                  'rounded-full bg-muted flex items-center justify-center text-muted-foreground'
                 )}
               >
                 {icon}

@@ -128,8 +128,8 @@ function BottomNav({ className }) {
         // Layout
         'fixed bottom-0 left-0 right-0 z-40',
         // Styling - solid background (no transparency)
-        'bg-white',
-        'border-t border-sage-100',
+        'bg-background',
+        'border-t border-border',
         // Safe area handling for iOS
         'pb-safe-bottom',
         // Shadow
@@ -157,7 +157,7 @@ function BottomNav({ className }) {
                 // Transitions
                 'transition-all duration-300',
                 // Hover state (subtle on mobile)
-                'hover:bg-sage-50',
+                'hover:bg-muted',
                 // Active state
                 'relative',
                 // Focus state for accessibility
@@ -168,7 +168,7 @@ function BottomNav({ className }) {
             >
               {/* Active indicator line at top */}
               {isActive && (
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-12 h-1 bg-sage-700 rounded-b-full" />
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-12 h-1 bg-secondary rounded-b-full" />
               )}
 
               {/* Icon */}
@@ -177,7 +177,7 @@ function BottomNav({ className }) {
                   // Size - compact for smaller nav
                   'h-6 w-6',
                   // Color based on active state
-                  isActive ? 'text-sage-700' : 'text-sage-400',
+                  isActive ? 'text-muted-foreground' : 'text-muted-foreground',
                   // Stroke width for active state (bolder when active)
                   isActive ? 'stroke-[2.5]' : 'stroke-[2]',
                   // Smooth transition

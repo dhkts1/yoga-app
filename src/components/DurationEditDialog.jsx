@@ -71,7 +71,7 @@ const DurationEditDialog = ({
 
         <div className="space-y-6 py-4">
           {/* Current Duration Display */}
-          <div className="flex items-center justify-center gap-2 text-2xl font-medium text-sage-600">
+          <div className="flex items-center justify-center gap-2 text-2xl font-medium text-muted-foreground">
             <Clock className="h-6 w-6" />
             {formatDuration(duration)}
           </div>
@@ -109,7 +109,7 @@ const DurationEditDialog = ({
                   onClick={() => setDuration(option.value)}
                   className={
                     duration === option.value
-                      ? "bg-sage-600 hover:bg-sage-700"
+                      ? "bg-secondary hover:bg-primary"
                       : ""
                   }
                 >
@@ -126,7 +126,7 @@ const DurationEditDialog = ({
           </Button>
           <Button
             onClick={handleSave}
-            className="bg-sage-600 hover:bg-sage-700"
+            className="bg-secondary hover:bg-primary"
           >
             Save Duration
           </Button>

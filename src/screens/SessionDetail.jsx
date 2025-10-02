@@ -168,7 +168,7 @@ function SessionDetail() {
       <DefaultLayout header={<PageHeader title="Loading..." backPath={backPath} />}>
         <div className="flex items-center justify-center min-h-[60vh]">
           <div className="text-center">
-            <div className="text-sage-400 text-lg">Loading session...</div>
+            <div className="text-muted-foreground text-lg">Loading session...</div>
           </div>
         </div>
       </DefaultLayout>
@@ -190,7 +190,7 @@ function SessionDetail() {
             <div className="flex items-center gap-2">
               <button
                 onClick={handleShare}
-                className="p-2 text-sage-600 hover:text-sage-700 rounded-lg hover:bg-sage-50 transition-colors"
+                className="p-2 text-muted-foreground hover:text-muted-foreground rounded-lg hover:bg-muted transition-colors"
               >
                 <Share2 className="h-5 w-5" />
               </button>
@@ -205,7 +205,7 @@ function SessionDetail() {
         <div className="mx-auto max-w-sm text-center">
           {/* Session Icon/Emoji */}
           <div className="mb-2 flex items-center justify-center">
-            <div className="w-12 h-12 rounded-full bg-sage-100 flex items-center justify-center">
+            <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center">
               <span className="text-2xl">
                 {sessionData.emoji || '🧘'}
               </span>
@@ -213,7 +213,7 @@ function SessionDetail() {
           </div>
 
           {/* Description */}
-          <p className="text-sage-700 text-sm mb-3">
+          <p className="text-muted-foreground text-sm mb-3">
             {sessionDescription}
           </p>
 
@@ -230,24 +230,24 @@ function SessionDetail() {
             )}
 
             {/* Duration */}
-            <div className="flex items-center gap-1 px-2.5 py-1 bg-white rounded-full shadow-sm">
-              <Clock className="h-3.5 w-3.5 text-sage-600" />
-              <span className="text-xs font-medium text-sage-900">{totalDuration} min</span>
+            <div className="flex items-center gap-1 px-2.5 py-1 bg-card rounded-full shadow-sm">
+              <Clock className="h-3.5 w-3.5 text-muted-foreground" />
+              <span className="text-xs font-medium text-card-foreground">{totalDuration} min</span>
             </div>
 
             {/* Difficulty */}
             {sessionData.difficulty && (
-              <div className="flex items-center gap-1 px-2.5 py-1 bg-white rounded-full shadow-sm">
-                <TrendingUp className="h-3.5 w-3.5 text-sage-600" />
-                <span className="text-xs font-medium text-sage-900 capitalize">{sessionData.difficulty}</span>
+              <div className="flex items-center gap-1 px-2.5 py-1 bg-card rounded-full shadow-sm">
+                <TrendingUp className="h-3.5 w-3.5 text-muted-foreground" />
+                <span className="text-xs font-medium text-card-foreground capitalize">{sessionData.difficulty}</span>
               </div>
             )}
 
             {/* Category/Focus */}
             {(sessionData.focus || sessionData.category) && (
-              <div className="flex items-center gap-1 px-2.5 py-1 bg-white rounded-full shadow-sm">
-                <Target className="h-3.5 w-3.5 text-sage-600" />
-                <span className="text-xs font-medium text-sage-900 capitalize">
+              <div className="flex items-center gap-1 px-2.5 py-1 bg-card rounded-full shadow-sm">
+                <Target className="h-3.5 w-3.5 text-muted-foreground" />
+                <span className="text-xs font-medium text-card-foreground capitalize">
                   {sessionData.focus || sessionData.category}
                 </span>
               </div>
@@ -266,8 +266,8 @@ function SessionDetail() {
 
           {/* Custom Session Badge */}
           {isCustom && (
-            <div className="inline-block px-2.5 py-0.5 bg-sage-100 rounded-full">
-              <span className="text-xs font-medium text-sage-700">Custom Session</span>
+            <div className="inline-block px-2.5 py-0.5 bg-muted rounded-full">
+              <span className="text-xs font-medium text-muted-foreground">Custom Session</span>
             </div>
           )}
         </div>
@@ -278,9 +278,9 @@ function SessionDetail() {
         <div className="mx-auto max-w-sm space-y-6">
           {/* Poses List (for yoga sessions) */}
           {sessionType !== 'breathing' && sessionData.poses && sessionData.poses.length > 0 && (
-            <div className="bg-white rounded-2xl p-5 shadow-sm">
-              <h2 className="text-lg font-medium text-sage-900 mb-4 flex items-center gap-2">
-                <Heart className="h-5 w-5 text-sage-600" />
+            <div className="bg-card rounded-2xl p-5 shadow-sm">
+              <h2 className="text-lg font-medium text-card-foreground mb-4 flex items-center gap-2">
+                <Heart className="h-5 w-5 text-muted-foreground" />
                 Poses in This Session ({sessionData.poses.length})
               </h2>
               <div className="space-y-3">
@@ -291,36 +291,36 @@ function SessionDetail() {
                   return (
                     <div
                       key={`${pose.id}-${index}`}
-                      className="flex items-center gap-3 p-3 bg-cream-50 rounded-xl hover:bg-cream-100 transition-colors"
+                      className="flex items-center gap-3 p-3 rounded-xl hover:bg-muted/50 transition-colors"
                     >
                       {/* Pose Number */}
-                      <div className="flex-shrink-0 w-8 h-8 rounded-full bg-sage-100 flex items-center justify-center">
-                        <span className="text-sm font-medium text-sage-700">{index + 1}</span>
+                      <div className="flex-shrink-0 w-8 h-8 rounded-full bg-muted flex items-center justify-center">
+                        <span className="text-sm font-medium text-muted-foreground">{index + 1}</span>
                       </div>
 
                       {/* Pose Thumbnail */}
                       <div className="flex-shrink-0">
-                        <PoseImage pose={pose} size="small" />
+                        <PoseImage poseId={pose.id} size="sm" />
                       </div>
 
                       {/* Pose Info */}
                       <div className="flex-1 min-w-0">
-                        <h3 className="text-sm font-medium text-sage-900 truncate">
+                        <h3 className="text-sm font-medium text-card-foreground truncate">
                           {pose.nameEnglish}
                           {poseItem?.side && (
-                            <span className="ml-1 text-xs font-normal text-sage-500">
+                            <span className="ml-1 text-xs font-normal text-muted-foreground">
                               ({poseItem.side === 'right' ? 'Right' : 'Left'})
                             </span>
                           )}
                         </h3>
-                        <p className="text-xs text-sage-600 truncate">
+                        <p className="text-xs text-muted-foreground truncate">
                           {pose.nameSanskrit}
                         </p>
                       </div>
 
                       {/* Duration */}
                       <div className="flex-shrink-0 text-right">
-                        <div className="text-sm font-medium text-sage-700">
+                        <div className="text-sm font-medium text-muted-foreground">
                           {poseItem.duration || pose.duration}s
                         </div>
                       </div>
@@ -333,15 +333,15 @@ function SessionDetail() {
 
           {/* Benefits Section */}
           {sessionData.benefits && sessionData.benefits.length > 0 && (
-            <div className="bg-white rounded-2xl p-5 shadow-sm">
-              <h2 className="text-lg font-medium text-sage-900 mb-4">
+            <div className="bg-card rounded-2xl p-5 shadow-sm">
+              <h2 className="text-lg font-medium text-card-foreground mb-4">
                 Benefits
               </h2>
               <ul className="space-y-2">
                 {sessionData.benefits.map((benefit, index) => (
                   <li key={index} className="flex items-start gap-2">
                     <span className="text-accent text-lg mt-0.5">•</span>
-                    <span className="text-sm text-sage-700">{benefit}</span>
+                    <span className="text-sm text-muted-foreground">{benefit}</span>
                   </li>
                 ))}
               </ul>
@@ -350,12 +350,12 @@ function SessionDetail() {
 
           {/* Focus Areas (for yoga sessions) */}
           {sessionType !== 'breathing' && sessionData.bodyPart && (
-            <div className="bg-white rounded-2xl p-5 shadow-sm">
-              <h2 className="text-lg font-medium text-sage-900 mb-3">
+            <div className="bg-card rounded-2xl p-5 shadow-sm">
+              <h2 className="text-lg font-medium text-card-foreground mb-3">
                 Focus Areas
               </h2>
               <div className="flex flex-wrap gap-2">
-                <span className="px-3 py-1.5 bg-sage-100 text-sage-700 rounded-full text-sm font-medium capitalize">
+                <span className="px-3 py-1.5 bg-muted text-muted-foreground rounded-full text-sm font-medium capitalize">
                   {sessionData.bodyPart === 'full' ? 'Full Body' : sessionData.bodyPart}
                 </span>
               </div>
@@ -364,8 +364,8 @@ function SessionDetail() {
 
           {/* Best For (for breathing exercises) */}
           {sessionType === 'breathing' && sessionData.bestFor && sessionData.bestFor.length > 0 && (
-            <div className="bg-white rounded-2xl p-5 shadow-sm">
-              <h2 className="text-lg font-medium text-sage-900 mb-4">
+            <div className="bg-card rounded-2xl p-5 shadow-sm">
+              <h2 className="text-lg font-medium text-card-foreground mb-4">
                 Best For
               </h2>
               <div className="flex flex-wrap gap-2">
@@ -383,15 +383,15 @@ function SessionDetail() {
 
           {/* Tips Section */}
           {sessionData.tips && sessionData.tips.length > 0 && (
-            <div className="bg-white rounded-2xl p-5 shadow-sm">
-              <h2 className="text-lg font-medium text-sage-900 mb-4">
+            <div className="bg-card rounded-2xl p-5 shadow-sm">
+              <h2 className="text-lg font-medium text-card-foreground mb-4">
                 Tips
               </h2>
               <ul className="space-y-2">
                 {sessionData.tips.map((tip, index) => (
                   <li key={index} className="flex items-start gap-2">
-                    <span className="text-gold text-lg mt-0.5">💡</span>
-                    <span className="text-sm text-sage-700">{tip}</span>
+                    <span className="text-accent text-lg mt-0.5">💡</span>
+                    <span className="text-sm text-muted-foreground">{tip}</span>
                   </li>
                 ))}
               </ul>
@@ -400,17 +400,17 @@ function SessionDetail() {
 
           {/* Instructions (for breathing exercises) */}
           {sessionType === 'breathing' && sessionData.instructions && sessionData.instructions.length > 0 && (
-            <div className="bg-white rounded-2xl p-5 shadow-sm">
-              <h2 className="text-lg font-medium text-sage-900 mb-4">
+            <div className="bg-card rounded-2xl p-5 shadow-sm">
+              <h2 className="text-lg font-medium text-card-foreground mb-4">
                 Instructions
               </h2>
               <ol className="space-y-3">
                 {sessionData.instructions.map((instruction, index) => (
                   <li key={index} className="flex items-start gap-3">
-                    <span className="flex-shrink-0 w-6 h-6 rounded-full bg-sage-100 text-sage-700 text-xs font-medium flex items-center justify-center">
+                    <span className="flex-shrink-0 w-6 h-6 rounded-full bg-muted text-muted-foreground text-xs font-medium flex items-center justify-center">
                       {index + 1}
                     </span>
-                    <span className="text-sm text-sage-700 pt-0.5">{instruction}</span>
+                    <span className="text-sm text-muted-foreground pt-0.5">{instruction}</span>
                   </li>
                 ))}
               </ol>
@@ -420,11 +420,12 @@ function SessionDetail() {
       </div>
 
       {/* Fixed Footer CTA */}
-      <div className="fixed bottom-[calc(48px+env(safe-area-inset-bottom))] left-0 right-0 bg-white border-t border-sage-200 p-4 shadow-lg">
+      <div className="fixed bottom-[calc(48px+env(safe-area-inset-bottom))] left-0 right-0 bg-card border-t border-border p-4 shadow-lg">
         <div className="mx-auto max-w-sm">
           <Button
+            variant="primary"
             onClick={handleStartPractice}
-            className="w-full bg-sage-600 hover:bg-sage-700 text-white rounded-xl py-3 h-auto flex items-center justify-center gap-2"
+            className="w-full rounded-xl py-3 h-auto flex items-center justify-center gap-2"
           >
             <Play className="h-5 w-5" />
             <span className="font-medium">Start Practice</span>

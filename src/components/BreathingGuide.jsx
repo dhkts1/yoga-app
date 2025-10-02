@@ -209,7 +209,7 @@ function BreathingGuide({
         </div>
 
         {/* Outer ring for reference - centered */}
-        <div className="absolute w-48 h-48 rounded-full border-2 border-sage-200 opacity-30" />
+        <div className="absolute w-48 h-48 rounded-full border-2 border-border opacity-30" />
 
         {/* Animated breathing circle - synced with timer */}
         <div
@@ -220,7 +220,7 @@ function BreathingGuide({
           }}
         >
           {/* Inner circle for depth */}
-          <div className="w-24 h-24 rounded-full bg-sage-300 opacity-50" />
+          <div className="w-24 h-24 rounded-full bg-muted opacity-50" />
         </div>
       </div>
 
@@ -236,11 +236,11 @@ function BreathingGuide({
 
         {/* Current phase duration display */}
         <div className="flex items-center justify-center space-x-2">
-          <div className="w-2 h-2 rounded-full bg-sage-500" />
+          <div className="w-2 h-2 rounded-full bg-muted0" />
           <Text variant="caption" className="text-secondary">
             {exercise.pattern[currentPhase]}s
           </Text>
-          <div className="w-2 h-2 rounded-full bg-sage-500" />
+          <div className="w-2 h-2 rounded-full bg-muted0" />
         </div>
       </div>
 
@@ -249,7 +249,7 @@ function BreathingGuide({
         <Text variant="caption" className="text-secondary mb-1">
           {exercise.nameEnglish}
         </Text>
-        <Text variant="caption" className="text-sage-600">
+        <Text variant="caption" className="text-muted-foreground">
           {exercise.pattern.inhale}-{exercise.pattern.holdIn}-{exercise.pattern.exhale}-{exercise.pattern.holdOut} pattern
         </Text>
       </div>

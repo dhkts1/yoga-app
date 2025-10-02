@@ -86,20 +86,20 @@ function ConfirmDialog({
   const iconBgColors = {
     warning: 'bg-state-warning/20',
     error: 'bg-state-error/20',
-    info: 'bg-sage-100',
+    info: 'bg-muted',
   };
 
   // Icon color mapping
   const iconColors = {
     warning: 'text-state-warning',
     error: 'text-state-error',
-    info: 'text-sage-700',
+    info: 'text-muted-foreground',
   };
 
   // Confirm button styling
   const confirmButtonClass = confirmVariant === 'danger'
     ? 'bg-state-error hover:bg-state-error/90 shadow-lg'
-    : 'bg-sage-600 hover:bg-sage-700 shadow-lg';
+    : 'bg-secondary hover:bg-primary shadow-lg';
 
   return (
     <div
@@ -111,7 +111,7 @@ function ConfirmDialog({
       aria-describedby="confirm-dialog-description"
     >
       <div
-        className="bg-white rounded-2xl p-6 max-w-sm w-full shadow-2xl animate-in zoom-in-95 duration-300"
+        className="bg-card rounded-2xl p-6 max-w-sm w-full shadow-2xl animate-in zoom-in-95 duration-300"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header with Icon and Title */}
@@ -120,23 +120,23 @@ function ConfirmDialog({
             <div className={`p-3 rounded-xl ${iconBgColors[icon]}`}>
               <IconComponent className={`h-6 w-6 ${iconColors[icon]}`} />
             </div>
-            <Heading level={2} id="confirm-dialog-title" className="text-sage-800">
+            <Heading level={2} id="confirm-dialog-title" className="text-foreground">
               {title}
             </Heading>
           </div>
           <button
             onClick={onClose}
-            className="p-1 rounded-lg hover:bg-sage-100 transition-colors"
+            className="p-1 rounded-lg hover:bg-muted transition-colors"
             aria-label="Close dialog"
           >
-            <X className="h-5 w-5 text-sage-600" />
+            <X className="h-5 w-5 text-muted-foreground" />
           </button>
         </div>
 
         {/* Message */}
         <Text
           id="confirm-dialog-description"
-          className="text-sage-600 mb-6 leading-relaxed"
+          className="text-muted-foreground mb-6 leading-relaxed"
         >
           {message}
         </Text>
@@ -146,7 +146,7 @@ function ConfirmDialog({
           <Button
             variant="secondary"
             onClick={onClose}
-            className="flex-1 border-sage-300 hover:bg-sage-50"
+            className="flex-1 border-primary hover:bg-muted"
           >
             {cancelText}
           </Button>

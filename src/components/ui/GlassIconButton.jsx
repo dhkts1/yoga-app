@@ -30,8 +30,8 @@ function GlassIconButton({
   ...props
 }) {
   const variantStyles = variant === 'circular'
-    ? 'h-9 w-9 rounded-full bg-sage-50/40'
-    : 'p-1.5 -ml-1.5 rounded-xl bg-sage-50/30';
+    ? 'h-9 w-9 rounded-full bg-muted/40'
+    : 'p-1.5 -ml-1.5 rounded-xl bg-muted/30';
 
   return (
     <button
@@ -42,8 +42,8 @@ function GlassIconButton({
         // Glass effect
         'backdrop-blur-md',
         // Colors
-        'text-sage-700 hover:text-sage-900',
-        'hover:bg-sage-100/50',
+        'text-muted-foreground hover:text-card-foreground',
+        'hover:bg-muted/50',
         // Animations
         'transition-all duration-200 ease-out',
         'hover:scale-105 active:scale-95',

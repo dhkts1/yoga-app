@@ -73,14 +73,14 @@ function PracticeHeader({
             <h1 className={cn(
               "font-semibold truncate tracking-tight",
               // Solid color - cleaner, more minimal
-              "text-sage-800",
+              "text-foreground",
               exitButtonStyle === 'circular' ? "text-xl" : "text-base"
             )}>
               {title}
             </h1>
             {subtitle && (
               <p className={cn(
-                "text-sage-600/80 truncate",
+                "text-muted-foreground/80 truncate",
                 exitButtonStyle === 'circular' ? "text-xs mt-0.5" : "text-sm italic mt-0.5"
               )}>
                 {subtitle}

@@ -73,7 +73,7 @@ const SelectablePoseCard = ({
       <Card
         className={`p-2 cursor-pointer transition-all ${
           isSelected
-            ? 'bg-sage-100 border-sage-500 border-2 shadow-sm'
+            ? 'bg-muted border-primary border-2 shadow-sm'
             : 'hover:bg-gray-50 border border-gray-200'
         } ${className}`}
         onClick={() => onSelect?.(poseId)}
@@ -81,14 +81,14 @@ const SelectablePoseCard = ({
         <div className="flex items-center gap-2">
           {/* Small selection indicator */}
           <div className={`w-1 h-8 rounded-full flex-shrink-0 ${
-            isSelected ? 'bg-sage-600' : 'bg-transparent'
+            isSelected ? 'bg-secondary' : 'bg-transparent'
           }`} />
           <div className="text-lg flex-shrink-0">
             {pose.emoji}
           </div>
           <div className="flex-1 min-w-0">
             <h3 className={`text-sm font-medium truncate ${
-              isSelected ? 'text-sage-900' : 'text-gray-900'
+              isSelected ? 'text-card-foreground' : 'text-gray-900'
             }`}>
               {pose.nameEnglish}
             </h3>

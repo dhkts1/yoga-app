@@ -43,79 +43,79 @@ const Badge = React.forwardRef(({
   const variants = {
     // Status variants (for programs, sessions)
     'status-active': [
-      'bg-sage-100 text-sage-700 border-sage-300',
-      'hover:bg-sage-200',
+      'bg-muted text-muted-foreground border-primary',
+      'hover:bg-muted',
     ],
     'status-paused': [
-      'bg-amber-100 text-amber-700 border-amber-300',
-      'hover:bg-amber-200',
+      'bg-state-warning/10 text-state-warning border-state-warning/30',
+      'hover:bg-state-warning/20',
     ],
     'status-completed': [
-      'bg-green-100 text-green-700 border-green-300',
-      'hover:bg-green-200',
+      'bg-state-success/10 text-state-success border-state-success/30',
+      'hover:bg-state-success/20',
     ],
     'status-not-started': [
-      'bg-gray-100 text-gray-600 border-gray-300',
-      'hover:bg-gray-200',
+      'bg-muted text-muted-foreground border-border',
+      'hover:bg-muted',
     ],
 
     // Difficulty variants
     'difficulty-beginner': [
-      'bg-blue-100 text-blue-700 border-blue-300',
-      'hover:bg-blue-200',
+      'bg-state-info/10 text-state-info border-state-info/30',
+      'hover:bg-state-info/20',
     ],
     'difficulty-intermediate': [
-      'bg-purple-100 text-purple-700 border-purple-300',
-      'hover:bg-purple-200',
+      'bg-accent/10 text-accent border-accent/30',
+      'hover:bg-accent/20',
     ],
     'difficulty-advanced': [
-      'bg-red-100 text-red-700 border-red-300',
-      'hover:bg-red-200',
+      'bg-state-error/10 text-state-error border-state-error/30',
+      'hover:bg-state-error/20',
     ],
     'difficulty-mixed': [
-      'bg-gray-100 text-gray-700 border-gray-300',
-      'hover:bg-gray-200',
+      'bg-muted text-muted-foreground border-border',
+      'hover:bg-muted',
     ],
 
     // Yoga style variants
     'style-iyengar': [
-      'bg-sage-100 text-sage-700 border-sage-300',
-      'hover:bg-sage-200',
+      'bg-muted text-muted-foreground border-primary',
+      'hover:bg-muted',
     ],
     'style-vinyasa': [
-      'bg-gold-100 text-gold-700 border-gold-300',
-      'hover:bg-gold-200',
+      'bg-accent/10 text-accent border-accent/30',
+      'hover:bg-accent/20',
     ],
     'style-hatha': [
-      'bg-cream-200 text-cream-800 border-cream-400',
-      'hover:bg-cream-300',
+      'bg-muted text-muted-foreground border-border',
+      'hover:bg-muted',
     ],
     'style-restorative': [
-      'bg-purple-100 text-purple-700 border-purple-300',
-      'hover:bg-purple-200',
+      'bg-accent/10 text-accent border-accent/30',
+      'hover:bg-accent/20',
     ],
 
     // Default variant
     default: [
-      'bg-sage-100 text-sage-700 border-sage-300',
-      'hover:bg-sage-200',
+      'bg-muted text-muted-foreground border-primary',
+      'hover:bg-muted',
     ],
 
     // Additional semantic variants
     success: [
-      'bg-state-success/10 text-green-700 border-state-success/30',
+      'bg-state-success/10 text-state-success border-state-success/30',
       'hover:bg-state-success/20',
     ],
     warning: [
-      'bg-state-warning/10 text-amber-700 border-state-warning/30',
+      'bg-state-warning/10 text-state-warning border-state-warning/30',
       'hover:bg-state-warning/20',
     ],
     error: [
-      'bg-state-error/10 text-red-700 border-red-300',
+      'bg-state-error/10 text-state-error border-state-error/30',
       'hover:bg-state-error/20',
     ],
     info: [
-      'bg-state-info/10 text-blue-700 border-state-info/30',
+      'bg-state-info/10 text-state-info border-state-info/30',
       'hover:bg-state-info/20',
     ],
   };

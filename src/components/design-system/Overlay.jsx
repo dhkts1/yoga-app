@@ -50,10 +50,10 @@ const Overlay = React.forwardRef(({
   if (!open) return null;
 
   const backdrops = {
-    blur: 'bg-background-overlay backdrop-blur-sm',
-    dark: 'bg-black/50',
-    light: 'bg-white/80',
-    sage: 'bg-sage-500/20 backdrop-blur-sm'
+    blur: 'bg-background/90 backdrop-blur-sm',
+    dark: 'bg-background/80',
+    light: 'bg-card/80',
+    sage: 'bg-primary/20 backdrop-blur-sm'
   };
 
   const animations = {
@@ -129,8 +129,8 @@ const Modal = React.forwardRef(({
     >
       <div
         className={cn(
-          'bg-white rounded-2xl shadow-xl',
-          'border border-border-light',
+          'bg-card rounded-2xl shadow-xl',
+          'border border-border',
           'w-full box-border',
           'max-h-full overflow-y-auto',
           sizes[size],
@@ -143,12 +143,12 @@ const Modal = React.forwardRef(({
           <div className="flex items-center justify-between p-6 pb-4">
             <div>
               {title && (
-                <h2 className="text-xl font-semibold text-primary">
+                <h2 className="text-xl font-semibold text-foreground">
                   {title}
                 </h2>
               )}
               {description && (
-                <p className="text-base text-secondary mt-1">
+                <p className="text-base text-muted-foreground mt-1">
                   {description}
                 </p>
               )}
@@ -157,9 +157,9 @@ const Modal = React.forwardRef(({
               <button
                 onClick={onClose}
                 className={cn(
-                  'p-2 rounded-lg text-muted hover:text-secondary',
-                  'hover:bg-sage-50 transition-colors duration-200',
-                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage-500'
+                  'p-2 rounded-lg text-muted-foreground hover:text-foreground',
+                  'hover:bg-muted transition-colors duration-200',
+                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
                 )}
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -234,7 +234,7 @@ const Drawer = React.forwardRef(({
     >
       <div
         className={cn(
-          'bg-white shadow-xl border border-border-light',
+          'bg-card shadow-xl border border-border',
           'w-full box-border',
           positions[position].content,
           positions[position].animation,
@@ -246,22 +246,22 @@ const Drawer = React.forwardRef(({
         {/* Drag handle for bottom drawer */}
         {position === 'bottom' && (
           <div className="flex justify-center pt-3 pb-2">
-            <div className="w-12 h-1 bg-gray-300 rounded-full" />
+            <div className="w-12 h-1 bg-muted-foreground/30 rounded-full" />
           </div>
         )}
 
         {/* Header */}
         {title && (
-          <div className="flex items-center justify-between p-6 pb-4 border-b border-border-light">
-            <h2 className="text-xl font-semibold text-primary">
+          <div className="flex items-center justify-between p-6 pb-4 border-b border-border">
+            <h2 className="text-xl font-semibold text-foreground">
               {title}
             </h2>
             <button
               onClick={onClose}
               className={cn(
-                'p-2 rounded-lg text-muted hover:text-secondary',
-                'hover:bg-sage-50 transition-colors duration-200',
-                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage-500'
+                'p-2 rounded-lg text-muted-foreground hover:text-foreground',
+                'hover:bg-muted transition-colors duration-200',
+                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
               )}
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -307,11 +307,11 @@ const TipsOverlay = React.forwardRef(({
         {/* Pose name */}
         {pose && (
           <div className="text-center">
-            <h3 className="text-lg font-medium text-primary">
+            <h3 className="text-lg font-medium text-foreground">
               {pose.nameEnglish}
             </h3>
             {pose.nameSanskrit && (
-              <p className="text-sm text-secondary italic">
+              <p className="text-sm text-muted-foreground italic">
                 {pose.nameSanskrit}
               </p>
             )}
@@ -321,12 +321,12 @@ const TipsOverlay = React.forwardRef(({
         {/* Tips content */}
         {tips.length > 0 ? (
           <div className="space-y-3">
-            <h4 className="font-medium text-primary">Form Tips:</h4>
+            <h4 className="font-medium text-foreground">Form Tips:</h4>
             <ul className="space-y-2">
               {tips.map((tip, index) => (
                 <li key={index} className="flex items-start gap-3">
-                  <div className="w-2 h-2 bg-sage-500 rounded-full mt-2 flex-shrink-0" />
-                  <span className="text-base text-secondary">{tip}</span>
+                  <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0" />
+                  <span className="text-base text-muted-foreground">{tip}</span>
                 </li>
               ))}
             </ul>
@@ -338,12 +338,12 @@ const TipsOverlay = React.forwardRef(({
         {/* Benefits */}
         {pose?.benefits && pose.benefits.length > 0 && (
           <div className="space-y-3">
-            <h4 className="font-medium text-primary">Benefits:</h4>
+            <h4 className="font-medium text-foreground">Benefits:</h4>
             <ul className="space-y-2">
               {pose.benefits.map((benefit, index) => (
                 <li key={index} className="flex items-start gap-3">
-                  <div className="w-2 h-2 bg-gold-500 rounded-full mt-2 flex-shrink-0" />
-                  <span className="text-base text-secondary">{benefit}</span>
+                  <div className="w-2 h-2 bg-accent rounded-full mt-2 flex-shrink-0" />
+                  <span className="text-base text-muted-foreground">{benefit}</span>
                 </li>
               ))}
             </ul>
@@ -355,9 +355,9 @@ const TipsOverlay = React.forwardRef(({
           <button
             onClick={onClose}
             className={cn(
-              'w-full py-3 px-4 bg-sage-500 text-white rounded-lg',
-              'hover:bg-sage-600 transition-colors duration-200',
-              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage-500 focus-visible:ring-offset-2'
+              'w-full py-3 px-4 bg-primary text-primary-foreground rounded-lg',
+              'hover:bg-secondary transition-colors duration-200',
+              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2'
             )}
           >
             Got it
@@ -391,12 +391,12 @@ const PauseOverlay = React.forwardRef(({
       ref={ref}
       {...props}
     >
-      <div className="bg-white rounded-2xl shadow-xl border border-border-light p-8 text-center">
+      <div className="bg-card rounded-2xl shadow-xl border border-border p-8 text-center">
         <div className="space-y-6">
           {/* Pause icon */}
           <div className="flex justify-center">
-            <div className="w-16 h-16 bg-sage-100 rounded-full flex items-center justify-center">
-              <svg className="w-8 h-8 text-sage-600" fill="currentColor" viewBox="0 0 24 24">
+            <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center">
+              <svg className="w-8 h-8 text-muted-foreground" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/>
               </svg>
             </div>
@@ -404,16 +404,16 @@ const PauseOverlay = React.forwardRef(({
 
           {/* Content */}
           <div className="space-y-2">
-            <h2 className="text-xl font-semibold text-primary">
+            <h2 className="text-xl font-semibold text-foreground">
               Practice Paused
             </h2>
             {sessionName && (
-              <p className="text-base text-secondary">
+              <p className="text-base text-muted-foreground">
                 {sessionName}
               </p>
             )}
             {currentPose && totalPoses && (
-              <p className="text-sm text-muted">
+              <p className="text-sm text-muted-foreground">
                 Pose {currentPose} of {totalPoses}
               </p>
             )}
@@ -424,9 +424,9 @@ const PauseOverlay = React.forwardRef(({
             <button
               onClick={onResume}
               className={cn(
-                'w-full py-3 px-4 bg-sage-500 text-white rounded-lg',
-                'hover:bg-sage-600 transition-colors duration-200',
-                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage-500 focus-visible:ring-offset-2'
+                'w-full py-3 px-4 bg-primary text-primary-foreground rounded-lg',
+                'hover:bg-secondary transition-colors duration-200',
+                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2'
               )}
             >
               Resume Practice
@@ -434,9 +434,9 @@ const PauseOverlay = React.forwardRef(({
             <button
               onClick={onEnd}
               className={cn(
-                'w-full py-3 px-4 bg-transparent text-secondary border border-border-medium rounded-lg',
-                'hover:bg-background-secondary transition-colors duration-200',
-                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage-500 focus-visible:ring-offset-2'
+                'w-full py-3 px-4 bg-transparent text-muted-foreground border border-border rounded-lg',
+                'hover:bg-muted transition-colors duration-200',
+                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2'
               )}
             >
               End Session
@@ -465,12 +465,12 @@ const AlertDialog = React.forwardRef(({
 }, ref) => {
   const variants = {
     default: {
-      confirmButton: 'bg-sage-500 hover:bg-sage-600 text-white',
-      cancelButton: 'bg-transparent hover:bg-background-secondary text-secondary border border-border-medium'
+      confirmButton: 'bg-primary hover:bg-secondary text-primary-foreground',
+      cancelButton: 'bg-transparent hover:bg-muted text-muted-foreground border border-border'
     },
     destructive: {
-      confirmButton: 'bg-state-error hover:bg-red-500 text-white',
-      cancelButton: 'bg-transparent hover:bg-background-secondary text-secondary border border-border-medium'
+      confirmButton: 'bg-destructive hover:bg-destructive/90 text-destructive-foreground',
+      cancelButton: 'bg-transparent hover:bg-muted text-muted-foreground border border-border'
     }
   };
 
@@ -486,11 +486,11 @@ const AlertDialog = React.forwardRef(({
     >
       <div className="space-y-6">
         <div className="text-center space-y-2">
-          <h2 className="text-lg font-semibold text-primary">
+          <h2 className="text-lg font-semibold text-foreground">
             {title}
           </h2>
           {description && (
-            <p className="text-base text-secondary">
+            <p className="text-base text-muted-foreground">
               {description}
             </p>
           )}
@@ -501,7 +501,7 @@ const AlertDialog = React.forwardRef(({
             onClick={onClose}
             className={cn(
               'flex-1 py-3 px-4 rounded-lg transition-colors duration-200',
-              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage-500 focus-visible:ring-offset-2',
+              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
               variants[variant].cancelButton
             )}
           >
@@ -511,7 +511,7 @@ const AlertDialog = React.forwardRef(({
             onClick={onConfirm}
             className={cn(
               'flex-1 py-3 px-4 rounded-lg transition-colors duration-200',
-              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage-500 focus-visible:ring-offset-2',
+              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
               variants[variant].confirmButton
             )}
           >

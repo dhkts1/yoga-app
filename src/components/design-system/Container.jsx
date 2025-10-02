@@ -81,9 +81,9 @@ const Section = React.forwardRef(({
 
   const backgrounds = {
     default: '',
-    sage: 'bg-sage-50',
-    cream: 'bg-cream-100',
-    white: 'bg-white',
+    sage: 'bg-muted',
+    cream: 'bg-muted',
+    white: 'bg-card',
     transparent: 'bg-transparent'
   };
 
@@ -319,7 +319,7 @@ const PracticeLayout = React.forwardRef(({
     >
       {/* Timer section */}
       {timer && (
-        <div className="flex-shrink-0 bg-white border-b border-border-light">
+        <div className="flex-shrink-0 bg-card border-b border-border-light">
           <Container padding="default">
             <div className="py-6 text-center">
               {timer}
@@ -339,7 +339,7 @@ const PracticeLayout = React.forwardRef(({
 
       {/* Controls section */}
       {controls && (
-        <div className="flex-shrink-0 bg-white border-t border-border-light">
+        <div className="flex-shrink-0 bg-card border-t border-border-light">
           <Container padding="default">
             <div className="py-4">
               {controls}

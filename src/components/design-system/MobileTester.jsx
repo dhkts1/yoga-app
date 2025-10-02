@@ -72,8 +72,8 @@ const MobileTester = ({ children, showIndicator = true, testSizes = [375, 414, 4
         <button
           onClick={() => setTestMode(!testMode)}
           className={cn(
-            'bg-sage-600 text-white px-3 py-2 rounded-lg text-sm font-medium',
-            'hover:bg-sage-700 transition-colors',
+            'bg-primary text-primary-foreground px-3 py-2 rounded-lg text-sm font-medium',
+            'hover:bg-primary transition-colors',
             'shadow-lg backdrop-blur-sm'
           )}
         >
@@ -93,9 +93,9 @@ const MobileTester = ({ children, showIndicator = true, testSizes = [375, 414, 4
                   document.documentElement.style.boxSizing = 'border-box';
                 }}
                 className={cn(
-                  'block w-full bg-white text-sage-600 px-3 py-2 rounded text-sm',
-                  'hover:bg-sage-50 transition-colors border border-sage-200',
-                  viewportWidth === size && 'bg-sage-100 font-medium'
+                  'block w-full bg-card text-muted-foreground px-3 py-2 rounded text-sm',
+                  'hover:bg-muted transition-colors border border-border',
+                  viewportWidth === size && 'bg-muted font-medium'
                 )}
               >
                 {size}px

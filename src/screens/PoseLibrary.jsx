@@ -82,20 +82,20 @@ function PoseLibrary() {
       {/* Search Bar */}
       <div className="mx-auto max-w-sm mb-4">
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-sage-600" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
           <input
             type="text"
             placeholder="Search poses..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-10 py-3 rounded-2xl bg-white border-2 border-sage-100 focus:border-sage-400 focus:outline-none text-sage-900 placeholder-sage-500"
+            className="w-full pl-10 pr-10 py-3 rounded-2xl bg-card border-2 border-border focus:border-primary focus:outline-none text-card-foreground placeholder-sage-500"
           />
           {searchQuery && (
             <button
               onClick={() => setSearchQuery('')}
-              className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:bg-sage-100 rounded-full transition-colors"
+              className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:bg-muted rounded-full transition-colors"
             >
-              <X className="h-4 w-4 text-sage-600" />
+              <X className="h-4 w-4 text-muted-foreground" />
             </button>
           )}
         </div>
@@ -106,12 +106,12 @@ function PoseLibrary() {
         <Button
           onClick={() => setShowFilters(!showFilters)}
           variant="outline"
-          className="w-full rounded-2xl border-sage-300 text-sage-700 hover:bg-sage-50"
+          className="w-full rounded-2xl border-primary text-muted-foreground hover:bg-muted"
         >
           <Filter className="h-5 w-5 mr-2" />
           Filters
           {activeFilterCount > 0 && (
-            <span className="ml-2 px-2 py-0.5 rounded-full bg-sage-600 text-white text-xs font-medium">
+            <span className="ml-2 px-2 py-0.5 rounded-full bg-secondary text-white text-xs font-medium">
               {activeFilterCount}
             </span>
           )}
@@ -120,10 +120,10 @@ function PoseLibrary() {
 
       {/* Filters Panel */}
       {showFilters && (
-        <div className="mx-auto max-w-sm mb-6 p-4 bg-white rounded-2xl shadow-sm space-y-4">
+        <div className="mx-auto max-w-sm mb-6 p-4 bg-card rounded-2xl shadow-sm space-y-4">
           {/* Category Filter */}
           <div>
-            <label className="block text-sm font-medium text-sage-900 mb-2">
+            <label className="block text-sm font-medium text-card-foreground mb-2">
               Category
             </label>
             <div className="flex flex-wrap gap-2">
@@ -131,8 +131,8 @@ function PoseLibrary() {
                 onClick={() => setSelectedCategory('all')}
                 className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
                   selectedCategory === 'all'
-                    ? 'bg-sage-700 text-white'
-                    : 'bg-cream-100 text-sage-700 hover:bg-sage-100'
+                    ? 'bg-secondary text-white'
+                    : 'bg-muted text-muted-foreground hover:bg-muted'
                 }`}
               >
                 All ({categoryCounts.all})
@@ -143,8 +143,8 @@ function PoseLibrary() {
                   onClick={() => setSelectedCategory(cat)}
                   className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all capitalize ${
                     selectedCategory === cat
-                      ? 'bg-sage-700 text-white'
-                      : 'bg-cream-100 text-sage-700 hover:bg-sage-100'
+                      ? 'bg-secondary text-white'
+                      : 'bg-muted text-muted-foreground hover:bg-muted'
                   }`}
                 >
                   {cat} ({categoryCounts[cat]})
@@ -155,7 +155,7 @@ function PoseLibrary() {
 
           {/* Difficulty Filter */}
           <div>
-            <label className="block text-sm font-medium text-sage-900 mb-2">
+            <label className="block text-sm font-medium text-card-foreground mb-2">
               Difficulty
             </label>
             <div className="flex flex-wrap gap-2">
@@ -163,8 +163,8 @@ function PoseLibrary() {
                 onClick={() => setSelectedDifficulty('all')}
                 className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
                   selectedDifficulty === 'all'
-                    ? 'bg-sage-700 text-white'
-                    : 'bg-cream-100 text-sage-700 hover:bg-sage-100'
+                    ? 'bg-secondary text-white'
+                    : 'bg-muted text-muted-foreground hover:bg-muted'
                 }`}
               >
                 All ({difficultyCounts.all})
@@ -175,8 +175,8 @@ function PoseLibrary() {
                   onClick={() => setSelectedDifficulty(diff)}
                   className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all capitalize ${
                     selectedDifficulty === diff
-                      ? 'bg-sage-700 text-white'
-                      : 'bg-cream-100 text-sage-700 hover:bg-sage-100'
+                      ? 'bg-secondary text-white'
+                      : 'bg-muted text-muted-foreground hover:bg-muted'
                   }`}
                 >
                   {diff} ({difficultyCounts[diff]})
@@ -190,7 +190,7 @@ function PoseLibrary() {
             <Button
               onClick={clearFilters}
               variant="ghost"
-              className="w-full text-sage-600 hover:text-sage-900"
+              className="w-full text-muted-foreground hover:text-card-foreground"
             >
               Clear All Filters
             </Button>
@@ -200,7 +200,7 @@ function PoseLibrary() {
 
       {/* Results Count */}
       <div className="mx-auto max-w-sm mb-4">
-        <p className="text-sm text-sage-600 text-center">
+        <p className="text-sm text-muted-foreground text-center">
           {filteredPoses.length === poses.length
             ? `Showing all ${poses.length} poses`
             : `Found ${filteredPoses.length} pose${filteredPoses.length !== 1 ? 's' : ''}`}
@@ -211,12 +211,12 @@ function PoseLibrary() {
       <div className="mx-auto max-w-sm">
         {filteredPoses.length === 0 ? (
           <div className="text-center py-12">
-            <BookOpen className="h-12 w-12 mx-auto text-sage-400 mb-4" />
-            <p className="text-sage-600 mb-2">No poses found</p>
+            <BookOpen className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+            <p className="text-muted-foreground mb-2">No poses found</p>
             <Button
               onClick={clearFilters}
               variant="outline"
-              className="border-sage-300 text-sage-700 hover:bg-sage-50"
+              className="border-primary text-muted-foreground hover:bg-muted"
             >
               Clear Filters
             </Button>
@@ -227,10 +227,10 @@ function PoseLibrary() {
               <button
                 key={pose.id}
                 onClick={() => handlePoseSelect(pose.id)}
-                className="bg-white rounded-xl p-3 shadow-sm transition-all duration-300 hover:shadow-md hover:scale-[1.02] active:scale-[0.98] text-left"
+                className="bg-card rounded-xl p-3 shadow-sm transition-all duration-300 hover:shadow-md hover:scale-[1.02] active:scale-[0.98] text-left"
               >
                 {/* Pose Image */}
-                <div className="mb-3 aspect-square rounded-lg overflow-hidden bg-cream-50">
+                <div className="mb-3 aspect-square rounded-lg overflow-hidden bg-muted">
                   <PoseImage
                     poseId={pose.id}
                     alt={pose.nameEnglish}
@@ -240,14 +240,14 @@ function PoseLibrary() {
 
                 {/* Pose Info */}
                 <div className="space-y-1">
-                  <h3 className="text-sm font-medium text-sage-900 line-clamp-1">
+                  <h3 className="text-sm font-medium text-card-foreground line-clamp-1">
                     {pose.nameEnglish}
                   </h3>
-                  <p className="text-xs text-sage-600 italic line-clamp-1">
+                  <p className="text-xs text-muted-foreground italic line-clamp-1">
                     {pose.nameSanskrit}
                   </p>
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="text-xs px-2 py-0.5 rounded-full bg-sage-100 text-sage-700 capitalize">
+                    <span className="text-xs px-2 py-0.5 rounded-full bg-muted text-muted-foreground capitalize">
                       {pose.category}
                     </span>
                     <span className={`text-xs px-2 py-0.5 rounded-full capitalize ${
