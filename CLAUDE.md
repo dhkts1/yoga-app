@@ -102,11 +102,12 @@ npm run test:e2e:report  # View test report
 - Key methods:
   - `startProgram(programId)` - Begin a new program at week 1
   - `resumeProgram(programId)` - Resume a paused program
-  - `pauseProgram()` - Pause current active program
-  - `completeWeek(weekNumber, sessionCount, notes)` - Mark week complete and unlock next
-  - `saveWeekNotes(programId, weekNumber, notes)` - Save reflections
-  - `getActiveProgram()` - Current program and week
-  - `isProgramComplete(programId, totalWeeks)` - Check completion status
+  - `pauseProgram(programId)` - Pause current active program
+  - `completeWeek(programId, weekNumber, sessionCount, notes)` - Mark week complete and unlock next
+  - `addWeekNote(programId, weekNumber, notes)` - Save reflections
+  - `getCurrentWeek(programId)` - Get current week number
+  - `getProgramStatus(programId, totalWeeks)` - Check program status
+  - `isWeekCompleted(programId, weekNumber)` - Check if week is completed
 - Division of responsibilities:
   - `progress.js` stores session completions (single source of truth)
   - `programProgress.js` queries `progress.js` for completion data
@@ -285,6 +286,14 @@ Multi-week programs provide structured, progressive yoga courses spanning 8-13 w
 ### Program Types (Currently Available)
 1. **Iyengar Foundation (13 weeks)** - Beginner-focused alignment and technique
 2. **Vinyasa Flow Builder (8 weeks)** - Mixed difficulty dynamic flow practice
+3. **Foundations of Breath & Movement (8 weeks)** - Breath-centered Hatha practice
+4. **Therapeutic Yoga for Back Care (10 weeks)** - Therapeutic sequences for spinal health
+5. **The Eight Limbs Journey (12 weeks)** - Exploration of Patanjali's eight-limbed yoga
+6. **Pranayama Mastery (10 weeks)** - Intensive breath control course
+7. **Strength & Stability (10 weeks)** - Building physical strength and endurance
+8. **Inversion Intensive (12 weeks)** - Advanced inversion practice
+9. **Backbending Journey (12 weeks)** - Progressive backbend exploration
+10. **Restorative & Therapeutic Practice (13 weeks)** - Deep healing and restoration
 
 ### User Journey
 
@@ -452,6 +461,7 @@ programProgressStore.completeWeek(programId, weekNumber, stats.completedCount, n
 - **PWA**: vite-plugin-pwa 1.0.3
 - **Build**: Vite with manual chunk splitting
 - **Code Quality**: ESLint + Prettier with Tailwind plugin
+- **Testing**: Playwright 1.55.1 for E2E tests
 
 ## Important Notes
 
@@ -469,7 +479,7 @@ programProgressStore.completeWeek(programId, weekNumber, stats.completedCount, n
 ✅ **Completed MVP+**
 - 12 yoga poses with full metadata (+ extended pose library for programs)
 - 4 pre-built sessions + custom session builder
-- Multi-week programs (8-13 week structured courses)
+- Multi-week programs (10 programs ranging from 8-13 weeks)
 - Progressive unlocking system with milestone tracking
 - Visual timer with pause/resume and auto-advance
 - Progress tracking with streak counter
@@ -545,10 +555,18 @@ src/
 - **Adding Program Context to Sessions**: Pass programContext via navigation state when launching sessions from WeekDetail
 - **Session Completion Tracking**: When completing a session with program context, pass programId, weekNumber, dayNumber to `completeSession()`
 - **Week Progress Queries**: Use `isProgramDayCompleted()` to check individual session completions within a week
-- **See**: `PROGRESS_STORE_CHANGES.md` for detailed integration guide
 
 ## Testing Approach
 
+### E2E Testing with Playwright
+- **Location**: `/tests/e2e/` directory
+- **Config**: `playwright.config.js` configured for mobile-first testing
+- **Viewport**: Tests run at iPhone 13 dimensions (375px baseline)
+- **Server**: Auto-starts dev server on `http://localhost:5173`
+- **Timeout**: 20 seconds per test for fast feedback
+- **Parallelization**: Tests run in parallel for speed
+
+### Test Coverage Areas
 - **Mobile responsiveness**: Test at 375px viewport (iPhone SE baseline)
 - **Touch interactions**: Verify 44px minimum touch targets
 - **Offline functionality**: Test with network disabled
@@ -558,6 +576,38 @@ src/
 - **Program flows**: Test sequential unlocking, pause/resume, reset with confirmation
 - **Data integrity**: Verify program context in session completions, no store duplication
 - **Week progress**: Confirm session completion tracking within weeks, accurate progress bars
+
+### Running Tests
+```bash
+# Run all E2E tests
+npm run test:e2e
+
+# Run tests in UI mode (interactive)
+npm run test:e2e:ui
+
+# Debug tests
+npm run test:e2e:debug
+
+# View HTML test report
+npm run test:e2e:report
+```
+
+## Additional Documentation
+
+### Recent Refactoring (October 2025)
+The codebase underwent significant refactoring to improve maintainability:
+
+- **REFACTORING_SUMMARY.md** - Comprehensive overview (208+ lines eliminated)
+- **NEW_APIS.md** - Quick reference for new components, hooks, and utilities
+- **DESIGN_SYSTEM_COMPONENTS.md** - Design system component usage guide
+- **src/hooks/README.md** - Custom hooks API reference
+
+Key improvements:
+- 4 new design system components (Badge, Stat, Tab, EmptyState)
+- Badge utility system eliminating 114 lines of duplication
+- localStorage hooks eliminating 94 lines of duplication
+- Centralized design tokens for consistent styling
+- Mobile-first patterns across all new components
 
 ---
 

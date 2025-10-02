@@ -3,7 +3,8 @@ import {
   clearAppData,
   fastForwardTimer,
   dismissOnboardingIfPresent,
-  skipMoodTrackerIfPresent
+  skipMoodTrackerIfPresent,
+  ensurePracticeStarted
 } from '../helpers/test-utils.js';
 
 /**
@@ -33,7 +34,7 @@ test.describe('Complete Session', () => {
     await page.waitForURL(/\/practice/);
     await skipMoodTrackerIfPresent(page);
 
-    await page.getByRole('button', { name: /play/i }).click();
+    await ensurePracticeStarted(page);
     await skipMoodTrackerIfPresent(page);
     await page.waitForURL(/\/complete/, { timeout: 15000 });
 
@@ -47,7 +48,7 @@ test.describe('Complete Session', () => {
     await page.waitForURL(/\/practice/);
     await skipMoodTrackerIfPresent(page);
 
-    await page.getByRole('button', { name: /play/i }).click();
+    await ensurePracticeStarted(page);
     await skipMoodTrackerIfPresent(page);
     await page.waitForURL(/\/complete/, { timeout: 15000 });
 
@@ -69,7 +70,7 @@ test.describe('Complete Session', () => {
     await page.waitForURL(/\/practice/, { timeout: 10000 });
     await skipMoodTrackerIfPresent(page);
 
-    await page.getByRole('button', { name: /play/i }).click();
+    await ensurePracticeStarted(page);
     await skipMoodTrackerIfPresent(page);
     await page.waitForURL(/\/complete/, { timeout: 15000 });
 
@@ -96,7 +97,7 @@ test.describe('Complete Session', () => {
     await page.waitForURL(/\/practice/);
     await skipMoodTrackerIfPresent(page);
 
-    await page.getByRole('button', { name: /play/i }).click();
+    await ensurePracticeStarted(page);
     await skipMoodTrackerIfPresent(page);
     await page.waitForURL(/\/complete/, { timeout: 15000 });
 
@@ -116,7 +117,7 @@ test.describe('Complete Session', () => {
     await page.waitForURL(/\/practice/);
     await skipMoodTrackerIfPresent(page);
 
-    await page.getByRole('button', { name: /play/i }).click();
+    await ensurePracticeStarted(page);
     await skipMoodTrackerIfPresent(page);
     await page.waitForURL(/\/complete/, { timeout: 15000 });
 

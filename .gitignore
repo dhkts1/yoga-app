@@ -235,3 +235,7 @@ test-output.txt
 *_STATUS.md
 *_MIGRATION.md
 *_MAPPING.md
+
+# Capacitor native platforms
+android/
+ios/

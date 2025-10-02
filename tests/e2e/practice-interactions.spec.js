@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { clearAppData, skipMoodTrackerIfPresent } from '../helpers/test-utils.js';
+import { clearAppData, skipMoodTrackerIfPresent, ensurePracticeStarted } from '../helpers/test-utils.js';
 
 /**
  * Practice Screen Interaction Tests
@@ -21,9 +21,8 @@ test.describe('Practice Interactions', () => {
     await page.waitForURL(/\/practice/, { timeout: 5000 });
     await skipMoodTrackerIfPresent(page);
 
-    // Click play
-    await page.getByRole('button', { name: /play/i }).click();
-    await skipMoodTrackerIfPresent(page);
+    // Ensure practice is started (handles auto-start after mood tracker dismissal)
+    await ensurePracticeStarted(page);
 
     // Should show pause button
     await expect(page.getByRole('button', { name: /pause/i })).toBeVisible({ timeout: 3000 });
@@ -34,8 +33,8 @@ test.describe('Practice Interactions', () => {
     await page.waitForURL(/\/practice/, { timeout: 5000 });
     await skipMoodTrackerIfPresent(page);
 
-    await page.getByRole('button', { name: /play/i }).click();
-    await skipMoodTrackerIfPresent(page);
+    // Ensure practice is started (handles auto-start after mood tracker dismissal)
+    await ensurePracticeStarted(page);
 
     // Click pause
     const pauseButton = page.getByRole('button', { name: /pause/i });

@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { clearAppData, fastForwardTimer, getStorageState, skipMoodTrackerIfPresent } from '../helpers/test-utils.js';
+import { clearAppData, fastForwardTimer, getStorageState, skipMoodTrackerIfPresent, ensurePracticeStarted } from '../helpers/test-utils.js';
 
 /**
  * Data Persistence Test
@@ -27,7 +27,7 @@ test.describe('Data Persistence', () => {
     await page.waitForURL(/\/practice/, { timeout: 10000 });
     await skipMoodTrackerIfPresent(page);
 
-    await page.getByRole('button', { name: /play/i }).click();
+    await ensurePracticeStarted(page);
     await skipMoodTrackerIfPresent(page);
     await page.waitForURL(/\/complete/, { timeout: 15000 });
 
@@ -52,7 +52,7 @@ test.describe('Data Persistence', () => {
     await page.waitForURL(/\/practice/, { timeout: 10000 });
     await skipMoodTrackerIfPresent(page);
 
-    await page.getByRole('button', { name: /play/i }).click();
+    await ensurePracticeStarted(page);
     await skipMoodTrackerIfPresent(page);
     await page.waitForURL(/\/complete/, { timeout: 15000 });
 
@@ -85,7 +85,7 @@ test.describe('Data Persistence', () => {
     await page.waitForURL(/\/practice/, { timeout: 10000 });
     await skipMoodTrackerIfPresent(page);
 
-    await page.getByRole('button', { name: /play/i }).click();
+    await ensurePracticeStarted(page);
     await skipMoodTrackerIfPresent(page);
     await page.waitForURL(/\/complete/, { timeout: 15000 });
 
@@ -126,7 +126,7 @@ test.describe('Data Persistence', () => {
     await page.waitForURL(/\/practice/, { timeout: 10000 });
     await skipMoodTrackerIfPresent(page);
 
-    await page.getByRole('button', { name: /play/i }).click();
+    await ensurePracticeStarted(page);
     await skipMoodTrackerIfPresent(page);
     await page.waitForURL(/\/complete/, { timeout: 15000 });
 
@@ -177,7 +177,7 @@ test.describe('Data Persistence', () => {
     await page.waitForURL(/\/practice/, { timeout: 10000 });
     await skipMoodTrackerIfPresent(page);
 
-    await page.getByRole('button', { name: /play/i }).click();
+    await ensurePracticeStarted(page);
     await skipMoodTrackerIfPresent(page);
     await page.waitForURL(/\/complete/, { timeout: 15000 });
 

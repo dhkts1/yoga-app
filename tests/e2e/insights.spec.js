@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { clearAppData, fastForwardTimer, skipMoodTrackerIfPresent } from '../helpers/test-utils.js';
+import { clearAppData, fastForwardTimer, skipMoodTrackerIfPresent, ensurePracticeStarted } from '../helpers/test-utils.js';
 
 /**
  * Insights/Progress Screen Tests
@@ -39,7 +39,7 @@ test.describe('Insights', () => {
     await page.waitForURL(/\/practice/, { timeout: 5000 });
     await skipMoodTrackerIfPresent(page);
 
-    await page.getByRole('button', { name: /play/i }).click();
+    await ensurePracticeStarted(page);
     await skipMoodTrackerIfPresent(page);
     await page.waitForURL(/\/complete/, { timeout: 15000 });
 
@@ -69,7 +69,7 @@ test.describe('Insights', () => {
     await page.waitForURL(/\/practice/, { timeout: 5000 });
     await skipMoodTrackerIfPresent(page);
 
-    await page.getByRole('button', { name: /play/i }).click();
+    await ensurePracticeStarted(page);
     await skipMoodTrackerIfPresent(page);
     await page.waitForURL(/\/complete/, { timeout: 15000 });
 
@@ -98,7 +98,7 @@ test.describe('Insights', () => {
     await page.waitForURL(/\/practice/, { timeout: 5000 });
     await skipMoodTrackerIfPresent(page);
 
-    await page.getByRole('button', { name: /play/i }).click();
+    await ensurePracticeStarted(page);
     await skipMoodTrackerIfPresent(page);
     await page.waitForURL(/\/complete/, { timeout: 15000 });
 

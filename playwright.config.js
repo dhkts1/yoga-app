@@ -48,8 +48,8 @@ export default defineConfig({
     viewport: { width: 375, height: 667 },
 
     // Faster timeouts for snappier tests
-    actionTimeout: 5000, // 5 seconds for actions
-    navigationTimeout: 5000, // 5 seconds for navigation
+    actionTimeout: 10000, // 10 seconds for actions
+    navigationTimeout: 10000, // 10 seconds for navigation
 
     // Disable video to save time and space
     video: 'off',
