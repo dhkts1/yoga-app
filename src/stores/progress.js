@@ -35,6 +35,14 @@ const getDaysSince = (date) => {
   return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 };
 
+// Helper function to calculate new streak based on last practice date
+const calculateNewStreak = (currentStreak, lastPracticeDate) => {
+  if (!lastPracticeDate) return 1; // First session ever
+  if (isToday(lastPracticeDate)) return currentStreak; // Already practiced today
+  if (isYesterday(lastPracticeDate)) return currentStreak + 1; // Continue streak
+  return 1; // Gap in practice - reset streak
+};
+
 const useProgressStore = create(
   persist(
     (set, get) => ({
@@ -107,21 +115,7 @@ const useProgressStore = create(
         };
 
         // Calculate new streak
-        let newStreak = state.currentStreak;
-
-        if (!state.lastPracticeDate) {
-          // First session ever
-          newStreak = 1;
-        } else if (isToday(state.lastPracticeDate)) {
-          // Already practiced today - don't increment streak but record session
-          newStreak = state.currentStreak;
-        } else if (isYesterday(state.lastPracticeDate)) {
-          // Practiced yesterday - continue streak
-          newStreak = state.currentStreak + 1;
-        } else {
-          // Gap in practice - reset streak
-          newStreak = 1;
-        }
+        const newStreak = calculateNewStreak(state.currentStreak, state.lastPracticeDate);
 
         // Update longest streak if current is longer
         const newLongestStreak = Math.max(state.longestStreak, newStreak);
@@ -189,21 +183,7 @@ const useProgressStore = create(
         };
 
         // Calculate new streak (breathing counts toward practice streak)
-        let newStreak = state.currentStreak;
-
-        if (!state.lastPracticeDate) {
-          // First session ever
-          newStreak = 1;
-        } else if (isToday(state.lastPracticeDate)) {
-          // Already practiced today - don't increment streak but record session
-          newStreak = state.currentStreak;
-        } else if (isYesterday(state.lastPracticeDate)) {
-          // Practiced yesterday - continue streak
-          newStreak = state.currentStreak + 1;
-        } else {
-          // Gap in practice - reset streak
-          newStreak = 1;
-        }
+        const newStreak = calculateNewStreak(state.currentStreak, state.lastPracticeDate);
 
         // Update longest streak if current is longer
         const newLongestStreak = Math.max(state.longestStreak, newStreak);

@@ -1,5 +1,6 @@
 import { ChevronUp, ChevronDown, Trash2 } from 'lucide-react';
 import { Card, Button } from './design-system';
+import { Checkbox } from './ui/checkbox';
 import { getPoseById } from '../data/poses';
 import { getDurationOptions, formatDuration } from '../data/customSessions';
 
@@ -7,7 +8,7 @@ import { getDurationOptions, formatDuration } from '../data/customSessions';
  * SelectablePoseCard - Mobile-friendly pose card for session building
  *
  * Two modes:
- * - library: Shows pose info with "Add" button for selection
+ * - library: Shows pose info with checkbox for multi-select
  * - sequence: Shows pose in sequence with duration controls and reordering
  */
 const SelectablePoseCard = ({
@@ -22,7 +23,10 @@ const SelectablePoseCard = ({
   onMoveDown,
   className = "",
   canMoveUp = false,
-  canMoveDown = false
+  canMoveDown = false,
+  // Multi-select props
+  isSelected = false,
+  onSelect
 }) => {
   const pose = getPoseById(poseId);
 
@@ -64,34 +68,34 @@ const SelectablePoseCard = ({
   };
 
   if (mode === 'library') {
-    // Library mode: Simple card with Add button
+    // Library mode: Compact card with color indicator for selection
     return (
-      <Card className={`p-3 ${className}`}>
-        <div className="flex items-center justify-between gap-2">
-          <div className="flex items-center space-x-2 flex-1 min-w-0">
-            <div className="text-xl flex-shrink-0">
-              {pose.emoji}
-            </div>
-            <div className="flex-1 min-w-0">
-              <h3 className="text-sm font-medium text-gray-900 truncate">
-                {pose.nameEnglish}
-              </h3>
-              <p className="text-xs text-gray-500 italic truncate">
-                {pose.nameSanskrit}
-              </p>
-              <p className="text-xs text-gray-500 mt-0.5">
-                {formatDuration(duration)}
-              </p>
-            </div>
+      <Card
+        className={`p-2 cursor-pointer transition-all ${
+          isSelected
+            ? 'bg-sage-100 border-sage-500 border-2 shadow-sm'
+            : 'hover:bg-gray-50 border border-gray-200'
+        } ${className}`}
+        onClick={() => onSelect?.(poseId)}
+      >
+        <div className="flex items-center gap-2">
+          {/* Small selection indicator */}
+          <div className={`w-1 h-8 rounded-full flex-shrink-0 ${
+            isSelected ? 'bg-sage-600' : 'bg-transparent'
+          }`} />
+          <div className="text-lg flex-shrink-0">
+            {pose.emoji}
           </div>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleAddPose}
-            className="flex-shrink-0 min-h-[44px] px-3 text-sm"
-          >
-            Add
-          </Button>
+          <div className="flex-1 min-w-0">
+            <h3 className={`text-sm font-medium truncate ${
+              isSelected ? 'text-sage-900' : 'text-gray-900'
+            }`}>
+              {pose.nameEnglish}
+            </h3>
+            <p className="text-xs text-gray-500 italic truncate">
+              {pose.nameSanskrit}
+            </p>
+          </div>
         </div>
       </Card>
     );

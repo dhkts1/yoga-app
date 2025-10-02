@@ -68,16 +68,16 @@ export async function dismissOnboardingIfPresent(page) {
     const onboardingDialog = page.locator('[role="dialog"]').filter({ hasText: /welcome to mindful yoga|onboarding/i });
 
     // Wait for dialog to be visible (gives animation time to complete)
-    await onboardingDialog.waitFor({ state: 'visible', timeout: 5000 });
+    await onboardingDialog.waitFor({ state: 'visible', timeout: 1000 });
 
     // Try to find Skip button first (fastest way)
     const skipButton = page.getByRole('button', { name: /skip/i });
 
-    await skipButton.waitFor({ state: 'visible', timeout: 2000 });
+    await skipButton.waitFor({ state: 'visible', timeout: 500 });
     await skipButton.click();
 
     // Wait for onboarding to disappear
-    await onboardingDialog.waitFor({ state: 'hidden', timeout: 5000 });
+    await onboardingDialog.waitFor({ state: 'hidden', timeout: 1000 });
   } catch (error) {
     // Onboarding not present or already dismissed, that's fine
     console.log('No onboarding to dismiss or already dismissed');

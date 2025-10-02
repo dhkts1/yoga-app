@@ -30,6 +30,7 @@ export { Button } from './Button';
 export { Card, PoseCard, SessionCard } from './Card';
 export { Heading, Text, Timer } from './Typography';
 export { Container, Stack, Grid, PageWrapper, PracticeLayout } from './Container';
+export { default as ContentBody } from './ContentBody';
 export { ProgressBar, CircularProgress, Timer as TimerProgress, Spinner } from './Progress';
 export { Modal, Drawer, TipsOverlay, PauseOverlay, AlertDialog } from './Overlay';
 export { Icon, PlayIcon, PauseIcon, TimerIcon, HeartIcon } from './Icon';

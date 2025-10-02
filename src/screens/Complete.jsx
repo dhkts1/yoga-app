@@ -8,6 +8,7 @@ import { getWeekByNumber } from '../data/programs';
 import useProgressStore from '../stores/progress';
 import useProgramProgressStore from '../stores/programProgress';
 import { FullscreenLayout } from '../components/layouts';
+import { ContentBody } from '../components/design-system';
 import { calculateMoodImprovement } from '../utils/moodCalculator.jsx';
 import { useReducedMotion } from '../hooks/useReducedMotion';
 
@@ -158,10 +159,8 @@ function Complete() {
   return (
     <FullscreenLayout
       showBottomNav={false}
-      centered={true}
-      contentClassName="px-4 py-8"
     >
-      <div className="w-full max-w-sm flex flex-col items-center">
+      <ContentBody size="sm" centered padding="lg" spacing="md">
         {/* Success Icon with fade-in animation */}
         <motion.div
           className="mb-8 text-center"
@@ -315,7 +314,7 @@ function Complete() {
             <span>Practice Again</span>
           </button>
         </div>
-      </div>
+      </ContentBody>
 
       {/* Subtle celebration animation */}
       <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">

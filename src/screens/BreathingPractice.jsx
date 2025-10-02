@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Play, Pause, RotateCcw } from 'lucide-react';
-import { Button, Text } from '../components/design-system';
+import { Button, Text, ContentBody } from '../components/design-system';
 import { PracticeLayout } from '../components/layouts';
 import BreathingGuide from '../components/BreathingGuide';
 import { PracticeHeader } from '../components/headers';
@@ -50,6 +50,48 @@ function BreathingPractice() {
   // Refs for tracking
   const sessionStartTimeRef = useRef(null);
   const timerIntervalRef = useRef(null);
+
+  // Helper function to complete session and navigate
+  const completeAndNavigate = (preMoodData = null, postMoodData = null) => {
+    // Calculate actual practice time
+    const actualDuration = sessionStartTimeRef.current
+      ? Math.round((Date.now() - sessionStartTimeRef.current) / 1000 / 60)
+      : duration;
+
+    // Prepare session data
+    const sessionData = {
+      exerciseId: exercise.id,
+      exerciseName: exercise.nameEnglish,
+      duration: actualDuration,
+      targetCycles: totalCycles,
+      completedCycles: currentCycle,
+      category: exercise.category
+    };
+
+    // Add mood data if provided
+    if (preMoodData || postMoodData) {
+      sessionData.preMood = preMoodData?.mood?.value;
+      sessionData.preEnergy = preMoodData?.energy?.value;
+      sessionData.postMood = postMoodData?.mood?.value;
+      sessionData.postEnergy = postMoodData?.energy?.value;
+    }
+
+    // Record completion in progress store
+    completeBreathingSession(sessionData);
+
+    // Navigate to completion screen
+    navigate('/complete', {
+      state: {
+        sessionType: 'breathing',
+        exerciseName: exercise.nameEnglish,
+        duration: actualDuration,
+        completedCycles: currentCycle,
+        targetCycles: totalCycles,
+        ...(preMoodData && { preMoodData }),
+        ...(postMoodData && { postMoodData })
+      }
+    });
+  };
 
   // Handle cycle completion from BreathingGuide
   const handleCycleComplete = () => {
@@ -129,31 +171,8 @@ function BreathingPractice() {
     if (breathingPrefs.showMoodCheck) {
       setShowPostMoodTracker(true);
     } else {
-      // Calculate actual practice time
-      const actualDuration = sessionStartTimeRef.current
-        ? Math.round((Date.now() - sessionStartTimeRef.current) / 1000 / 60)
-        : duration;
-
-      // Record completion without mood data
-      completeBreathingSession({
-        exerciseId: exercise.id,
-        exerciseName: exercise.nameEnglish,
-        duration: actualDuration,
-        targetCycles: totalCycles,
-        completedCycles: currentCycle,
-        category: exercise.category
-      });
-
-      // Navigate to completion screen
-      navigate('/complete', {
-        state: {
-          sessionType: 'breathing',
-          exerciseName: exercise.nameEnglish,
-          duration: actualDuration,
-          completedCycles: currentCycle,
-          targetCycles: totalCycles
-        }
-      });
+      // Complete session without mood tracking
+      completeAndNavigate();
     }
   };
 
@@ -194,69 +213,15 @@ function BreathingPractice() {
   // Handle post-practice mood tracking completion
   const handlePostMoodComplete = (moodData) => {
     setShowPostMoodTracker(false);
-
-    // Calculate actual practice time
-    const actualDuration = sessionStartTimeRef.current
-      ? Math.round((Date.now() - sessionStartTimeRef.current) / 1000 / 60)
-      : duration;
-
-    // Record completion in progress store with mood data
-    completeBreathingSession({
-      exerciseId: exercise.id,
-      exerciseName: exercise.nameEnglish,
-      duration: actualDuration,
-      targetCycles: totalCycles,
-      completedCycles: currentCycle,
-      category: exercise.category,
-      preMood: preMoodData?.mood?.value,
-      preEnergy: preMoodData?.energy?.value,
-      postMood: moodData?.mood?.value,
-      postEnergy: moodData?.energy?.value
-    });
-
-    // Navigate to completion screen with mood data
-    navigate('/complete', {
-      state: {
-        sessionType: 'breathing',
-        exerciseName: exercise.nameEnglish,
-        duration: actualDuration,
-        completedCycles: currentCycle,
-        targetCycles: totalCycles,
-        preMoodData,
-        postMoodData: moodData
-      }
-    });
+    // Complete session with mood data
+    completeAndNavigate(preMoodData, moodData);
   };
 
   // Handle post-practice mood tracking skip
   const handlePostMoodSkip = () => {
     setShowPostMoodTracker(false);
-
-    // Calculate actual practice time
-    const actualDuration = sessionStartTimeRef.current
-      ? Math.round((Date.now() - sessionStartTimeRef.current) / 1000 / 60)
-      : duration;
-
-    // Record completion in progress store without mood data
-    completeBreathingSession({
-      exerciseId: exercise.id,
-      exerciseName: exercise.nameEnglish,
-      duration: actualDuration,
-      targetCycles: totalCycles,
-      completedCycles: currentCycle,
-      category: exercise.category
-    });
-
-    // Navigate to completion screen without mood data
-    navigate('/complete', {
-      state: {
-        sessionType: 'breathing',
-        exerciseName: exercise.nameEnglish,
-        duration: actualDuration,
-        completedCycles: currentCycle,
-        targetCycles: totalCycles
-      }
-    });
+    // Complete session without mood data
+    completeAndNavigate();
   };
 
   // Cleanup on unmount
@@ -386,9 +351,9 @@ function BreathingPractice() {
     <PracticeLayout
       header={renderHeader()}
       footer={renderFooter()}
-      contentClassName="px-4 pb-6"
     >
-      {/* Timer and cycle info - above breathing circle */}
+      <ContentBody size="sm" centered padding="md">
+        {/* Timer and cycle info - above breathing circle */}
       <div className="text-center mb-4 mt-4">
         {/* Cycle count */}
         {sessionStarted && (
@@ -407,7 +372,7 @@ function BreathingPractice() {
       </div>
 
       {/* Breathing guide - replaces PoseImage in yoga practice */}
-      <div className="mx-auto mb-3 flex items-center justify-center">
+      <div className="mx-auto flex items-center justify-center">
         <BreathingGuide
           exercise={exercise}
           isActive={isActive}
@@ -416,23 +381,7 @@ function BreathingPractice() {
           totalCycles={totalCycles}
         />
       </div>
-
-      {/* Exercise Info - matches pose info structure */}
-      <div className="text-center">
-        <h2 className="mb-1 text-lg sm:text-xl font-medium text-primary">
-          {exercise.nameEnglish}
-        </h2>
-        <p className="mb-1 text-xs sm:text-sm text-secondary italic">
-          {exercise.nameSanskrit}
-        </p>
-
-        {/* Exercise description - matches pose description */}
-        {exercise.description && (
-          <p className="hidden sm:block mb-3 text-sm text-sage-700 px-4 leading-relaxed">
-            {exercise.description}
-          </p>
-        )}
-      </div>
+      </ContentBody>
     </PracticeLayout>
   );
 }

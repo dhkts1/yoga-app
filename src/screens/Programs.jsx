@@ -6,7 +6,7 @@ import { PageHeader } from '../components/headers';
 import { Progress } from '../components/ui/progress';
 import useProgramProgressStore from '../stores/programProgress';
 import { programs } from '../data/programs';
-import { StatusBadge } from '../components/design-system';
+import { StatusBadge, ContentBody } from '../components/design-system';
 import { LIST_ANIMATION } from '../utils/animations';
 
 function Programs() {
@@ -26,9 +26,9 @@ function Programs() {
           showBack={false}
         />
       }
-      contentClassName="px-4 py-6"
     >
-      {/* Introduction */}
+      <ContentBody size="md" spacing="md">
+        {/* Introduction */}
       <div className="bg-white rounded-xl p-6 mb-6 shadow-sm border border-sage-100">
         <div className="flex items-start gap-3">
           <BookOpen className="h-6 w-6 text-sage-600 flex-shrink-0 mt-1" />
@@ -119,6 +119,7 @@ function Programs() {
           );
         })}
       </motion.div>
+      </ContentBody>
     </DefaultLayout>
   );
 }

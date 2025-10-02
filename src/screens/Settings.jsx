@@ -3,7 +3,7 @@ import { Bell, Download, Trash2, Info, RefreshCw, Clock } from 'lucide-react';
 import { DefaultLayout } from '../components/layouts';
 import { PageHeader } from '../components/headers';
 import { Text } from '../components/design-system/Typography';
-import { Container } from '../components/design-system/Container';
+import { ContentBody } from '../components/design-system';
 import { Switch } from '../components/ui/switch';
 import SettingsSection from '../components/SettingsSection';
 import ConfirmDialog from '../components/ConfirmDialog';
@@ -92,7 +92,7 @@ function Settings() {
     <DefaultLayout
       header={<PageHeader title="Settings" showBack={false} />}
     >
-      <Container className="py-6 space-y-4 pb-24">
+      <ContentBody size="lg" spacing="md">
         {/* Practice Settings Section */}
         <SettingsSection
           id="practice"
@@ -363,7 +363,7 @@ function Settings() {
             </Text>
           </div>
         </SettingsSection>
-      </Container>
+      </ContentBody>
 
       {/* Clear Data Confirmation Dialog */}
       <ConfirmDialog

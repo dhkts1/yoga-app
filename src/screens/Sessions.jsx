@@ -2,15 +2,16 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Clock, Zap, Moon, Sun, Plus, Palette, Edit2, Trash2, Star, Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { Button } from '../components/design-system';
+import { Button, ContentBody } from '../components/design-system';
 import { DefaultLayout } from '../components/layouts';
 import { PageHeader } from '../components/headers';
 import FavoriteButton from '../components/FavoriteButton';
 import CategoryTabs from '../components/CategoryTabs';
 import SessionList, { FavoriteSessionList } from '../components/SessionList';
-import usePreferencesStore from '../stores/preferences';
+import ConfirmDialog from '../components/ConfirmDialog';
 import useProgressStore from '../stores/progress';
 import useCustomSessions from '../hooks/useCustomSessions';
+import useFavorites from '../hooks/useFavorites';
 import { getTopRecommendations, getRecommendationTag } from '../utils/recommendations';
 import { getSessionById } from '../data/sessions';
 import { getBreathingExerciseById } from '../data/breathing';
@@ -25,13 +26,12 @@ import { LIST_ANIMATION } from '../utils/animations';
 function Sessions() {
   const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState('all');
-  const { getFavoriteSessionIds } = usePreferencesStore();
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [sessionToDelete, setSessionToDelete] = useState(null);
   const { practiceHistory, breathingHistory, totalSessions } = useProgressStore();
 
   // Use custom sessions hook instead of direct localStorage
   const { sessions: customSessions, remove: removeCustomSession } = useCustomSessions();
-
-  const favoriteIds = getFavoriteSessionIds();
 
   // Get smart recommendations
   const allHistory = [...(practiceHistory || []), ...(breathingHistory || [])];
@@ -60,9 +60,21 @@ function Sessions() {
   };
 
   const handleDeleteSession = (sessionId) => {
-    if (confirm('Are you sure you want to delete this custom session?')) {
-      removeCustomSession(sessionId);
+    setSessionToDelete(sessionId);
+    setShowDeleteConfirm(true);
+  };
+
+  const confirmDelete = () => {
+    if (sessionToDelete) {
+      removeCustomSession(sessionToDelete);
     }
+    setShowDeleteConfirm(false);
+    setSessionToDelete(null);
+  };
+
+  const cancelDelete = () => {
+    setShowDeleteConfirm(false);
+    setSessionToDelete(null);
   };
 
   // Filter by selected category
@@ -72,13 +84,9 @@ function Sessions() {
   // Get category counts
   const categoryCounts = getCategoryCounts(customSessions);
 
-  // Separate filtered sessions into favorites and non-favorites
-  const favoriteSessionsList = filteredSessions.filter(s => favoriteIds.includes(s.id));
-  const nonFavoriteSessionsList = filteredSessions.filter(s => !favoriteIds.includes(s.id));
-
-  // Separate filtered custom sessions into favorites and non-favorites
-  const favoriteCustomSessionsList = filteredCustomSessions.filter(s => favoriteIds.includes(s.id));
-  const nonFavoriteCustomSessionsList = filteredCustomSessions.filter(s => !favoriteIds.includes(s.id));
+  // Use favorites hook to separate sessions
+  const { favorites: favoriteSessionsList, nonFavorites: nonFavoriteSessionsList } = useFavorites(filteredSessions, 'session');
+  const { favorites: favoriteCustomSessionsList, nonFavorites: nonFavoriteCustomSessionsList } = useFavorites(filteredCustomSessions, 'session');
 
   // Helper function to get custom session actions
   const getCustomSessionActions = (session) => (
@@ -118,9 +126,9 @@ function Sessions() {
     <DefaultLayout
       header={<PageHeader title="Choose Your Practice" subtitle="Yoga sessions for every moment" showBack={false} />}
       className="bg-cream"
-      contentClassName="px-4 py-6"
     >
-      {/* Category Tabs & Create Button */}
+      <ContentBody size="md" spacing="lg">
+        {/* Category Tabs & Create Button */}
       <div className="mb-6 -mt-2">
         <div className="flex items-center justify-between mb-4">
           <div className="flex-1">
@@ -268,7 +276,19 @@ function Sessions() {
         getIcon={(session) => sessionIcons[session.id] || Clock}
         getActions={getPrebuiltSessionActions}
       />
+      </ContentBody>
 
+      {/* Delete Confirmation Dialog */}
+      <ConfirmDialog
+        isOpen={showDeleteConfirm}
+        onClose={cancelDelete}
+        onConfirm={confirmDelete}
+        title="Delete Custom Session?"
+        message="This action cannot be undone. Your custom session will be permanently deleted."
+        confirmText="Delete"
+        confirmVariant="danger"
+        icon="warning"
+      />
     </DefaultLayout>
   );
 }

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Clock, AlertCircle } from 'lucide-react';
 import { poses } from '../data/poses';
@@ -9,14 +9,35 @@ import {
 import useLocalStorage from '../hooks/useLocalStorage';
 import useCustomSessions from '../hooks/useCustomSessions';
 import SelectablePoseCard from '../components/SelectablePoseCard';
-import { Button, Card } from '../components/design-system';
+import SequenceItem from '../components/SequenceItem';
+import DurationEditDialog from '../components/DurationEditDialog';
+import AddPosesDialog from '../components/AddPosesDialog';
+import { Button, Card, ContentBody, EmptyState } from '../components/design-system';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
 import { DefaultLayout } from '../components/layouts';
 import PageHeader from '../components/headers/PageHeader';
+import ConfirmDialog from '../components/ConfirmDialog';
 
 function SessionBuilder() {
   const navigate = useNavigate();
   const [validationErrors, setValidationErrors] = useState([]);
-  const sequenceRef = useRef(null);
+  const [showClearConfirm, setShowClearConfirm] = useState(false);
+  const [activeTab, setActiveTab] = useState('sequence');
+
+  // Duration edit dialog state
+  const [durationDialog, setDurationDialog] = useState({
+    isOpen: false,
+    poseId: null,
+    duration: 30,
+    index: null
+  });
+
+  // Multi-select state
+  const [selectedPoseIds, setSelectedPoseIds] = useState([]);
+  const [showAddPosesDialog, setShowAddPosesDialog] = useState(false);
+
+  // Drag and drop state
+  const [draggedIndex, setDraggedIndex] = useState(null);
 
   // Use custom sessions hook for saving
   const { add: addCustomSession } = useCustomSessions();
@@ -35,21 +56,71 @@ function SessionBuilder() {
   useEffect(() => {
     setDraft({
       name: sessionName,
-      poses: sequencePoses,
-      lastModified: new Date().toISOString()
+      poses: sequencePoses
     });
   }, [sessionName, sequencePoses, setDraft]);
 
   const totalDuration = calculateTotalDuration(sequencePoses);
 
-  // Add pose to sequence
-  const handleAddPose = (poseId, duration = 30) => {
-    const newPose = {
+  // Toggle pose selection
+  const handleTogglePoseSelection = (poseId) => {
+    setSelectedPoseIds(prev =>
+      prev.includes(poseId)
+        ? prev.filter(id => id !== poseId)
+        : [...prev, poseId]
+    );
+  };
+
+  // Open add poses dialog
+  const handleOpenAddDialog = () => {
+    if (selectedPoseIds.length > 0) {
+      setShowAddPosesDialog(true);
+    }
+  };
+
+  // Add multiple poses with side options
+  const handleAddPoses = (posesToAdd) => {
+    const newPoses = posesToAdd.map(({ poseId, side, duration }) => ({
       poseId,
+      side,
       duration,
-      id: `${poseId}-${Date.now()}` // Unique ID for reordering
-    };
-    setSequencePoses(prev => [...prev, newPose]);
+      id: `${poseId}-${side || 'default'}-${Date.now()}-${Math.random()}` // Unique ID
+    }));
+
+    setSequencePoses(prev => [...prev, ...newPoses]);
+    setSelectedPoseIds([]);
+    setActiveTab('sequence');
+  };
+
+  // Open duration edit dialog
+  const handleDurationClick = (index, poseId, currentDuration) => {
+    setDurationDialog({
+      isOpen: true,
+      poseId,
+      duration: currentDuration,
+      index
+    });
+  };
+
+  // Save duration from dialog
+  const handleDurationSave = (newDuration) => {
+    if (durationDialog.index !== null) {
+      handleDurationChange(
+        durationDialog.poseId,
+        newDuration,
+        durationDialog.index
+      );
+    }
+  };
+
+  // Close duration dialog
+  const closeDurationDialog = () => {
+    setDurationDialog({
+      isOpen: false,
+      poseId: null,
+      duration: 30,
+      index: null
+    });
   };
 
   // Remove pose from sequence
@@ -64,37 +135,51 @@ function SessionBuilder() {
     ));
   };
 
-  // Move pose up in sequence
-  const handleMoveUp = (index) => {
-    if (index > 0) {
-      setSequencePoses(prev => {
-        const newSequence = [...prev];
-        [newSequence[index - 1], newSequence[index]] = [newSequence[index], newSequence[index - 1]];
-        return newSequence;
-      });
-    }
+  // Drag and drop handlers
+  const handleDragStart = (e, index) => {
+    setDraggedIndex(index);
+    e.dataTransfer.effectAllowed = 'move';
   };
 
-  // Move pose down in sequence
-  const handleMoveDown = (index) => {
+  const handleDragEnd = () => {
+    setDraggedIndex(null);
+  };
+
+  const handleDragOver = (e, index) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+
+    if (draggedIndex === null || draggedIndex === index) return;
+
     setSequencePoses(prev => {
-      if (index < prev.length - 1) {
-        const newSequence = [...prev];
-        [newSequence[index], newSequence[index + 1]] = [newSequence[index + 1], newSequence[index]];
-        return newSequence;
-      }
-      return prev;
+      const newSequence = [...prev];
+      const draggedItem = newSequence[draggedIndex];
+      newSequence.splice(draggedIndex, 1);
+      newSequence.splice(index, 0, draggedItem);
+      setDraggedIndex(index);
+      return newSequence;
     });
+  };
+
+  const handleDrop = (e, index) => {
+    e.preventDefault();
   };
 
   // Clear session
   const handleClear = () => {
-    if (confirm('Are you sure you want to clear this session? This will remove all poses.')) {
-      setSessionName('');
-      setSequencePoses([]);
-      setValidationErrors([]);
-      clearDraft();
-    }
+    setShowClearConfirm(true);
+  };
+
+  const confirmClear = () => {
+    setSessionName('');
+    setSequencePoses([]);
+    setValidationErrors([]);
+    clearDraft();
+    setShowClearConfirm(false);
+  };
+
+  const cancelClear = () => {
+    setShowClearConfirm(false);
   };
 
   // Validate and save session
@@ -131,6 +216,7 @@ function SessionBuilder() {
       poses: sequencePoses.map((p, index) => ({
         poseId: p.poseId,
         duration: p.duration,
+        ...(p.side && { side: p.side }), // Include side if present
         order: index
       })),
       totalDurationSeconds: totalDuration,
@@ -157,6 +243,7 @@ function SessionBuilder() {
       header={
         <PageHeader
           title="Create Session"
+          subtitle="Build your custom yoga sequence"
           backPath="/sessions"
           actions={
             <Button
@@ -170,10 +257,8 @@ function SessionBuilder() {
         />
       }
       className="bg-cream"
-      contentClassName="px-4 py-6"
     >
-
-      <div className="max-w-screen-xl mx-auto space-y-6">
+      <ContentBody size="lg" spacing="md">
         {/* Session Details */}
         <Card className="p-4">
           <div className="space-y-4">
@@ -231,74 +316,128 @@ function SessionBuilder() {
           </Card>
         )}
 
-        {/* Sequence Builder */}
-        <Card className="p-3">
-          <h2 className="font-medium text-gray-900 mb-2 text-sm">Your Sequence</h2>
+        {/* Tab Navigation */}
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="grid w-full grid-cols-2 bg-sage-50">
+            <TabsTrigger
+              value="sequence"
+              className="data-[state=active]:bg-white data-[state=active]:text-sage-900"
+            >
+              Your Sequence ({sequencePoses.length})
+            </TabsTrigger>
+            <TabsTrigger
+              value="library"
+              className="data-[state=active]:bg-white data-[state=active]:text-sage-900"
+            >
+              Add Poses
+            </TabsTrigger>
+          </TabsList>
 
-          <div
-            ref={sequenceRef}
-            className="min-h-16 p-2 border-2 border-dashed rounded-lg border-gray-300"
-          >
-            {sequencePoses.length === 0 ? (
-              <div className="text-center py-3 text-gray-400 text-sm">
-                Empty
-              </div>
-            ) : (
-              <div className="space-y-2 max-h-[30vh] overflow-y-auto">
-                {sequencePoses.map((pose, index) => (
-                  <SelectablePoseCard
-                    key={pose.id}
-                    poseId={pose.poseId}
-                    duration={pose.duration}
-                    mode="sequence"
-                    index={index}
-                    onDurationChange={handleDurationChange}
-                    onRemove={handleRemovePose}
-                    onMoveUp={handleMoveUp}
-                    onMoveDown={handleMoveDown}
-                    canMoveUp={index > 0}
-                    canMoveDown={index < sequencePoses.length - 1}
-                  />
-                ))}
+          {/* Sequence Tab */}
+          <TabsContent value="sequence" className="mt-4">
+            <Card className="p-4">
+              {sequencePoses.length === 0 ? (
+                <EmptyState
+                  icon="🧘"
+                  title="No poses yet"
+                  description="Switch to 'Add Poses' to build your sequence"
+                />
+              ) : (
+                <div className="space-y-2 max-h-[calc(100vh-400px)] overflow-y-auto pr-1">
+                  {sequencePoses.map((pose, index) => (
+                    <SequenceItem
+                      key={pose.id}
+                      poseId={pose.poseId}
+                      duration={pose.duration}
+                      side={pose.side}
+                      index={index}
+                      onDurationClick={handleDurationClick}
+                      onRemove={handleRemovePose}
+                      onDragStart={handleDragStart}
+                      onDragEnd={handleDragEnd}
+                      onDragOver={handleDragOver}
+                      onDrop={handleDrop}
+                      isDragging={draggedIndex === index}
+                    />
+                  ))}
+                </div>
+              )}
+            </Card>
+          </TabsContent>
+
+          {/* Library Tab */}
+          <TabsContent value="library" className="mt-4 space-y-3">
+            {/* Add Selected Button */}
+            {selectedPoseIds.length > 0 && (
+              <div className="sticky top-0 z-10 bg-cream pb-2">
+                <Button
+                  onClick={handleOpenAddDialog}
+                  className="w-full bg-sage-600 hover:bg-sage-700 text-white"
+                >
+                  Add {selectedPoseIds.length} Selected Pose{selectedPoseIds.length !== 1 ? 's' : ''}
+                </Button>
               </div>
             )}
-          </div>
-        </Card>
 
-        {/* Pose Library */}
-        <Card className="p-3">
-          <h2 className="font-medium text-gray-900 mb-3 text-sm">
-            Pose Library ({poses.length} poses)
-          </h2>
-
-          <div className="max-h-[60vh] overflow-y-auto overflow-x-hidden">
-            <div className="grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-              {poses.map((pose) => (
-                <SelectablePoseCard
-                  key={pose.id}
-                  poseId={pose.id}
-                  mode="library"
-                  onAdd={handleAddPose}
-                />
-              ))}
-            </div>
-          </div>
-        </Card>
+            <Card className="p-4">
+              <div className="max-h-[calc(100vh-450px)] overflow-y-auto overflow-x-hidden pr-1">
+                <div className="grid gap-3 grid-cols-1 sm:grid-cols-2">
+                  {poses.map((pose) => (
+                    <SelectablePoseCard
+                      key={pose.id}
+                      poseId={pose.id}
+                      mode="library"
+                      isSelected={selectedPoseIds.includes(pose.id)}
+                      onSelect={handleTogglePoseSelection}
+                    />
+                  ))}
+                </div>
+              </div>
+            </Card>
+          </TabsContent>
+        </Tabs>
 
         {/* Save Button - Fixed at bottom */}
         {sequencePoses.length > 0 && (
-          <div className="fixed bottom-[60px] left-0 right-0 p-4 bg-gradient-to-t from-cream to-transparent pointer-events-none z-40">
-            <div className="max-w-sm mx-auto pointer-events-auto">
-              <Button
-                onClick={handleSaveSession}
-                className="w-full bg-sage-600 hover:bg-sage-700 text-white py-4 rounded-2xl shadow-lg text-base font-medium"
-              >
-                Save & Preview Session
-              </Button>
-            </div>
+          <div className="sticky bottom-0 left-0 right-0 pt-4 pb-2 bg-gradient-to-t from-cream via-cream to-transparent">
+            <Button
+              onClick={handleSaveSession}
+              className="w-full bg-sage-600 hover:bg-sage-700 text-white py-4 rounded-2xl shadow-lg text-base font-medium"
+            >
+              Save & Preview Session
+            </Button>
           </div>
         )}
-      </div>
+      </ContentBody>
+
+      {/* Clear Confirmation Dialog */}
+      <ConfirmDialog
+        isOpen={showClearConfirm}
+        onClose={cancelClear}
+        onConfirm={confirmClear}
+        title="Clear Session?"
+        message="This will remove all poses from your session. This action cannot be undone."
+        confirmText="Clear All"
+        confirmVariant="danger"
+        icon="warning"
+      />
+
+      {/* Duration Edit Dialog */}
+      <DurationEditDialog
+        isOpen={durationDialog.isOpen}
+        onClose={closeDurationDialog}
+        poseId={durationDialog.poseId}
+        currentDuration={durationDialog.duration}
+        onSave={handleDurationSave}
+      />
+
+      {/* Add Poses Dialog */}
+      <AddPosesDialog
+        isOpen={showAddPosesDialog}
+        onClose={() => setShowAddPosesDialog(false)}
+        selectedPoseIds={selectedPoseIds}
+        onAdd={handleAddPoses}
+      />
     </DefaultLayout>
   );
 }

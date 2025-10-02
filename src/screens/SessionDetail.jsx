@@ -26,7 +26,7 @@ function SessionDetail() {
   const { practiceHistory, breathingHistory } = useProgressStore();
 
   // Use custom sessions hook
-  const { getById: getCustomSessionById } = useCustomSessions();
+  const { getById: getCustomSessionById, isLoading: customSessionsLoading } = useCustomSessions();
 
   // Load session data on mount
   useEffect(() => {
@@ -35,6 +35,11 @@ function SessionDetail() {
       const customParam = searchParams.get('custom');
 
       if (customParam === 'true') {
+        // Wait for custom sessions to load
+        if (customSessionsLoading) {
+          return;
+        }
+
         // Load using hook
         const session = getCustomSessionById(sessionId);
         if (session) {
@@ -69,7 +74,7 @@ function SessionDetail() {
     };
 
     loadSessionData();
-  }, [sessionId, searchParams, navigate, getCustomSessionById]);
+  }, [sessionId, searchParams, navigate, getCustomSessionById, customSessionsLoading]);
 
   // Calculate total duration in minutes for custom sessions
   const getTotalDuration = () => {

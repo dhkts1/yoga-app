@@ -9,6 +9,7 @@ import useCustomSessions from '../hooks/useCustomSessions';
 import PoseImage from '../components/PoseImage';
 import MoodTracker from '../components/MoodTracker';
 import { PracticeLayout } from '../components/layouts';
+import { ContentBody } from '../components/design-system';
 import FeatureTooltip from '../components/FeatureTooltip';
 import { PracticeHeader } from '../components/headers';
 import { PracticeControls } from '../components/practice/PracticeControls';
@@ -31,13 +32,18 @@ function Practice() {
   const tipsButtonRef = useRef(null);
 
   // Use custom sessions hook
-  const { getById: getCustomSessionById } = useCustomSessions();
+  const { getById: getCustomSessionById, isLoading: customSessionsLoading } = useCustomSessions();
 
   // Load session based on type
   const [session, setSession] = useState(null);
 
   useEffect(() => {
     if (customSessionId) {
+      // Wait for custom sessions to load
+      if (customSessionsLoading) {
+        return;
+      }
+
       // Load custom session using hook
       const customSession = getCustomSessionById(customSessionId);
       if (customSession) {
@@ -51,7 +57,7 @@ function Practice() {
       const prebuiltSession = getSessionById(sessionId || 'morning-energizer');
       setSession(prebuiltSession);
     }
-  }, [sessionId, customSessionId, navigate, getCustomSessionById]);
+  }, [sessionId, customSessionId, navigate, getCustomSessionById, customSessionsLoading]);
   // Preferences store for tooltips and rest duration
   const {
     isTooltipDismissed,
@@ -285,22 +291,21 @@ function Practice() {
       <PracticeLayout
         header={renderHeader()}
         footer={renderFooter()}
-        contentClassName="px-4 pb-6"
       >
-        {/* Program context badge - moved from header */}
-        {programContext && (
-          <div className="flex items-center justify-center mb-3 mt-2 px-4">
-            <div className="flex items-center gap-1.5 bg-sage-50 border border-sage-200 rounded-full px-3 py-1.5 max-w-full">
-              <BookMarked className="h-3.5 w-3.5 text-sage-600 flex-shrink-0" />
-              <p className="text-xs sm:text-sm text-sage-600 truncate">
-                {programName} • Week {weekNumber}, Day {dayNumber}
-              </p>
+        <ContentBody size="sm" centered padding="md">
+          {programContext && (
+            <div className="flex items-center justify-center mb-4">
+              <div className="flex items-center gap-1.5 bg-sage-50 border border-sage-200 rounded-full px-3 py-1.5 max-w-full">
+                <BookMarked className="h-3.5 w-3.5 text-sage-600 flex-shrink-0" />
+                <p className="text-xs sm:text-sm text-sage-600 truncate">
+                  {programName} • Week {weekNumber}, Day {dayNumber}
+                </p>
+              </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {/* Rest Screen */}
-        <div className="flex flex-col items-center justify-center h-full animate-fade-in">
+          {/* Rest Screen */}
+          <div className="animate-fade-in">
           <div className="text-center space-y-6">
             {/* Rest Message */}
             <div>
@@ -346,7 +351,8 @@ function Practice() {
               Skip Rest
             </button>
           </div>
-        </div>
+          </div>
+        </ContentBody>
       </PracticeLayout>
     );
   }
@@ -355,62 +361,63 @@ function Practice() {
     <PracticeLayout
       header={renderHeader()}
       footer={renderFooter()}
-      contentClassName="px-4 pb-6"
     >
-      {/* Program context badge - moved from header */}
-      {programContext && (
-        <div className="flex items-center justify-center mb-3 mt-2 px-4">
-          <div className="flex items-center gap-1.5 bg-sage-50 border border-sage-200 rounded-full px-3 py-1.5 max-w-full">
-            <BookMarked className="h-3.5 w-3.5 text-sage-600 flex-shrink-0" />
-            <p className="text-xs sm:text-sm text-sage-600 truncate">
-              {programName} • Week {weekNumber}, Day {dayNumber}
-            </p>
+      <ContentBody size="sm" centered padding="md">
+        {/* Program context badge - moved from header */}
+        {programContext && (
+          <div className="flex items-center justify-center mb-4">
+            <div className="flex items-center gap-1.5 bg-sage-50 border border-sage-200 rounded-full px-3 py-1.5 max-w-full">
+              <BookMarked className="h-3.5 w-3.5 text-sage-600 flex-shrink-0" />
+              <p className="text-xs sm:text-sm text-sage-600 truncate">
+                {programName} • Week {weekNumber}, Day {dayNumber}
+              </p>
+            </div>
           </div>
-        </div>
-      )}
-
-      {/* Pose illustration with beautiful SVG */}
-      <div className="mx-auto mb-3 flex items-center justify-center">
-        <PoseImage
-          pose={pose}
-          size="large"
-          className="drop-shadow-lg"
-        />
-      </div>
-
-      {/* Pose Info */}
-      <div className="text-center">
-        <h2 className="mb-1 text-lg sm:text-xl font-medium text-primary">
-          {pose.nameEnglish}
-          {currentPoseData?.side && (
-            <span className="ml-2 text-base font-normal text-sage-600">
-              ({currentPoseData.side === 'right' ? 'Right Side' : 'Left Side'})
-            </span>
-          )}
-        </h2>
-        <p className="mb-1 text-xs sm:text-sm text-secondary italic">
-          {pose.nameSanskrit}
-        </p>
-        {/* Pose count - moved from header */}
-        <p className="text-xs text-sage-500 mb-1">
-          Pose {currentPoseIndex + 1} of {session?.poses?.length || 0}
-        </p>
-
-        {/* Timer */}
-        <div className="mb-2">
-          <div className="text-2xl sm:text-3xl font-light text-primary">
-            {formatTime(timeRemaining)}
-          </div>
-          <p className="text-xs sm:text-sm text-secondary">remaining</p>
-        </div>
-
-        {/* Pose description - hidden on very small screens */}
-        {pose.description && (
-          <p className="hidden sm:block mb-3 text-sm text-sage-700 px-4 leading-relaxed">
-            {pose.description}
-          </p>
         )}
-      </div>
+
+        {/* Pose illustration with beautiful SVG */}
+        <div className="mx-auto mb-3 flex items-center justify-center">
+          <PoseImage
+            pose={pose}
+            size="large"
+            className="drop-shadow-lg"
+          />
+        </div>
+
+        {/* Pose Info */}
+        <div className="text-center">
+          <h2 className="mb-1 text-lg sm:text-xl font-medium text-primary">
+            {pose.nameEnglish}
+            {currentPoseData?.side && (
+              <span className="ml-2 text-base font-normal text-sage-600">
+                ({currentPoseData.side === 'right' ? 'Right Side' : 'Left Side'})
+              </span>
+            )}
+          </h2>
+          <p className="mb-1 text-xs sm:text-sm text-secondary italic">
+            {pose.nameSanskrit}
+          </p>
+          {/* Pose count - moved from header */}
+          <p className="text-xs text-sage-500 mb-1">
+            Pose {currentPoseIndex + 1} of {session?.poses?.length || 0}
+          </p>
+
+          {/* Timer */}
+          <div className="mb-2">
+            <div className="text-2xl sm:text-3xl font-light text-primary">
+              {formatTime(timeRemaining)}
+            </div>
+            <p className="text-xs sm:text-sm text-secondary">remaining</p>
+          </div>
+
+          {/* Pose description - hidden on very small screens */}
+          {pose.description && (
+            <p className="hidden sm:block mb-3 text-sm text-sage-700 px-4 leading-relaxed">
+              {pose.description}
+            </p>
+          )}
+        </div>
+      </ContentBody>
 
       {/* Enhanced Tips Overlay */}
       <PracticeTipsOverlay pose={pose} show={showTips} />

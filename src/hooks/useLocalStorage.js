@@ -62,16 +62,17 @@ const useLocalStorage = (key, initialValue) => {
    */
   const setValue = useCallback((value) => {
     try {
-      // Allow value to be a function (like useState)
-      const valueToStore = value instanceof Function ? value(storedValue) : value;
+      // Use functional update to get current value without needing it in deps
+      setStoredValue(prevValue => {
+        const valueToStore = value instanceof Function ? value(prevValue) : value;
 
-      // Save state
-      setStoredValue(valueToStore);
+        // Save to localStorage
+        if (typeof window !== 'undefined') {
+          window.localStorage.setItem(key, JSON.stringify(valueToStore));
+        }
 
-      // Save to localStorage
-      if (typeof window !== 'undefined') {
-        window.localStorage.setItem(key, JSON.stringify(valueToStore));
-      }
+        return valueToStore;
+      });
 
       // Clear error on successful save
       setError(null);
@@ -79,7 +80,7 @@ const useLocalStorage = (key, initialValue) => {
       console.error(`Error saving to localStorage key "${key}":`, error);
       setError(error);
     }
-  }, [key, storedValue]);
+  }, [key]);
 
   /**
    * Remove value from localStorage and reset to initialValue

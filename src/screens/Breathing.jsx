@@ -4,9 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { DefaultLayout } from '../components/layouts';
 import { PageHeader } from '../components/headers';
-import { Button, Card, Text } from '../components/design-system';
+import { Button, Card, Text, ContentBody } from '../components/design-system';
 import { breathingDurations, breathingExercises } from '../data/breathing';
 import usePreferencesStore from '../stores/preferences';
+import useFavorites from '../hooks/useFavorites';
 import ExerciseCard from '../components/ExerciseCard';
 import { LIST_ANIMATION } from '../utils/animations';
 
@@ -19,14 +20,11 @@ import { LIST_ANIMATION } from '../utils/animations';
  */
 function Breathing() {
   const navigate = useNavigate();
-  const { breathing: breathingPrefs, getFavoriteExerciseIds } = usePreferencesStore();
+  const { breathing: breathingPrefs } = usePreferencesStore();
   const [selectedDuration, setSelectedDuration] = useState(breathingPrefs.defaultDuration || 3);
 
-  const favoriteExerciseIds = getFavoriteExerciseIds();
-
-  // Separate exercises into favorites and non-favorites
-  const favoriteExercises = breathingExercises.filter(ex => favoriteExerciseIds.includes(ex.id));
-  const nonFavoriteExercises = breathingExercises.filter(ex => !favoriteExerciseIds.includes(ex.id));
+  // Use favorites hook to separate exercises
+  const { favorites: favoriteExercises, nonFavorites: nonFavoriteExercises } = useFavorites(breathingExercises, 'breathing');
 
   const handleExerciseSelect = (exerciseId) => {
     navigate(`/breathing/practice?exercise=${exerciseId}&duration=${selectedDuration}`);
@@ -41,9 +39,9 @@ function Breathing() {
           showBack={false}
         />
       }
-      contentClassName="px-4 py-6"
     >
-      {/* Duration Selector */}
+      <ContentBody size="md" spacing="md">
+        {/* Duration Selector */}
       <div className="mb-6">
         <Text variant="body" className="mb-3 font-medium text-primary">
           Session Duration
@@ -134,6 +132,7 @@ function Breathing() {
           </div>
         </div>
       </Card>
+      </ContentBody>
     </DefaultLayout>
   );
 }

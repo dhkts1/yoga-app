@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useRef, useState, useEffect } from 'react';
 import { Sun, Moon, Sunrise, Flame, Star, ChevronRight, Sparkles, BookOpen, Calendar } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Button, Heading, Text } from '../components/design-system';
+import { Button, Heading, Text, ContentBody } from '../components/design-system';
 import { DefaultLayout } from '../components/layouts';
 import { PageHeader } from '../components/headers';
 import useProgressStore from '../stores/progress';
@@ -145,11 +145,11 @@ function Welcome() {
     <DefaultLayout
       header={<PageHeader title="Welcome Back" subtitle="Ready to practice?" showBack={false} />}
     >
-      <div className="w-full max-w-sm mx-auto px-4 py-6 flex flex-col items-center">
+      <ContentBody size="sm" spacing="none">
         {/* Time-based greeting */}
-        <div className="mb-6 text-center">
-          <GreetingIcon className="mx-auto mb-4 h-12 w-12 text-sage-600" />
-          <Heading level={1} className="mb-2">
+        <div className="min-h-[30vh] flex flex-col items-center justify-center mb-0 text-center">
+          <GreetingIcon className="mx-auto mb-4 h-16 w-16 text-sage-600" />
+          <Heading level={1}>
             {greeting.text}
           </Heading>
         </div>
@@ -163,7 +163,7 @@ function Welcome() {
               rotate: [0, 5, -5, 0]
             } : {}}
             transition={{ duration: 0.6, times: [0, 0.5, 1] }}
-            className="mb-6 inline-flex items-center gap-2 px-4 py-2 bg-accent/10 rounded-full relative"
+            className="mb-6 -mt-4 inline-flex items-center gap-2 px-4 py-2 bg-accent/10 rounded-full relative"
           >
             <Flame className="h-4 w-4 text-accent" />
             <Text variant="caption" className="font-medium text-accent">
@@ -371,8 +371,7 @@ function Welcome() {
             </div>
           </div>
         )}
-      </div>
-
+      </ContentBody>
     </DefaultLayout>
   );
 }

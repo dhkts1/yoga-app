@@ -10,7 +10,7 @@ import {
   Smile,
   Zap
 } from 'lucide-react';
-import { Button, Heading, Text } from '../components/design-system';
+import { Button, Heading, Text, ContentBody } from '../components/design-system';
 import { DefaultLayout } from '../components/layouts';
 import { PageHeader } from '../components/headers';
 import useProgressStore from '../stores/progress';
@@ -145,7 +145,7 @@ function Insights() {
         }
         className="print:p-0"
       >
-        <div className="px-4 py-6 print:p-4 max-w-full">
+        <ContentBody size="lg" spacing="lg" className="print:p-4">
           {/* Key Metrics Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8 w-full min-w-0">
             <StatCard
@@ -308,7 +308,6 @@ function Insights() {
               Practice Insights • Generated on {new Date().toLocaleDateString()} • Total Sessions: {totalSessions}
             </Text>
           </div>
-        </div>
 
         {/* Session History Modal */}
         <SessionHistoryModal
@@ -317,6 +316,7 @@ function Insights() {
           selectedDate={selectedDate}
           sessions={selectedDaySessions}
         />
+        </ContentBody>
 
         {/* Print Styles */}
         <style suppressHydrationWarning>{`

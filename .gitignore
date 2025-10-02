@@ -228,13 +228,11 @@ test-results/
 playwright-report/
 test-output.txt
 
-# Temporary documentation files
-*_SUMMARY.md
-*_GUIDE.md
-*_REPORT.md
-*_STATUS.md
-*_MIGRATION.md
-*_MAPPING.md
+# Temporary documentation files (root level only, docs/ is tracked)
+# Note: Documentation in docs/ directory is intentionally tracked
+.DS_Store
+
+# Playwright test results (already covered above but explicit for clarity)
 
 # Capacitor native platforms
 android/

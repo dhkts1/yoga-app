@@ -2,6 +2,8 @@
 dev-dist/
 dist/
 build/
+android/
+scripts/
 
 # Test files that use Node.js specific features
 test-app.js
