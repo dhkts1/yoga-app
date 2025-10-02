@@ -7,11 +7,11 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from './ui/dialog';
-import { Button } from './design-system';
-import { Slider } from './ui/slider';
-import { getPoseById } from '../data/poses';
-import { formatDuration } from '../data/customSessions';
+} from '../ui/dialog';
+import { Button } from '../design-system';
+import { Slider } from '../ui/slider';
+import { getPoseById } from '../../data/poses';
+import { formatDuration } from '../../data/customSessions';
 
 /**
  * DurationEditDialog - Modal for editing pose duration with slider and quick options

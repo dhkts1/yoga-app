@@ -1,8 +1,7 @@
 import { ChevronUp, ChevronDown, Trash2 } from 'lucide-react';
-import { Card, Button } from './design-system';
-import { Checkbox } from './ui/checkbox';
-import { getPoseById } from '../data/poses';
-import { getDurationOptions, formatDuration } from '../data/customSessions';
+import { Card, Button } from '../design-system';
+import { getPoseById } from '../../data/poses';
+import { getDurationOptions, formatDuration } from '../../data/customSessions';
 
 /**
  * SelectablePoseCard - Mobile-friendly pose card for session building
@@ -43,11 +42,11 @@ const SelectablePoseCard = ({
     }
   };
 
-  const handleAddPose = () => {
-    if (onAdd) {
-      onAdd(poseId, duration);
-    }
-  };
+  // const handleAddPose = () => {
+  //   if (onAdd) {
+  //     onAdd(poseId, duration);
+  //   }
+  // };
 
   const handleRemovePose = () => {
     if (onRemove) {

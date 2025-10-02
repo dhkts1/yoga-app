@@ -1,6 +1,6 @@
 import { X } from 'lucide-react';
 import { cn } from '../../lib/utils';
-import GlassIconButton from '../ui/GlassIconButton';
+import { GlassIconButton } from '../design-system';
 import { HEADER_STYLES } from './headerStyles';
 
 /**

@@ -23,7 +23,7 @@ export * from './Stat';
 export * from './Tab';
 export * from './EmptyState';
 export { default as StatusBadge } from './StatusBadge';
-export { default as ConfirmDialog } from '../ConfirmDialog';
+export { default as ConfirmDialog } from '../dialogs/ConfirmDialog';
 
 // Default exports for common patterns
 export { Button } from './Button';
@@ -40,4 +40,4 @@ export { Badge } from './Badge';
 export { Stat, StatGrid } from './Stat';
 export { Tab, TabPanel } from './Tab';
 export { EmptyState } from './EmptyState';
-// SkeletonLoader is exported from its own file at ../SkeletonLoader.jsx
+export { default as GlassIconButton } from './GlassIconButton';

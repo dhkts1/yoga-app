@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import { AlertTriangle, Info, AlertCircle, X } from 'lucide-react';
 import { useEffect } from 'react';
-import { Heading, Text } from './design-system/Typography';
-import { Button } from './design-system/Button';
+import { Heading, Text } from '../design-system/Typography';
+import { Button } from '../design-system/Button';
 
 /**
  * ConfirmDialog Component

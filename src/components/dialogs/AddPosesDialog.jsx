@@ -7,11 +7,11 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from './ui/dialog';
-import { Button } from './design-system';
-import { Checkbox } from './ui/checkbox';
-import { Label } from './ui/label';
-import { getPoseById } from '../data/poses';
+} from '../ui/dialog';
+import { Button } from '../design-system';
+import { Checkbox } from '../ui/checkbox';
+import { Label } from '../ui/label';
+import { getPoseById } from '../../data/poses';
 
 /**
  * AddPosesDialog - Dialog for adding selected poses with left/right side options

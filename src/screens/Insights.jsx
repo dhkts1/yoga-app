@@ -17,7 +17,7 @@ import useProgressStore from '../stores/progress';
 import SimpleBarChart from '../components/charts/SimpleBarChart';
 import HeatmapCalendar from '../components/charts/HeatmapCalendar';
 import SessionHistoryModal from '../components/SessionHistoryModal';
-import ProgramProgressCard from '../components/ProgramProgressCard';
+import { ProgramProgressCard } from '../components/cards';
 
 function Insights() {
   const navigate = useNavigate();

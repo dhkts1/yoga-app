@@ -1,7 +1,7 @@
 import { ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { cn } from '../../lib/utils';
-import GlassIconButton from '../ui/GlassIconButton';
+import { GlassIconButton } from '../design-system';
 import { HEADER_STYLES } from './headerStyles';
 
 /**

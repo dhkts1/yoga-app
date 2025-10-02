@@ -8,7 +8,7 @@ import { Button, Card, Text, ContentBody } from '../components/design-system';
 import { breathingDurations, breathingExercises } from '../data/breathing';
 import usePreferencesStore from '../stores/preferences';
 import useFavorites from '../hooks/useFavorites';
-import ExerciseCard from '../components/ExerciseCard';
+import { ExerciseCard } from '../components/cards';
 import { LIST_ANIMATION } from '../utils/animations';
 
 /**

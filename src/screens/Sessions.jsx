@@ -8,7 +8,7 @@ import { PageHeader } from '../components/headers';
 import FavoriteButton from '../components/FavoriteButton';
 import CategoryTabs from '../components/CategoryTabs';
 import SessionList, { FavoriteSessionList } from '../components/SessionList';
-import ConfirmDialog from '../components/ConfirmDialog';
+import { ConfirmDialog } from '../components/dialogs';
 import PoseImage from '../components/PoseImage';
 import useProgressStore from '../stores/progress';
 import useCustomSessions from '../hooks/useCustomSessions';

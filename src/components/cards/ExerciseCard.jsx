@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
-import { Card, Heading } from './design-system';
-import FavoriteButton from './FavoriteButton';
-import { getCategoryColors } from '../utils/badges';
+import { Card, Heading } from '../design-system';
+import FavoriteButton from '../FavoriteButton';
+import { getCategoryColors } from '../../utils/badges';
 
 /**
  * ExerciseCard Component

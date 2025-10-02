@@ -8,15 +8,13 @@ import {
 } from '../data/customSessions';
 import useLocalStorage from '../hooks/useLocalStorage';
 import useCustomSessions from '../hooks/useCustomSessions';
-import SelectablePoseCard from '../components/SelectablePoseCard';
+import { SelectablePoseCard } from '../components/cards';
 import SequenceItem from '../components/SequenceItem';
-import DurationEditDialog from '../components/DurationEditDialog';
-import AddPosesDialog from '../components/AddPosesDialog';
+import { DurationEditDialog, AddPosesDialog, ConfirmDialog } from '../components/dialogs';
 import { Button, Card, ContentBody, EmptyState } from '../components/design-system';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
 import { DefaultLayout } from '../components/layouts';
 import PageHeader from '../components/headers/PageHeader';
-import ConfirmDialog from '../components/ConfirmDialog';
 
 function SessionBuilder() {
   const navigate = useNavigate();

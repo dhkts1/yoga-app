@@ -6,7 +6,7 @@ import { Text } from '../components/design-system/Typography';
 import { ContentBody } from '../components/design-system';
 import { Switch } from '../components/ui/switch';
 import SettingsSection from '../components/SettingsSection';
-import ConfirmDialog from '../components/ConfirmDialog';
+import { ConfirmDialog } from '../components/dialogs';
 import { ThemeToggleWithLabel } from '../components/ThemeToggle';
 import usePreferencesStore from '../stores/preferences';
 import useProgressStore from '../stores/progress';

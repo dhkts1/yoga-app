@@ -1,9 +1,9 @@
 import { useNavigate } from 'react-router-dom';
 import { BookOpen, ArrowRight, Calendar } from 'lucide-react';
-import { Card, Button, Text } from './design-system';
-import { ProgressBar } from './design-system/Progress';
-import useProgramProgressStore from '../stores/programProgress';
-import { getProgramById } from '../data/programs';
+import { Card, Button, Text } from '../design-system';
+import { ProgressBar } from '../design-system/Progress';
+import useProgramProgressStore from '../../stores/programProgress';
+import { getProgramById } from '../../data/programs';
 
 /**
  * ProgramProgressCard - Shows active program progress on Insights dashboard

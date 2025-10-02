@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 import { Star, Sparkles } from 'lucide-react';
-import SessionCard from './SessionCard';
+import SessionCard from './cards/SessionCard';
 import { LIST_ANIMATION } from '../utils/animations';
 
 /**
