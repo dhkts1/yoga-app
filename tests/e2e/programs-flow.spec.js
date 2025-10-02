@@ -745,8 +745,8 @@ test.describe('Multi-Week Programs Flow', () => {
       await resetButton.click();
       await page.waitForTimeout(300);
 
-      // Verify confirmation warning appears
-      const warningText = page.locator('text=/click again|confirm|delete.*progress/i');
+      // Verify confirmation warning appears (multiple elements may match, use first)
+      const warningText = page.locator('text=/click again|confirm|delete.*progress/i').first();
       await expect(warningText).toBeVisible({ timeout: 3000 });
     });
   });
