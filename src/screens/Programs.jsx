@@ -26,7 +26,6 @@ function Programs() {
           showBack={false}
         />
       }
-      className="bg-cream"
       contentClassName="px-4 py-6"
     >
       {/* Introduction */}

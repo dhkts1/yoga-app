@@ -6,8 +6,8 @@
  */
 
 export const HEADER_STYLES = {
-  // Main header container - airy glass aesthetic
-  container: 'bg-white/60 backdrop-blur-xl shadow-[0_4px_16px_-2px_rgba(0,0,0,0.08),0_2px_8px_-2px_rgba(0,0,0,0.04)] transition-all duration-300',
+  // Main header container - seamless with no shadow
+  container: 'bg-background transition-all duration-300',
 
   // Typography
   title: {

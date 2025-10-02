@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useTestMode } from './useTestMode';
 
 /**
@@ -12,27 +12,27 @@ import { useTestMode } from './useTestMode';
  * - Test mode integration for E2E tests
  *
  * @param {Object} params - Hook configuration
- * @param {Object} params.currentPoseData - Current pose data with duration
  * @param {Object} params.session - Session data with poses array
- * @param {number} params.currentPoseIndex - Index of current pose
  * @param {number} params.restDuration - Rest period duration from preferences (seconds)
  * @param {Function} params.onSessionComplete - Callback when session completes
  *
  * @returns {Object} Timer state and controls
  */
 export function usePracticeTimer({
-  currentPoseData,
   session,
-  currentPoseIndex,
   restDuration,
   onSessionComplete
 }) {
   const { getEffectiveDuration } = useTestMode();
 
-  // Timer state
-  const [timeRemaining, setTimeRemaining] = useState(
-    getEffectiveDuration(currentPoseData?.duration || 0)
-  );
+  // Pose navigation state
+  const [currentPoseIndexInternal, setCurrentPoseIndexInternal] = useState(0);
+
+  // Derive current pose data from session and internal index
+  const currentPoseData = session?.poses?.[currentPoseIndexInternal];
+
+  // Timer state - initialize to 0, useEffect will set correct value when session loads
+  const [timeRemaining, setTimeRemaining] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [sessionStarted, setSessionStarted] = useState(false);
 
@@ -40,25 +40,23 @@ export function usePracticeTimer({
   const [isResting, setIsResting] = useState(false);
   const [restTimeRemaining, setRestTimeRemaining] = useState(0);
 
-  // Pose navigation state
-  const [currentPoseIndexInternal, setCurrentPoseIndexInternal] = useState(currentPoseIndex);
-
   // Session timing for accurate progress tracking
   const sessionStartTimeRef = useRef(null);
   const [totalPracticeTime, setTotalPracticeTime] = useState(0); // in seconds
   const lastResumeTimeRef = useRef(null);
 
-  // Sync internal pose index with prop
-  useEffect(() => {
-    setCurrentPoseIndexInternal(currentPoseIndex);
-  }, [currentPoseIndex]);
+  // Initialize timer when pose INDEX changes (not on every render)
+  // Use a ref to track the last initialized pose index
+  const lastInitializedPoseIndex = useRef(-1);
 
-  // Initialize timer when pose changes
   useEffect(() => {
-    if (currentPoseData) {
-      setTimeRemaining(getEffectiveDuration(currentPoseData.duration));
+    // Only initialize if this is a new pose (index changed)
+    if (currentPoseIndexInternal !== lastInitializedPoseIndex.current && currentPoseData?.duration) {
+      const newTime = getEffectiveDuration(currentPoseData.duration);
+      setTimeRemaining(newTime);
+      lastInitializedPoseIndex.current = currentPoseIndexInternal;
     }
-  }, [currentPoseIndexInternal, currentPoseData, getEffectiveDuration]);
+  }, [currentPoseIndexInternal, getEffectiveDuration]);
 
   // Timer countdown logic
   useEffect(() => {
@@ -195,13 +193,13 @@ export function usePracticeTimer({
   /**
    * Auto-start practice when triggered.
    */
-  const startPractice = () => {
+  const startPractice = useCallback(() => {
     const now = Date.now();
     setSessionStarted(true);
     sessionStartTimeRef.current = now;
     lastResumeTimeRef.current = now;
     setIsPlaying(true);
-  };
+  }, []);
 
   /**
    * Get final practice time including current active session.

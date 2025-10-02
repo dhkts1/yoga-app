@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
 import { Text, CircularProgress } from './design-system';
 import { getBreathingInstruction } from '../data/breathing';
 

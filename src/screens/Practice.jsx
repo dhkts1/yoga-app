@@ -67,9 +67,7 @@ function Practice() {
 
   // Practice timer hook - manages timer, rest periods, and pose progression
   const timerHook = usePracticeTimer({
-    currentPoseData: session?.poses?.[0], // Initial pose data
     session,
-    currentPoseIndex: 0,
     restDuration,
     onSessionComplete: () => {
       // Trigger post-practice mood tracker when session completes
@@ -120,11 +118,8 @@ function Practice() {
   // Auto-start practice when mood tracker is dismissed
   useEffect(() => {
     if (!showPreMoodTracker && !sessionStarted && session && pose) {
-      // Small delay to let the UI settle
-      const timer = setTimeout(() => {
-        startPractice();
-      }, 300);
-      return () => clearTimeout(timer);
+      // Immediate start - no delay needed
+      startPractice();
     }
   }, [showPreMoodTracker, sessionStarted, session, pose, startPractice]);
 

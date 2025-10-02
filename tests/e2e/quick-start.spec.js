@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { clearAppData, fastForwardTimer, dismissOnboardingIfPresent, skipMoodTrackerIfPresent } from '../helpers/test-utils.js';
+import { clearAppData, fastForwardTimer, dismissOnboardingIfPresent, skipMoodTrackerIfPresent, ensurePracticeStarted } from '../helpers/test-utils.js';
 
 /**
  * Quick Start Flow Test
@@ -64,15 +64,21 @@ test.describe('Quick Start Flow', () => {
     await expect(timer).toBeVisible();
   });
 
-  test('should show play button', async ({ page }) => {
+  test('should show play/pause button', async ({ page }) => {
     await fastForwardTimer(page);
     await page.getByRole('button', { name: /start/i }).click();
     await page.waitForURL(/\/practice/);
     await skipMoodTrackerIfPresent(page);
 
-    // Verify play button exists
-    const playButton = page.getByRole('button', { name: /play/i });
-    await expect(playButton).toBeVisible();
+    // Verify play/pause button exists (either Play or Pause state is valid)
+    // After mood tracker dismissal, practice may auto-start showing Pause instead of Play
+    const playButton = page.getByRole('button', { name: 'Play' });
+    const pauseButton = page.getByRole('button', { name: 'Pause' });
+
+    const isPlayVisible = await playButton.isVisible({ timeout: 1000 }).catch(() => false);
+    const isPauseVisible = await pauseButton.isVisible({ timeout: 1000 }).catch(() => false);
+
+    expect(isPlayVisible || isPauseVisible).toBe(true);
   });
 
 

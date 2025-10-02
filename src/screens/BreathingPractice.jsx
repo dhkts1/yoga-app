@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Play, Pause, RotateCcw, Volume2, VolumeX, Heart, HeartOff } from 'lucide-react';
-import { Button, Text, Heading } from '../components/design-system';
+import { Button, Text } from '../components/design-system';
 import { PracticeLayout } from '../components/layouts';
 import BreathingGuide from '../components/BreathingGuide';
 import { PracticeHeader } from '../components/headers';

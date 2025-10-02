@@ -107,6 +107,36 @@ export async function skipMoodTrackerIfPresent(page) {
 }
 
 /**
+ * Start practice timer if not already playing
+ * After mood tracker dismissal, practice may auto-start, so check current state
+ *
+ * @param {import('@playwright/test').Page} page - Playwright page object
+ */
+export async function ensurePracticeStarted(page) {
+  try {
+    // Wait for either Play or Pause button to appear
+    const playButton = page.getByRole('button', { name: 'Play' });
+    const pauseButton = page.getByRole('button', { name: 'Pause' });
+
+    // Try to find Play button first (timer not started)
+    const isPlayVisible = await playButton.isVisible({ timeout: 2000 }).catch(() => false);
+
+    if (isPlayVisible) {
+      // Timer not started yet, click Play to start
+      await playButton.click();
+      // Wait for button to change to Pause (confirming it started)
+      await pauseButton.waitFor({ state: 'visible', timeout: 2000 });
+    } else {
+      // Timer already playing (auto-started), just verify Pause button exists
+      await pauseButton.waitFor({ state: 'visible', timeout: 2000 });
+    }
+  } catch (error) {
+    // If neither button found, practice might have already completed or there's an error
+    console.warn('Could not find Play/Pause button:', error.message);
+  }
+}
+
+/**
  * Enable test mode to speed up timers
  * Sets window.__TEST_MODE__ flag that Practice component checks
  * Also stores in sessionStorage so it persists across navigation

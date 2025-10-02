@@ -152,9 +152,6 @@ function Welcome() {
           <Heading level={1} className="mb-2">
             {greeting.text}
           </Heading>
-          <Text variant="secondary">
-            Ready for your mindful practice?
-          </Text>
         </div>
 
         {/* Compact Streak Badge - only show if user has practiced */}

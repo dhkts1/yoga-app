@@ -3,6 +3,7 @@ import {
   clearAppData,
   fastForwardTimer,
   skipMoodTrackerIfPresent,
+  ensurePracticeStarted,
   dismissOnboardingIfPresent
 } from '../helpers/test-utils.js';
 
@@ -434,10 +435,13 @@ test.describe('Multi-Week Programs Flow', () => {
       await skipMoodTrackerIfPresent(page);
 
       // Start practice
-      await page.getByRole('button', { name: /play/i }).click();
+      await ensurePracticeStarted(page);
+
+      // In test mode, session completes very quickly - wait for post-mood tracker and dismiss
+      await page.waitForTimeout(300);
       await skipMoodTrackerIfPresent(page);
 
-      // Wait for completion
+      // Wait for completion screen
       await page.waitForURL(/\/complete/, { timeout: 15000 });
 
       // Wait for state to persist
@@ -484,22 +488,22 @@ test.describe('Multi-Week Programs Flow', () => {
 
       const sessionButton = page.locator('button:has-text("Iyengar Foundation")').first();
       await sessionButton.click();
+      await page.waitForURL(/\/sessions\/.+\/preview/);
+
+      // Click "Start Practice" button on preview screen
+      const startPracticeButton = page.getByRole('button', { name: /start practice/i });
+      await startPracticeButton.click();
       await page.waitForURL(/\/practice/);
       await skipMoodTrackerIfPresent(page);
 
-      await page.getByRole('button', { name: /play/i }).click();
+      await ensurePracticeStarted(page);
+      await page.waitForTimeout(300);
       await skipMoodTrackerIfPresent(page);
       await page.waitForURL(/\/complete/, { timeout: 15000 });
 
-      // Navigate to Insights
+      // Navigate to Insights - use bottom nav directly (program sessions return to week detail, not home)
       await page.waitForTimeout(500);
-      const homeButton = page.getByRole('link', { name: /home/i }).or(
-        page.getByRole('button', { name: /home|done/i })
-      );
-      await homeButton.click();
-      await page.waitForURL('/');
-
-      await page.getByRole('button', { name: /progress|insights/i }).click();
+      await page.getByRole('button', { name: 'Progress', exact: true }).click();
       await page.waitForURL(/\/insights|\/progress/);
 
       // Just verify insights page loaded - program card may or may not be visible
@@ -527,10 +531,16 @@ test.describe('Multi-Week Programs Flow', () => {
 
       const sessionButton = page.locator('button:has-text("Iyengar Foundation")').first();
       await sessionButton.click();
+      await page.waitForURL(/\/sessions\/.+\/preview/);
+
+      // Click "Start Practice" button on preview screen
+      const startPracticeButton = page.getByRole('button', { name: /start practice/i });
+      await startPracticeButton.click();
       await page.waitForURL(/\/practice/);
       await skipMoodTrackerIfPresent(page);
 
-      await page.getByRole('button', { name: /play/i }).click();
+      await ensurePracticeStarted(page);
+      await page.waitForTimeout(300);
       await skipMoodTrackerIfPresent(page);
       await page.waitForURL(/\/complete/, { timeout: 15000 });
       await page.waitForTimeout(1000);
@@ -844,21 +854,14 @@ test.describe('Multi-Week Programs Flow', () => {
       await page.waitForURL(/\/practice/);
       await skipMoodTrackerIfPresent(page);
 
-      await page.getByRole('button', { name: /play/i }).click();
+      await ensurePracticeStarted(page);
+      await page.waitForTimeout(300);
       await skipMoodTrackerIfPresent(page);
       await page.waitForURL(/\/complete/, { timeout: 15000 });
       await page.waitForTimeout(1000);
 
-      // Navigate back to WeekDetail via Home then Programs
+      // Navigate back to WeekDetail (program sessions return here automatically)
       await page.getByRole('button', { name: 'Back to Home' }).click();
-      await page.waitForURL('/'); // Wait for home page
-      await page.getByRole('button', { name: 'Programs', exact: true }).click();
-      await page.waitForURL(/\/programs/);
-      const iyengarProgram2 = page.locator('button:has-text("Iyengar Foundation")').first();
-      await iyengarProgram2.click();
-      await page.waitForURL(/\/programs\/iyengar-foundation-13/);
-      const week1Button2 = page.locator('button:has-text("Week 1")').first();
-      await week1Button2.click();
       await page.waitForURL(/\/programs\/iyengar-foundation-13\/week\/1/);
 
       // State Verification: Session 1 should show as completed
@@ -922,16 +925,8 @@ test.describe('Multi-Week Programs Flow', () => {
         await page.waitForURL(/\/complete/, { timeout: 15000 });
         await page.waitForTimeout(1000);
 
-        // Navigate back to week detail
+        // Navigate back to week detail (program sessions return here automatically)
         await page.getByRole('button', { name: 'Back to Home' }).click();
-        await page.waitForURL('/'); // Wait for home page
-        await page.getByRole('button', { name: 'Programs', exact: true }).click();
-        await page.waitForURL(/\/programs/);
-        const iyengarProgram = page.locator('button:has-text("Iyengar Foundation")').first();
-        await iyengarProgram.click();
-        await page.waitForURL(/\/programs\/iyengar-foundation-13/);
-        const week1Button = page.locator('button:has-text("Week 1")').first();
-        await week1Button.click();
         await page.waitForURL(/\/programs\/iyengar-foundation-13\/week\/1/);
       };
 
@@ -1007,16 +1002,8 @@ test.describe('Multi-Week Programs Flow', () => {
         await page.waitForURL(/\/complete/, { timeout: 15000 });
         await page.waitForTimeout(1000);
 
-        // Navigate back to week detail
+        // Navigate back to week detail (program sessions return here automatically)
         await page.getByRole('button', { name: 'Back to Home' }).click();
-        await page.waitForURL('/'); // Wait for home page
-        await page.getByRole('button', { name: 'Programs', exact: true }).click();
-        await page.waitForURL(/\/programs/);
-        const iyengarProgram = page.locator('button:has-text("Iyengar Foundation")').first();
-        await iyengarProgram.click();
-        await page.waitForURL(/\/programs\/iyengar-foundation-13/);
-        const week1Button = page.locator('button:has-text("Week 1")').first();
-        await week1Button.click();
         await page.waitForURL(/\/programs\/iyengar-foundation-13\/week\/1/);
       };
 
@@ -1107,21 +1094,14 @@ test.describe('Multi-Week Programs Flow', () => {
       await page.waitForURL(/\/practice/);
       await skipMoodTrackerIfPresent(page);
 
-      await page.getByRole('button', { name: /play/i }).click();
+      await ensurePracticeStarted(page);
+      await page.waitForTimeout(300);
       await skipMoodTrackerIfPresent(page);
       await page.waitForURL(/\/complete/, { timeout: 15000 });
       await page.waitForTimeout(1000);
 
       // Navigate back to week detail
       await page.getByRole('button', { name: 'Back to Home' }).click();
-      await page.waitForURL('/'); // Wait for home page
-      await page.getByRole('button', { name: 'Programs', exact: true }).click();
-      await page.waitForURL(/\/programs/);
-      const iyengarProgram2 = page.locator('button:has-text("Iyengar Foundation")').first();
-      await iyengarProgram2.click();
-      await page.waitForURL(/\/programs\/iyengar-foundation-13/);
-      const week1Button2 = page.locator('button:has-text("Week 1")').first();
-      await week1Button2.click();
       await page.waitForURL(/\/programs\/iyengar-foundation-13\/week\/1/);
 
       // Verify session is marked as completed
@@ -1282,14 +1262,6 @@ test.describe('Multi-Week Programs Flow', () => {
         if (!hasWeekCompletion) {
           // Navigate back to week detail for next session
           await page.getByRole('button', { name: 'Back to Home' }).click();
-          await page.waitForURL('/');
-          await page.getByRole('button', { name: 'Programs', exact: true }).click();
-          await page.waitForURL(/\/programs/);
-          const iyengarProgram = page.locator('button:has-text("Iyengar Foundation")').first();
-          await iyengarProgram.click();
-          await page.waitForURL(/\/programs\/iyengar-foundation-13/);
-          const week1Button = page.locator('button:has-text("Week 1")').first();
-          await week1Button.click();
           await page.waitForURL(/\/programs\/iyengar-foundation-13\/week\/1/);
         }
 
@@ -1450,11 +1422,10 @@ test.describe('Multi-Week Programs Flow', () => {
 
       // Navigate back to program detail to check current week
       await page.getByRole('button', { name: 'Back to Home' }).click();
-      await page.waitForURL('/');
-      await page.getByRole('button', { name: 'Programs', exact: true }).click();
-      await page.waitForURL(/\/programs/);
-      const iyengarProgram2 = page.locator('button:has-text("Iyengar Foundation")').first();
-      await iyengarProgram2.click();
+      await page.waitForURL(/\/programs\/iyengar-foundation-13\/week\/1/);
+
+      // Navigate from week detail to program detail
+      await page.goBack();
       await page.waitForURL(/\/programs\/iyengar-foundation-13/);
 
       // External Validation: Check localStorage for currentWeek = 2
@@ -1502,14 +1473,6 @@ test.describe('Multi-Week Programs Flow', () => {
 
         // Navigate back to week detail
         await page.getByRole('button', { name: 'Back to Home' }).click();
-        await page.waitForURL('/');
-        await page.getByRole('button', { name: 'Programs', exact: true }).click();
-        await page.waitForURL(/\/programs/);
-        const iyengarProgram = page.locator('button:has-text("Iyengar Foundation")').first();
-        await iyengarProgram.click();
-        await page.waitForURL(/\/programs\/iyengar-foundation-13/);
-        const week1Button = page.locator('button:has-text("Week 1")').first();
-        await week1Button.click();
         await page.waitForURL(/\/programs\/iyengar-foundation-13\/week\/1/);
       };
 

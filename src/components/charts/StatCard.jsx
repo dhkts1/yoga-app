@@ -33,21 +33,21 @@ function StatCard({
   };
 
   return (
-    <Card className={`p-4 ${className}`}>
+    <Card className={`p-3 ${className}`}>
       <div className="flex items-start justify-between">
         <div className="flex-1">
           {/* Title */}
-          <Text variant="caption" className="text-secondary mb-1 block">
+          <Text variant="caption" className="text-secondary mb-1 block text-xs">
             {title}
           </Text>
 
           {/* Main Value */}
-          <div className="flex items-baseline space-x-2">
-            <Text variant="heading" className="text-2xl font-semibold text-primary">
+          <div className="flex items-baseline space-x-1">
+            <Text variant="heading" className="text-xl font-semibold text-primary">
               {formatValue(value)}
             </Text>
             {subtitle && (
-              <Text variant="caption" className="text-secondary">
+              <Text variant="caption" className="text-secondary text-xs">
                 {subtitle}
               </Text>
             )}
@@ -55,7 +55,7 @@ function StatCard({
 
           {/* Trend indicator */}
           {trend && (
-            <Text variant="caption" className={`mt-1 ${getTrendColor()}`}>
+            <Text variant="caption" className={`mt-1 text-xs ${getTrendColor()}`}>
               {trend}
             </Text>
           )}
@@ -63,8 +63,8 @@ function StatCard({
 
         {/* Icon */}
         {Icon && (
-          <div className="ml-3">
-            <Icon className="h-6 w-6 text-sage-600" />
+          <div className="ml-2">
+            <Icon className="h-5 w-5 text-sage-600" />
           </div>
         )}
       </div>

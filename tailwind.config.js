@@ -88,7 +88,7 @@ module.exports = {
 
         // Background colors
         background: {
-          DEFAULT: '#FAFAFA',          // Main background
+          DEFAULT: '#F5F3F0',          // Main background (cream)
           secondary: '#F5F3F0',        // Secondary background
           sage: '#8FA68E',             // Sage background
           cream: '#F5F3F0',            // Cream background

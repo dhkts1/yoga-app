@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import usePreferencesStore from '../stores/preferences';
 
@@ -104,9 +104,9 @@ export function useMoodTracking({ sessionId, getFinalPracticeTime, programContex
    * Trigger post-practice mood tracker.
    * Called when session completes.
    */
-  const showPostMood = () => {
+  const showPostMood = useCallback(() => {
     setShowPostMoodTracker(true);
-  };
+  }, []);
 
   return {
     // State
