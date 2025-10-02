@@ -6,6 +6,8 @@ import {
   calculateTotalDuration,
   formatDuration
 } from '../data/customSessions';
+import useLocalStorage from '../hooks/useLocalStorage';
+import useCustomSessions from '../hooks/useCustomSessions';
 import SelectablePoseCard from '../components/SelectablePoseCard';
 import { Button, Card } from '../components/design-system';
 import { DefaultLayout } from '../components/layouts';
@@ -13,34 +15,30 @@ import PageHeader from '../components/headers/PageHeader';
 
 function SessionBuilder() {
   const navigate = useNavigate();
-  const [sessionName, setSessionName] = useState('');
-  const [sequencePoses, setSequencePoses] = useState([]);
   const [validationErrors, setValidationErrors] = useState([]);
   const sequenceRef = useRef(null);
 
-  // Auto-save draft functionality
-  useEffect(() => {
-    const savedDraft = localStorage.getItem('sessionBuilderDraft');
-    if (savedDraft) {
-      try {
-        const draft = JSON.parse(savedDraft);
-        if (draft.name) setSessionName(draft.name);
-        if (draft.poses) setSequencePoses(draft.poses);
-      } catch (error) {
-        console.warn('Failed to load draft session:', error);
-      }
-    }
-  }, []);
+  // Use custom sessions hook for saving
+  const { add: addCustomSession } = useCustomSessions();
 
-  // Auto-save draft on changes
+  // Use localStorage hook for draft auto-save
+  const [draft, setDraft, clearDraft] = useLocalStorage('sessionBuilderDraft', {
+    name: '',
+    poses: []
+  });
+
+  // Local state synced with draft
+  const [sessionName, setSessionName] = useState(draft.name || '');
+  const [sequencePoses, setSequencePoses] = useState(draft.poses || []);
+
+  // Auto-save draft whenever sessionName or sequencePoses change
   useEffect(() => {
-    const draft = {
+    setDraft({
       name: sessionName,
       poses: sequencePoses,
       lastModified: new Date().toISOString()
-    };
-    localStorage.setItem('sessionBuilderDraft', JSON.stringify(draft));
-  }, [sessionName, sequencePoses]);
+    });
+  }, [sessionName, sequencePoses, setDraft]);
 
   const totalDuration = calculateTotalDuration(sequencePoses);
 
@@ -95,7 +93,7 @@ function SessionBuilder() {
       setSessionName('');
       setSequencePoses([]);
       setValidationErrors([]);
-      localStorage.removeItem('sessionBuilderDraft');
+      clearDraft();
     }
   };
 
@@ -140,26 +138,18 @@ function SessionBuilder() {
       createdAt: new Date().toISOString()
     };
 
-    // Load existing custom sessions
-    let customSessions = [];
+    // Add new session using hook
     try {
-      const saved = localStorage.getItem('customSessions');
-      if (saved) {
-        customSessions = JSON.parse(saved);
-      }
+      addCustomSession(newSession);
+
+      // Clear draft
+      clearDraft();
+
+      // Navigate to session preview
+      navigate(`/sessions/${newSession.id}/preview?custom=true`);
     } catch (error) {
-      console.error('Failed to load custom sessions:', error);
+      setValidationErrors([error.message]);
     }
-
-    // Add new session
-    customSessions.push(newSession);
-    localStorage.setItem('customSessions', JSON.stringify(customSessions));
-
-    // Clear draft
-    localStorage.removeItem('sessionBuilderDraft');
-
-    // Navigate to session preview
-    navigate(`/sessions/${newSession.id}/preview?custom=true`);
   };
 
   return (
@@ -215,7 +205,7 @@ function SessionBuilder() {
                   variant="outline"
                   size="sm"
                   onClick={handleClear}
-                  className="text-red-600 border-red-200 hover:bg-red-50"
+                  className="text-state-error border-state-error/30 hover:bg-state-error/10"
                 >
                   Clear All
                 </Button>
@@ -226,12 +216,12 @@ function SessionBuilder() {
 
         {/* Validation Errors */}
         {validationErrors.length > 0 && (
-          <Card className="p-4 border-red-200 bg-red-50">
+          <Card className="p-4 border-state-error/30 bg-state-error/10">
             <div className="flex items-start gap-2">
-              <AlertCircle className="h-5 w-5 text-red-500 flex-shrink-0 mt-0.5" />
+              <AlertCircle className="h-5 w-5 text-state-error flex-shrink-0 mt-0.5" />
               <div>
-                <h3 className="font-medium text-red-800 mb-1">Please fix these issues:</h3>
-                <ul className="text-sm text-red-700 space-y-1">
+                <h3 className="font-medium text-state-error mb-1">Please fix these issues:</h3>
+                <ul className="text-sm text-state-error space-y-1">
                   {validationErrors.map((error, index) => (
                     <li key={index}>• {error}</li>
                   ))}

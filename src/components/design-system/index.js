@@ -18,6 +18,12 @@ export * from './Overlay';
 export * from './Icon';
 export * from './OfflineIndicator';
 export * from './MobileTester';
+export * from './Badge';
+export * from './Stat';
+export * from './Tab';
+export * from './EmptyState';
+export { default as StatusBadge } from './StatusBadge';
+export { default as ConfirmDialog } from '../ConfirmDialog';
 
 // Default exports for common patterns
 export { Button } from './Button';
@@ -29,4 +35,8 @@ export { Modal, Drawer, TipsOverlay, PauseOverlay, AlertDialog } from './Overlay
 export { Icon, PlayIcon, PauseIcon, TimerIcon, HeartIcon } from './Icon';
 export { OfflineIndicator } from './OfflineIndicator';
 export { MobileTester, ComponentValidator, useMobileSafe } from './MobileTester';
+export { Badge } from './Badge';
+export { Stat, StatGrid } from './Stat';
+export { Tab, TabPanel } from './Tab';
+export { EmptyState } from './EmptyState';
 // SkeletonLoader is exported from its own file at ../SkeletonLoader.jsx

@@ -10,6 +10,7 @@ import { PageHeader } from '../components/headers';
 import FavoriteButton from '../components/FavoriteButton';
 import PoseImage from '../components/PoseImage';
 import useProgressStore from '../stores/progress';
+import useCustomSessions from '../hooks/useCustomSessions';
 
 function SessionDetail() {
   const { sessionId } = useParams();
@@ -24,6 +25,9 @@ function SessionDetail() {
   const [isCustom, setIsCustom] = useState(false);
   const { practiceHistory, breathingHistory } = useProgressStore();
 
+  // Use custom sessions hook
+  const { getById: getCustomSessionById } = useCustomSessions();
+
   // Load session data on mount
   useEffect(() => {
     const loadSessionData = () => {
@@ -31,21 +35,13 @@ function SessionDetail() {
       const customParam = searchParams.get('custom');
 
       if (customParam === 'true') {
-        // Load from localStorage
-        try {
-          const saved = localStorage.getItem('customSessions');
-          if (saved) {
-            const customSessions = JSON.parse(saved);
-            const session = customSessions.find(s => s.id === sessionId);
-            if (session) {
-              setSessionData(session);
-              setSessionType('custom');
-              setIsCustom(true);
-              return;
-            }
-          }
-        } catch (error) {
-          console.error('Failed to load custom session:', error);
+        // Load using hook
+        const session = getCustomSessionById(sessionId);
+        if (session) {
+          setSessionData(session);
+          setSessionType('custom');
+          setIsCustom(true);
+          return;
         }
       }
 
@@ -73,7 +69,7 @@ function SessionDetail() {
     };
 
     loadSessionData();
-  }, [sessionId, searchParams, navigate]);
+  }, [sessionId, searchParams, navigate, getCustomSessionById]);
 
   // Calculate total duration in minutes for custom sessions
   const getTotalDuration = () => {

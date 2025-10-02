@@ -44,10 +44,10 @@ function ProgramProgressCard() {
   // Style badge color mapping
   const getStyleColor = (style) => {
     const styleColors = {
-      iyengar: 'bg-sage-100 text-sage-700',
-      vinyasa: 'bg-blue-100 text-blue-700',
-      hatha: 'bg-amber-100 text-amber-700',
-      restorative: 'bg-purple-100 text-purple-700',
+      iyengar: 'bg-sage-100 text-sage-800',
+      vinyasa: 'bg-accent/20 text-accent',
+      hatha: 'bg-cream-200 text-sage-800',
+      restorative: 'bg-purple-50 text-purple-700',
     };
     return styleColors[style.toLowerCase()] || 'bg-gray-100 text-gray-700';
   };

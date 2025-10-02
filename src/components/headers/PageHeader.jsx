@@ -1,6 +1,8 @@
 import { ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { cn } from '../../lib/utils';
+import GlassIconButton from '../ui/GlassIconButton';
+import { HEADER_STYLES } from './headerStyles';
 
 /**
  * PageHeader - Reusable header component for standard app pages
@@ -42,15 +44,7 @@ function PageHeader({
 
   return (
     <header
-      className={cn(
-        // Background with subtle gradient
-        'bg-gradient-to-b from-white to-sage-50/30',
-        // Shadow for depth
-        'shadow-sm',
-        // Border
-        'border-b border-sage-100',
-        className
-      )}
+      className={cn(HEADER_STYLES.container, className)}
       {...props}
     >
       <div className="px-4 h-14 flex items-center">
@@ -58,29 +52,24 @@ function PageHeader({
           {/* Back Button + Title */}
           <div className="flex items-center gap-3 min-w-0 flex-1">
             {showBack && (
-              <button
+              <GlassIconButton
+                icon={ArrowLeft}
                 onClick={handleBack}
-                className={cn(
-                  'flex-shrink-0 p-1.5 -ml-1.5',
-                  'text-sage-600 hover:text-sage-700',
-                  'hover:bg-sage-50 rounded-full',
-                  'transition-all duration-200',
-                  'print:hidden'
-                )}
-                aria-label="Go back"
-              >
-                <ArrowLeft className="h-5 w-5" />
-              </button>
+                label="Go back"
+                variant="standard"
+                className="print:hidden"
+              />
             )}
             <div className="min-w-0 flex-1">
               <h1 className={cn(
-                'text-base font-semibold truncate',
-                'bg-gradient-to-r from-sage-800 to-sage-600 bg-clip-text text-transparent'
+                'text-base font-semibold truncate tracking-tight',
+                // Solid color - cleaner, more minimal
+                'text-sage-800'
               )}>
                 {title}
               </h1>
               {subtitle && (
-                <p className="text-xs text-sage-600 truncate">{subtitle}</p>
+                <p className="text-xs text-sage-600/80 truncate mt-0.5">{subtitle}</p>
               )}
             </div>
           </div>

@@ -22,11 +22,11 @@ const MOOD_OPTIONS = [
 ];
 
 const ENERGY_LEVELS = [
-  { value: 1, label: 'Very Low', color: 'bg-red-200' },
-  { value: 2, label: 'Low', color: 'bg-orange-200' },
-  { value: 3, label: 'Moderate', color: 'bg-yellow-200' },
-  { value: 4, label: 'High', color: 'bg-green-200' },
-  { value: 5, label: 'Very High', color: 'bg-emerald-200' }
+  { value: 1, label: 'Very Low', color: 'bg-state-error/30' },
+  { value: 2, label: 'Low', color: 'bg-state-warning/30' },
+  { value: 3, label: 'Moderate', color: 'bg-gold/30' },
+  { value: 4, label: 'High', color: 'bg-state-success/30' },
+  { value: 5, label: 'Very High', color: 'bg-state-success/50' }
 ];
 
 function MoodTracker({

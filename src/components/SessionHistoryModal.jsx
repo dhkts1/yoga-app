@@ -69,7 +69,7 @@ function SessionHistoryModal({
   const getSessionTypeBadge = (session) => {
     if (session.type === 'breathing') {
       return (
-        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-state-info/10 text-state-info">
           <Wind className="w-3 h-3 mr-1" />
           Breathing
         </span>
@@ -229,11 +229,11 @@ function SessionHistoryModal({
                   {/* Mood Data */}
                   {session.moodImprovement !== null && (
                     <div className="flex items-center gap-4 text-xs mb-2 bg-sage-50 rounded px-2 py-1">
-                      <span className={`font-medium ${session.moodImprovement >= 0 ? 'text-green-700' : 'text-red-700'}`}>
+                      <span className={`font-medium ${session.moodImprovement >= 0 ? 'text-state-success' : 'text-state-error'}`}>
                         {session.moodImprovement >= 0 ? '+' : ''}{session.moodImprovement} mood
                       </span>
                       {session.energyImprovement !== null && (
-                        <span className={`font-medium ${session.energyImprovement >= 0 ? 'text-green-700' : 'text-red-700'}`}>
+                        <span className={`font-medium ${session.energyImprovement >= 0 ? 'text-state-success' : 'text-state-error'}`}>
                           {session.energyImprovement >= 0 ? '+' : ''}{session.energyImprovement} energy
                         </span>
                       )}

@@ -7,6 +7,7 @@ import { Button, Card, Heading, Text } from '../components/design-system';
 import { breathingDurations, breathingExercises } from '../data/breathing';
 import usePreferencesStore from '../stores/preferences';
 import FavoriteButton from '../components/FavoriteButton';
+import { getCategoryColors } from '../utils/badges';
 
 /**
  * Breathing Screen
@@ -25,26 +26,6 @@ function Breathing() {
   // Separate exercises into favorites and non-favorites
   const favoriteExercises = breathingExercises.filter(ex => favoriteExerciseIds.includes(ex.id));
   const nonFavoriteExercises = breathingExercises.filter(ex => !favoriteExerciseIds.includes(ex.id));
-
-  // Category colors for visual distinction - using full class names for Tailwind
-  const categoryColors = {
-    'calming': {
-      bg: 'bg-sage-100',
-      text: 'text-sage-700'
-    },
-    'relaxing': {
-      bg: 'bg-blue-100',
-      text: 'text-blue-700'
-    },
-    'energizing': {
-      bg: 'bg-orange-100',
-      text: 'text-orange-700'
-    },
-    'balancing': {
-      bg: 'bg-purple-100',
-      text: 'text-purple-700'
-    }
-  };
 
   const handleExerciseSelect = (exerciseId) => {
     navigate(`/breathing/practice?exercise=${exerciseId}&duration=${selectedDuration}`);
@@ -94,7 +75,7 @@ function Breathing() {
           </h2>
           <div className="space-y-4">
             {favoriteExercises.map((exercise) => {
-              const categoryStyle = categoryColors[exercise.category] || categoryColors['calming'];
+              const categoryStyle = getCategoryColors(exercise.category);
 
               return (
                 <Card
@@ -145,7 +126,7 @@ function Breathing() {
           </h2>
         )}
         {nonFavoriteExercises.map((exercise) => {
-          const categoryStyle = categoryColors[exercise.category] || categoryColors['calming'];
+          const categoryStyle = getCategoryColors(exercise.category);
 
           return (
             <Card

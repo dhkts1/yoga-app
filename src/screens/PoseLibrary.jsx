@@ -252,10 +252,10 @@ function PoseLibrary() {
                     </span>
                     <span className={`text-xs px-2 py-0.5 rounded-full capitalize ${
                       pose.difficulty === 'beginner'
-                        ? 'bg-green-100 text-green-700'
+                        ? 'bg-state-info/10 text-state-info'
                         : pose.difficulty === 'intermediate'
-                        ? 'bg-amber-100 text-amber-700'
-                        : 'bg-red-100 text-red-700'
+                        ? 'bg-purple-100 text-purple-800'
+                        : 'bg-gold/20 text-accent'
                     }`}>
                       {pose.difficulty}
                     </span>

@@ -1,33 +1,13 @@
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { BookOpen, Clock, Calendar, Play, Pause, CheckCircle2, Lock } from 'lucide-react';
+import { BookOpen, Clock, Calendar } from 'lucide-react';
 import { DefaultLayout } from '../components/layouts';
 import { PageHeader } from '../components/headers';
-import { Badge } from '../components/ui/badge';
 import { Progress } from '../components/ui/progress';
 import useProgramProgressStore from '../stores/programProgress';
 import { programs } from '../data/programs';
-
-// Animation variants for staggered list items
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.05,
-      delayChildren: 0.1
-    }
-  }
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 10 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.3, ease: 'easeOut' }
-  }
-};
+import { StatusBadge } from '../components/design-system';
+import { LIST_ANIMATION } from '../utils/animations';
 
 function Programs() {
   const navigate = useNavigate();
@@ -35,71 +15,6 @@ function Programs() {
 
   const handleProgramClick = (programId) => {
     navigate(`/programs/${programId}`);
-  };
-
-  const getStatusBadge = (program) => {
-    const status = getProgramStatus(program.id, program.totalWeeks);
-
-    switch (status) {
-      case 'active':
-        return (
-          <Badge className="bg-sage-600 text-white border-0">
-            <Play className="h-3 w-3 mr-1" />
-            Active
-          </Badge>
-        );
-      case 'paused':
-        return (
-          <Badge className="bg-amber-500 text-white border-0">
-            <Pause className="h-3 w-3 mr-1" />
-            Paused
-          </Badge>
-        );
-      case 'completed':
-        return (
-          <Badge className="bg-green-600 text-white border-0">
-            <CheckCircle2 className="h-3 w-3 mr-1" />
-            Completed
-          </Badge>
-        );
-      default:
-        return (
-          <Badge variant="outline" className="bg-white text-sage-700 border-sage-300">
-            <Lock className="h-3 w-3 mr-1" />
-            Not Started
-          </Badge>
-        );
-    }
-  };
-
-  const getDifficultyBadge = (difficulty) => {
-    const colors = {
-      beginner: 'bg-blue-100 text-blue-800 border-0',
-      intermediate: 'bg-purple-100 text-purple-800 border-0',
-      advanced: 'bg-red-100 text-red-800 border-0',
-      mixed: 'bg-gray-100 text-gray-800 border-0'
-    };
-
-    return (
-      <Badge className={colors[difficulty]}>
-        {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
-      </Badge>
-    );
-  };
-
-  const getStyleBadge = (style) => {
-    const colors = {
-      iyengar: 'bg-sage-100 text-sage-800 border-0',
-      vinyasa: 'bg-accent/20 text-accent border-0',
-      hatha: 'bg-cream-200 text-sage-800 border-0',
-      restorative: 'bg-purple-50 text-purple-700 border-0'
-    };
-
-    return (
-      <Badge className={colors[style] || 'bg-gray-100 text-gray-800 border-0'}>
-        {style.charAt(0).toUpperCase() + style.slice(1)}
-      </Badge>
-    );
   };
 
   return (
@@ -133,7 +48,7 @@ function Programs() {
       {/* Programs List */}
       <motion.div
         className="space-y-4 mb-24"
-        variants={containerVariants}
+        variants={LIST_ANIMATION.container}
         initial="hidden"
         animate="visible"
       >
@@ -146,7 +61,7 @@ function Programs() {
           return (
             <motion.button
               key={program.id}
-              variants={itemVariants}
+              variants={LIST_ANIMATION.item}
               onClick={() => handleProgramClick(program.id)}
               className="w-full text-left bg-white rounded-xl p-5 shadow-sm border border-sage-100 transition-all duration-300 hover:shadow-md hover:scale-[1.01] active:scale-[0.99]"
             >
@@ -157,9 +72,9 @@ function Programs() {
                     {program.name}
                   </h3>
                   <div className="flex flex-wrap items-center gap-2 mb-3">
-                    {getStatusBadge(program)}
-                    {getDifficultyBadge(program.difficulty)}
-                    {getStyleBadge(program.style)}
+                    <StatusBadge type="programStatus" value={status} />
+                    <StatusBadge type="difficulty" value={program.difficulty} />
+                    <StatusBadge type="style" value={program.style} />
                   </div>
                 </div>
               </div>

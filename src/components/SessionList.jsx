@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 import { Star, Sparkles } from 'lucide-react';
 import SessionCard from './SessionCard';
+import { LIST_ANIMATION } from '../utils/animations';
 
 /**
  * SessionList component for displaying grouped session cards with optional animations
@@ -11,27 +12,6 @@ import SessionCard from './SessionCard';
  * - Section headers with icons
  * - Support for different session groupings (favorites, custom, recommended)
  */
-
-// Default animation variants for staggered list items
-const defaultContainerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.05,
-      delayChildren: 0.1
-    }
-  }
-};
-
-const defaultItemVariants = {
-  hidden: { opacity: 0, y: 10 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.3, ease: 'easeOut' }
-  }
-};
 
 /**
  * SessionList - Renders a list of session cards with optional header and animations
@@ -51,8 +31,8 @@ const SessionList = ({
   showPoseCount = true,
   className = '',
   animate = true,
-  containerVariants = defaultContainerVariants,
-  itemVariants = defaultItemVariants,
+  containerVariants = LIST_ANIMATION.container,
+  itemVariants = LIST_ANIMATION.item,
   recommendation,
 }) => {
   if (!sessions || sessions.length === 0) return null;

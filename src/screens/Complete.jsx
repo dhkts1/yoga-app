@@ -1,6 +1,6 @@
 import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { CheckCircle, Home, RotateCcw, Star, Wind, TrendingUp, Heart, Trophy } from 'lucide-react';
+import { CheckCircle, Home, RotateCcw, Star, Wind, Trophy } from 'lucide-react';
 import { motion } from 'framer-motion';
 import confetti from 'canvas-confetti';
 import { getSessionById } from '../data/sessions';
@@ -8,6 +8,7 @@ import { getWeekByNumber } from '../data/programs';
 import useProgressStore from '../stores/progress';
 import useProgramProgressStore from '../stores/programProgress';
 import { FullscreenLayout } from '../components/layouts';
+import { calculateMoodImprovement } from '../utils/moodCalculator.jsx';
 
 function Complete() {
   const navigate = useNavigate();
@@ -163,52 +164,8 @@ function Complete() {
     }
   };
 
-  // Helper function to get mood improvement message
-  const getMoodImprovementMessage = () => {
-    if (!preMoodData || !postMoodData) return null;
-
-    const moodImprovement = postMoodData.mood.value - preMoodData.mood.value;
-    const energyImprovement = postMoodData.energy.value - preMoodData.energy.value;
-
-    if (moodImprovement > 0 && energyImprovement > 0) {
-      return {
-        icon: <Heart className="h-5 w-5 text-red-500" />,
-        message: "Your mood and energy both improved!",
-        detail: `Mood: ${preMoodData.mood.emoji} → ${postMoodData.mood.emoji} • Energy: +${energyImprovement}`,
-        color: "bg-green-50 border-green-200 text-green-800"
-      };
-    } else if (moodImprovement > 0) {
-      return {
-        icon: <TrendingUp className="h-5 w-5 text-green-500" />,
-        message: "Your mood improved!",
-        detail: `${preMoodData.mood.emoji} → ${postMoodData.mood.emoji}`,
-        color: "bg-green-50 border-green-200 text-green-800"
-      };
-    } else if (energyImprovement > 0) {
-      return {
-        icon: <TrendingUp className="h-5 w-5 text-blue-500" />,
-        message: "Your energy level increased!",
-        detail: `Energy boost: +${energyImprovement}`,
-        color: "bg-blue-50 border-blue-200 text-blue-800"
-      };
-    } else if (moodImprovement === 0 && energyImprovement === 0) {
-      return {
-        icon: <Star className="h-5 w-5 text-accent" />,
-        message: "You maintained your positive state!",
-        detail: "Consistency is key to wellbeing",
-        color: "bg-amber-50 border-amber-200 text-amber-800"
-      };
-    } else {
-      return {
-        icon: <Heart className="h-5 w-5 text-sage-600" />,
-        message: "Thank you for taking time for yourself",
-        detail: "Every practice is valuable for your wellbeing",
-        color: "bg-sage-50 border-sage-200 text-sage-800"
-      };
-    }
-  };
-
-  const moodImprovementInfo = getMoodImprovementMessage();
+  // Calculate mood improvement using utility
+  const moodImprovementInfo = calculateMoodImprovement(preMoodData, postMoodData);
 
   return (
     <FullscreenLayout
@@ -325,7 +282,7 @@ function Complete() {
         {/* Week Completion Display with celebration */}
         {weekCompletionInfo && (
           <motion.div
-            className="mb-6 w-full rounded-lg border-2 border-accent bg-amber-50 p-4 shadow-lg"
+            className="mb-6 w-full rounded-lg border-2 border-accent bg-accent/10 p-4 shadow-lg"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, delay: 1.0 }}
@@ -336,14 +293,14 @@ function Complete() {
                 <p className="font-semibold text-base text-accent mb-1">
                   {weekCompletionInfo.isMilestone ? '🎉 Milestone Achievement!' : 'Week Complete!'}
                 </p>
-                <p className="font-medium text-sm text-amber-900 mb-1">
+                <p className="font-medium text-sm text-primary mb-1">
                   {weekCompletionInfo.weekName}
                 </p>
-                <p className="text-xs text-amber-800">
+                <p className="text-xs text-secondary">
                   You completed all recommended sessions for this week ({weekCompletionInfo.sessionsCompleted} sessions total)
                 </p>
                 {weekCompletionInfo.isMilestone && (
-                  <p className="text-xs text-amber-700 mt-2 italic">
+                  <p className="text-xs text-secondary mt-2 italic">
                     This is a significant milestone in your journey!
                   </p>
                 )}

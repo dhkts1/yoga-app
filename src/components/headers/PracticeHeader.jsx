@@ -1,5 +1,7 @@
 import { X } from 'lucide-react';
 import { cn } from '../../lib/utils';
+import GlassIconButton from '../ui/GlassIconButton';
+import { HEADER_STYLES } from './headerStyles';
 
 /**
  * PracticeHeader - Specialized header for practice screens
@@ -35,46 +37,19 @@ function PracticeHeader({
   className,
   ...props
 }) {
-  const ExitButton = exitButtonStyle === 'circular' ? (
-    <button
+  const ExitButton = (
+    <GlassIconButton
+      icon={X}
       onClick={onExit}
-      className={cn(
-        'flex h-10 w-10 items-center justify-center rounded-full',
-        'bg-sage-100 text-sage-700',
-        'hover:bg-sage-200 hover:shadow-md',
-        'transition-all duration-200',
-        'flex-shrink-0'
-      )}
-      aria-label="Exit practice"
-    >
-      <X className="h-5 w-5" />
-    </button>
-  ) : (
-    <button
-      onClick={onExit}
-      className={cn(
-        'flex-shrink-0 p-2 -ml-2',
-        'text-sage-600 hover:text-sage-700',
-        'hover:bg-sage-50 rounded-full',
-        'transition-all duration-200'
-      )}
-      aria-label="Exit practice"
-    >
-      <X className="h-6 w-6" />
-    </button>
+      label="Exit practice"
+      variant={exitButtonStyle}
+      className={exitButtonStyle === 'circular' ? 'hover:shadow-md' : ''}
+    />
   );
 
   return (
     <header
-      className={cn(
-        // Background with subtle gradient
-        'bg-gradient-to-b from-white to-sage-50/30',
-        // Shadow for depth
-        'shadow-sm',
-        // Border
-        'border-b border-sage-100',
-        className
-      )}
+      className={cn(HEADER_STYLES.container, className)}
       {...props}
     >
       {/* Main header content - Fixed height */}
@@ -89,32 +64,31 @@ function PracticeHeader({
             exitButtonStyle === 'circular' ? "text-center mx-3" : "flex items-center gap-3 ml-3"
           )}>
             {contextBadge && exitButtonStyle === 'circular' && (
-              <div className="flex items-center justify-center gap-1 mb-0.5">
+              <div className="flex items-center justify-center gap-1 mb-1">
                 {contextBadge}
               </div>
             )}
-            <div className="min-w-0">
-              <h1 className={cn(
-                "font-semibold truncate",
-                "bg-gradient-to-r from-sage-800 to-sage-600 bg-clip-text text-transparent",
-                exitButtonStyle === 'circular' ? "text-sm" : "text-base"
+            <h1 className={cn(
+              "font-semibold truncate tracking-tight",
+              // Solid color - cleaner, more minimal
+              "text-sage-800",
+              exitButtonStyle === 'circular' ? "text-xl" : "text-base"
+            )}>
+              {title}
+            </h1>
+            {subtitle && (
+              <p className={cn(
+                "text-sage-600/80 truncate",
+                exitButtonStyle === 'circular' ? "text-xs mt-0.5" : "text-sm italic mt-0.5"
               )}>
-                {title}
-              </h1>
-              {subtitle && (
-                <p className={cn(
-                  "text-sage-600 truncate",
-                  exitButtonStyle === 'circular' ? "text-xs" : "text-sm italic"
-                )}>
-                  {subtitle}
-                </p>
-              )}
-            </div>
+                {subtitle}
+              </p>
+            )}
           </div>
 
           {/* Right actions */}
           {actions && (
-            <div className="flex items-center gap-1 flex-shrink-0 ml-3">
+            <div className="flex items-center gap-1.5 flex-shrink-0 ml-3">
               {actions}
             </div>
           )}

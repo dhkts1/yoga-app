@@ -1,35 +1,14 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Lock, CheckCircle2, Award, Play, Pause, RotateCcw, ChevronRight, BookOpen, Clock, Calendar } from 'lucide-react';
+import { Award, RotateCcw, ChevronRight, BookOpen, Clock, Calendar, Play, Pause, Lock } from 'lucide-react';
 import { DefaultLayout } from '../components/layouts';
 import { PageHeader } from '../components/headers';
-import { Button } from '../components/design-system';
-import { Badge } from '../components/ui/badge';
+import { Button, StatusBadge } from '../components/design-system';
 import { Progress } from '../components/ui/progress';
 import { getProgramById } from '../data/programs';
 import useProgramProgressStore from '../stores/programProgress';
-
-// Animation variants
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.04,
-      delayChildren: 0.1
-    }
-  }
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 8 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.3, ease: 'easeOut' }
-  }
-};
+import { LIST_ANIMATION_SUBTLE } from '../utils/animations';
 
 function ProgramDetail() {
   const navigate = useNavigate();
@@ -103,38 +82,17 @@ function ProgramDetail() {
   };
 
   const getWeekBadge = (week) => {
-    const completed = isWeekCompleted(program.id, week.weekNumber);
-    const unlocked = isWeekUnlocked(week.weekNumber);
-    const isCurrent = week.weekNumber === currentWeek;
-
-    if (completed) {
-      return (
-        <Badge className="bg-green-600 text-white border-0">
-          <CheckCircle2 className="h-3 w-3 mr-1" />
-          Completed
-        </Badge>
-      );
-    }
-
-    if (isCurrent && isActive) {
-      return (
-        <Badge className="bg-sage-600 text-white border-0">
-          <Play className="h-3 w-3 mr-1" />
-          Current
-        </Badge>
-      );
-    }
-
-    if (!unlocked) {
-      return (
-        <Badge variant="outline" className="bg-gray-50 text-gray-500 border-gray-300">
-          <Lock className="h-3 w-3 mr-1" />
-          Locked
-        </Badge>
-      );
-    }
-
-    return null;
+    return (
+      <StatusBadge
+        type="weekStatus"
+        value={{
+          isCompleted: isWeekCompleted(program.id, week.weekNumber),
+          isCurrent: week.weekNumber === currentWeek,
+          isActive,
+          isUnlocked: isWeekUnlocked(week.weekNumber),
+        }}
+      />
+    );
   };
 
   return (
@@ -234,7 +192,7 @@ function ProgramDetail() {
         </div>
 
         {showResetConfirm && (
-          <p className="text-xs text-red-600 mt-2 text-center">
+          <p className="text-xs text-state-error mt-2 text-center">
             Click again to confirm. This will delete all progress.
           </p>
         )}
@@ -248,7 +206,7 @@ function ProgramDetail() {
 
         <motion.div
           className="space-y-3 mb-24"
-          variants={containerVariants}
+          variants={LIST_ANIMATION_SUBTLE.container}
           initial="hidden"
           animate="visible"
         >
@@ -260,7 +218,7 @@ function ProgramDetail() {
             return (
               <motion.button
                 key={week.weekNumber}
-                variants={itemVariants}
+                variants={LIST_ANIMATION_SUBTLE.item}
                 onClick={() => handleWeekClick(week.weekNumber)}
                 disabled={!unlocked}
                 className={`w-full text-left bg-white rounded-xl p-4 shadow-sm border transition-all duration-300 ${

@@ -1,6 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
-import { AnimatePresence, motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { AnimatePresence } from 'framer-motion';
 import Welcome from './screens/Welcome';
 import Sessions from './screens/Sessions';
 import SessionDetail from './screens/SessionDetail';
@@ -17,257 +16,30 @@ import ProgramDetail from './screens/ProgramDetail';
 import WeekDetail from './screens/WeekDetail';
 import OfflineIndicator from './components/design-system/OfflineIndicator';
 import Onboarding from './components/Onboarding';
+import AnimatedRoute from './components/AnimatedRoute';
 
 // Animated routes wrapper component
 function AnimatedRoutes() {
   const location = useLocation();
-  const [shouldReduceMotion, setShouldReduceMotion] = useState(false);
-
-  // Check for prefers-reduced-motion
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    setShouldReduceMotion(mediaQuery.matches);
-
-    const handleChange = (e) => {
-      setShouldReduceMotion(e.matches);
-    };
-
-    mediaQuery.addEventListener('change', handleChange);
-    return () => mediaQuery.removeEventListener('change', handleChange);
-  }, []);
-
-  // Page transition variants - using only 2 keyframes for spring compatibility
-  const pageVariants = shouldReduceMotion
-    ? {
-        initial: { opacity: 1 },
-        animate: { opacity: 1 },
-        exit: { opacity: 1 },
-      }
-    : {
-        initial: { opacity: 0 },
-        animate: { opacity: 1 },
-        exit: { opacity: 0 },
-      };
-
-  const pageTransition = {
-    type: "tween",
-    ease: "easeInOut",
-    duration: 0.3,
-  };
 
   return (
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
-        <Route
-          path="/"
-          element={
-            <motion.div
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              variants={pageVariants}
-              transition={pageTransition}
-            >
-              <Welcome />
-            </motion.div>
-          }
-        />
-        <Route
-          path="/sessions"
-          element={
-            <motion.div
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              variants={pageVariants}
-              transition={pageTransition}
-            >
-              <Sessions />
-            </motion.div>
-          }
-        />
-        <Route
-          path="/sessions/:sessionId/preview"
-          element={
-            <motion.div
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              variants={pageVariants}
-              transition={pageTransition}
-            >
-              <SessionDetail />
-            </motion.div>
-          }
-        />
-        <Route
-          path="/sessions/builder"
-          element={
-            <motion.div
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              variants={pageVariants}
-              transition={pageTransition}
-            >
-              <SessionBuilder />
-            </motion.div>
-          }
-        />
-        <Route
-          path="/practice"
-          element={
-            <motion.div
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              variants={pageVariants}
-              transition={pageTransition}
-            >
-              <Practice />
-            </motion.div>
-          }
-        />
-        <Route
-          path="/breathing"
-          element={
-            <motion.div
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              variants={pageVariants}
-              transition={pageTransition}
-            >
-              <Breathing />
-            </motion.div>
-          }
-        />
-        <Route
-          path="/breathing/practice"
-          element={
-            <motion.div
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              variants={pageVariants}
-              transition={pageTransition}
-            >
-              <BreathingPractice />
-            </motion.div>
-          }
-        />
-        <Route
-          path="/insights"
-          element={
-            <motion.div
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              variants={pageVariants}
-              transition={pageTransition}
-            >
-              <Insights />
-            </motion.div>
-          }
-        />
-        <Route
-          path="/progress"
-          element={
-            <motion.div
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              variants={pageVariants}
-              transition={pageTransition}
-            >
-              <Insights />
-            </motion.div>
-          }
-        />
-        <Route
-          path="/settings"
-          element={
-            <motion.div
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              variants={pageVariants}
-              transition={pageTransition}
-            >
-              <Settings />
-            </motion.div>
-          }
-        />
-        <Route
-          path="/complete"
-          element={
-            <motion.div
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              variants={pageVariants}
-              transition={pageTransition}
-            >
-              <Complete />
-            </motion.div>
-          }
-        />
-        <Route
-          path="/poses"
-          element={
-            <motion.div
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              variants={pageVariants}
-              transition={pageTransition}
-            >
-              <PoseLibrary />
-            </motion.div>
-          }
-        />
-        <Route
-          path="/programs"
-          element={
-            <motion.div
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              variants={pageVariants}
-              transition={pageTransition}
-            >
-              <Programs />
-            </motion.div>
-          }
-        />
-        <Route
-          path="/programs/:programId"
-          element={
-            <motion.div
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              variants={pageVariants}
-              transition={pageTransition}
-            >
-              <ProgramDetail />
-            </motion.div>
-          }
-        />
-        <Route
-          path="/programs/:programId/week/:weekNumber"
-          element={
-            <motion.div
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              variants={pageVariants}
-              transition={pageTransition}
-            >
-              <WeekDetail />
-            </motion.div>
-          }
-        />
+        <Route path="/" element={<AnimatedRoute component={Welcome} />} />
+        <Route path="/sessions" element={<AnimatedRoute component={Sessions} />} />
+        <Route path="/sessions/:sessionId/preview" element={<AnimatedRoute component={SessionDetail} />} />
+        <Route path="/sessions/builder" element={<AnimatedRoute component={SessionBuilder} />} />
+        <Route path="/practice" element={<AnimatedRoute component={Practice} />} />
+        <Route path="/breathing" element={<AnimatedRoute component={Breathing} />} />
+        <Route path="/breathing/practice" element={<AnimatedRoute component={BreathingPractice} />} />
+        <Route path="/insights" element={<AnimatedRoute component={Insights} />} />
+        <Route path="/progress" element={<AnimatedRoute component={Insights} />} />
+        <Route path="/settings" element={<AnimatedRoute component={Settings} />} />
+        <Route path="/complete" element={<AnimatedRoute component={Complete} />} />
+        <Route path="/poses" element={<AnimatedRoute component={PoseLibrary} />} />
+        <Route path="/programs" element={<AnimatedRoute component={Programs} />} />
+        <Route path="/programs/:programId" element={<AnimatedRoute component={ProgramDetail} />} />
+        <Route path="/programs/:programId/week/:weekNumber" element={<AnimatedRoute component={WeekDetail} />} />
       </Routes>
     </AnimatePresence>
   );

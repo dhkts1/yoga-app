@@ -71,8 +71,22 @@ npm run test:e2e     # Run Playwright E2E tests
 
 ## 📄 Documentation
 
+### Core Documentation
 - **CLAUDE.md** - Development guidance and architecture
 - **PRD.md** - Complete product requirements
+
+### Refactoring Documentation (October 2025)
+- **docs/REFACTORING_SUMMARY.md** - Comprehensive refactoring overview (208+ lines eliminated)
+- **docs/NEW_APIS.md** - Quick reference for new components, hooks, and utilities
+- **DESIGN_SYSTEM_COMPONENTS.md** - Design system component usage guide
+- **src/hooks/README.md** - Custom hooks API reference
+
+#### Recent Improvements
+- ✅ **4 new design system components** (Badge, Stat, Tab, EmptyState)
+- ✅ **Badge utility system** eliminating 114 lines of duplication
+- ✅ **localStorage hooks** eliminating 94 lines of duplication
+- ✅ **Centralized design tokens** for consistent styling
+- ✅ **Mobile-first patterns** across all new components
 
 ## 🧪 Testing
 

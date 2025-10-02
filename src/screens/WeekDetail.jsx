@@ -18,27 +18,7 @@ import useProgramProgressStore from '../stores/programProgress';
 import useProgressStore from '../stores/progress';
 import { getProgramById, getWeekByNumber } from '../data/programs';
 import { getSessionById } from '../data/sessions';
-
-// Animation variants
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.05,
-      delayChildren: 0.1
-    }
-  }
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 8 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.3, ease: 'easeOut' }
-  }
-};
+import { LIST_ANIMATION_SUBTLE } from '../utils/animations';
 
 function WeekDetail() {
   const navigate = useNavigate();
@@ -152,7 +132,7 @@ function WeekDetail() {
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
             {completed && (
-              <Badge className="bg-green-600 text-white border-0">
+              <Badge className="bg-state-success text-white border-0">
                 <CheckCircle2 className="h-3 w-3 mr-1" />
                 Completed
               </Badge>
@@ -204,12 +184,12 @@ function WeekDetail() {
           </div>
           <div className="w-full bg-sage-100 rounded-full h-2 overflow-hidden">
             <div
-              className="bg-green-600 h-full rounded-full transition-all duration-500 ease-out"
+              className="bg-state-success h-full rounded-full transition-all duration-500 ease-out"
               style={{ width: `${progressPercentage}%` }}
             />
           </div>
           {progressPercentage === 100 && !completed && (
-            <p className="text-xs text-green-700 mt-2 flex items-center gap-1">
+            <p className="text-xs text-state-success mt-2 flex items-center gap-1">
               <CheckCircle2 className="h-3 w-3" />
               All sessions complete! Mark week as complete below.
             </p>
@@ -242,7 +222,7 @@ function WeekDetail() {
 
         <motion.div
           className="space-y-3"
-          variants={containerVariants}
+          variants={LIST_ANIMATION_SUBTLE.container}
           initial="hidden"
           animate="visible"
         >
@@ -253,11 +233,11 @@ function WeekDetail() {
             return (
               <motion.button
                 key={sessionId}
-                variants={itemVariants}
+                variants={LIST_ANIMATION_SUBTLE.item}
                 onClick={() => handleSessionClick(sessionId, index)}
                 className={`w-full text-left rounded-xl p-4 shadow-sm border transition-all duration-300 hover:shadow-md hover:scale-[1.01] active:scale-[0.99] ${
                   isCompleted
-                    ? 'bg-green-50 border-green-200'
+                    ? 'bg-state-success/10 border-state-success/30'
                     : 'bg-white border-sage-100'
                 }`}
               >
@@ -269,7 +249,7 @@ function WeekDetail() {
                         Session {index + 1}
                       </span>
                       {isCompleted && (
-                        <Badge className="bg-green-600 text-white border-0 text-xs py-0 px-2 h-5">
+                        <Badge className="bg-state-success text-white border-0 text-xs py-0 px-2 h-5">
                           <CheckCircle2 className="h-3 w-3 mr-1" />
                           Completed
                         </Badge>
@@ -300,7 +280,7 @@ function WeekDetail() {
                   {/* Arrow or checkmark */}
                   <div className="flex-shrink-0 flex items-center">
                     {isCompleted ? (
-                      <CheckCircle2 className="h-6 w-6 text-green-600" />
+                      <CheckCircle2 className="h-6 w-6 text-state-success" />
                     ) : (
                       <ChevronRight className="h-5 w-5 text-sage-400" />
                     )}
