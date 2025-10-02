@@ -143,7 +143,7 @@ function Welcome() {
 
   return (
     <DefaultLayout
-      header={<PageHeader title="Today" showBack={false} />}
+      header={<PageHeader title="Welcome Back" subtitle="Ready to practice?" showBack={false} />}
     >
       <div className="w-full max-w-sm mx-auto px-4 py-6 flex flex-col items-center">
         {/* Time-based greeting */}
