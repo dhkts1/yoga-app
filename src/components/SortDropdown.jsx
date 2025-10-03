@@ -55,10 +55,10 @@ function SortDropdown({ selectedSort, onSortChange }) {
         aria-haspopup="true"
         aria-label="Sort options"
       >
-        <ArrowUpDown className="h-3.5 w-3.5 flex-shrink-0 text-muted-foreground" />
-        <Text className="text-xs font-medium text-card-foreground">Sort</Text>
+        <ArrowUpDown className="size-3.5 shrink-0 text-muted-foreground" />
+        <Text className="text-xs font-medium text-foreground">Sort</Text>
         <ChevronDown
-          className={`h-3.5 w-3.5 flex-shrink-0 text-muted-foreground transition-transform ${isOpen ? "rotate-180" : ""}`}
+          className={`size-3.5 shrink-0 text-muted-foreground transition-transform ${isOpen ? "rotate-180" : ""}`}
         />
       </button>
 
@@ -76,11 +76,11 @@ function SortDropdown({ selectedSort, onSortChange }) {
                   className={`flex w-full items-center gap-2 border-b border-border px-3 py-2 text-left transition-colors last:border-b-0 ${
                     isActive
                       ? "bg-primary text-primary-foreground"
-                      : "text-card-foreground hover:bg-muted active:bg-muted"
+                      : "text-foreground hover:bg-muted active:bg-muted"
                   } `}
                   aria-label={option.label}
                 >
-                  <span className="flex-shrink-0 text-sm" aria-hidden="true">
+                  <span className="shrink-0 text-sm" aria-hidden="true">
                     {option.icon}
                   </span>
                   <Text className="truncate text-sm font-medium">

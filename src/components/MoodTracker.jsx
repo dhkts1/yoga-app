@@ -79,14 +79,14 @@ function MoodTracker({
       role="dialog"
       aria-modal="true"
       aria-labelledby="mood-tracker-title"
-      className={`bg-card rounded-2xl p-4 sm:p-6 shadow-lg max-w-sm mx-4 sm:mx-auto ${className}`}
+      className={`mx-4 max-w-sm rounded-2xl bg-card p-4 shadow-lg sm:mx-auto sm:p-6 ${className}`}
     >
       {/* Header */}
-      <div className="text-center mb-6">
-        <h3 id="mood-tracker-title" className="text-lg font-medium text-primary mb-2">
+      <div className="mb-6 text-center">
+        <h3 id="mood-tracker-title" className="mb-2 text-lg font-medium text-foreground">
           {title}
         </h3>
-        <p className="text-sm text-secondary">
+        <p className="text-sm text-muted-foreground">
           {isPostPractice
             ? "Let's see how your practice went"
             : "This helps us understand your starting point"
@@ -97,11 +97,11 @@ function MoodTracker({
       {/* Mood Selection */}
       {!showEnergyStep && (
         <div className="animate-fade-in">
-          <h4 className="text-sm font-medium text-muted-foreground mb-4 text-center">
+          <h4 className="mb-4 text-center text-sm font-medium text-muted-foreground">
             How's your mood right now?
           </h4>
 
-          <div className="grid grid-cols-5 gap-1 sm:gap-2 mb-6">
+          <div className="mb-6 grid grid-cols-5 gap-1 sm:gap-2">
             {MOOD_OPTIONS.map((mood) => (
               <motion.button
                 key={mood.value}
@@ -115,8 +115,8 @@ function MoodTracker({
                   }
                 }}
                 className={`
-                  relative aspect-square rounded-xl border-2 transition-all duration-300
-                  hover:scale-105 min-h-[44px] flex items-center justify-center
+                  relative flex aspect-square min-h-touch items-center justify-center
+                  rounded-xl border-2 transition-all duration-300 hover:scale-105
                   ${selectedMood?.value === mood.value
                     ? 'border-primary bg-primary/10 shadow-md'
                     : 'border-border hover:border-primary/50 hover:bg-muted'
@@ -128,15 +128,15 @@ function MoodTracker({
                   {mood.emoji}
                 </span>
                 {selectedMood?.value === mood.value && (
-                  <CheckCircle className="absolute -top-1 -right-1 h-4 w-4 text-primary bg-card rounded-full" />
+                  <CheckCircle className="absolute -right-1 -top-1 size-4 rounded-full bg-card text-foreground" />
                 )}
               </motion.button>
             ))}
           </div>
 
-          <div className="grid grid-cols-5 gap-1 sm:gap-2 mb-6">
+          <div className="mb-6 grid grid-cols-5 gap-1 sm:gap-2">
             {MOOD_OPTIONS.map((mood) => (
-              <p key={mood.value} className="text-xs text-center text-secondary">
+              <p key={mood.value} className="text-center text-xs text-muted-foreground">
                 {mood.label}
               </p>
             ))}
@@ -147,11 +147,11 @@ function MoodTracker({
       {/* Energy Level Selection */}
       {showEnergyStep && (
         <div className="animate-fade-in">
-          <h4 className="text-sm font-medium text-muted-foreground mb-4 text-center">
+          <h4 className="mb-4 text-center text-sm font-medium text-muted-foreground">
             What's your energy level?
           </h4>
 
-          <div className="space-y-3 mb-6">
+          <div className="mb-6 space-y-3">
             {ENERGY_LEVELS.map((level) => (
               <motion.button
                 key={level.value}
@@ -161,9 +161,9 @@ function MoodTracker({
                   transition: { type: 'spring', stiffness: 400, damping: 20 }
                 }}
                 className={`
-                  w-full p-3 rounded-lg border-2 transition-all duration-300
-                  hover:scale-[1.02] min-h-[44px]
-                  flex items-center justify-between
+                  flex min-h-touch w-full items-center justify-between rounded-lg
+                  border-2 p-3
+                  transition-all duration-300 hover:scale-[1.02]
                   ${selectedEnergy?.value === level.value
                     ? 'border-primary bg-primary/10 shadow-md'
                     : 'border-border hover:border-primary/50 hover:bg-muted'
@@ -177,9 +177,9 @@ function MoodTracker({
                       scale: [1, 1.2, 1],
                       transition: { duration: 0.3 }
                     } : {}}
-                    className={`w-6 h-6 rounded-full ${level.color} transition-all duration-300`}
+                    className={`size-6 rounded-full ${level.color} transition-all duration-300`}
                   />
-                  <span className="text-sm font-medium text-primary">
+                  <span className="text-sm font-medium text-foreground">
                     {level.label}
                   </span>
                 </div>
@@ -193,7 +193,7 @@ function MoodTracker({
                         scaleY: [1, 1.3, 1],
                         transition: { duration: 0.3, delay: index * 0.05 }
                       } : {}}
-                      className={`w-1.5 h-4 rounded-full transition-all duration-300 ${
+                      className={`h-4 w-1.5 rounded-full transition-all duration-300 ${
                         index < level.value ? 'bg-primary' : 'bg-muted'
                       }`}
                     />
@@ -201,7 +201,7 @@ function MoodTracker({
                 </div>
 
                 {selectedEnergy?.value === level.value && (
-                  <CheckCircle className="h-5 w-5 text-primary ml-2" />
+                  <CheckCircle className="ml-2 size-5 text-foreground" />
                 )}
               </motion.button>
             ))}
@@ -210,11 +210,11 @@ function MoodTracker({
       )}
 
       {/* Progress indicator */}
-      <div className="flex justify-center space-x-2 mb-6">
-        <div className={`w-2 h-2 rounded-full transition-all duration-300 ${
+      <div className="mb-6 flex justify-center space-x-2">
+        <div className={`size-2 rounded-full transition-all duration-300 ${
           selectedMood ? 'bg-primary' : 'bg-muted'
         }`} />
-        <div className={`w-2 h-2 rounded-full transition-all duration-300 ${
+        <div className={`size-2 rounded-full transition-all duration-300 ${
           showEnergyStep ? 'bg-primary' : 'bg-muted'
         }`} />
       </div>
@@ -222,14 +222,14 @@ function MoodTracker({
       {/* Don't show again and Skip options */}
       <div className="space-y-3">
         {/* Don't show again checkbox */}
-        <label className="flex items-center justify-center gap-2 cursor-pointer">
+        <label className="flex cursor-pointer items-center justify-center gap-2">
           <input
             type="checkbox"
             checked={dontShowAgain}
             onChange={(e) => setDontShowAgain(e.target.checked)}
-            className="w-4 h-4 text-muted-foreground border-primary rounded focus:ring-ring"
+            className="size-4 rounded border-primary text-muted-foreground focus:ring-ring"
           />
-          <span className="text-sm text-secondary">
+          <span className="text-sm text-muted-foreground">
             Don't show mood tracking again
           </span>
         </label>
@@ -238,7 +238,7 @@ function MoodTracker({
         <div className="text-center">
           <button
             onClick={handleSkip}
-            className="text-sm text-secondary hover:text-primary transition-colors duration-200 underline"
+            className="text-sm text-muted-foreground underline transition-colors duration-200 hover:text-foreground"
           >
             Skip this step
           </button>

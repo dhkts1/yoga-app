@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { Text, CircularProgress } from './design-system';
 import { getBreathingInstruction } from '../data/breathing';
 
@@ -24,25 +24,30 @@ function BreathingGuide({
 }) {
   const [currentPhase, setCurrentPhase] = useState('inhale');
   const [timeInPhase, setTimeInPhase] = useState(0);
-  const [isAnimating, setIsAnimating] = useState(false);
-  const [circleScale, setCircleScale] = useState(0.5);
-  const phaseStartScaleRef = useRef(0.5); // Track scale at phase start
+  const [phaseStartScale, setPhaseStartScale] = useState(0.5); // Track scale at phase start
   const intervalRef = useRef(null);
   const timeoutRef = useRef(null);
 
+  // Derive isAnimating from isActive - no setState in effect needed
+  const isAnimating = isActive;
+
   // Get current phase duration from exercise pattern
   const getCurrentPhaseDuration = () => {
+    if (!exercise) return 0;
     return exercise.pattern[currentPhase] * 1000; // convert to milliseconds
   };
 
   // Move to next phase in the breathing cycle
-  const moveToNextPhase = () => {
+  const moveToNextPhase = (currentScale) => {
     const phases = ['inhale', 'holdIn', 'exhale', 'holdOut'];
     const currentIndex = phases.indexOf(currentPhase);
     const nextPhase = phases[(currentIndex + 1) % phases.length];
 
     setCurrentPhase(nextPhase);
     setTimeInPhase(0);
+
+    // Save current scale as the start scale for next phase
+    setPhaseStartScale(currentScale);
 
     // If we completed a full cycle (returned to inhale), notify parent
     if (nextPhase === 'inhale' && currentPhase === 'holdOut') {
@@ -56,8 +61,6 @@ function BreathingGuide({
       return;
     }
 
-    setIsAnimating(true);
-
     // Clear any existing timers
     if (intervalRef.current) clearInterval(intervalRef.current);
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
@@ -69,8 +72,18 @@ function BreathingGuide({
         const phaseDuration = getCurrentPhaseDuration();
 
         if (newTime >= phaseDuration) {
-          // Phase complete, move to next
-          timeoutRef.current = setTimeout(moveToNextPhase, 0);
+          // Calculate current scale before transitioning
+          const progress = 1; // Phase complete
+          let currentScale = phaseStartScale;
+
+          if (currentPhase === 'inhale') {
+            currentScale = phaseStartScale + ((1.0 - phaseStartScale) * progress);
+          } else if (currentPhase === 'exhale') {
+            currentScale = phaseStartScale - ((phaseStartScale - 0.5) * progress);
+          }
+
+          // Phase complete, move to next with current scale
+          timeoutRef.current = setTimeout(() => moveToNextPhase(currentScale), 0);
           return 0;
         }
 
@@ -81,57 +94,38 @@ function BreathingGuide({
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
+
+      // Reset state when effect cleanup runs (e.g., when isActive becomes false)
+      if (!isActive) {
+        setCurrentPhase('inhale');
+        setTimeInPhase(0);
+        setPhaseStartScale(0.5);
+      }
     };
   }, [isActive, exercise, currentPhase]);
 
-  // Stop animation when not active
-  useEffect(() => {
-    if (!isActive) {
-      setIsAnimating(false);
-      setCurrentPhase('inhale');
-      setTimeInPhase(0);
-
-      if (intervalRef.current) clearInterval(intervalRef.current);
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    }
-  }, [isActive]);
-
-  // Save the scale when entering a new phase
-  useEffect(() => {
-    if (timeInPhase === 0) {
-      phaseStartScaleRef.current = circleScale;
-    }
-  }, [currentPhase, timeInPhase, circleScale]);
-
-  // Calculate circle scale based on current phase and time progress
-  useEffect(() => {
+  // Calculate circle scale using useMemo - derived from phase and time
+  const circleScale = useMemo(() => {
     if (!isActive || !exercise) {
-      setCircleScale(0.5);
-      phaseStartScaleRef.current = 0.5;
-      return;
+      return 0.5;
     }
 
     const phaseDuration = getCurrentPhaseDuration();
     const progress = phaseDuration > 0 ? Math.min(timeInPhase / phaseDuration, 1) : 0;
-    const startScale = phaseStartScaleRef.current;
 
     switch (currentPhase) {
       case 'inhale':
-        // Expand from start scale to 1.0
-        setCircleScale(startScale + ((1.0 - startScale) * progress));
-        break;
+        return phaseStartScale + ((1.0 - phaseStartScale) * progress);
       case 'holdIn':
-        // Stay at current scale (already at 1.0 from inhale)
-        break;
+        return phaseStartScale; // Stay at current scale
       case 'exhale':
-        // Contract from start scale to 0.5
-        setCircleScale(startScale - ((startScale - 0.5) * progress));
-        break;
+        return phaseStartScale - ((phaseStartScale - 0.5) * progress);
       case 'holdOut':
-        // Stay at current scale (already at 0.5 from exhale)
-        break;
+        return phaseStartScale; // Stay at current scale
+      default:
+        return 0.5;
     }
-  }, [currentPhase, timeInPhase, isActive, exercise]);
+  }, [isActive, exercise, currentPhase, timeInPhase, phaseStartScale]);
 
   if (!exercise) {
     return null;
@@ -192,7 +186,7 @@ function BreathingGuide({
   return (
     <div className={`flex flex-col items-center justify-center ${className}`}>
       {/* Main breathing circle with controls */}
-      <div className="relative flex items-center justify-center mb-8 w-56 h-56">
+      <div className="relative mb-8 flex size-56 items-center justify-center">
         {/* Phase progress ring - positioned absolutely */}
         <div className="absolute inset-0 flex items-center justify-center">
           <CircularProgress
@@ -205,44 +199,44 @@ function BreathingGuide({
         </div>
 
         {/* Outer ring for reference - centered */}
-        <div className="absolute w-48 h-48 rounded-full border-2 border-border opacity-30" />
+        <div className="absolute size-48 rounded-full border-2 border-border opacity-30" />
 
         {/* Animated breathing circle - synced with timer */}
         <div
-          className="absolute w-48 h-48 rounded-full bg-gradient-to-br from-sage-400 to-sage-600 shadow-lg flex items-center justify-center transition-transform duration-75 ease-linear"
+          className="absolute flex size-48 items-center justify-center rounded-full bg-gradient-to-br from-sage-400 to-sage-600 shadow-lg transition-transform duration-75 ease-linear"
           style={{
             transform: `scale(${circleScale})`,
             opacity: isAnimating ? 0.8 : 0.6
           }}
         >
           {/* Inner circle for depth */}
-          <div className="w-24 h-24 rounded-full bg-muted opacity-50" />
+          <div className="size-24 rounded-full bg-muted opacity-50" />
         </div>
       </div>
 
       {/* Phase text and instructions */}
-      <div className="text-center max-w-sm">
-        <Text variant="h2" className="mb-2 font-medium text-primary">
+      <div className="max-w-sm text-center">
+        <Text variant="h2" className="mb-2 font-medium text-foreground">
           {getPhaseText()}
         </Text>
 
-        <Text variant="body" className="text-secondary mb-4">
+        <Text variant="body" className="mb-4 text-muted-foreground">
           {getInstructionText()}
         </Text>
 
         {/* Current phase duration display */}
         <div className="flex items-center justify-center space-x-2">
-          <div className="w-2 h-2 rounded-full bg-muted0" />
-          <Text variant="caption" className="text-secondary">
+          <div className="bg-muted0 size-2 rounded-full" />
+          <Text variant="caption" className="text-muted-foreground">
             {exercise.pattern[currentPhase]}s
           </Text>
-          <div className="w-2 h-2 rounded-full bg-muted0" />
+          <div className="bg-muted0 size-2 rounded-full" />
         </div>
       </div>
 
       {/* Exercise name and pattern display */}
       <div className="mt-6 text-center">
-        <Text variant="caption" className="text-secondary mb-1">
+        <Text variant="caption" className="mb-1 text-muted-foreground">
           {exercise.nameEnglish}
         </Text>
         <Text variant="caption" className="text-muted-foreground">

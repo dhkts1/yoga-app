@@ -39,13 +39,13 @@ const Heading = React.forwardRef(
 
     // Typography variants - mobile-first responsive sizing
     const variants = {
-      h1: "text-xl sm:text-2xl font-semibold text-primary leading-tight tracking-tight",
-      h2: "text-lg sm:text-xl font-semibold text-primary leading-tight tracking-tight",
-      h3: "text-base sm:text-lg font-medium text-primary leading-snug tracking-tight",
-      h4: "text-base font-medium text-primary leading-snug tracking-tight",
+      h1: "text-xl sm:text-2xl font-semibold text-foreground leading-tight tracking-tight",
+      h2: "text-lg sm:text-xl font-semibold text-foreground leading-tight tracking-tight",
+      h3: "text-base sm:text-lg font-medium text-foreground leading-snug tracking-tight",
+      h4: "text-base font-medium text-foreground leading-snug tracking-tight",
       display:
-        "text-2xl sm:text-3xl font-semibold text-primary leading-tight tracking-tight",
-      hero: "text-3xl sm:text-4xl font-bold text-primary leading-tight tracking-tight",
+        "text-2xl sm:text-3xl font-semibold text-foreground leading-tight tracking-tight",
+      hero: "text-3xl sm:text-4xl font-bold text-foreground leading-tight tracking-tight",
     };
 
     const headingStyles = cn(
@@ -83,16 +83,16 @@ const Text = React.forwardRef(
     ref,
   ) => {
     const variants = {
-      body: "text-base text-primary leading-relaxed",
-      secondary: "text-base text-secondary leading-relaxed",
-      muted: "text-base text-muted leading-relaxed",
-      small: "text-sm text-secondary leading-normal",
-      caption: "text-sm text-muted leading-normal",
-      large: "text-lg text-primary leading-relaxed",
-      lead: "text-lg text-primary leading-relaxed font-light",
+      body: "text-base text-foreground leading-relaxed",
+      secondary: "text-base text-muted-foreground leading-relaxed",
+      muted: "text-base text-muted-foreground leading-relaxed",
+      small: "text-sm text-muted-foreground leading-normal",
+      caption: "text-sm text-muted-foreground leading-normal",
+      large: "text-lg text-foreground leading-relaxed",
+      lead: "text-lg text-foreground leading-relaxed font-light",
       // Mobile-optimized variants
-      "mobile-body": "text-sm sm:text-base text-primary leading-relaxed",
-      "mobile-small": "text-xs sm:text-sm text-secondary leading-normal",
+      "mobile-body": "text-sm sm:text-base text-foreground leading-relaxed",
+      "mobile-small": "text-xs sm:text-sm text-muted-foreground leading-normal",
     };
 
     const textStyles = cn(
@@ -122,11 +122,11 @@ const PoseName = React.forwardRef(
   ({ className, children, sanskrit, ...props }, ref) => {
     return (
       <div className={cn("space-y-1", className)} ref={ref} {...props}>
-        <h3 className="text-lg font-medium leading-relaxed text-primary">
+        <h3 className="text-lg font-medium leading-relaxed text-foreground">
           {children}
         </h3>
         {sanskrit && (
-          <p className="text-sm italic leading-normal text-secondary">
+          <p className="text-sm italic leading-normal text-muted-foreground">
             {sanskrit}
           </p>
         )}
@@ -169,7 +169,7 @@ const Label = React.forwardRef(
     return (
       <label
         className={cn(
-          "text-base font-medium leading-normal text-primary",
+          "text-base font-medium leading-normal text-foreground",
           "mb-2 block",
           className,
         )}
@@ -196,7 +196,7 @@ const HelperText = React.forwardRef(
       <p
         className={cn(
           "mt-1 text-sm leading-normal",
-          error ? "text-state-error" : "text-muted",
+          error ? "text-state-error" : "text-muted-foreground",
           className,
         )}
         ref={ref}
@@ -223,11 +223,11 @@ const Quote = React.forwardRef(
         ref={ref}
         {...props}
       >
-        <p className="mb-2 text-base italic leading-relaxed text-primary">
+        <p className="mb-2 text-base italic leading-relaxed text-foreground">
           "{children}"
         </p>
         {author && (
-          <cite className="text-sm not-italic text-secondary">— {author}</cite>
+          <cite className="text-sm not-italic text-muted-foreground">— {author}</cite>
         )}
       </blockquote>
     );
@@ -285,7 +285,7 @@ const Link = React.forwardRef(
       default:
         "text-muted-foreground hover:text-muted-foreground underline underline-offset-2",
       subtle:
-        "text-primary hover:text-muted-foreground hover:underline underline-offset-2",
+        "text-foreground hover:text-muted-foreground hover:underline underline-offset-2",
       button:
         "text-muted-foreground hover:text-muted-foreground font-medium no-underline hover:underline underline-offset-2",
     };

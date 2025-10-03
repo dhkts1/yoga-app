@@ -35,7 +35,7 @@ function AppLayout({
     <div
       className={cn(
         // Full viewport height, flex column layout
-        'h-screen flex flex-col',
+        'flex h-screen flex-col',
         // Background
         'bg-background',
         // Safe area padding (top only - bottom handled by individual elements)
@@ -48,7 +48,7 @@ function AppLayout({
       {showHeader && header && (
         <div
           className={cn(
-            'flex-shrink-0 z-50 bg-background',
+            'z-50 shrink-0 bg-background',
             fixedHeader && 'sticky top-0'
           )}
         >
@@ -65,7 +65,7 @@ function AppLayout({
           // Add bottom padding for BottomNav (48px + safe area)
           showBottomNav && 'pb-[calc(48px+env(safe-area-inset-bottom))]',
           // Add bottom padding for fixed footer if present
-          showFooter && fixedFooter && !showBottomNav && 'pb-[env(safe-area-inset-bottom)]',
+          showFooter && fixedFooter && !showBottomNav && 'pb-safe-bottom',
           contentClassName
         )}
         style={{
@@ -79,7 +79,7 @@ function AppLayout({
       {showFooter && footer && (
         <div
           className={cn(
-            'flex-shrink-0 z-40 bg-background border-t border-border',
+            'z-40 shrink-0 border-t border-border bg-background',
             fixedFooter && 'sticky bottom-0',
             // Add safe area padding to footer
             handleSafeArea && !showBottomNav && 'pb-safe-bottom'

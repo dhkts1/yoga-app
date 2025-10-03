@@ -59,9 +59,9 @@ function Programs() {
         {/* Introduction */}
         <Card padding="sm" className="mb-4 border-border bg-muted">
           <div className="flex items-start gap-2.5">
-            <BookOpen className="mt-0.5 h-5 w-5 flex-shrink-0 text-muted-foreground" />
+            <BookOpen className="mt-0.5 size-5 shrink-0 text-muted-foreground" />
             <div>
-              <Text className="mb-1 text-sm font-medium text-card-foreground">
+              <Text className="mb-1 text-sm font-medium text-foreground">
                 {t("screens.programs.beginJourney")}
               </Text>
               <Text
@@ -95,7 +95,7 @@ function Programs() {
                 {/* Header with badges */}
                 <div className="mb-2 flex items-start justify-between gap-2">
                   <div className="min-w-0 flex-1">
-                    <h3 className="mb-1.5 line-clamp-2 text-sm font-medium text-card-foreground">
+                    <h3 className="mb-1.5 line-clamp-2 text-sm font-medium text-foreground">
                       {program.name}
                     </h3>
                     <div className="mb-2 flex flex-wrap items-center gap-1.5">
@@ -138,14 +138,14 @@ function Programs() {
                 {/* Metadata */}
                 <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
                   <div className="flex items-center gap-1">
-                    <Calendar className="h-3.5 w-3.5 flex-shrink-0" />
+                    <Calendar className="size-3.5 shrink-0" />
                     <span>
                       {program.totalWeeks} {t("common.weeks")}
                     </span>
                   </div>
                   <span>•</span>
                   <div className="flex items-center gap-1">
-                    <Clock className="h-3.5 w-3.5 flex-shrink-0" />
+                    <Clock className="size-3.5 shrink-0" />
                     <span>{t("screens.programs.progressiveLearning")}</span>
                   </div>
                 </div>

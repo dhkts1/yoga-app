@@ -10,12 +10,12 @@ import SkeletonLoader from './SkeletonLoader';
 export default function RouteLoadingFallback() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="w-full max-w-md px-4 space-y-4">
+      <div className="w-full max-w-md space-y-4 px-4">
         {/* Header skeleton */}
         <SkeletonLoader variant="text" height="2rem" width="60%" className="mx-auto" />
 
         {/* Content skeletons */}
-        <div className="space-y-3 mt-8">
+        <div className="mt-8 space-y-3">
           <SkeletonLoader variant="card" height="6rem" />
           <SkeletonLoader variant="card" height="6rem" />
           <SkeletonLoader variant="card" height="6rem" />

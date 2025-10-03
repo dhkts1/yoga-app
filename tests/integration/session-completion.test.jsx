@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import useProgressStore from '../../src/stores/progress';
+import useAnalyticsStore from '../../src/stores/analytics';
 import Welcome from '../../src/screens/Welcome';
 
 /**
@@ -144,7 +145,7 @@ describe('Session Completion Flow', () => {
         useProgressStore.getState().completeSession(session);
       });
 
-      const analytics = useProgressStore.getState().getMoodAnalytics(30);
+      const analytics = useAnalyticsStore.getState().getMoodAnalytics(30);
 
       expect(analytics.sessionsWithMoodData).toBe(3);
       expect(analytics.averageMoodImprovement).toBeGreaterThan(0);

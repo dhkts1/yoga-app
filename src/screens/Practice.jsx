@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import { HelpCircle } from 'lucide-react';
 import { getSessionById } from '../data/sessions';
@@ -10,7 +10,6 @@ import PoseImage from '../components/PoseImage';
 import MoodTracker from '../components/MoodTracker';
 import { PracticeLayout } from '../components/layouts';
 import { ContentBody } from '../components/design-system';
-import FeatureTooltip from '../components/FeatureTooltip';
 import { PracticeHeader } from '../components/headers';
 import { PracticeControls } from '../components/practice/PracticeControls';
 import { PracticeTipsOverlay } from '../components/practice/PracticeTipsOverlay';
@@ -40,8 +39,15 @@ function Practice() {
 
   // Load session based on type
   const [session, setSession] = useState(null);
+  const sessionLoadedRef = useRef(false);
 
   useEffect(() => {
+    // Prevent cascading renders by only loading session once per session change
+    const sessionKey = `${sessionId}-${customSessionId}`;
+    if (sessionLoadedRef.current === sessionKey) {
+      return;
+    }
+
     if (customSessionId) {
       // Wait for custom sessions to load
       if (customSessionsLoading) {
@@ -51,6 +57,7 @@ function Practice() {
       // Load custom session using hook
       const customSession = getCustomSessionById(customSessionId);
       if (customSession) {
+        sessionLoadedRef.current = sessionKey;
         setSession(getCustomSessionWithPoses(customSession));
       } else {
         console.error('Custom session not found:', customSessionId);
@@ -59,6 +66,7 @@ function Practice() {
     } else {
       // Load pre-built session
       const prebuiltSession = getSessionById(sessionId || 'morning-energizer');
+      sessionLoadedRef.current = sessionKey;
       setSession(prebuiltSession);
     }
   }, [sessionId, customSessionId, navigate, getCustomSessionById, customSessionsLoading]);
@@ -254,7 +262,7 @@ function Practice() {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
         <div className="text-center">
-          <p className="text-lg text-primary mb-2">{t('screens.practice.sessionNotFound')}</p>
+          <p className="mb-2 text-lg text-foreground">{t('screens.practice.sessionNotFound')}</p>
           <button
             onClick={() => navigate('/sessions')}
             className="text-muted-foreground hover:text-muted-foreground"
@@ -270,7 +278,7 @@ function Practice() {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
         <div className="text-center">
-          <p className="text-lg text-primary">{t('screens.practice.loadingPose')}</p>
+          <p className="text-lg text-foreground">{t('screens.practice.loadingPose')}</p>
         </div>
       </div>
     );
@@ -323,10 +331,10 @@ function Practice() {
               }
               setShowTips(!showTips);
             }}
-            className="flex h-10 w-10 items-center justify-center rounded-full bg-muted text-muted-foreground hover:bg-muted transition-colors"
+            className="flex size-10 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors hover:bg-muted"
             aria-label={t(showTips ? 'screens.practice.closeTips' : 'screens.practice.showTips')}
           >
-            <HelpCircle className="h-5 w-5" />
+            <HelpCircle className="size-5" />
           </button>
 
           {/* Tooltip: Tips Icon */}
@@ -377,10 +385,10 @@ function Practice() {
       >
         <ContentBody size="sm" centered padding="none" {...swipeHandlers}>
           {/* Session name and program context - directly under header */}
-          <div className="text-center px-4 -mt-1">
+          <div className="-mt-1 px-4 text-center">
             {programContext && (
               <div className="mb-1">
-                <p className="text-lg sm:text-xl font-medium text-foreground">
+                <p className="text-lg font-medium text-foreground sm:text-xl">
                   {programName}
                 </p>
                 <p className="text-sm text-muted-foreground">
@@ -397,13 +405,13 @@ function Practice() {
 
           {/* Rest Screen */}
           <div className="animate-fade-in">
-          <div className="text-center space-y-6">
+          <div className="space-y-6 text-center">
             {/* Rest Message */}
             <div>
-              <h2 className="text-3xl sm:text-4xl font-light text-muted-foreground mb-2">
+              <h2 className="mb-2 text-3xl font-light text-muted-foreground sm:text-4xl">
                 {t('screens.practice.restTransition')}
               </h2>
-              <p className="text-base sm:text-lg text-muted-foreground">
+              <p className="text-base text-muted-foreground sm:text-lg">
                 {t('screens.practice.prepareNext')}
               </p>
             </div>
@@ -411,20 +419,20 @@ function Practice() {
             {/* Countdown Timer with ARIA live region */}
             <div className="my-8">
               <div
-                className="text-7xl sm:text-8xl font-light text-primary mb-2"
+                className="mb-2 text-7xl font-light text-foreground sm:text-8xl"
                 aria-live="assertive"
                 aria-atomic="true"
               >
                 {restTimeRemaining}
               </div>
-              <p className="text-base sm:text-lg text-secondary">{t('screens.practice.secondsRemaining')}</p>
+              <p className="text-base text-muted-foreground sm:text-lg">{t('screens.practice.secondsRemaining')}</p>
             </div>
 
             {/* Next Pose Preview */}
             {nextPose && (
               <div className="mb-8">
-                <p className="text-sm text-muted-foreground mb-2">{t('screens.practice.nextPoseLabel')}</p>
-                <p className="text-3xl sm:text-4xl font-medium text-foreground mb-1">
+                <p className="mb-2 text-sm text-muted-foreground">{t('screens.practice.nextPoseLabel')}</p>
+                <p className="mb-1 text-3xl font-medium text-foreground sm:text-4xl">
                   {nextPose.nameEnglish}
                   {nextPoseData?.side && (
                     <span className="ml-2 text-xl font-normal text-muted-foreground">
@@ -432,7 +440,7 @@ function Practice() {
                     </span>
                   )}
                 </p>
-                <p className="text-lg sm:text-xl text-muted-foreground italic">
+                <p className="text-lg italic text-muted-foreground sm:text-xl">
                   {nextPose.nameSanskrit}
                 </p>
               </div>
@@ -441,7 +449,7 @@ function Practice() {
             {/* Skip Rest Button */}
             <button
               onClick={handleNextPose}
-              className="mt-6 px-8 py-3 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium transition-all duration-300 shadow-lg hover:shadow-xl active:scale-95"
+              className="mt-6 rounded-full bg-primary px-8 py-3 font-medium text-primary-foreground shadow-lg transition-all duration-300 hover:bg-primary/90 hover:shadow-xl active:scale-95"
             >
               {t('screens.practice.skipRest')}
             </button>
@@ -460,10 +468,10 @@ function Practice() {
     >
       <ContentBody size="sm" centered padding="none" {...swipeHandlers}>
         {/* Session name and program context - directly under header */}
-        <div className="text-center px-4 -mt-1">
+        <div className="-mt-1 px-4 text-center">
           {programContext && (
             <div className="mb-1">
-              <p className="text-lg sm:text-xl font-medium text-foreground">
+              <p className="text-lg font-medium text-foreground sm:text-xl">
                 {programName}
               </p>
               <p className="text-sm text-muted-foreground">
@@ -489,7 +497,7 @@ function Practice() {
 
         {/* Pose Info */}
         <div className="text-center">
-          <h2 className="mb-1 text-xl sm:text-2xl font-medium text-primary">
+          <h2 className="mb-1 text-xl font-medium text-foreground sm:text-2xl">
             {pose.nameEnglish}
             {currentPoseData?.side && (
               <span className="ml-2 text-lg font-normal text-muted-foreground">
@@ -497,30 +505,30 @@ function Practice() {
               </span>
             )}
           </h2>
-          <p className="mb-1 text-sm sm:text-base text-secondary italic">
+          <p className="mb-1 text-sm italic text-muted-foreground sm:text-base">
             {pose.nameSanskrit}
           </p>
           {/* Pose count - moved from header */}
-          <p className="text-sm text-muted-foreground mb-1">
+          <p className="mb-1 text-sm text-muted-foreground">
             {t('screens.practice.poseOf', { current: currentPoseIndex + 1, total: session?.poses?.length || 0 })}
           </p>
 
           {/* Timer with ARIA live region */}
           <div className="mb-2">
             <div
-              className="text-3xl sm:text-4xl font-light text-primary"
+              className="text-3xl font-light text-foreground sm:text-4xl"
               aria-live="polite"
               aria-atomic="true"
             >
               {formatTime(timeRemaining)}
             </div>
-            <p className="text-sm sm:text-base text-secondary">{t('screens.practice.remaining')}</p>
+            <p className="text-sm text-muted-foreground sm:text-base">{t('screens.practice.remaining')}</p>
           </div>
 
           {/* Next Pose Preview */}
           {currentPoseIndex < session.poses.length - 1 && (
             <div className="mb-3">
-              <p className="text-lg sm:text-xl font-medium text-foreground">
+              <p className="text-lg font-medium text-foreground sm:text-xl">
                 {t('screens.practice.nextPoseLabel')} {getPoseById(session.poses[currentPoseIndex + 1].poseId)?.nameEnglish}
                 {session.poses[currentPoseIndex + 1]?.side && (
                   <span className="ml-1 text-lg font-normal text-muted-foreground">
@@ -533,7 +541,7 @@ function Practice() {
 
           {/* Pose description - hidden on very small screens */}
           {pose.description && (
-            <p className="hidden sm:block mb-3 text-base text-muted-foreground leading-relaxed">
+            <p className="mb-3 hidden text-base leading-relaxed text-muted-foreground sm:block">
               {pose.description}
             </p>
           )}

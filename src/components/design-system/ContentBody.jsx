@@ -55,7 +55,7 @@ const ContentBody = React.forwardRef(({
     paddings[padding],
 
     // Vertical centering for sparse content
-    centered && 'flex flex-col items-center justify-center h-full',
+    centered && 'flex h-full flex-col items-center justify-center',
 
     // Child spacing
     spacings[spacing],

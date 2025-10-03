@@ -38,11 +38,11 @@ function GlassIconButton({
       onClick={onClick}
       className={cn(
         // Base styles
-        'flex-shrink-0 flex items-center justify-center',
+        'flex shrink-0 items-center justify-center',
         // Glass effect
         'backdrop-blur-md',
         // Colors
-        'text-muted-foreground hover:text-card-foreground',
+        'text-muted-foreground hover:text-foreground',
         'hover:bg-muted/50',
         // Animations
         'transition-all duration-200 ease-out',
@@ -56,7 +56,7 @@ function GlassIconButton({
       aria-label={label}
       {...props}
     >
-      <Icon className="h-5 w-5" strokeWidth={2} />
+      <Icon className="size-5" strokeWidth={2} />
     </button>
   );
 }

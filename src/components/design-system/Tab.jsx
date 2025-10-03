@@ -68,17 +68,17 @@ const Tab = React.forwardRef(({
         'rounded-md',
         isActive
           ? 'bg-card text-muted-foreground shadow-sm'
-          : 'text-text-secondary hover:text-muted-foreground hover:bg-card/50'
+          : 'text-muted-foreground hover:bg-card/50 hover:text-muted-foreground'
       );
     }
 
     if (variant === 'underline') {
       return cn(
         baseTabStyles,
-        'pb-3 border-b-2',
+        'border-b-2 pb-3',
         isActive
-          ? 'text-foreground border-primary'
-          : 'text-muted-foreground border-transparent hover:text-foreground hover:border-primary'
+          ? 'border-primary text-foreground'
+          : 'border-transparent text-muted-foreground hover:border-primary hover:text-foreground'
       );
     }
 
@@ -87,8 +87,8 @@ const Tab = React.forwardRef(({
         baseTabStyles,
         'rounded-lg border-2',
         isActive
-          ? 'bg-primary text-primary-foreground border-primary shadow-sm'
-          : 'bg-transparent text-muted-foreground border-border hover:bg-muted hover:border-primary'
+          ? 'border-primary bg-primary text-primary-foreground shadow-sm'
+          : 'border-border bg-transparent text-muted-foreground hover:border-primary hover:bg-muted'
       );
     }
 
@@ -133,18 +133,18 @@ const Tab = React.forwardRef(({
             >
               <div className="flex items-center justify-center gap-2">
                 {tabIcon && (
-                  <span className="flex-shrink-0">{tabIcon}</span>
+                  <span className="shrink-0">{tabIcon}</span>
                 )}
                 <span>{tabLabel}</span>
                 {tabCount !== null && tabCount !== undefined && (
                   <span
                     className={cn(
-                      'ml-1 px-2 py-0.5 rounded-full text-xs font-medium',
+                      'ml-1 rounded-full px-2 py-0.5 text-xs font-medium',
                       isActive
                         ? variant === 'buttons'
-                          ? 'bg-card/20 text-white'
+                          ? 'bg-card/20 text-primary-foreground'
                           : 'bg-muted text-muted-foreground'
-                        : 'bg-muted text-text-muted'
+                        : 'bg-muted text-muted-foreground'
                     )}
                   >
                     {tabCount}
@@ -156,7 +156,7 @@ const Tab = React.forwardRef(({
               {variant === 'pills' && isActive && (
                 <motion.div
                   layoutId="activeTabIndicator"
-                  className="absolute inset-0 bg-card rounded-md shadow-sm -z-10"
+                  className="absolute inset-0 -z-10 rounded-md bg-card shadow-sm"
                   transition={{
                     type: 'spring',
                     stiffness: 400,

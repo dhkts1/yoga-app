@@ -25,7 +25,13 @@ npm run preview      # Preview production build
 npm run lint         # ESLint check (includes Tailwind CSS linting)
 npm run format       # Prettier formatting (with Tailwind plugin)
 
-# Testing
+# Testing - Unit Tests (Vitest)
+npm run test               # Run unit tests in watch mode
+npm test -- --run          # Run once (used in pre-commit hook)
+npm run test:ui            # Interactive unit test UI
+npm run test:coverage      # Coverage report
+
+# Testing - E2E (Playwright)
 npm run test:e2e           # Run E2E tests with Playwright
 npm run test:e2e:ui        # Interactive test UI
 npm run test:e2e:debug     # Debug tests step-by-step
@@ -48,6 +54,7 @@ npm run test:a11y          # Run accessibility tests
 ### Tech Stack
 
 - **Framework**: React 18 + Vite 5
+- **Compiler**: React Compiler (RC) - Automatic memoization without manual `useMemo`/`useCallback`
 - **Routing**: React Router v7.9.3
 - **State**: Zustand 5.0.8 with persist middleware
 - **Styling**: Tailwind CSS 3.4.4 + custom design system
@@ -55,7 +62,8 @@ npm run test:a11y          # Run accessibility tests
 - **Voice**: Web Speech API
 - **Icons**: Lucide React 0.419.0
 - **PWA**: vite-plugin-pwa 1.0.3
-- **Testing**: Playwright 1.55.1
+- **Mobile Build**: Capacitor 7.4.3 (Android APK support)
+- **Testing**: Playwright 1.55.1 + Vitest 3.2.4
 
 ### State Management (`/src/stores/`)
 
@@ -76,6 +84,12 @@ npm run test:a11y          # Run accessibility tests
 **preferences.js** - User settings
 - Voice coaching preferences, app settings
 - Persisted with Zustand middleware (`yoga-preferences` key)
+
+**analytics.js** - Analytics methods (no state duplication)
+- Queries `progress.js` as source of truth
+- Key methods: `getMoodAnalytics()`, `getPracticeHeatmap()`, `getAnalyticsSummary()`
+- Includes recommendation tracking and favorite action analytics
+- Follows Single Responsibility Principle (analytics logic separate from progress state)
 
 ### Data Layer (`/src/data/`)
 
@@ -284,7 +298,8 @@ src/
 ├── stores/
 │   ├── progress.js
 │   ├── programProgress.js
-│   └── preferences.js
+│   ├── preferences.js
+│   └── analytics.js
 ├── hooks/
 │   ├── usePracticeTimer.js
 │   ├── useMoodTracking.js
@@ -302,6 +317,26 @@ src/
 
 ## Testing
 
+### Unit & Integration Testing (Vitest)
+```bash
+npm run test               # Watch mode (development)
+npm test -- --run          # Single run (CI/pre-commit)
+npm run test:ui            # Interactive UI
+npm run test:coverage      # Coverage report
+```
+
+**Configuration**:
+- Framework: Vitest 3.2.4 with Happy DOM
+- Location: `/tests/integration/` for integration tests
+- Globals: `vi`, `describe`, `it`, `expect`, `beforeEach`, `afterEach` (auto-imported)
+- Config: Inline in `vite.config.js` (shares Vite config)
+- Coverage: v8 provider via `@vitest/coverage-v8`
+
+**Test Types**:
+- Integration tests for hooks (`useMoodTracking`, `useCustomSessions`, etc.)
+- Store tests (progress, programProgress, preferences)
+- Component tests with React Testing Library
+
 ### E2E Testing (Playwright)
 ```bash
 npm run test:e2e         # All tests
@@ -315,7 +350,7 @@ npm run test:a11y        # Accessibility tests
 - Location: `/tests/e2e/` (E2E), `/tests/a11y/` (Accessibility)
 - Viewport: 375px (iPhone 13)
 - Server: Auto-starts on `http://localhost:5173`
-- Parallelization: Enabled for speed
+- Parallelization: Enabled (75% workers locally, 1 on CI)
 - Config: `playwright.config.js` (mobile-first, 20s timeout)
 
 **Test Coverage**:
@@ -324,6 +359,8 @@ npm run test:a11y        # Accessibility tests
 - Program flow (unlock, pause, resume)
 - Session completion tracking
 - Data persistence
+- Multi-tab synchronization
+- Keyboard navigation
 - WCAG AA compliance (via @axe-core/playwright)
 
 ---
@@ -352,6 +389,10 @@ npm run test:a11y        # Accessibility tests
 - **No user accounts** - All data stored locally via localStorage
 - **JavaScript** - Using .jsx (not TypeScript) for rapid prototyping
 - **Mobile-first** - All features optimized for 375px baseline
+- **React Compiler** - Automatic optimization enabled (RC version via Babel plugin)
+  - Auto-memoizes components without manual `useMemo`/`useCallback`
+  - ESLint enforces compiler-compatible patterns (`react-compiler/react-compiler: error`)
+  - No manual performance optimization needed in most cases
 - **PWA enabled** - Full offline functionality via service worker (vite-plugin-pwa with Workbox)
 - **Voice coaching** - Toggleable, 3 personalities available
 - **Mood tracking** - Optional, users can skip

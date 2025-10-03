@@ -39,13 +39,16 @@ module.exports = {
       ],
     },
   },
-  plugins: ['react-refresh', 'tailwindcss'],
+  plugins: ['react-refresh', 'tailwindcss', 'react-compiler'],
   rules: {
     'react/jsx-no-target-blank': 'off',
     'react/prop-types': 'off', // Temporarily disable for rapid development
     'react/no-unescaped-entities': 'off', // Allow quotes in JSX text
     'react-refresh/only-export-components': 'off', // Allow mixed exports during development
     'react-hooks/exhaustive-deps': 'off', // Disable during rapid prototyping
+
+    // React Compiler rule
+    'react-compiler/react-compiler': 'error',
 
     // Tailwind CSS rules
     'tailwindcss/classnames-order': 'warn', // Prettier handles this, but keep as fallback

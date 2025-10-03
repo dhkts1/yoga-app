@@ -53,8 +53,8 @@ function PracticeHeader({
       {...props}
     >
       {/* Main header content - Fixed height */}
-      <div className="h-14 px-4 flex items-center">
-        <div className="flex items-center justify-center w-full relative z-[60]">
+      <div className="flex h-14 items-center px-4">
+        <div className="relative z-[60] flex w-full items-center justify-center">
           {/* Exit button - absolute positioned on left */}
           <div className="absolute left-0">
             {ExitButton}
@@ -62,16 +62,16 @@ function PracticeHeader({
 
           {/* Title area - truly centered with slight downward shift */}
           <div className={cn(
-            "min-w-0 mt-1",
+            "mt-1 min-w-0",
             exitButtonStyle === 'circular' ? "text-center" : "flex items-center gap-3"
           )}>
             {contextBadge && exitButtonStyle === 'circular' && (
-              <div className="flex items-center justify-center gap-1 mb-1">
+              <div className="mb-1 flex items-center justify-center gap-1">
                 {contextBadge}
               </div>
             )}
             <h1 className={cn(
-              "font-semibold truncate tracking-tight",
+              "truncate font-semibold tracking-tight",
               // Solid color - cleaner, more minimal
               "text-foreground",
               exitButtonStyle === 'circular' ? "text-xl" : "text-base"
@@ -80,8 +80,8 @@ function PracticeHeader({
             </h1>
             {subtitle && (
               <p className={cn(
-                "text-muted-foreground/80 truncate",
-                exitButtonStyle === 'circular' ? "text-xs mt-0.5" : "text-sm italic mt-0.5"
+                "truncate text-muted-foreground/80",
+                exitButtonStyle === 'circular' ? "mt-0.5 text-xs" : "mt-0.5 text-sm italic"
               )}>
                 {subtitle}
               </p>
@@ -90,7 +90,7 @@ function PracticeHeader({
 
           {/* Right actions - absolute positioned on right */}
           {actions && (
-            <div className="absolute right-0 flex items-center gap-1.5 flex-shrink-0">
+            <div className="absolute right-0 flex shrink-0 items-center gap-1.5">
               {actions}
             </div>
           )}

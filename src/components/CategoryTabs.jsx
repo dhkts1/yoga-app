@@ -60,7 +60,7 @@ function CategoryTabs({
           <span className="shrink-0 text-base" aria-hidden="true">
             {selectedCat.icon}
           </span>
-          <Text className="truncate text-sm font-medium text-card-foreground">
+          <Text className="truncate text-sm font-medium text-foreground">
             {selectedCat.label}
           </Text>
           <Badge variant="default" size="sm">
@@ -90,7 +90,7 @@ function CategoryTabs({
                     isActive
                       ? "bg-primary text-primary-foreground"
                       : hasContent || category.id === "all"
-                        ? "text-card-foreground hover:bg-muted active:bg-muted"
+                        ? "text-foreground hover:bg-muted active:bg-muted"
                         : "cursor-not-allowed text-muted-foreground opacity-40"
                   } `}
                   aria-label={`${category.label} category${hasContent ? ` (${count} items)` : ""}`}
@@ -108,7 +108,7 @@ function CategoryTabs({
                       variant="default"
                       size="sm"
                       className={
-                        isActive ? "bg-primary-foreground text-primary" : ""
+                        isActive ? "bg-primary-foreground text-foreground" : ""
                       }
                     >
                       {count}

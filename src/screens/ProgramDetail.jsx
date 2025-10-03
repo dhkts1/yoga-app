@@ -254,7 +254,7 @@ function ProgramDetail() {
 
       {/* Weeks List */}
       <div className="mb-6">
-        <h2 className="mb-4 px-1 text-lg font-medium text-card-foreground">
+        <h2 className="mb-4 px-1 text-lg font-medium text-foreground">
           Program Schedule
         </h2>
 
@@ -295,7 +295,7 @@ function ProgramDetail() {
                     </div>
 
                     {/* Week name */}
-                    <h3 className="mb-1 line-clamp-1 text-base font-medium text-card-foreground">
+                    <h3 className="mb-1 line-clamp-1 text-base font-medium text-foreground">
                       {week.name}
                     </h3>
 

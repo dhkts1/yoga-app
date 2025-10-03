@@ -27,25 +27,25 @@ import { Play, Pause, CheckCircle2, Lock } from "lucide-react";
 export function getProgramStatusBadge(status) {
   const configs = {
     active: {
-      className: "bg-sage-600 text-white border-0",
+      className: "bg-sage-600 text-primary-foreground border-0",
       Icon: Play,
       iconProps: { className: "h-3 w-3 mr-1" },
       children: "Active",
     },
     paused: {
-      className: "bg-state-warning text-white border-0",
+      className: "bg-state-warning text-primary-foreground border-0",
       Icon: Pause,
       iconProps: { className: "h-3 w-3 mr-1" },
       children: "Paused",
     },
     completed: {
-      className: "bg-state-success text-white border-0",
+      className: "bg-state-success text-primary-foreground border-0",
       Icon: CheckCircle2,
       iconProps: { className: "h-3 w-3 mr-1" },
       children: "Completed",
     },
     "not-started": {
-      className: "bg-white text-sage-700 border-sage-300",
+      className: "bg-background text-sage-700 border-sage-300",
       variant: "outline",
       Icon: Lock,
       iconProps: { className: "h-3 w-3 mr-1" },
@@ -71,7 +71,7 @@ export function getWeekStatusBadge({
 }) {
   if (isCompleted) {
     return {
-      className: "bg-state-success text-white border-0",
+      className: "bg-state-success text-primary-foreground border-0",
       Icon: CheckCircle2,
       iconProps: { className: "h-3 w-3 mr-1" },
       children: "Completed",
@@ -80,7 +80,7 @@ export function getWeekStatusBadge({
 
   if (isCurrent && isActive) {
     return {
-      className: "bg-sage-600 text-white border-0",
+      className: "bg-sage-600 text-primary-foreground border-0",
       Icon: Play,
       iconProps: { className: "h-3 w-3 mr-1" },
       children: "Current",

@@ -34,10 +34,10 @@ export function OfflineIndicator() {
             damping: 30,
             duration: 0.3
           }}
-          className="fixed top-0 left-0 right-0 z-50 bg-primary text-primary-foreground px-4 py-2 text-center text-sm font-medium shadow-natural-md"
+          className="shadow-natural-md fixed inset-x-0 top-0 z-50 bg-primary px-4 py-2 text-center text-sm font-medium text-primary-foreground"
         >
           <div className="flex items-center justify-center gap-2">
-            <div className="w-2 h-2 bg-muted rounded-full animate-pulse" />
+            <div className="size-2 animate-pulse rounded-full bg-muted" />
             You're currently offline. Your practice will still work perfectly!
           </div>
         </motion.div>

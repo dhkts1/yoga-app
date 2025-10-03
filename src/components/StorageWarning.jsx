@@ -28,7 +28,7 @@ function StorageWarning() {
   if (!showWarning || !storageInfo) return null;
 
   return (
-    <div className="fixed inset-x-4 bottom-20 z-40 rounded-lg bg-state-warning p-4 text-white shadow-lg duration-300 animate-in slide-in-from-bottom-2">
+    <div className="fixed inset-x-4 bottom-20 z-40 rounded-lg bg-state-warning p-4 text-primary-foreground shadow-lg duration-300 animate-in slide-in-from-bottom-2">
       <div className="flex items-start gap-3">
         <AlertTriangle className="mt-0.5 size-5 shrink-0" />
         <div className="min-w-0 flex-1">
@@ -37,16 +37,16 @@ function StorageWarning() {
             Your device storage is at {storageInfo.percent}%. Export your data
             to create a backup.
           </p>
-          <div className="h-1.5 overflow-hidden rounded-full bg-white/30">
+          <div className="h-1.5 overflow-hidden rounded-full bg-primary-foreground/30">
             <div
-              className="h-full bg-white transition-all duration-300"
+              className="h-full bg-primary-foreground transition-all duration-300"
               style={{ width: `${storageInfo.percent}%` }}
             />
           </div>
         </div>
         <button
           onClick={() => setShowWarning(false)}
-          className="shrink-0 text-white/80 transition-colors hover:text-white"
+          className="shrink-0 text-primary-foreground/80 transition-colors hover:text-primary-foreground"
           aria-label="Dismiss warning"
         >
           <X className="size-5" />

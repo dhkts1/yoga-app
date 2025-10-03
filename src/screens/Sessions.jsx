@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Clock,
@@ -37,6 +37,26 @@ import {
 import { LIST_ANIMATION } from "../utils/animations";
 import useTranslation from "../hooks/useTranslation";
 
+// Session icon mapping - moved outside component for React Compiler
+const SESSION_ICONS = {
+  "morning-energizer": Sun,
+  "lunch-break-relief": Zap,
+  "evening-wind-down": Moon,
+};
+
+// Helper to enrich session with pose image - React Compiler compatible
+const enrichSessionWithImage = (session) => ({
+  ...session,
+  poseImage: session.poses?.[0]?.poseId ? (
+    <PoseImage
+      poseId={session.poses[0].poseId}
+      size="sm"
+      shape="circular"
+    />
+  ) : null,
+  gradient: "bg-card",
+});
+
 function Sessions() {
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -63,12 +83,6 @@ function Sessions() {
     () => getTopRecommendations(allHistory, 2),
     [allHistory],
   );
-
-  const sessionIcons = {
-    "morning-energizer": Sun,
-    "lunch-break-relief": Zap,
-    "evening-wind-down": Moon,
-  };
 
   const handleSessionSelect = (sessionId, isCustom = false) => {
     if (isCustom) {
@@ -120,8 +134,8 @@ function Sessions() {
     [customSessions],
   );
 
-  // Sorting function
-  const sortSessions = (sessions) => {
+  // Sorting function - wrapped in useCallback for React Compiler
+  const sortSessions = useCallback((sessions) => {
     const sorted = [...sessions];
     switch (selectedSort) {
       case "duration-asc":
@@ -152,16 +166,16 @@ function Sessions() {
       default:
         return sorted; // Keep original order (most recent first for custom)
     }
-  };
+  }, [selectedSort]);
 
   // Apply sorting to filtered sessions
   const sortedFilteredSessions = useMemo(
     () => sortSessions(filteredSessions),
-    [filteredSessions, selectedSort],
+    [sortSessions, filteredSessions],
   );
   const sortedFilteredCustomSessions = useMemo(
     () => sortSessions(filteredCustomSessions),
-    [filteredCustomSessions, selectedSort],
+    [sortSessions, filteredCustomSessions],
   );
 
   // Use favorites hook to separate sessions
@@ -188,7 +202,7 @@ function Sessions() {
         className="p-2 hover:bg-muted"
         aria-label={`Edit ${session.name}`}
       >
-        <Edit2 className="h-4 w-4 text-muted-foreground" />
+        <Edit2 className="size-4 text-muted-foreground" />
       </Button>
       <Button
         variant="ghost"
@@ -200,7 +214,7 @@ function Sessions() {
         className="p-2 hover:bg-state-error/10"
         aria-label={`Delete ${session.name}`}
       >
-        <Trash2 className="h-4 w-4 text-state-error" />
+        <Trash2 className="size-4 text-state-error" />
       </Button>
     </>
   );
@@ -238,10 +252,10 @@ function Sessions() {
             />
             <button
               onClick={handleCreateSession}
-              className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-primary text-white transition-colors hover:bg-primary/90"
+              className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground transition-colors hover:bg-primary/90"
               aria-label={t("screens.sessions.createCustom")}
             >
-              <Plus className="h-5 w-5" />
+              <Plus className="size-5" />
             </button>
           </div>
         </div>
@@ -250,8 +264,8 @@ function Sessions() {
         {totalSessions >= 3 && recommendations.length > 0 && (
           <div className="mb-4">
             <div className="mb-2 flex items-center justify-center gap-1.5">
-              <Sparkles className="h-3.5 w-3.5 flex-shrink-0 text-accent" />
-              <h2 className="text-sm font-medium text-card-foreground">
+              <Sparkles className="size-3.5 shrink-0 text-accent" />
+              <h2 className="text-sm font-medium text-foreground">
                 {t("screens.sessions.recommendedForYou")}
               </h2>
             </div>
@@ -275,7 +289,7 @@ function Sessions() {
                   sessionData.duration || sessionData.defaultDuration;
                 const Icon = isBreathing
                   ? Zap
-                  : sessionIcons[rec.sessionId] || Clock;
+                  : SESSION_ICONS[rec.sessionId] || Clock;
 
                 // Get first pose for image (if yoga session)
                 const firstPoseId =
@@ -304,7 +318,7 @@ function Sessions() {
                     <div className="flex items-center gap-2.5">
                       {/* Pose Image */}
                       {firstPoseId && (
-                        <div className="h-10 w-10 flex-shrink-0">
+                        <div className="size-10 shrink-0">
                           <PoseImage
                             poseId={firstPoseId}
                             size="sm"
@@ -316,18 +330,18 @@ function Sessions() {
                       <div className="min-w-0 flex-1">
                         <div className="mb-0.5 flex items-center gap-1.5">
                           {!firstPoseId && (
-                            <Icon className="h-4 w-4 flex-shrink-0 text-accent" />
+                            <Icon className="size-4 shrink-0 text-accent" />
                           )}
-                          <h3 className="line-clamp-1 text-sm font-medium text-card-foreground">
+                          <h3 className="line-clamp-1 text-sm font-medium text-foreground">
                             {sessionName}
                           </h3>
                           {rec.isPrimary && (
-                            <Star className="h-3.5 w-3.5 flex-shrink-0 fill-current text-accent" />
+                            <Star className="size-3.5 shrink-0 fill-current text-accent" />
                           )}
                         </div>
                         <div className="flex items-center gap-2 text-xs text-muted-foreground">
                           <div className="flex items-center gap-1">
-                            <Clock className="h-3.5 w-3.5" />
+                            <Clock className="size-3.5" />
                             <span>{duration} min</span>
                           </div>
                           {!isBreathing && (
@@ -348,17 +362,7 @@ function Sessions() {
 
         {/* Favorite Custom Sessions */}
         <FavoriteSessionList
-          sessions={favoriteCustomSessionsList.map((session) => ({
-            ...session,
-            poseImage: session.poses?.[0]?.poseId ? (
-              <PoseImage
-                poseId={session.poses[0].poseId}
-                size="sm"
-                shape="circular"
-              />
-            ) : null,
-            gradient: "bg-card",
-          }))}
+          sessions={favoriteCustomSessionsList.map(enrichSessionWithImage)}
           title={t("screens.sessions.favoriteCustomSessions")}
           type="custom"
           onSessionClick={(session) => handleSessionSelect(session.id, true)}
@@ -368,17 +372,7 @@ function Sessions() {
 
         {/* Non-favorite Custom Sessions */}
         <SessionList
-          sessions={nonFavoriteCustomSessionsList.map((session) => ({
-            ...session,
-            poseImage: session.poses?.[0]?.poseId ? (
-              <PoseImage
-                poseId={session.poses[0].poseId}
-                size="sm"
-                shape="circular"
-              />
-            ) : null,
-            gradient: "bg-card",
-          }))}
+          sessions={nonFavoriteCustomSessionsList.map(enrichSessionWithImage)}
           title={t("screens.sessions.yourCustomSessions")}
           variant="custom"
           type="custom"
@@ -389,37 +383,17 @@ function Sessions() {
 
         {/* Favorite Pre-built Sessions */}
         <FavoriteSessionList
-          sessions={favoriteSessionsList.map((session) => ({
-            ...session,
-            poseImage: session.poses?.[0]?.poseId ? (
-              <PoseImage
-                poseId={session.poses[0].poseId}
-                size="sm"
-                shape="circular"
-              />
-            ) : null,
-            gradient: "bg-card",
-          }))}
+          sessions={favoriteSessionsList.map(enrichSessionWithImage)}
           title={t("screens.sessions.favoriteSessions")}
           type="yoga"
           onSessionClick={(session) => handleSessionSelect(session.id)}
-          getIcon={(session) => sessionIcons[session.id] || Clock}
+          getIcon={(session) => SESSION_ICONS[session.id] || Clock}
           getActions={getPrebuiltSessionActions}
         />
 
         {/* Non-favorite Pre-built Sessions */}
         <SessionList
-          sessions={nonFavoriteSessionsList.map((session) => ({
-            ...session,
-            poseImage: session.poses?.[0]?.poseId ? (
-              <PoseImage
-                poseId={session.poses[0].poseId}
-                size="sm"
-                shape="circular"
-              />
-            ) : null,
-            gradient: "bg-card",
-          }))}
+          sessions={nonFavoriteSessionsList.map(enrichSessionWithImage)}
           title={
             (customSessions.length > 0 || favoriteSessionsList.length > 0) &&
             nonFavoriteSessionsList.length > 0
@@ -431,7 +405,7 @@ function Sessions() {
           variant="default"
           type="yoga"
           onSessionClick={(session) => handleSessionSelect(session.id)}
-          getIcon={(session) => sessionIcons[session.id] || Clock}
+          getIcon={(session) => SESSION_ICONS[session.id] || Clock}
           getActions={getPrebuiltSessionActions}
         />
       </ContentBody>

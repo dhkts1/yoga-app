@@ -37,7 +37,7 @@ function SettingsSection({
           <div
             className={`rounded-lg p-2 ${iconBgColor} text-muted-foreground`}
           >
-            <Icon className="h-5 w-5" />
+            <Icon className="size-5" />
           </div>
           <div className="text-left">
             <Heading level={3} className="text-base text-foreground sm:text-lg">
@@ -49,7 +49,7 @@ function SettingsSection({
           </div>
         </div>
         <ChevronDown
-          className={`h-5 w-5 text-muted-foreground transition-transform duration-300 ${
+          className={`size-5 text-muted-foreground transition-transform duration-300 ${
             isOpen ? "rotate-180" : ""
           }`}
         />

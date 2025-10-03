@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import useProgressStore from '../../src/stores/progress';
+import useAnalyticsStore from '../../src/stores/analytics';
 import usePreferencesStore from '../../src/stores/preferences';
 
 /**
@@ -167,7 +168,7 @@ describe('Mood Tracking Flow', () => {
         useProgressStore.getState().completeSession(session);
       });
 
-      const analytics = useProgressStore.getState().getMoodAnalytics(30);
+      const analytics = useAnalyticsStore.getState().getMoodAnalytics(30);
 
       expect(analytics.sessionsWithMoodData).toBe(3);
       expect(analytics.averageMoodImprovement).toBeGreaterThan(0);
@@ -186,7 +187,7 @@ describe('Mood Tracking Flow', () => {
         useProgressStore.getState().completeSession(session);
       });
 
-      const analytics = useProgressStore.getState().getMoodAnalytics(30);
+      const analytics = useAnalyticsStore.getState().getMoodAnalytics(30);
 
       // 3 out of 4 sessions improved = 75%
       expect(analytics.improvementRate).toBe(75);
@@ -204,12 +205,12 @@ describe('Mood Tracking Flow', () => {
         useProgressStore.getState().completeSession(session);
       });
 
-      const analytics = useProgressStore.getState().getMoodAnalytics(30);
+      const analytics = useAnalyticsStore.getState().getMoodAnalytics(30);
       expect(analytics.moodTrend).toBe('improving');
     });
 
     it('handles insufficient data gracefully', () => {
-      const analytics = useProgressStore.getState().getMoodAnalytics(30);
+      const analytics = useAnalyticsStore.getState().getMoodAnalytics(30);
 
       expect(analytics.averageMoodImprovement).toBe(0);
       expect(analytics.averageEnergyImprovement).toBe(0);
@@ -233,7 +234,7 @@ describe('Mood Tracking Flow', () => {
       useProgressStore.getState().completeSession(oldSession);
 
       // Get analytics for last 30 days
-      const analytics = useProgressStore.getState().getMoodAnalytics(30);
+      const analytics = useAnalyticsStore.getState().getMoodAnalytics(30);
 
       // Should include the recent session
       expect(analytics.sessionsWithMoodData).toBeGreaterThan(0);
@@ -250,7 +251,7 @@ describe('Mood Tracking Flow', () => {
         useProgressStore.getState().completeSession(session);
       });
 
-      const analytics = useProgressStore.getState().getMoodAnalytics(30);
+      const analytics = useAnalyticsStore.getState().getMoodAnalytics(30);
 
       expect(analytics.sessionsWithMoodData).toBe(2); // Only 2 have mood data
       expect(analytics.totalSessions).toBe(3); // But 3 total sessions
@@ -266,7 +267,7 @@ describe('Mood Tracking Flow', () => {
       const session2 = { sessionId: 's2', sessionName: 'S2', duration: 10, poses: [], preMood: 3, postMood: 5, preEnergy: 3, postEnergy: 5 };
       useProgressStore.getState().completeSession(session2);
 
-      const lastMood = useProgressStore.getState().getLastSessionMoodData();
+      const lastMood = useAnalyticsStore.getState().getLastSessionMoodData();
 
       expect(lastMood).toBeDefined();
       // Should be from the last session with mood data
@@ -287,7 +288,7 @@ describe('Mood Tracking Flow', () => {
 
       useProgressStore.getState().completeSession(session);
 
-      const lastMood = useProgressStore.getState().getLastSessionMoodData();
+      const lastMood = useAnalyticsStore.getState().getLastSessionMoodData();
       expect(lastMood).toBeNull();
     });
 
@@ -301,7 +302,7 @@ describe('Mood Tracking Flow', () => {
         useProgressStore.getState().completeSession(session);
       });
 
-      const lastMood = useProgressStore.getState().getLastSessionMoodData();
+      const lastMood = useAnalyticsStore.getState().getLastSessionMoodData();
 
       // Should return data from s1, not s2
       expect(lastMood).toBeDefined();
@@ -415,7 +416,7 @@ describe('Mood Tracking Flow', () => {
       useProgressStore.getState().completeSession(yogaSession);
       useProgressStore.getState().completeBreathingSession(breathingSession);
 
-      const analytics = useProgressStore.getState().getMoodAnalytics(30);
+      const analytics = useAnalyticsStore.getState().getMoodAnalytics(30);
 
       expect(analytics.sessionsWithMoodData).toBe(2);
       expect(analytics.totalSessions).toBe(2);
@@ -518,7 +519,7 @@ describe('Mood Tracking Flow', () => {
         useProgressStore.getState().completeSession(session);
       });
 
-      const analytics = useProgressStore.getState().getMoodAnalytics(30);
+      const analytics = useAnalyticsStore.getState().getMoodAnalytics(30);
 
       expect(analytics.averageMoodImprovement).toBe(4);
       expect(analytics.improvementRate).toBe(100);
@@ -581,7 +582,7 @@ describe('Mood Tracking Flow', () => {
 
       useProgressStore.getState().importData(importData);
 
-      const lastMood = useProgressStore.getState().getLastSessionMoodData();
+      const lastMood = useAnalyticsStore.getState().getLastSessionMoodData();
       expect(lastMood).toBeDefined();
       expect(lastMood.moodImprovement).toBe(2);
     });

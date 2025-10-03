@@ -150,7 +150,7 @@ const Badge = React.forwardRef(({
     if (icon && iconPosition === 'left') {
       return (
         <>
-          <span className="flex-shrink-0">{icon}</span>
+          <span className="shrink-0">{icon}</span>
           {children}
         </>
       );
@@ -160,7 +160,7 @@ const Badge = React.forwardRef(({
       return (
         <>
           {children}
-          <span className="flex-shrink-0">{icon}</span>
+          <span className="shrink-0">{icon}</span>
         </>
       );
     }

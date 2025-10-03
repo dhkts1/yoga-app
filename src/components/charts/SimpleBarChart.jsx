@@ -21,11 +21,11 @@ const SimpleBarChart = memo(function SimpleBarChart({
   if (sortedData.length === 0) {
     return (
       <Card className={`p-4 ${className}`}>
-        <Text variant="body" className="font-medium mb-4">
+        <Text variant="body" className="mb-4 font-medium">
           {title}
         </Text>
-        <div className="text-center py-8">
-          <Text variant="caption" className="text-secondary">
+        <div className="py-8 text-center">
+          <Text variant="caption" className="text-muted-foreground">
             No data available yet
           </Text>
         </div>
@@ -38,7 +38,7 @@ const SimpleBarChart = memo(function SimpleBarChart({
   return (
     <Card className={`p-4 ${className}`}>
       {/* Title */}
-      <Text variant="body" className="font-medium mb-4">
+      <Text variant="body" className="mb-4 font-medium">
         {title}
       </Text>
 
@@ -50,19 +50,19 @@ const SimpleBarChart = memo(function SimpleBarChart({
           return (
             <div key={item.label || index} className="space-y-1">
               {/* Label and Value */}
-              <div className="flex justify-between items-center">
-                <Text variant="caption" className="text-primary font-medium">
+              <div className="flex items-center justify-between">
+                <Text variant="caption" className="font-medium text-foreground">
                   {item.label}
                 </Text>
                 {showValues && (
-                  <Text variant="caption" className="text-secondary">
+                  <Text variant="caption" className="text-muted-foreground">
                     {item.value}
                   </Text>
                 )}
               </div>
 
               {/* Bar */}
-              <div className="w-full bg-muted rounded-full h-2">
+              <div className="h-2 w-full rounded-full bg-muted">
                 <div
                   className="bg-muted0 h-2 rounded-full transition-all duration-500 ease-out"
                   style={{ width: `${percentage}%` }}
@@ -75,7 +75,7 @@ const SimpleBarChart = memo(function SimpleBarChart({
 
       {/* Legend/Note */}
       {sortedData.length > 0 && (
-        <Text variant="caption" className="text-secondary mt-3 block">
+        <Text variant="caption" className="mt-3 block text-muted-foreground">
           Top {sortedData.length} most practiced
         </Text>
       )}

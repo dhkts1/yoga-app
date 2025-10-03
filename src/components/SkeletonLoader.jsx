@@ -7,7 +7,7 @@
 
 import PropTypes from "prop-types";
 import { cn } from "../lib/utils";
-import { useEffect, useState } from "react";
+import { useReducedMotion } from "../hooks/useReducedMotion";
 
 const SkeletonLoader = ({
   width = "100%",
@@ -16,20 +16,8 @@ const SkeletonLoader = ({
   className = "",
   variant = "default",
 }) => {
-  const [shouldReduceMotion, setShouldReduceMotion] = useState(false);
-
-  // Check for prefers-reduced-motion
-  useEffect(() => {
-    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setShouldReduceMotion(mediaQuery.matches);
-
-    const handleChange = (e) => {
-      setShouldReduceMotion(e.matches);
-    };
-
-    mediaQuery.addEventListener("change", handleChange);
-    return () => mediaQuery.removeEventListener("change", handleChange);
-  }, []);
+  // Use existing hook instead of re-implementing
+  const shouldReduceMotion = useReducedMotion();
 
   // Variant styles
   const variants = {

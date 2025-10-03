@@ -7,6 +7,7 @@ import {
 import { AnimatePresence } from "framer-motion";
 import { lazy, Suspense, useEffect } from "react";
 import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 import usePreferencesStore from "./stores/preferences";
 
 // Eager-loaded screens (instant initial render for core UX)
@@ -39,6 +40,27 @@ import SkipLink from "./components/SkipLink";
 import { focusMainHeading } from "./utils/focusManagement";
 import "./utils/errorLogging"; // Initialize error logging
 
+// Routes configuration (eliminates boilerplate wrapper pattern)
+const routes = [
+  // Eager-loaded routes (core UX)
+  { path: "/", component: Welcome },
+  { path: "/practice", component: Practice },
+  { path: "/complete", component: Complete },
+  // Lazy-loaded routes (code-split)
+  { path: "/sessions", component: Sessions },
+  { path: "/sessions/:sessionId/preview", component: SessionDetail },
+  { path: "/sessions/builder", component: SessionBuilder },
+  { path: "/breathing", component: Breathing },
+  { path: "/breathing/practice", component: BreathingPractice },
+  { path: "/insights", component: Insights },
+  { path: "/progress", component: Insights }, // Alias for insights
+  { path: "/settings", component: Settings },
+  { path: "/poses", component: PoseLibrary },
+  { path: "/programs", component: Programs },
+  { path: "/programs/:programId", component: ProgramDetail },
+  { path: "/programs/:programId/week/:weekNumber", component: WeekDetail },
+];
+
 // Animated routes wrapper component
 function AnimatedRoutes() {
   const location = useLocation();
@@ -61,126 +83,17 @@ function AnimatedRoutes() {
     <AnimatePresence mode="wait">
       <Suspense fallback={<RouteLoadingFallback />}>
         <Routes location={location} key={location.pathname}>
-          <Route
-            path="/"
-            element={
-              <ErrorBoundary>
-                <AnimatedRoute component={Welcome} />
-              </ErrorBoundary>
-            }
-          />
-          <Route
-            path="/sessions"
-            element={
-              <ErrorBoundary>
-                <AnimatedRoute component={Sessions} />
-              </ErrorBoundary>
-            }
-          />
-          <Route
-            path="/sessions/:sessionId/preview"
-            element={
-              <ErrorBoundary>
-                <AnimatedRoute component={SessionDetail} />
-              </ErrorBoundary>
-            }
-          />
-          <Route
-            path="/sessions/builder"
-            element={
-              <ErrorBoundary>
-                <AnimatedRoute component={SessionBuilder} />
-              </ErrorBoundary>
-            }
-          />
-          <Route
-            path="/practice"
-            element={
-              <ErrorBoundary>
-                <AnimatedRoute component={Practice} />
-              </ErrorBoundary>
-            }
-          />
-          <Route
-            path="/breathing"
-            element={
-              <ErrorBoundary>
-                <AnimatedRoute component={Breathing} />
-              </ErrorBoundary>
-            }
-          />
-          <Route
-            path="/breathing/practice"
-            element={
-              <ErrorBoundary>
-                <AnimatedRoute component={BreathingPractice} />
-              </ErrorBoundary>
-            }
-          />
-          <Route
-            path="/insights"
-            element={
-              <ErrorBoundary>
-                <AnimatedRoute component={Insights} />
-              </ErrorBoundary>
-            }
-          />
-          <Route
-            path="/progress"
-            element={
-              <ErrorBoundary>
-                <AnimatedRoute component={Insights} />
-              </ErrorBoundary>
-            }
-          />
-          <Route
-            path="/settings"
-            element={
-              <ErrorBoundary>
-                <AnimatedRoute component={Settings} />
-              </ErrorBoundary>
-            }
-          />
-          <Route
-            path="/complete"
-            element={
-              <ErrorBoundary>
-                <AnimatedRoute component={Complete} />
-              </ErrorBoundary>
-            }
-          />
-          <Route
-            path="/poses"
-            element={
-              <ErrorBoundary>
-                <AnimatedRoute component={PoseLibrary} />
-              </ErrorBoundary>
-            }
-          />
-          <Route
-            path="/programs"
-            element={
-              <ErrorBoundary>
-                <AnimatedRoute component={Programs} />
-              </ErrorBoundary>
-            }
-          />
-          <Route
-            path="/programs/:programId"
-            element={
-              <ErrorBoundary>
-                <AnimatedRoute component={ProgramDetail} />
-              </ErrorBoundary>
-            }
-          />
-          <Route
-            path="/programs/:programId/week/:weekNumber"
-            element={
-              <ErrorBoundary>
-                <AnimatedRoute component={WeekDetail} />
-              </ErrorBoundary>
-            }
-          />
+          {routes.map(({ path, component }) => (
+            <Route
+              key={path}
+              path={path}
+              element={
+                <ErrorBoundary>
+                  <AnimatedRoute component={component} />
+                </ErrorBoundary>
+              }
+            />
+          ))}
         </Routes>
       </Suspense>
     </AnimatePresence>
@@ -209,6 +122,7 @@ function App() {
           <AnimatedRoutes />
         </div>
         <Analytics />
+        <SpeedInsights />
       </Router>
     </ThemeProvider>
   );

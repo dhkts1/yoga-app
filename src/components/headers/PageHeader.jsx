@@ -47,8 +47,8 @@ function PageHeader({
       className={cn(HEADER_STYLES.container, className)}
       {...props}
     >
-      <div className="px-4 h-14 flex items-center">
-        <div className="flex items-center justify-center w-full relative">
+      <div className="flex h-14 items-center px-4">
+        <div className="relative flex w-full items-center justify-center">
           {/* Back Button - absolute positioned on left */}
           {showBack && (
             <div className="absolute left-0">
@@ -63,22 +63,22 @@ function PageHeader({
           )}
 
           {/* Title - truly centered with slight downward shift */}
-          <div className="min-w-0 text-center mt-1">
+          <div className="mt-1 min-w-0 text-center">
             <h1 className={cn(
-              'text-base font-semibold truncate tracking-tight',
+              'truncate text-base font-semibold tracking-tight',
               // Solid color - cleaner, more minimal
               'text-foreground'
             )}>
               {title}
             </h1>
             {subtitle && (
-              <p className="text-xs text-muted-foreground/80 truncate mt-0.5">{subtitle}</p>
+              <p className="mt-0.5 truncate text-xs text-muted-foreground/80">{subtitle}</p>
             )}
           </div>
 
           {/* Right Actions - absolute positioned on right */}
           {actions && (
-            <div className="absolute right-0 flex-shrink-0">
+            <div className="absolute right-0 shrink-0">
               {actions}
             </div>
           )}

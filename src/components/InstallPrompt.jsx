@@ -56,9 +56,9 @@ function InstallPrompt() {
   if (!showPrompt) return null;
 
   return (
-    <div className="fixed bottom-20 left-4 right-4 bg-card p-4 rounded-lg shadow-lg border border-border z-40 animate-slide-up">
-      <h3 className="font-medium mb-2 text-foreground">Install Mindful Yoga</h3>
-      <p className="text-sm text-muted-foreground mb-3">
+    <div className="fixed inset-x-4 bottom-20 z-40 animate-slide-up rounded-lg border border-border bg-card p-4 shadow-lg">
+      <h3 className="mb-2 font-medium text-foreground">Install Mindful Yoga</h3>
+      <p className="mb-3 text-sm text-muted-foreground">
         Install our app for quick access and offline practice
       </p>
       <div className="flex gap-2">

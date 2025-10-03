@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import usePreferencesStore from '../../src/stores/preferences';
 import useProgressStore from '../../src/stores/progress';
+import useAnalyticsStore from '../../src/stores/analytics';
 
 /**
  * Integration Tests: Favorites Management
@@ -111,7 +112,7 @@ describe('Favorites Management Flow', () => {
         action: 'add'
       };
 
-      const record = useProgressStore.getState().trackFavoriteAction(actionData);
+      const record = useAnalyticsStore.getState().trackFavoriteAction(actionData);
 
       expect(record).toBeDefined();
       expect(record.itemId).toBe('morning-energizer');
@@ -245,10 +246,10 @@ describe('Favorites Management Flow', () => {
       ];
 
       actions.forEach(action => {
-        useProgressStore.getState().trackFavoriteAction(action);
+        useAnalyticsStore.getState().trackFavoriteAction(action);
       });
 
-      const analytics = useProgressStore.getState().getFavoriteAnalytics();
+      const analytics = useAnalyticsStore.getState().getFavoriteAnalytics();
 
       expect(analytics.totalActions).toBe(4);
       expect(analytics.addCount).toBe(3);
@@ -263,10 +264,10 @@ describe('Favorites Management Flow', () => {
       ];
 
       actions.forEach(action => {
-        useProgressStore.getState().trackFavoriteAction(action);
+        useAnalyticsStore.getState().trackFavoriteAction(action);
       });
 
-      const analytics = useProgressStore.getState().getFavoriteAnalytics();
+      const analytics = useAnalyticsStore.getState().getFavoriteAnalytics();
 
       expect(analytics.favoritesByType.session).toBe(2);
       expect(analytics.favoritesByType.breathing).toBe(1);
@@ -281,10 +282,10 @@ describe('Favorites Management Flow', () => {
       ];
 
       actions.forEach(action => {
-        useProgressStore.getState().trackFavoriteAction(action);
+        useAnalyticsStore.getState().trackFavoriteAction(action);
       });
 
-      const analytics = useProgressStore.getState().getFavoriteAnalytics();
+      const analytics = useAnalyticsStore.getState().getFavoriteAnalytics();
 
       expect(analytics.mostFavorited).toBeDefined();
       expect(analytics.mostFavorited.length).toBeGreaterThan(0);
@@ -293,7 +294,7 @@ describe('Favorites Management Flow', () => {
     });
 
     it('returns empty analytics when no actions tracked', () => {
-      const analytics = useProgressStore.getState().getFavoriteAnalytics();
+      const analytics = useAnalyticsStore.getState().getFavoriteAnalytics();
 
       expect(analytics.totalActions).toBe(0);
       expect(analytics.addCount).toBe(0);
@@ -304,14 +305,14 @@ describe('Favorites Management Flow', () => {
     it('limits most favorited to top 5', () => {
       // Add 10 different items
       for (let i = 0; i < 10; i++) {
-        useProgressStore.getState().trackFavoriteAction({
+        useAnalyticsStore.getState().trackFavoriteAction({
           itemId: `session-${i}`,
           type: 'session',
           action: 'add'
         });
       }
 
-      const analytics = useProgressStore.getState().getFavoriteAnalytics();
+      const analytics = useAnalyticsStore.getState().getFavoriteAnalytics();
       expect(analytics.mostFavorited.length).toBeLessThanOrEqual(5);
     });
   });

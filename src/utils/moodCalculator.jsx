@@ -111,7 +111,7 @@ export function calculateMoodImprovement(preMoodData, postMoodData) {
   // State 1: Both mood and energy improved
   if (moodImprovement > 0 && energyImprovement > 0) {
     return {
-      icon: <Heart className="h-5 w-5 text-state-error" />,
+      icon: <Heart className="size-5 text-state-error" />,
       message: "Your mood and energy both improved!",
       detail: `Mood: ${preMoodData.mood.emoji} → ${postMoodData.mood.emoji} • Energy: +${energyImprovement}`,
       color: "bg-state-success/10 border-state-success/30 text-state-success"
@@ -121,7 +121,7 @@ export function calculateMoodImprovement(preMoodData, postMoodData) {
   // State 2: Only mood improved
   if (moodImprovement > 0) {
     return {
-      icon: <TrendingUp className="h-5 w-5 text-state-success" />,
+      icon: <TrendingUp className="size-5 text-state-success" />,
       message: "Your mood improved!",
       detail: `${preMoodData.mood.emoji} → ${postMoodData.mood.emoji}`,
       color: "bg-state-success/10 border-state-success/30 text-state-success"
@@ -131,7 +131,7 @@ export function calculateMoodImprovement(preMoodData, postMoodData) {
   // State 3: Only energy improved
   if (energyImprovement > 0) {
     return {
-      icon: <TrendingUp className="h-5 w-5 text-state-info" />,
+      icon: <TrendingUp className="size-5 text-state-info" />,
       message: "Your energy level increased!",
       detail: `Energy boost: +${energyImprovement}`,
       color: "bg-state-info/10 border-state-info/30 text-state-info"
@@ -141,7 +141,7 @@ export function calculateMoodImprovement(preMoodData, postMoodData) {
   // State 4: No change (maintained state)
   if (moodImprovement === 0 && energyImprovement === 0) {
     return {
-      icon: <Star className="h-5 w-5 text-accent" />,
+      icon: <Star className="size-5 text-accent" />,
       message: "You maintained your positive state!",
       detail: "Consistency is key to wellbeing",
       color: "bg-state-warning/10 border-state-warning/30 text-state-warning"
@@ -150,7 +150,7 @@ export function calculateMoodImprovement(preMoodData, postMoodData) {
 
   // State 5: Decline or negative change (fallback)
   return {
-    icon: <Heart className="h-5 w-5 text-muted-foreground" />,
+    icon: <Heart className="size-5 text-muted-foreground" />,
     message: "Thank you for taking time for yourself",
     detail: "Every practice is valuable for your wellbeing",
     color: "bg-muted border-border text-foreground"

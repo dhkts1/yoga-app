@@ -16,6 +16,7 @@ import { useEffect } from 'react';
  */
 export function useTestMode() {
   // Initialize test mode from sessionStorage on mount (for E2E tests)
+  // Also ensure window properties are set if sessionStorage indicates test mode
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const isTestMode = sessionStorage.getItem('__TEST_MODE__') === 'true';
@@ -38,11 +39,7 @@ export function useTestMode() {
       // Check sessionStorage FIRST (available during initial render, before useEffect runs)
       const isTestMode = sessionStorage.getItem('__TEST_MODE__') === 'true' || window.__TEST_MODE__;
       if (isTestMode) {
-        // Ensure window properties are set for timer interval
-        if (!window.__TEST_MODE__) {
-          window.__TEST_MODE__ = true;
-          window.__TIMER_SPEED__ = parseInt(sessionStorage.getItem('__TIMER_SPEED__') || '100', 10);
-        }
+        // Note: window properties are set in useEffect above, not here during render
         return 1; // 1 second per pose in test mode
       }
     }

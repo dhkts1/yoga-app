@@ -150,7 +150,7 @@ const CardTitle = React.forwardRef(({
   return (
     <Component
       className={cn(
-        'text-xl font-medium leading-8 text-primary',
+        'text-xl font-medium leading-8 text-foreground',
         'tracking-tight',
         className
       )}
@@ -172,7 +172,7 @@ const CardDescription = React.forwardRef(({
   return (
     <p
       className={cn(
-        'text-base text-secondary leading-6',
+        'text-base leading-6 text-muted-foreground',
         className
       )}
       ref={ref}

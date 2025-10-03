@@ -52,11 +52,11 @@ export function usePracticeTimer({
   useEffect(() => {
     // Only initialize if this is a new pose (index changed)
     if (currentPoseIndexInternal !== lastInitializedPoseIndex.current && currentPoseData?.duration) {
+      lastInitializedPoseIndex.current = currentPoseIndexInternal;
       const newTime = getEffectiveDuration(currentPoseData.duration);
       setTimeRemaining(newTime);
-      lastInitializedPoseIndex.current = currentPoseIndexInternal;
     }
-  }, [currentPoseIndexInternal, getEffectiveDuration]);
+  }, [currentPoseIndexInternal, currentPoseData?.duration, getEffectiveDuration]);
 
   // Timer countdown logic
   useEffect(() => {

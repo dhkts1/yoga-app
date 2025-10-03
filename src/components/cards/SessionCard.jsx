@@ -2,6 +2,7 @@ import { memo } from "react";
 import PropTypes from "prop-types";
 import { Clock, Star } from "lucide-react";
 import { motion } from "framer-motion";
+import { Heading } from "../design-system";
 
 /**
  * Unified SessionCard component that handles all session card variants
@@ -96,7 +97,7 @@ const SessionCard = memo(function SessionCard({
     >
       <div className="flex items-start justify-between gap-3">
         {/* Pose Image (if provided) */}
-        {poseImage && <div className="flex-shrink-0">{poseImage}</div>}
+        {poseImage && <div className="shrink-0">{poseImage}</div>}
 
         <div
           className={`min-w-0 flex-1 ${actions ? "pr-0" : variant === "recent" ? "mr-3" : "pr-12"}`}
@@ -104,15 +105,15 @@ const SessionCard = memo(function SessionCard({
           {/* Title Row */}
           <div className="mb-1 flex items-center gap-2">
             {!poseImage && (
-              <Icon className={`h-5 w-5 ${getIconColor()} flex-shrink-0`} />
+              <Icon className={`size-5 ${getIconColor()} shrink-0`} />
             )}
             <h3
-              className={`${size === "hero" ? "text-lg" : "text-base"} truncate font-medium text-card-foreground`}
+              className={`${size === "hero" ? "text-lg" : "text-base"} truncate font-medium text-foreground`}
             >
               {sessionName}
             </h3>
             {recommendation?.isPrimary && (
-              <Star className="h-4 w-4 flex-shrink-0 fill-current text-accent" />
+              <Star className="size-4 shrink-0 fill-current text-accent" />
             )}
           </div>
 
@@ -130,7 +131,7 @@ const SessionCard = memo(function SessionCard({
           {/* Recommendation Badge */}
           {recommendation?.tag && (
             <div className="mb-1 flex flex-wrap items-center gap-2">
-              <span className="rounded-full bg-accent px-2 py-0.5 text-xs font-medium text-white">
+              <span className="rounded-full bg-accent px-2 py-0.5 text-xs font-medium text-accent-foreground">
                 {recommendation.tag}
               </span>
             </div>
@@ -139,32 +140,32 @@ const SessionCard = memo(function SessionCard({
           {/* Metadata Row */}
           {variant !== "recent" && (
             <div className="flex items-center gap-2 overflow-hidden text-sm text-muted-foreground">
-              <div className="flex flex-shrink-0 items-center gap-1">
-                <Clock className="h-4 w-4" />
+              <div className="flex shrink-0 items-center gap-1">
+                <Clock className="size-4" />
                 <span>{duration} min</span>
               </div>
               {showPoseCount &&
                 session.poses?.length > 0 &&
                 type !== "breathing" && (
                   <>
-                    <span className="flex-shrink-0">•</span>
-                    <span className="flex-shrink-0">
+                    <span className="shrink-0">•</span>
+                    <span className="shrink-0">
                       {session.poses.length} poses
                     </span>
                   </>
                 )}
               {difficulty && (
                 <>
-                  <span className="flex-shrink-0">•</span>
-                  <span className="flex-shrink-0 whitespace-nowrap capitalize">
+                  <span className="shrink-0">•</span>
+                  <span className="shrink-0 whitespace-nowrap capitalize">
                     {difficulty}
                   </span>
                 </>
               )}
               {type === "custom" && (
                 <>
-                  <span className="flex-shrink-0">•</span>
-                  <span className="flex-shrink-0 whitespace-nowrap text-muted-foreground">
+                  <span className="shrink-0">•</span>
+                  <span className="shrink-0 whitespace-nowrap text-muted-foreground">
                     Custom
                   </span>
                 </>
@@ -184,10 +185,10 @@ const SessionCard = memo(function SessionCard({
         {/* Duration Badge (for recent or recommended cards) */}
         {(variant === "recent" || variant === "recommended") && (
           <div
-            className={`flex-shrink-0 ${
+            className={`shrink-0 ${
               variant === "recent"
                 ? "text-muted-foreground"
-                : "ml-3 flex h-10 w-10 items-center justify-center rounded-full bg-accent/20"
+                : "ml-3 flex size-10 items-center justify-center rounded-full bg-accent/20"
             }`}
           >
             <span
@@ -202,7 +203,7 @@ const SessionCard = memo(function SessionCard({
 
         {/* Duration Badge for custom sessions */}
         {type === "custom" && !actions && (
-          <div className="ml-3 flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-muted">
+          <div className="ml-3 flex size-10 shrink-0 items-center justify-center rounded-full bg-muted">
             <span className="text-sm font-medium text-muted-foreground">
               {duration}'
             </span>

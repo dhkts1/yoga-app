@@ -14,6 +14,7 @@ import { Button, Heading, Text, ContentBody, Stat } from '../components/design-s
 import { DefaultLayout } from '../components/layouts';
 import { PageHeader } from '../components/headers';
 import useProgressStore from '../stores/progress';
+import useAnalyticsStore from '../stores/analytics';
 import SimpleBarChart from '../components/charts/SimpleBarChart';
 import HeatmapCalendar from '../components/charts/HeatmapCalendar';
 import SessionHistoryModal from '../components/SessionHistoryModal';
@@ -29,17 +30,19 @@ function Insights() {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedDaySessions, setSelectedDaySessions] = useState([]);
 
-  // Get analytics data from store - using selectors for better performance
+  // Get data from stores - using selectors for better performance
   const totalSessions = useProgressStore(state => state.totalSessions);
   const practiceHistory = useProgressStore(state => state.practiceHistory);
   const breathingHistory = useProgressStore(state => state.breathingHistory);
-  const getPracticeHeatmap = useProgressStore(state => state.getPracticeHeatmap);
-  const getMostPracticedPoses = useProgressStore(state => state.getMostPracticedPoses);
-  const getFavoriteSessions = useProgressStore(state => state.getFavoriteSessions);
-  const getTimeOfDayDistribution = useProgressStore(state => state.getTimeOfDayDistribution);
-  const getBodyPartFocus = useProgressStore(state => state.getBodyPartFocus);
-  const getMoodAnalytics = useProgressStore(state => state.getMoodAnalytics);
-  const getAnalyticsSummary = useProgressStore(state => state.getAnalyticsSummary);
+
+  // Get analytics methods from analytics store
+  const getPracticeHeatmap = useAnalyticsStore(state => state.getPracticeHeatmap);
+  const getMostPracticedPoses = useAnalyticsStore(state => state.getMostPracticedPoses);
+  const getFavoriteSessions = useAnalyticsStore(state => state.getFavoriteSessions);
+  const getTimeOfDayDistribution = useAnalyticsStore(state => state.getTimeOfDayDistribution);
+  const getBodyPartFocus = useAnalyticsStore(state => state.getBodyPartFocus);
+  const getMoodAnalytics = useAnalyticsStore(state => state.getMoodAnalytics);
+  const getAnalyticsSummary = useAnalyticsStore(state => state.getAnalyticsSummary);
 
   // Memoize expensive analytics calculations
   const heatmapData = useMemo(() => getPracticeHeatmap(30), [getPracticeHeatmap]);
@@ -108,9 +111,9 @@ function Insights() {
   if (totalSessions < 5) {
     return (
       <DefaultLayout header={<PageHeader title={t('screens.insights.title')} showBack={false} />}>
-        <div className="px-4 py-8 text-center flex-1 flex items-center justify-center">
-          <div className="max-w-sm mx-auto">
-            <Activity className="h-16 w-16 text-sage-300 mx-auto mb-4" />
+        <div className="flex flex-1 items-center justify-center px-4 py-8 text-center">
+          <div className="mx-auto max-w-sm">
+            <Activity className="mx-auto mb-4 size-16 text-sage-300" />
             <Heading level={2} className="mb-2">
               {t('screens.insights.morePracticeNeeded')}
             </Heading>
@@ -136,10 +139,10 @@ function Insights() {
             actions={
               <button
                 onClick={handleExportPDF}
-                className="print:hidden text-muted-foreground hover:text-muted-foreground p-2 rounded-lg hover:bg-muted transition-colors"
+                className="rounded-lg p-2 text-muted-foreground transition-colors hover:bg-muted hover:text-muted-foreground print:hidden"
                 aria-label={t('screens.insights.exportPDF')}
               >
-                <Download className="h-5 w-5" />
+                <Download className="size-5" />
               </button>
             }
           />
@@ -148,11 +151,11 @@ function Insights() {
       >
         <ContentBody size="lg" spacing="lg" className="print:p-4">
           {/* Key Metrics Grid - 2x2 Compact Tiles */}
-          <div className="grid grid-cols-2 gap-2 sm:gap-3 mb-6 w-full min-w-0">
+          <div className="mb-6 grid w-full min-w-0 grid-cols-2 gap-2 sm:gap-3">
             <Stat
               label={t('screens.insights.totalSessions')}
               value={summary.overall.totalSessions}
-              icon={<Target className="h-5 w-5" />}
+              icon={<Target className="size-5" />}
               description={`${summary.thisWeek.sessions} ${t('screens.insights.thisWeek')}`}
               trend={weeklyTrend}
               variant="compact"
@@ -160,21 +163,21 @@ function Insights() {
             <Stat
               label={t('screens.insights.totalMinutes')}
               value={`${summary.overall.totalMinutes} ${t('common.min')}`}
-              icon={<Clock className="h-5 w-5" />}
+              icon={<Clock className="size-5" />}
               description={`${summary.thisMonth.minutes} ${t('screens.insights.thisMonth')}`}
               variant="compact"
             />
             <Stat
               label={t('screens.insights.averageLength')}
               value={`${averageSessionLength} ${t('common.min')}`}
-              icon={<Activity className="h-5 w-5" />}
+              icon={<Activity className="size-5" />}
               description={t('screens.insights.perSession')}
               variant="compact"
             />
             <Stat
               label={t('screens.insights.currentStreak')}
               value={`${summary.overall.currentStreak} ${t('common.days')}`}
-              icon={<Activity className="h-5 w-5" />}
+              icon={<Activity className="size-5" />}
               description={t('screens.insights.best', { count: summary.overall.longestStreak })}
               variant="compact"
             />
@@ -197,7 +200,7 @@ function Insights() {
           </div>
 
           {/* Analytics Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 w-full min-w-0">
+          <div className="mb-8 grid w-full min-w-0 grid-cols-1 gap-6 md:grid-cols-2">
             {/* Most Practiced Poses */}
             <div className="w-full overflow-hidden">
               <SimpleBarChart
@@ -237,11 +240,11 @@ function Insights() {
 
           {/* Wellbeing Insights */}
           {moodAnalytics.sessionsWithMoodData > 0 && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8 w-full min-w-0">
+            <div className="mb-8 grid w-full min-w-0 grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
               <Stat
                 label={t('screens.insights.moodImprovement')}
                 value={`+${moodAnalytics.averageMoodImprovement}`}
-                icon={<Smile className="h-5 w-5" />}
+                icon={<Smile className="size-5" />}
                 description={getMoodTrendText()}
                 trend={moodAnalytics.moodTrend === 'improving' ? 'up' : 'neutral'}
                 variant="compact"
@@ -249,14 +252,14 @@ function Insights() {
               <Stat
                 label={t('screens.insights.energyBoost')}
                 value={`+${moodAnalytics.averageEnergyImprovement}`}
-                icon={<Zap className="h-5 w-5" />}
+                icon={<Zap className="size-5" />}
                 description={t('screens.insights.sessionsImproved', { percent: moodAnalytics.improvementRate })}
                 variant="compact"
               />
               <Stat
                 label={t('screens.insights.wellbeingSessions')}
                 value={`${moodAnalytics.sessionsWithMoodData} ${t('common.of')} ${moodAnalytics.totalSessions}`}
-                icon={<Heart className="h-5 w-5" />}
+                icon={<Heart className="size-5" />}
                 description={t('screens.insights.sessionsWithTracking')}
                 variant="compact"
               />
@@ -264,9 +267,9 @@ function Insights() {
           )}
 
           {/* Insights & Encouragement */}
-          <div className="bg-muted rounded-lg p-6 w-full">
+          <div className="w-full rounded-lg bg-muted p-6">
             <div className="flex items-start space-x-3">
-              <BarChart3 className="h-6 w-6 text-muted-foreground mt-1 flex-shrink-0" />
+              <BarChart3 className="mt-1 size-6 shrink-0 text-muted-foreground" />
               <div className="min-w-0 flex-1">{/* Prevent text overflow */}
                 <Heading level={3} className="mb-2">
                   {t('screens.insights.yourInsights')}
@@ -303,7 +306,7 @@ function Insights() {
           </div>
 
           {/* Footer for print */}
-          <div className="print:block hidden text-center text-sm text-secondary border-t pt-4">
+          <div className="hidden border-t pt-4 text-center text-sm text-muted-foreground print:block">
             <Text variant="caption">
               Practice Insights • Generated on {new Date().toLocaleDateString()} • Total Sessions: {totalSessions}
             </Text>
@@ -327,7 +330,7 @@ function Insights() {
             .print\\:p-0 { padding: 0 !important; }
             .print\\:p-4 { padding: 1rem !important; }
             .print\\:mb-4 { margin-bottom: 1rem !important; }
-            .print\\:bg-white { background-color: white !important; }
+            .print\\:bg-white { background-color: #FFFFFF !important; } /* White for print (standard) */
 
             /* Ensure charts print well */
             .grid { break-inside: avoid; }

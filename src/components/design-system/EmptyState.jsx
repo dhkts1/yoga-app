@@ -58,9 +58,9 @@ const EmptyState = React.forwardRef(
 
     // Variant styles
     const variants = {
-      default: "text-text-secondary",
+      default: "text-muted-foreground",
       sage: "text-muted-foreground",
-      muted: "text-text-muted",
+      muted: "text-muted-foreground",
     };
 
     // Animation variants
@@ -150,7 +150,7 @@ const EmptyState = React.forwardRef(
             <MotionDiv variants={animate ? itemVariants : undefined}>
               <Heading
                 level={sizeConfig.titleLevel}
-                className="text-text-primary"
+                className="text-foreground"
               >
                 {title}
               </Heading>

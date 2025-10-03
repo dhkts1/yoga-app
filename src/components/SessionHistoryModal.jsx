@@ -138,14 +138,14 @@ function SessionHistoryModal({
           <div className="text-center">
             <div className="mb-1 flex items-center justify-center">
               <Activity className="mr-1 size-4 text-muted-foreground" />
-              <Text variant="caption" className="text-secondary">
+              <Text variant="caption" className="text-muted-foreground">
                 Total Sessions
               </Text>
             </div>
             <Text variant="body" className="text-lg font-semibold">
               {totalSessions}
             </Text>
-            <Text variant="caption" className="text-xs text-muted">
+            <Text variant="caption" className="text-xs text-muted-foreground">
               {yogaSessions > 0 && `${yogaSessions} yoga`}
               {yogaSessions > 0 && breathingSessions > 0 && " • "}
               {breathingSessions > 0 && `${breathingSessions} breathing`}
@@ -154,14 +154,14 @@ function SessionHistoryModal({
           <div className="text-center">
             <div className="mb-1 flex items-center justify-center">
               <Clock className="mr-1 size-4 text-muted-foreground" />
-              <Text variant="caption" className="text-secondary">
+              <Text variant="caption" className="text-muted-foreground">
                 Total Time
               </Text>
             </div>
             <Text variant="body" className="text-lg font-semibold">
               {totalMinutes}
             </Text>
-            <Text variant="caption" className="text-xs text-muted">
+            <Text variant="caption" className="text-xs text-muted-foreground">
               minutes
             </Text>
           </div>
@@ -207,7 +207,7 @@ function SessionHistoryModal({
 
         {/* Sessions List */}
         <div className="space-y-3">
-          <Heading level={4} className="text-sm font-medium text-secondary">
+          <Heading level={4} className="text-sm font-medium text-muted-foreground">
             Sessions ({totalSessions})
           </Heading>
           <div className="max-h-64 space-y-2 overflow-y-auto">
@@ -231,7 +231,7 @@ function SessionHistoryModal({
                         </Text>
                         {getSessionTypeBadge(session)}
                       </div>
-                      <div className="flex items-center gap-3 text-xs text-secondary">
+                      <div className="flex items-center gap-3 text-xs text-muted-foreground">
                         <span className="flex items-center">
                           <Clock className="mr-1 size-3" />
                           {session.duration} min

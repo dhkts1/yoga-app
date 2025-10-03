@@ -96,7 +96,7 @@ const Button = React.forwardRef(({
     ],
 
     outline: [
-      'bg-transparent text-primary border-2 border-border',
+      'bg-transparent text-foreground border-2 border-border',
       'hover:bg-muted hover:border-primary',
       'active:bg-muted active:scale-[0.98]',
     ],
@@ -164,7 +164,7 @@ const Button = React.forwardRef(({
   // Loading spinner component
   const LoadingSpinner = () => (
     <svg
-      className="animate-spin h-4 w-4"
+      className="size-4 animate-spin"
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"

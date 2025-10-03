@@ -57,31 +57,31 @@ export function PracticeControls({
         <button
           onClick={handlePreviousPose}
           disabled={isFirstPose}
-          className="flex h-12 w-12 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors hover:bg-muted disabled:opacity-30 disabled:hover:bg-muted"
+          className="flex size-12 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors hover:bg-muted disabled:opacity-30 disabled:hover:bg-muted"
           aria-label="Previous pose"
         >
-          <SkipBack className="h-5 w-5" />
+          <SkipBack className="size-5" />
         </button>
 
         <button
           onClick={handlePlayPause}
-          className="flex h-16 w-16 items-center justify-center rounded-full bg-primary text-white shadow-lg hover:bg-primary/90 active:scale-95"
+          className="flex size-16 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg hover:bg-primary/90 active:scale-95"
           aria-label={isPlaying ? "Pause" : "Play"}
         >
           {isPlaying ? (
-            <Pause className="h-7 w-7" />
+            <Pause className="size-7" />
           ) : (
-            <Play className="ml-1 h-7 w-7" />
+            <Play className="ml-1 size-7" />
           )}
         </button>
 
         <button
           onClick={handleNextPose}
           disabled={isLastPose}
-          className="flex h-12 w-12 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors hover:bg-muted disabled:opacity-30 disabled:hover:bg-muted"
+          className="flex size-12 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors hover:bg-muted disabled:opacity-30 disabled:hover:bg-muted"
           aria-label="Skip to next pose"
         >
-          <SkipForward className="h-5 w-5" />
+          <SkipForward className="size-5" />
         </button>
       </div>
     </div>

@@ -104,7 +104,7 @@ function ConfirmDialog({
 
   return (
     <div
-      className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in duration-300"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-foreground bg-opacity-50 p-4 backdrop-blur-sm duration-300 animate-in fade-in"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
@@ -113,14 +113,14 @@ function ConfirmDialog({
     >
       <div
         ref={dialogRef}
-        className="bg-card rounded-2xl p-6 max-w-sm w-full shadow-2xl animate-in zoom-in-95 duration-300"
+        className="w-full max-w-sm rounded-2xl bg-card p-6 shadow-2xl duration-300 animate-in zoom-in-95"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header with Icon and Title */}
-        <div className="flex items-start justify-between gap-3 mb-4">
+        <div className="mb-4 flex items-start justify-between gap-3">
           <div className="flex items-center gap-3">
-            <div className={`p-3 rounded-xl ${iconBgColors[icon]}`}>
-              <IconComponent className={`h-6 w-6 ${iconColors[icon]}`} />
+            <div className={`rounded-xl p-3 ${iconBgColors[icon]}`}>
+              <IconComponent className={`size-6 ${iconColors[icon]}`} />
             </div>
             <Heading level={2} id="confirm-dialog-title" className="text-foreground">
               {title}
@@ -128,17 +128,17 @@ function ConfirmDialog({
           </div>
           <button
             onClick={onClose}
-            className="p-1 rounded-lg hover:bg-muted transition-colors"
+            className="rounded-lg p-1 transition-colors hover:bg-muted"
             aria-label="Close dialog"
           >
-            <X className="h-5 w-5 text-muted-foreground" />
+            <X className="size-5 text-muted-foreground" />
           </button>
         </div>
 
         {/* Message */}
         <Text
           id="confirm-dialog-description"
-          className="text-muted-foreground mb-6 leading-relaxed"
+          className="mb-6 leading-relaxed text-muted-foreground"
         >
           {message}
         </Text>

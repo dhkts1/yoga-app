@@ -21,14 +21,14 @@ export function ThemeToggle({ className = '' }) {
   return (
     <button
       onClick={toggleTheme}
-      className={`relative flex items-center justify-center w-14 h-14 rounded-full bg-muted dark:bg-secondary hover:bg-muted dark:hover:bg-secondary transition-all duration-300 ${className}`}
+      className={`relative flex size-14 items-center justify-center rounded-full bg-muted transition-all duration-300 hover:bg-muted dark:bg-secondary dark:hover:bg-secondary ${className}`}
       aria-label={`Switch to ${isDark ? 'light' : 'dark'} mode`}
       aria-pressed={isDark}
     >
-      <div className="relative w-6 h-6">
+      <div className="relative size-6">
         {/* Sun icon (visible in dark mode) */}
         <Sun
-          className={`absolute inset-0 w-6 h-6 text-accent transition-all duration-300 ${
+          className={`absolute inset-0 size-6 text-accent transition-all duration-300 ${
             isDark
               ? 'rotate-0 scale-100 opacity-100'
               : 'rotate-90 scale-0 opacity-0'
@@ -36,7 +36,7 @@ export function ThemeToggle({ className = '' }) {
         />
         {/* Moon icon (visible in light mode) */}
         <Moon
-          className={`absolute inset-0 w-6 h-6 text-muted-foreground dark:text-card-foreground transition-all duration-300 ${
+          className={`absolute inset-0 size-6 text-muted-foreground transition-all duration-300 dark:text-foreground ${
             isDark
               ? '-rotate-90 scale-0 opacity-0'
               : 'rotate-0 scale-100 opacity-100'
@@ -60,14 +60,14 @@ export function ThemeToggleCompact({ className = '' }) {
   return (
     <button
       onClick={toggleTheme}
-      className={`flex items-center justify-center w-10 h-10 rounded-lg hover:bg-muted dark:hover:bg-sage-800 transition-colors ${className}`}
+      className={`flex size-10 items-center justify-center rounded-lg transition-colors hover:bg-muted dark:hover:bg-sage-800 ${className}`}
       aria-label={`Switch to ${isDark ? 'light' : 'dark'} mode`}
       aria-pressed={isDark}
     >
       {isDark ? (
-        <Sun className="w-5 h-5 text-accent" />
+        <Sun className="size-5 text-accent" />
       ) : (
-        <Moon className="w-5 h-5 text-muted-foreground" />
+        <Moon className="size-5 text-muted-foreground" />
       )}
     </button>
   );
@@ -92,27 +92,27 @@ export function ThemeToggleWithLabel() {
       <div className="flex items-center space-x-2">
         <button
           onClick={() => setTheme('light')}
-          className={`flex items-center justify-center w-12 h-12 rounded-lg transition-all ${
+          className={`flex size-12 items-center justify-center rounded-lg transition-all ${
             theme === 'light'
-              ? 'bg-primary text-white shadow-sage'
+              ? 'bg-primary text-primary-foreground shadow-sage'
               : 'bg-muted text-muted-foreground hover:bg-muted/80'
           }`}
           aria-label="Light mode"
           aria-pressed={theme === 'light'}
         >
-          <Sun className="w-5 h-5" />
+          <Sun className="size-5" />
         </button>
         <button
           onClick={() => setTheme('dark')}
-          className={`flex items-center justify-center w-12 h-12 rounded-lg transition-all ${
+          className={`flex size-12 items-center justify-center rounded-lg transition-all ${
             theme === 'dark'
-              ? 'bg-primary text-white shadow-sage'
+              ? 'bg-primary text-primary-foreground shadow-sage'
               : 'bg-muted text-muted-foreground hover:bg-muted/80'
           }`}
           aria-label="Dark mode"
           aria-pressed={theme === 'dark'}
         >
-          <Moon className="w-5 h-5" />
+          <Moon className="size-5" />
         </button>
       </div>
     </div>

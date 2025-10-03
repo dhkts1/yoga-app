@@ -1,7 +1,7 @@
 import { Star } from 'lucide-react';
 import { useState } from 'react';
 import usePreferencesStore from '../stores/preferences';
-import useProgressStore from '../stores/progress';
+import useAnalyticsStore from '../stores/analytics';
 
 /**
  * FavoriteButton Component
@@ -32,8 +32,8 @@ function FavoriteButton({
     toggleFavoriteExercise
   } = usePreferencesStore();
 
-  // Get analytics tracking from progress store
-  const { trackFavoriteAction } = useProgressStore();
+  // Get analytics tracking from analytics store
+  const { trackFavoriteAction } = useAnalyticsStore();
 
   const isFavorited = isFavorite(itemId, type);
 
@@ -92,8 +92,8 @@ function FavoriteButton({
         rounded-full
         transition-all duration-200
         hover:bg-muted
-        active:scale-95
-        focus:outline-none focus:ring-2 focus:ring-sage-300 focus:ring-offset-1
+        focus:outline-none
+        focus:ring-2 focus:ring-sage-300 focus:ring-offset-1 active:scale-95
         ${className}
       `}
       aria-label={isFavorited ? `Remove ${itemId} from favorites` : `Add ${itemId} to favorites`}

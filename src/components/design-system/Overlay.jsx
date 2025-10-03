@@ -122,9 +122,9 @@ const Modal = React.forwardRef(({
     >
       <div
         className={cn(
-          'bg-card rounded-2xl shadow-xl',
+          'rounded-2xl bg-card shadow-xl',
           'border border-border',
-          'w-full box-border',
+          'box-border w-full',
           'max-h-full overflow-y-auto',
           sizes[size],
           className
@@ -142,7 +142,7 @@ const Modal = React.forwardRef(({
                 </h2>
               )}
               {description && (
-                <p id="modal-description" className="text-base text-muted-foreground mt-1">
+                <p id="modal-description" className="mt-1 text-base text-muted-foreground">
                   {description}
                 </p>
               )}
@@ -152,12 +152,12 @@ const Modal = React.forwardRef(({
                 onClick={onClose}
                 aria-label="Close modal"
                 className={cn(
-                  'p-2 rounded-lg text-muted-foreground hover:text-foreground',
-                  'hover:bg-muted transition-colors duration-200',
+                  'rounded-lg p-2 text-muted-foreground hover:text-foreground',
+                  'transition-colors duration-200 hover:bg-muted',
                   'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
                 )}
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
                 <span className="sr-only">Close</span>
@@ -229,8 +229,8 @@ const Drawer = React.forwardRef(({
     >
       <div
         className={cn(
-          'bg-card shadow-xl border border-border',
-          'w-full box-border',
+          'border border-border bg-card shadow-xl',
+          'box-border w-full',
           positions[position].content,
           positions[position].animation,
           sizes[size],
@@ -240,26 +240,26 @@ const Drawer = React.forwardRef(({
       >
         {/* Drag handle for bottom drawer */}
         {position === 'bottom' && (
-          <div className="flex justify-center pt-3 pb-2">
-            <div className="w-12 h-1 bg-muted-foreground/30 rounded-full" />
+          <div className="flex justify-center pb-2 pt-3">
+            <div className="h-1 w-12 rounded-full bg-muted-foreground/30" />
           </div>
         )}
 
         {/* Header */}
         {title && (
-          <div className="flex items-center justify-between p-6 pb-4 border-b border-border">
+          <div className="flex items-center justify-between border-b border-border p-6 pb-4">
             <h2 className="text-xl font-semibold text-foreground">
               {title}
             </h2>
             <button
               onClick={onClose}
               className={cn(
-                'p-2 rounded-lg text-muted-foreground hover:text-foreground',
-                'hover:bg-muted transition-colors duration-200',
+                'rounded-lg p-2 text-muted-foreground hover:text-foreground',
+                'transition-colors duration-200 hover:bg-muted',
                 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
               )}
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
               <span className="sr-only">Close</span>
@@ -268,7 +268,7 @@ const Drawer = React.forwardRef(({
         )}
 
         {/* Content */}
-        <div className="p-6 overflow-y-auto">
+        <div className="overflow-y-auto p-6">
           {children}
         </div>
       </div>
@@ -306,7 +306,7 @@ const TipsOverlay = React.forwardRef(({
               {pose.nameEnglish}
             </h3>
             {pose.nameSanskrit && (
-              <p className="text-sm text-muted-foreground italic">
+              <p className="text-sm italic text-muted-foreground">
                 {pose.nameSanskrit}
               </p>
             )}
@@ -320,7 +320,7 @@ const TipsOverlay = React.forwardRef(({
             <ul className="space-y-2">
               {tips.map((tip, index) => (
                 <li key={index} className="flex items-start gap-3">
-                  <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0" />
+                  <div className="mt-2 size-2 shrink-0 rounded-full bg-primary" />
                   <span className="text-base text-muted-foreground">{tip}</span>
                 </li>
               ))}
@@ -337,7 +337,7 @@ const TipsOverlay = React.forwardRef(({
             <ul className="space-y-2">
               {pose.benefits.map((benefit, index) => (
                 <li key={index} className="flex items-start gap-3">
-                  <div className="w-2 h-2 bg-accent rounded-full mt-2 flex-shrink-0" />
+                  <div className="mt-2 size-2 shrink-0 rounded-full bg-accent" />
                   <span className="text-base text-muted-foreground">{benefit}</span>
                 </li>
               ))}
@@ -350,8 +350,8 @@ const TipsOverlay = React.forwardRef(({
           <button
             onClick={onClose}
             className={cn(
-              'w-full py-3 px-4 bg-primary text-primary-foreground rounded-lg',
-              'hover:bg-secondary transition-colors duration-200',
+              'w-full rounded-lg bg-primary px-4 py-3 text-primary-foreground',
+              'transition-colors duration-200 hover:bg-secondary',
               'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2'
             )}
           >
@@ -386,12 +386,12 @@ const PauseOverlay = React.forwardRef(({
       ref={ref}
       {...props}
     >
-      <div className="bg-card rounded-2xl shadow-xl border border-border p-8 text-center">
+      <div className="rounded-2xl border border-border bg-card p-8 text-center shadow-xl">
         <div className="space-y-6">
           {/* Pause icon */}
           <div className="flex justify-center">
-            <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center">
-              <svg className="w-8 h-8 text-muted-foreground" fill="currentColor" viewBox="0 0 24 24">
+            <div className="flex size-16 items-center justify-center rounded-full bg-muted">
+              <svg className="size-8 text-muted-foreground" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/>
               </svg>
             </div>
@@ -419,8 +419,8 @@ const PauseOverlay = React.forwardRef(({
             <button
               onClick={onResume}
               className={cn(
-                'w-full py-3 px-4 bg-primary text-primary-foreground rounded-lg',
-                'hover:bg-secondary transition-colors duration-200',
+                'w-full rounded-lg bg-primary px-4 py-3 text-primary-foreground',
+                'transition-colors duration-200 hover:bg-secondary',
                 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2'
               )}
             >
@@ -429,8 +429,8 @@ const PauseOverlay = React.forwardRef(({
             <button
               onClick={onEnd}
               className={cn(
-                'w-full py-3 px-4 bg-transparent text-muted-foreground border border-border rounded-lg',
-                'hover:bg-muted transition-colors duration-200',
+                'w-full rounded-lg border border-border bg-transparent px-4 py-3 text-muted-foreground',
+                'transition-colors duration-200 hover:bg-muted',
                 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2'
               )}
             >
@@ -480,7 +480,7 @@ const AlertDialog = React.forwardRef(({
       {...props}
     >
       <div className="space-y-6">
-        <div className="text-center space-y-2">
+        <div className="space-y-2 text-center">
           <h2 className="text-lg font-semibold text-foreground">
             {title}
           </h2>
@@ -495,7 +495,7 @@ const AlertDialog = React.forwardRef(({
           <button
             onClick={onClose}
             className={cn(
-              'flex-1 py-3 px-4 rounded-lg transition-colors duration-200',
+              'flex-1 rounded-lg px-4 py-3 transition-colors duration-200',
               'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
               variants[variant].cancelButton
             )}
@@ -505,7 +505,7 @@ const AlertDialog = React.forwardRef(({
           <button
             onClick={onConfirm}
             className={cn(
-              'flex-1 py-3 px-4 rounded-lg transition-colors duration-200',
+              'flex-1 rounded-lg px-4 py-3 transition-colors duration-200',
               'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
               variants[variant].confirmButton
             )}

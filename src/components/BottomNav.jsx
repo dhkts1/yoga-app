@@ -154,7 +154,7 @@ const BottomNav = memo(function BottomNav({ className }) {
         className,
       )}
     >
-      <div className="flex h-[48px] items-stretch justify-around">
+      <div className="flex h-12 items-stretch justify-around">
         {tabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = tab.isActive;

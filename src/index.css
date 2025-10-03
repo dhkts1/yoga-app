@@ -4,19 +4,17 @@
 
 @layer base {
     :root {
-        /* Light mode - shadcn/ui variables */
+        /* Light mode - simplified text colors (2 colors only) */
         --background: 30 15% 96%;        /* Cream background */
-        --foreground: 142 30% 18%;        /* Darker sage text - WCAG AA compliant (4.7:1) */
+        --foreground: 142 20% 30%;        /* Primary sage text */
         --card: 0 0% 100%;
-        --card-foreground: 222.2 84% 4.9%;
         --popover: 0 0% 100%;
-        --popover-foreground: 222.2 84% 4.9%;
-        --primary: 150 35% 32%;           /* Sage green - WCAG AA compliant (5.5:1) */
+        --primary: 142 20% 30%;           /* Primary color for backgrounds, borders, accents */
         --primary-foreground: 0 0% 100%;  /* Pure white for maximum contrast */
-        --secondary: 142 35% 30%;         /* Darker for better contrast (6:1) */
+        --secondary: 142 15% 50%;         /* Secondary color for backgrounds, borders */
         --secondary-foreground: 0 0% 100%; /* Pure white for maximum contrast */
         --muted: 210 40% 96.1%;
-        --muted-foreground: 142 35% 25%;  /* Darker sage for WCAG AA 5.2:1 contrast */
+        --muted-foreground: 142 15% 50%;  /* Muted sage text */
         --accent: 45 65% 42%;             /* Gold - darker for 4.5:1 contrast */
         --accent-foreground: 0 0% 100%;   /* Pure white for maximum contrast */
         --destructive: 0 84.2% 60.2%;
@@ -75,19 +73,15 @@
     .dark {
         color-scheme: dark;
 
-        /* Dark mode - soft slate palette with sage accents */
+        /* Dark mode - simplified text colors (2 colors only) */
         --background: 220 8% 18%;         /* Soft slate - cool charcoal */
-        --foreground: 30 15% 92%;         /* Warm cream text - main text */
+        --foreground: 142 15% 80%;        /* Primary sage text */
         --card: 220 6% 24%;               /* Lighter slate cards */
-        --card-foreground: 30 15% 92%;    /* Card text matches main text */
         --popover: 220 6% 24%;
-        --popover-foreground: 30 15% 92%;
-        --primary: 142 20% 65%;           /* Brighter sage for headings */
         --primary-foreground: 220 8% 18%;
-        --secondary: 30 15% 85%;          /* Light cream for body text */
         --secondary-foreground: 220 8% 18%;
         --muted: 220 5% 28%;              /* Muted slate backgrounds */
-        --muted-foreground: 30 10% 80%;   /* Lighter muted text for better contrast */
+        --muted-foreground: 142 12% 65%;  /* Muted sage text */
         --accent: 45 65% 60%;             /* Brighter gold for dark mode */
         --accent-foreground: 220 8% 18%;
         --destructive: 0 60% 50%;
@@ -135,11 +129,11 @@
         --gold-800: 45 65% 80%;
         --gold-900: 45 65% 88%;
 
-        /* Semantic color tokens - Dark mode (override light mode values) */
+        /* Primary and secondary colors for dark mode (backgrounds, borders, accents) */
         --primary: 142 20% 40%;           /* Darker sage for dark mode - WCAG AA on dark bg */
-        --primary-foreground: 142 25% 95%; /* Light sage text */
-        --secondary: 30 15% 75%;          /* Light cream for body text */
-        --secondary-foreground: 142 25% 12%; /* Dark text */
+        --primary-foreground: 142 25% 95%; /* Light sage text on primary backgrounds */
+        --secondary: 30 15% 75%;          /* Light cream for secondary backgrounds */
+        --secondary-foreground: 142 25% 12%; /* Dark text on secondary backgrounds */
         --accent: 45 65% 55%;             /* Gold for dark mode */
         --accent-foreground: 0 0% 100%;   /* White */
 

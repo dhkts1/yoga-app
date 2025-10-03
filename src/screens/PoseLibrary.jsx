@@ -8,6 +8,9 @@ import { PageHeader } from "../components/headers";
 import PoseImage from "../components/PoseImage";
 import useTranslation from "../hooks/useTranslation";
 
+// Constants moved outside component for React Compiler
+const DIFFICULTIES = ["beginner", "intermediate", "advanced"];
+
 function PoseLibrary() {
   // const navigate = useNavigate(); // Currently unused, keeping for future navigation features
   const [searchQuery, setSearchQuery] = useState("");
@@ -16,9 +19,8 @@ function PoseLibrary() {
   const [showFilters, setShowFilters] = useState(false);
   const { t } = useTranslation();
 
-  // Get unique categories and difficulties
-  const categories = useMemo(() => getCategories(), []);
-  const difficulties = ["beginner", "intermediate", "advanced"];
+  // Get unique categories (no useMemo - let React Compiler optimize)
+  const categories = getCategories();
 
   // Filter poses based on search and filters
   const filteredPoses = useMemo(() => {
@@ -50,11 +52,11 @@ function PoseLibrary() {
   // Count poses by difficulty
   const difficultyCounts = useMemo(() => {
     const counts = { all: poses.length };
-    difficulties.forEach((diff) => {
+    DIFFICULTIES.forEach((diff) => {
       counts[diff] = poses.filter((p) => p.difficulty === diff).length;
     });
     return counts;
-  }, [difficulties]);
+  }, []);
 
   // eslint-disable-next-line no-unused-vars
   const handlePoseSelect = (poseId) => {
@@ -93,7 +95,7 @@ function PoseLibrary() {
             placeholder={t("screens.poseLibrary.searchPlaceholder")}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full rounded-2xl border-2 border-border bg-card px-10 py-3 text-card-foreground placeholder:text-sage-500 focus:border-primary focus:outline-none"
+            className="w-full rounded-2xl border-2 border-border bg-card px-10 py-3 text-foreground placeholder:text-sage-500 focus:border-primary focus:outline-none"
           />
           {searchQuery && (
             <button
@@ -116,7 +118,7 @@ function PoseLibrary() {
           <Filter className="mr-2 size-5" />
           Filters
           {activeFilterCount > 0 && (
-            <span className="ml-2 rounded-full bg-secondary px-2 py-0.5 text-xs font-medium text-white">
+            <span className="ml-2 rounded-full bg-secondary px-2 py-0.5 text-xs font-medium text-secondary-foreground">
               {activeFilterCount}
             </span>
           )}
@@ -128,7 +130,7 @@ function PoseLibrary() {
         <div className="mx-auto mb-6 max-w-sm space-y-4 rounded-2xl bg-card p-4 shadow-sm">
           {/* Category Filter */}
           <div>
-            <label className="mb-2 block text-sm font-medium text-card-foreground">
+            <label className="mb-2 block text-sm font-medium text-foreground">
               {t("screens.poseLibrary.filterByCategory")}
             </label>
             <div className="flex flex-wrap gap-2">
@@ -136,7 +138,7 @@ function PoseLibrary() {
                 onClick={() => setSelectedCategory("all")}
                 className={`rounded-full px-3 py-1.5 text-sm font-medium transition-all ${
                   selectedCategory === "all"
-                    ? "bg-secondary text-white"
+                    ? "bg-secondary text-secondary-foreground"
                     : "bg-muted text-muted-foreground hover:bg-muted"
                 }`}
               >
@@ -148,7 +150,7 @@ function PoseLibrary() {
                   onClick={() => setSelectedCategory(cat)}
                   className={`rounded-full px-3 py-1.5 text-sm font-medium capitalize transition-all ${
                     selectedCategory === cat
-                      ? "bg-secondary text-white"
+                      ? "bg-secondary text-secondary-foreground"
                       : "bg-muted text-muted-foreground hover:bg-muted"
                   }`}
                 >
@@ -160,7 +162,7 @@ function PoseLibrary() {
 
           {/* Difficulty Filter */}
           <div>
-            <label className="mb-2 block text-sm font-medium text-card-foreground">
+            <label className="mb-2 block text-sm font-medium text-foreground">
               {t("screens.poseLibrary.filterByDifficulty")}
             </label>
             <div className="flex flex-wrap gap-2">
@@ -168,19 +170,19 @@ function PoseLibrary() {
                 onClick={() => setSelectedDifficulty("all")}
                 className={`rounded-full px-3 py-1.5 text-sm font-medium transition-all ${
                   selectedDifficulty === "all"
-                    ? "bg-secondary text-white"
+                    ? "bg-secondary text-secondary-foreground"
                     : "bg-muted text-muted-foreground hover:bg-muted"
                 }`}
               >
                 All ({difficultyCounts.all})
               </button>
-              {difficulties.map((diff) => (
+              {DIFFICULTIES.map((diff) => (
                 <button
                   key={diff}
                   onClick={() => setSelectedDifficulty(diff)}
                   className={`rounded-full px-3 py-1.5 text-sm font-medium capitalize transition-all ${
                     selectedDifficulty === diff
-                      ? "bg-secondary text-white"
+                      ? "bg-secondary text-secondary-foreground"
                       : "bg-muted text-muted-foreground hover:bg-muted"
                   }`}
                 >
@@ -195,7 +197,7 @@ function PoseLibrary() {
             <Button
               onClick={clearFilters}
               variant="ghost"
-              className="w-full text-muted-foreground hover:text-card-foreground"
+              className="w-full text-muted-foreground hover:text-foreground"
             >
               Clear All Filters
             </Button>
@@ -245,7 +247,7 @@ function PoseLibrary() {
 
                 {/* Pose Info */}
                 <div className="space-y-1">
-                  <h3 className="line-clamp-1 text-sm font-medium text-card-foreground">
+                  <h3 className="line-clamp-1 text-sm font-medium text-foreground">
                     {pose.nameEnglish}
                   </h3>
                   <p className="line-clamp-1 text-xs italic text-muted-foreground">

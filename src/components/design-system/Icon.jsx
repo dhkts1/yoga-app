@@ -28,16 +28,16 @@ const Icon = React.forwardRef(({
   const variants = {
     default: 'text-current',
     primary: 'text-muted-foreground',
-    secondary: 'text-secondary',
-    muted: 'text-muted',
-    white: 'text-white',
+    secondary: 'text-muted-foreground',
+    muted: 'text-muted-foreground',
+    white: 'text-primary-foreground',
     success: 'text-state-success',
     warning: 'text-state-warning',
     error: 'text-state-error'
   };
 
   const iconStyles = cn(
-    'flex-shrink-0',
+    'shrink-0',
     sizes[size],
     variants[variant],
     className

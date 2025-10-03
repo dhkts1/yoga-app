@@ -84,7 +84,7 @@ function Breathing() {
         {favoriteExercises.length > 0 && (
           <div className="mb-4">
             <h2 className="mb-2 flex items-center justify-center gap-1.5 text-sm font-medium text-foreground">
-              <Star className="h-4 w-4 fill-accent text-accent" />
+              <Star className="size-4 fill-accent text-accent" />
               Favorite Exercises
             </h2>
             <motion.div
@@ -134,8 +134,8 @@ function Breathing() {
         {/* Quick info about breathing exercises */}
         <Card padding="sm" className="mb-24 border-border bg-muted">
           <div className="flex items-start gap-3">
-            <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-muted">
-              <Wind className="h-4 w-4 text-muted-foreground" />
+            <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-muted">
+              <Wind className="size-4 text-muted-foreground" />
             </div>
             <div>
               <Text variant="body" className="mb-1 font-medium text-foreground">

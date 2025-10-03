@@ -146,7 +146,7 @@ function WeekDetail() {
         <div className="mb-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
             {completed && (
-              <Badge className="border-0 bg-state-success text-white">
+              <Badge className="border-0 bg-state-success text-primary-foreground">
                 <CheckCircle2 className="mr-1 size-3" />
                 {t("screens.weekDetail.completed")}
               </Badge>
@@ -165,7 +165,7 @@ function WeekDetail() {
           <h3 className="mb-2 text-sm font-medium uppercase tracking-wide text-muted-foreground">
             Focus
           </h3>
-          <p className="text-base font-medium text-card-foreground">
+          <p className="text-base font-medium text-foreground">
             {week.focus}
           </p>
         </div>
@@ -192,7 +192,7 @@ function WeekDetail() {
             <span className="text-sm font-medium text-muted-foreground">
               Week Progress
             </span>
-            <span className="text-sm font-medium text-card-foreground">
+            <span className="text-sm font-medium text-foreground">
               {completedSessionsCount}/{totalSessions} sessions
             </span>
           </div>
@@ -217,7 +217,7 @@ function WeekDetail() {
           <div className="flex items-start gap-3">
             <Lightbulb className="mt-0.5 size-5 shrink-0 text-muted-foreground" />
             <div>
-              <h3 className="mb-2 text-sm font-medium text-card-foreground">
+              <h3 className="mb-2 text-sm font-medium text-foreground">
                 Guidance for This Week
               </h3>
               <p className="text-sm leading-relaxed text-muted-foreground">
@@ -230,7 +230,7 @@ function WeekDetail() {
 
       {/* Recommended Sessions */}
       <div className="mb-6">
-        <h2 className="mb-4 px-1 text-lg font-medium text-card-foreground">
+        <h2 className="mb-4 px-1 text-lg font-medium text-foreground">
           {t("screens.weekDetail.sessionsThisWeek")}
         </h2>
 
@@ -267,7 +267,7 @@ function WeekDetail() {
                         Session {index + 1}
                       </span>
                       {isCompleted && (
-                        <Badge className="h-5 border-0 bg-state-success px-2 py-0 text-xs text-white">
+                        <Badge className="h-5 border-0 bg-state-success px-2 py-0 text-xs text-primary-foreground">
                           <CheckCircle2 className="mr-1 size-3" />
                           {t("screens.weekDetail.completed")}
                         </Badge>
@@ -275,7 +275,7 @@ function WeekDetail() {
                     </div>
 
                     {/* Session name */}
-                    <h3 className="mb-2 line-clamp-1 text-base font-medium text-card-foreground">
+                    <h3 className="mb-2 line-clamp-1 text-base font-medium text-foreground">
                       {session.name}
                     </h3>
 
@@ -324,7 +324,7 @@ function WeekDetail() {
       <div className="mb-36 rounded-xl border border-border bg-card p-5 shadow-sm">
         <div className="mb-3 flex items-center gap-2">
           <MessageSquare className="size-5 text-muted-foreground" />
-          <h3 className="text-base font-medium text-card-foreground">
+          <h3 className="text-base font-medium text-foreground">
             Your Notes
           </h3>
         </div>
@@ -339,7 +339,7 @@ function WeekDetail() {
           onChange={(e) => setNote(e.target.value)}
           onBlur={handleSaveNote}
           placeholder="Write your thoughts here..."
-          className="min-h-[120px] w-full resize-none rounded-lg border border-border px-4 py-3 text-sm text-card-foreground outline-none placeholder:text-sage-400 focus:border-primary focus:ring-2 focus:ring-sage-400/20"
+          className="min-h-[120px] w-full resize-none rounded-lg border border-border px-4 py-3 text-sm text-foreground outline-none placeholder:text-sage-400 focus:border-primary focus:ring-2 focus:ring-sage-400/20"
           disabled={completed}
         />
 

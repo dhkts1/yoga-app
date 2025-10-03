@@ -29,8 +29,8 @@ const Stat = React.forwardRef(({
   const variants = {
     default: {
       card: 'variant-default',
-      valueColor: 'text-primary',
-      labelColor: 'text-secondary',
+      valueColor: 'text-foreground',
+      labelColor: 'text-muted-foreground',
     },
     highlight: {
       card: 'variant-sage',
@@ -39,8 +39,8 @@ const Stat = React.forwardRef(({
     },
     compact: {
       card: 'variant-default padding-sm',
-      valueColor: 'text-primary',
-      labelColor: 'text-secondary',
+      valueColor: 'text-foreground',
+      labelColor: 'text-muted-foreground',
     },
   };
 
@@ -48,16 +48,16 @@ const Stat = React.forwardRef(({
 
   // Trend icon mapping
   const trendIcons = {
-    up: <TrendingUp className="w-4 h-4 text-state-success" />,
-    down: <TrendingDown className="w-4 h-4 text-state-error" />,
-    neutral: <Minus className="w-4 h-4 text-text-muted" />,
+    up: <TrendingUp className="size-4 text-state-success" />,
+    down: <TrendingDown className="size-4 text-state-error" />,
+    neutral: <Minus className="size-4 text-muted-foreground" />,
   };
 
   // Trend text color
   const trendColors = {
     up: 'text-state-success',
     down: 'text-state-error',
-    neutral: 'text-text-muted',
+    neutral: 'text-muted-foreground',
   };
 
   // Animation variants
@@ -104,10 +104,10 @@ const Stat = React.forwardRef(({
           {...props}
         >
           {/* Value row: icon + number + trend */}
-          <div className="flex items-center justify-between mb-1">
+          <div className="mb-1 flex items-center justify-between">
             <div className="flex items-center gap-2">
               {icon && (
-                <div className="flex-shrink-0 w-7 h-7 rounded bg-muted flex items-center justify-center text-muted-foreground">
+                <div className="flex size-7 shrink-0 items-center justify-center rounded bg-muted text-muted-foreground">
                   <div className="scale-75">
                     {icon}
                   </div>
@@ -115,13 +115,13 @@ const Stat = React.forwardRef(({
               )}
               <motion.div
                 variants={animate ? valueVariants : undefined}
-                className="font-bold text-xl leading-none"
+                className="text-xl font-bold leading-none"
               >
                 {value}
               </motion.div>
             </div>
             {trend && (
-              <div className={cn('flex-shrink-0', trendColors[trend])}>
+              <div className={cn('shrink-0', trendColors[trend])}>
                 <div className="scale-75">
                   {trendIcons[trend]}
                 </div>
@@ -131,11 +131,11 @@ const Stat = React.forwardRef(({
 
           {/* Label and description */}
           <div className="flex flex-col">
-            <Text variant="muted" className="text-xs leading-tight text-secondary">
+            <Text variant="muted" className="text-xs leading-tight text-muted-foreground">
               {label}
             </Text>
             {description && (
-              <Text variant="muted" className="text-xs leading-tight text-text-muted mt-1">
+              <Text variant="muted" className="mt-1 text-xs leading-tight text-muted-foreground">
                 {description}
               </Text>
             )}
@@ -153,9 +153,9 @@ const Stat = React.forwardRef(({
         {...props}
       >
         {/* Header with icon and trend */}
-        <div className="flex items-start justify-between mb-2">
+        <div className="mb-2 flex items-start justify-between">
           {icon && (
-            <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-muted flex items-center justify-center text-muted-foreground">
+            <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground">
               {icon}
             </div>
           )}
@@ -185,7 +185,7 @@ const Stat = React.forwardRef(({
 
           {/* Optional description */}
           {description && (
-            <Text variant="muted" size="sm" className="mt-2 text-text-muted">
+            <Text variant="muted" size="sm" className="mt-2 text-muted-foreground">
               {description}
             </Text>
           )}

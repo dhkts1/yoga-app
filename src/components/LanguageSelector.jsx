@@ -18,9 +18,9 @@ export default function LanguageSelector() {
             <RadioGroupItem value={lang.code} id={`lang-${lang.code}`} />
             <Label
               htmlFor={`lang-${lang.code}`}
-              className="flex items-center gap-2 cursor-pointer"
+              className="flex cursor-pointer items-center gap-2"
             >
-              <Globe className="w-4 h-4 text-sage-600" />
+              <Globe className="size-4 text-sage-600" />
               <span className="font-medium">{lang.nativeName}</span>
               <span className="text-sm text-sage-500">({lang.name})</span>
             </Label>

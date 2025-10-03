@@ -40,8 +40,41 @@ function Complete() {
 
   const [sessionRecord, setSessionRecord] = useState(null);
   const [streakStatus, setStreakStatus] = useState(null);
-  const [weekCompletionInfo, setWeekCompletionInfo] = useState(null);
   const shouldReduceMotion = useReducedMotion();
+
+  // Compute week completion info from session record and program context
+  const weekCompletionInfo = useMemo(() => {
+    if (!sessionRecord || !programContext?.programId || !programContext?.weekNumber) {
+      return null;
+    }
+
+    const { programId, weekNumber } = programContext;
+    const weekDef = getWeekByNumber(programId, weekNumber);
+
+    if (!weekDef) return null;
+
+    // Get all sessions completed this week
+    const weekSessions = getProgramWeekSessions(programId, weekNumber);
+    const completedSessionIds = [...new Set(weekSessions.map(s => s.sessionId))];
+
+    // Check if all recommended sessions for this week are completed
+    const recommendedSessionIds = weekDef.recommendedSessions || [];
+    const allRecommendedCompleted = recommendedSessionIds.length > 0 &&
+      recommendedSessionIds.every(id => completedSessionIds.includes(id));
+
+    // Only return info if week was just completed
+    if (allRecommendedCompleted && isWeekCompleted(programId, weekNumber)) {
+      return {
+        weekNumber,
+        weekName: weekDef.name,
+        programId,
+        sessionsCompleted: weekSessions.length,
+        isMilestone: weekDef.isMilestone
+      };
+    }
+
+    return null;
+  }, [sessionRecord, programContext, getProgramWeekSessions, isWeekCompleted]);
 
   // Confetti celebration and haptic feedback when component mounts
   useEffect(() => {
@@ -65,7 +98,11 @@ function Complete() {
 
   // Record session completion when component mounts
   useEffect(() => {
-    if (!sessionRecord && (session || isBreathingSession)) {
+    // Track if we've already recorded to prevent cascading renders
+    const recordKey = session?.id || (isBreathingSession ? 'breathing' : '');
+    const hasRecorded = sessionRecord !== null;
+
+    if (!hasRecorded && recordKey && (session || isBreathingSession)) {
       let record;
 
       if (isBreathingSession) {
@@ -118,14 +155,7 @@ function Complete() {
             if (allRecommendedCompleted && !weekAlreadyCompleted) {
               // Week just completed! Mark it in program progress
               completeWeek(programId, weekNumber, weekSessions.length);
-
-              setWeekCompletionInfo({
-                weekNumber,
-                weekName: weekDef.name,
-                programId,
-                sessionsCompleted: weekSessions.length,
-                isMilestone: weekDef.isMilestone
-              });
+              // Note: weekCompletionInfo will be computed via useMemo
             }
           }
         }
@@ -182,24 +212,24 @@ function Complete() {
               animate={shouldReduceMotion ? {} : { rotate: [0, 10, -10, 0] }}
               transition={{ duration: 0.6, delay: 0.3 }}
             >
-              <Wind className="mx-auto mb-4 h-20 w-20 text-primary" />
+              <Wind className="mx-auto mb-4 size-20 text-foreground" />
             </motion.div>
           ) : (
             <motion.div
               animate={shouldReduceMotion ? {} : { scale: [1, 1.1, 1] }}
               transition={{ duration: 0.6, delay: 0.3 }}
             >
-              <CheckCircle className="mx-auto mb-4 h-20 w-20 text-primary" />
+              <CheckCircle className="mx-auto mb-4 size-20 text-foreground" />
             </motion.div>
           )}
-          <h1 className="mb-2 text-2xl font-medium text-primary">
+          <h1 className="mb-2 text-2xl font-medium text-foreground">
             {t('screens.complete.title')}
           </h1>
-          <p className="text-secondary">
+          <p className="text-muted-foreground">
             {isBreathingSession ? breathingExerciseName : `${session?.name || 'session'}`}
           </p>
           {isBreathingSession && breathingDuration && (
-            <p className="text-sm text-secondary mt-1">
+            <p className="mt-1 text-sm text-muted-foreground">
               {breathingDuration} {t('common.minute')}
             </p>
           )}
@@ -212,21 +242,21 @@ function Complete() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.4 }}
         >
-          <p className="text-lg text-primary">
+          <p className="text-lg text-foreground">
             {t('screens.complete.wellDone')}
           </p>
           {streakStatus && (
             <motion.div
-              className="mt-3 p-3 bg-muted rounded-lg"
+              className="mt-3 rounded-lg bg-muted p-3"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.4, delay: 0.6 }}
             >
-              <p className="text-sm text-primary font-medium">
+              <p className="text-sm font-medium text-foreground">
                 {streakStatus.message}
               </p>
               {streakStatus.streak > 0 && (
-                <div className="flex items-center justify-center mt-2 space-x-1">
+                <div className="mt-2 flex items-center justify-center space-x-1">
                   {Array.from({ length: Math.min(streakStatus.streak, 7) }).map((_, i) => (
                     <motion.div
                       key={i}
@@ -235,12 +265,12 @@ function Complete() {
                       transition={{ duration: 0.3, delay: 0.7 + i * 0.05 }}
                     >
                       <Star
-                        className="h-4 w-4 text-accent fill-current"
+                        className="size-4 fill-current text-accent"
                       />
                     </motion.div>
                   ))}
                   {streakStatus.streak > 7 && (
-                    <span className="text-xs text-accent font-medium ml-1">
+                    <span className="ml-1 text-xs font-medium text-accent">
                       +{streakStatus.streak - 7}
                     </span>
                   )}
@@ -248,7 +278,7 @@ function Complete() {
               )}
             </motion.div>
           )}
-          <p className="mt-2 text-sm text-secondary">
+          <p className="mt-2 text-sm text-muted-foreground">
             {t('screens.complete.journeyStep')}
           </p>
         </motion.div>
@@ -264,10 +294,10 @@ function Complete() {
             <div className="flex items-center space-x-3">
               {moodImprovementInfo.icon}
               <div className="flex-1">
-                <p className="font-medium text-sm">
+                <p className="text-sm font-medium">
                   {moodImprovementInfo.message}
                 </p>
-                <p className="text-xs opacity-80 mt-1">
+                <p className="mt-1 text-xs opacity-80">
                   {moodImprovementInfo.detail}
                 </p>
               </div>
@@ -284,19 +314,19 @@ function Complete() {
             transition={{ duration: 0.5, delay: 1.0 }}
           >
             <div className="flex items-start space-x-3">
-              <Trophy className="h-6 w-6 text-accent flex-shrink-0 mt-0.5" />
+              <Trophy className="mt-0.5 size-6 shrink-0 text-accent" />
               <div className="flex-1">
-                <p className="font-semibold text-base text-accent mb-1">
+                <p className="mb-1 text-base font-semibold text-accent">
                   {weekCompletionInfo.isMilestone ? t('screens.complete.milestoneAchievement') : t('screens.complete.weekComplete')}
                 </p>
-                <p className="font-medium text-sm text-primary mb-1">
+                <p className="mb-1 text-sm font-medium text-foreground">
                   {weekCompletionInfo.weekName}
                 </p>
-                <p className="text-xs text-secondary">
+                <p className="text-xs text-muted-foreground">
                   {t('screens.complete.completedSessions', { count: weekCompletionInfo.sessionsCompleted })}
                 </p>
                 {weekCompletionInfo.isMilestone && (
-                  <p className="text-xs text-secondary mt-2 italic">
+                  <p className="mt-2 text-xs italic text-muted-foreground">
                     {t('screens.complete.significantMilestone')}
                   </p>
                 )}
@@ -309,27 +339,27 @@ function Complete() {
         <div className="w-full space-y-4">
           <button
             onClick={handleGoHome}
-            className="flex w-full items-center justify-center space-x-2 rounded-lg bg-primary px-6 py-3 text-white shadow-sm transition-all duration-300 hover:bg-primary/90 active:scale-95"
+            className="flex w-full items-center justify-center space-x-2 rounded-lg bg-primary px-6 py-3 text-primary-foreground shadow-sm transition-all duration-300 hover:bg-primary/90 active:scale-95"
           >
-            <Home className="h-5 w-5" />
+            <Home className="size-5" />
             <span>{t('screens.complete.backToHome')}</span>
           </button>
 
           <button
             onClick={handlePracticeAgain}
-            className="flex w-full items-center justify-center space-x-2 rounded-lg border border-primary px-6 py-3 text-primary transition-all duration-300 hover:bg-primary/5 active:scale-95"
+            className="flex w-full items-center justify-center space-x-2 rounded-lg border border-primary px-6 py-3 text-foreground transition-all duration-300 hover:bg-primary/5 active:scale-95"
           >
-            <RotateCcw className="h-5 w-5" />
+            <RotateCcw className="size-5" />
             <span>{t('screens.complete.practiceAgain')}</span>
           </button>
         </div>
       </ContentBody>
 
       {/* Subtle celebration animation */}
-      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
-        <div className="absolute -top-20 -right-20 h-40 w-40 rounded-full bg-accent/10 animate-breathe"></div>
-        <div className="absolute -bottom-20 -left-20 h-32 w-32 rounded-full bg-primary/10 animate-breathe" style={{animationDelay: '2s'}}></div>
-        <div className="absolute top-1/3 left-1/4 h-6 w-6 rounded-full bg-accent/20 animate-breathe" style={{animationDelay: '1s'}}></div>
+      <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+        <div className="absolute -right-20 -top-20 size-40 animate-breathe rounded-full bg-accent/10"></div>
+        <div className="absolute -bottom-20 -left-20 size-32 animate-breathe rounded-full bg-primary/10" style={{animationDelay: '2s'}}></div>
+        <div className="absolute left-1/4 top-1/3 size-6 animate-breathe rounded-full bg-accent/20" style={{animationDelay: '1s'}}></div>
       </div>
     </FullscreenLayout>
   );

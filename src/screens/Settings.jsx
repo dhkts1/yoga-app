@@ -15,7 +15,7 @@ import {
 import { DefaultLayout } from "../components/layouts";
 import { PageHeader } from "../components/headers";
 import { Text } from "../components/design-system/Typography";
-import { ContentBody, Card } from "../components/design-system";
+import { ContentBody } from "../components/design-system";
 import { Switch } from "../components/ui/switch";
 import SettingsSection from "../components/SettingsSection";
 import { ConfirmDialog } from "../components/dialogs";
@@ -25,6 +25,7 @@ import {
   LIGHT_MODE_THEMES,
 } from "../components/ThemeProvider";
 import LanguageSelector from "../components/LanguageSelector";
+import ThemeColorSelector from "../components/ThemeColorSelector";
 import usePreferencesStore from "../stores/preferences";
 import useProgressStore from "../stores/progress";
 import useCollapsibleSections from "../hooks/useCollapsibleSections";
@@ -184,186 +185,26 @@ function Settings() {
 
           {/* Light Mode Theme Selector - only show when light mode is active */}
           {theme === "light" && (
-            <div className="mt-4 border-t border-border py-4">
-              <div className="mb-4">
-                <Text className="font-medium text-foreground">
-                  Light Mode Color
-                </Text>
-                <Text variant="caption" className="text-muted-foreground">
-                  Choose your preferred light mode palette
-                </Text>
-              </div>
-
-              <div className="space-y-1.5">
-                {Object.entries(LIGHT_MODE_THEMES).map(([key, themeData]) => {
-                  const isSelected = lightModeTheme === key;
-                  const isCustom = key === "custom";
-
-                  return (
-                    <Card
-                      key={key}
-                      variant={isSelected ? "outlined" : "default"}
-                      padding="xs"
-                      interactive
-                      onClick={() => setLightModeTheme(key)}
-                      className={
-                        isSelected ? "border-primary bg-primary/5" : ""
-                      }
-                    >
-                      <div className="flex items-center gap-2.5">
-                        {/* Color preview circle */}
-                        <div className="relative shrink-0">
-                          <div
-                            className="size-8 rounded-full border-2 border-border"
-                            style={{
-                              backgroundColor: isCustom
-                                ? customLightColor
-                                : themeData.preview,
-                            }}
-                          />
-                          {/* Color picker for custom theme */}
-                          {isCustom && (
-                            <input
-                              type="color"
-                              value={customLightColor}
-                              onChange={(e) => {
-                                setCustomLightColor(e.target.value);
-                                setLightModeTheme("custom");
-                              }}
-                              onClick={(e) => e.stopPropagation()}
-                              className="absolute inset-0 size-full cursor-pointer rounded-full opacity-0"
-                              title="Pick a custom color"
-                            />
-                          )}
-                        </div>
-
-                        {/* Theme info */}
-                        <div className="min-w-0 flex-1">
-                          <Text className="font-medium leading-tight text-foreground">
-                            {themeData.name}
-                          </Text>
-                          <Text
-                            variant="caption"
-                            className="leading-tight text-muted-foreground"
-                          >
-                            {themeData.description}
-                          </Text>
-                        </div>
-
-                        {/* Selected indicator */}
-                        {isSelected && (
-                          <div className="shrink-0 text-primary">
-                            <svg
-                              className="size-5"
-                              fill="currentColor"
-                              viewBox="0 0 20 20"
-                            >
-                              <path
-                                fillRule="evenodd"
-                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                clipRule="evenodd"
-                              />
-                            </svg>
-                          </div>
-                        )}
-                      </div>
-                    </Card>
-                  );
-                })}
-              </div>
-            </div>
+            <ThemeColorSelector
+              mode="light"
+              themes={LIGHT_MODE_THEMES}
+              currentTheme={lightModeTheme}
+              customColor={customLightColor}
+              onThemeChange={setLightModeTheme}
+              onColorChange={setCustomLightColor}
+            />
           )}
 
           {/* Dark Mode Theme Selector - only show when dark mode is active */}
           {theme === "dark" && (
-            <div className="mt-4 border-t border-border py-4">
-              <div className="mb-4">
-                <Text className="font-medium text-foreground">
-                  Dark Mode Color
-                </Text>
-                <Text variant="caption" className="text-muted-foreground">
-                  Choose your preferred dark mode palette
-                </Text>
-              </div>
-
-              <div className="space-y-1.5">
-                {Object.entries(DARK_MODE_THEMES).map(([key, themeData]) => {
-                  const isSelected = darkModeTheme === key;
-                  const isCustom = key === "custom";
-
-                  return (
-                    <Card
-                      key={key}
-                      variant={isSelected ? "outlined" : "default"}
-                      padding="xs"
-                      interactive
-                      onClick={() => setDarkModeTheme(key)}
-                      className={
-                        isSelected ? "border-primary bg-primary/5" : ""
-                      }
-                    >
-                      <div className="flex items-center gap-2.5">
-                        {/* Color preview circle */}
-                        <div className="relative shrink-0">
-                          <div
-                            className="size-8 rounded-full border-2 border-border"
-                            style={{
-                              backgroundColor: isCustom
-                                ? customDarkColor
-                                : themeData.preview,
-                            }}
-                          />
-                          {/* Color picker for custom theme */}
-                          {isCustom && (
-                            <input
-                              type="color"
-                              value={customDarkColor}
-                              onChange={(e) => {
-                                setCustomDarkColor(e.target.value);
-                                setDarkModeTheme("custom");
-                              }}
-                              onClick={(e) => e.stopPropagation()}
-                              className="absolute inset-0 size-full cursor-pointer rounded-full opacity-0"
-                              title="Pick a custom color"
-                            />
-                          )}
-                        </div>
-
-                        {/* Theme info */}
-                        <div className="min-w-0 flex-1">
-                          <Text className="font-medium leading-tight text-foreground">
-                            {themeData.name}
-                          </Text>
-                          <Text
-                            variant="caption"
-                            className="leading-tight text-muted-foreground"
-                          >
-                            {themeData.description}
-                          </Text>
-                        </div>
-
-                        {/* Selected indicator */}
-                        {isSelected && (
-                          <div className="shrink-0 text-primary">
-                            <svg
-                              className="size-5"
-                              fill="currentColor"
-                              viewBox="0 0 20 20"
-                            >
-                              <path
-                                fillRule="evenodd"
-                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                clipRule="evenodd"
-                              />
-                            </svg>
-                          </div>
-                        )}
-                      </div>
-                    </Card>
-                  );
-                })}
-              </div>
-            </div>
+            <ThemeColorSelector
+              mode="dark"
+              themes={DARK_MODE_THEMES}
+              currentTheme={darkModeTheme}
+              customColor={customDarkColor}
+              onThemeChange={setDarkModeTheme}
+              onColorChange={setCustomDarkColor}
+            />
           )}
         </SettingsSection>
 
@@ -729,7 +570,7 @@ function Settings() {
             onClick={handleFeedback}
             className="group w-full rounded-lg border border-border p-3 text-left transition-all duration-300 hover:bg-muted"
           >
-            <Text className="font-medium text-foreground group-hover:text-card-foreground">
+            <Text className="font-medium text-foreground group-hover:text-foreground">
               Send Feedback
             </Text>
             <Text variant="caption" className="text-muted-foreground">
@@ -778,7 +619,7 @@ function Settings() {
 
       {/* Import Data Dialog */}
       {showImportDialog && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 duration-200 animate-in fade-in">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/50 p-4 duration-200 animate-in fade-in">
           <div className="w-full max-w-md rounded-lg border border-border bg-card p-6 shadow-xl duration-200 animate-in zoom-in-95">
             <div className="mb-4 flex items-start gap-3">
               <div className="rounded-lg bg-state-warning/20 p-2 text-state-warning">

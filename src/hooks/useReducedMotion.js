@@ -51,7 +51,7 @@ export function useReducedMotion() {
     if (typeof window === 'undefined') return;
 
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    setShouldReduceMotion(mediaQuery.matches);
+    // No need to set initial value - already set in useState initializer
 
     const handleChange = (e) => {
       setShouldReduceMotion(e.matches);

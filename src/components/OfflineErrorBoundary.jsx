@@ -94,14 +94,14 @@ class OfflineErrorBoundary extends React.Component {
     if (this.state.hasError && this.state.isOffline) {
       // Render offline-specific UI
       return (
-        <div className="min-h-screen bg-background flex items-center justify-center p-4">
+        <div className="flex min-h-screen items-center justify-center bg-background p-4">
           <ContentBody size="sm" centered>
-            <div className="text-center space-y-6">
+            <div className="space-y-6 text-center">
               {/* Icon */}
               <div className="flex justify-center">
                 <div className="rounded-full bg-muted p-6">
                   <WifiOff
-                    className="h-12 w-12 text-muted-foreground"
+                    className="size-12 text-muted-foreground"
                     strokeWidth={1.5}
                   />
                 </div>
@@ -118,7 +118,7 @@ class OfflineErrorBoundary extends React.Component {
               </div>
 
               {/* Reassurance */}
-              <div className="bg-muted/50 rounded-lg p-4 border border-border">
+              <div className="rounded-lg border border-border bg-muted/50 p-4">
                 <Text variant="small" className="text-center">
                   The app works offline! You can continue your practice, and everything will sync when you're back online.
                 </Text>
@@ -130,7 +130,7 @@ class OfflineErrorBoundary extends React.Component {
                   onClick={this.handleRetry}
                   variant="primary"
                   fullWidth
-                  icon={<RefreshCw className="h-5 w-5" />}
+                  icon={<RefreshCw className="size-5" />}
                   iconPosition="left"
                 >
                   Try Again
@@ -140,7 +140,7 @@ class OfflineErrorBoundary extends React.Component {
                   onClick={this.handleGoHome}
                   variant="secondary"
                   fullWidth
-                  icon={<Home className="h-5 w-5" />}
+                  icon={<Home className="size-5" />}
                   iconPosition="left"
                 >
                   Go Home
@@ -148,7 +148,7 @@ class OfflineErrorBoundary extends React.Component {
               </div>
 
               {/* Connection status */}
-              <div className="pt-6 border-t border-border">
+              <div className="border-t border-border pt-6">
                 <Text variant="caption" className="text-center">
                   {this.state.isOffline
                     ? 'Waiting for connection...'
@@ -159,10 +159,10 @@ class OfflineErrorBoundary extends React.Component {
               {/* Technical details (dev mode only) */}
               {process.env.NODE_ENV === 'development' && this.state.error && (
                 <details className="mt-8 text-left">
-                  <summary className="cursor-pointer text-sm font-medium text-muted-foreground hover:text-primary mb-2">
+                  <summary className="mb-2 cursor-pointer text-sm font-medium text-muted-foreground hover:text-foreground">
                     Technical Details (Dev Only)
                   </summary>
-                  <div className="bg-muted rounded-lg p-4 space-y-2 overflow-auto max-h-64">
+                  <div className="max-h-64 space-y-2 overflow-auto rounded-lg bg-muted p-4">
                     <Text variant="caption" as="div">
                       <strong>Error:</strong> {this.state.error.toString()}
                     </Text>

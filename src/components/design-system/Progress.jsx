@@ -47,7 +47,7 @@ const ProgressBar = React.forwardRef(({
   };
 
   const trackStyles = cn(
-    'w-full rounded-full overflow-hidden',
+    'w-full overflow-hidden rounded-full',
     sizes[size],
     variants[variant].track,
     className
@@ -76,7 +76,7 @@ const ProgressBar = React.forwardRef(({
         />
       </div>
       {showValue && (
-        <div className="flex justify-between mt-1 text-sm text-muted-foreground">
+        <div className="mt-1 flex justify-between text-sm text-muted-foreground">
           <span>{value}</span>
           <span>{max}</span>
         </div>
@@ -134,7 +134,7 @@ const CircularProgress = React.forwardRef(({
         width={size}
         height={size}
         className={cn(
-          'transform -rotate-90',
+          '-rotate-90',
           animated && 'animate-pulse'
         )}
       >
@@ -217,10 +217,10 @@ const Timer = React.forwardRef(({
         animated={!paused && remainingSeconds > 0}
       >
         <div className="text-center">
-          <div className="text-3xl font-semibold text-foreground font-mono">
+          <div className="font-mono text-3xl font-semibold text-foreground">
             {formatTime(minutes, seconds)}
           </div>
-          <div className="text-sm text-muted-foreground mt-1">
+          <div className="mt-1 text-sm text-muted-foreground">
             {paused ? 'Paused' : 'Remaining'}
           </div>
         </div>
@@ -228,8 +228,8 @@ const Timer = React.forwardRef(({
 
       {/* Breathing animation indicator */}
       {!paused && remainingSeconds > 0 && (
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <div className="w-full h-full rounded-full border-2 border-primary opacity-30 animate-breathe" />
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+          <div className="size-full animate-breathe rounded-full border-2 border-primary opacity-30" />
         </div>
       )}
     </div>
@@ -258,11 +258,11 @@ const SessionProgress = React.forwardRef(({
       />
 
       {/* Progress info */}
-      <div className="flex justify-between items-center text-sm">
+      <div className="flex items-center justify-between text-sm">
         <span className="text-muted-foreground">
           Pose {currentPose} of {totalPoses}
         </span>
-        <span className="text-muted-foreground font-medium">
+        <span className="font-medium text-muted-foreground">
           {Math.round((currentPose / totalPoses) * 100)}%
         </span>
       </div>
@@ -274,7 +274,7 @@ const SessionProgress = React.forwardRef(({
             <div
               key={index}
               className={cn(
-                'flex-1 h-1 rounded-full transition-colors duration-300',
+                'h-1 flex-1 rounded-full transition-colors duration-300',
                 index < currentPose
                   ? 'bg-primary'
                   : index === currentPose
@@ -307,8 +307,8 @@ const Spinner = React.forwardRef(({
 
   const variants = {
     default: 'text-muted-foreground',
-    light: 'text-white',
-    muted: 'text-muted'
+    light: 'text-primary-foreground',
+    muted: 'text-muted-foreground'
   };
 
   const spinnerStyles = cn(

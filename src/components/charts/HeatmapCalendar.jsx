@@ -122,7 +122,7 @@ const HeatmapCalendar = memo(function HeatmapCalendar({
           {/* Day labels */}
           {["S", "M", "T", "W", "T", "F", "S"].map((dayName, index) => (
             <div key={dayName + index} className="text-center">
-              <Text variant="caption" className="text-xs text-secondary">
+              <Text variant="caption" className="text-xs text-muted-foreground">
                 {dayName}
               </Text>
             </div>
@@ -167,7 +167,7 @@ const HeatmapCalendar = memo(function HeatmapCalendar({
 
                 {/* Tooltip on hover - positioned dynamically based on row */}
                 <div
-                  className={`absolute ${tooltipPositionClass} pointer-events-none left-1/2 z-50 min-w-max -translate-x-1/2 whitespace-nowrap rounded border border-border bg-popover px-2 py-1 text-xs text-popover-foreground opacity-0 shadow-lg transition-opacity group-hover:opacity-100`}
+                  className={`absolute ${tooltipPositionClass} pointer-events-none left-1/2 z-50 min-w-max -translate-x-1/2 whitespace-nowrap rounded border border-border bg-popover px-2 py-1 text-xs text-foreground opacity-0 shadow-lg transition-opacity group-hover:opacity-100`}
                 >
                   {day.date.toLocaleDateString()}
                   <br />
@@ -189,7 +189,7 @@ const HeatmapCalendar = memo(function HeatmapCalendar({
         {/* Legend */}
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <Text variant="caption" className="text-secondary">
+            <Text variant="caption" className="text-muted-foreground">
               Less
             </Text>
             {[0, 1, 2, 3, 4].map((level) => (
@@ -198,7 +198,7 @@ const HeatmapCalendar = memo(function HeatmapCalendar({
                 className={`size-3 rounded-sm ${getIntensityColor(level)}`}
               />
             ))}
-            <Text variant="caption" className="text-secondary">
+            <Text variant="caption" className="text-muted-foreground">
               More
             </Text>
           </div>
@@ -207,7 +207,7 @@ const HeatmapCalendar = memo(function HeatmapCalendar({
         {/* Summary stats */}
         <div className="flex justify-between border-t border-border pt-2">
           <div className="text-center">
-            <Text variant="caption" className="text-secondary">
+            <Text variant="caption" className="text-muted-foreground">
               Practice Days
             </Text>
             <Text variant="body" className="font-medium">
@@ -215,7 +215,7 @@ const HeatmapCalendar = memo(function HeatmapCalendar({
             </Text>
           </div>
           <div className="text-center">
-            <Text variant="caption" className="text-secondary">
+            <Text variant="caption" className="text-muted-foreground">
               Current Streak
             </Text>
             <Text variant="body" className="font-medium">
@@ -223,7 +223,7 @@ const HeatmapCalendar = memo(function HeatmapCalendar({
             </Text>
           </div>
           <div className="text-center">
-            <Text variant="caption" className="text-secondary">
+            <Text variant="caption" className="text-muted-foreground">
               Consistency
             </Text>
             <Text variant="body" className="font-medium">

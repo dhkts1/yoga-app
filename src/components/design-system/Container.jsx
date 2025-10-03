@@ -267,7 +267,7 @@ const PageWrapper = React.forwardRef(({
   return (
     <main
       className={cn(
-        'min-h-screen bg-background pt-safe-top pb-safe-bottom overflow-x-hidden',
+        'min-h-screen overflow-x-hidden bg-background pb-safe-bottom pt-safe-top',
         padding && 'px-4 sm:px-6',
         className
       )}
@@ -278,12 +278,12 @@ const PageWrapper = React.forwardRef(({
         <Section spacing="sm" background="white">
           <Container>
             {title && (
-              <h1 className="text-2xl font-semibold text-primary mb-2">
+              <h1 className="mb-2 text-2xl font-semibold text-foreground">
                 {title}
               </h1>
             )}
             {description && (
-              <p className="text-lg text-secondary">
+              <p className="text-lg text-muted-foreground">
                 {description}
               </p>
             )}
@@ -310,8 +310,8 @@ const PracticeLayout = React.forwardRef(({
   return (
     <div
       className={cn(
-        'min-h-screen bg-background flex flex-col',
-        'pt-safe-top pb-safe-bottom',
+        'flex min-h-screen flex-col bg-background',
+        'pb-safe-bottom pt-safe-top',
         className
       )}
       ref={ref}
@@ -319,7 +319,7 @@ const PracticeLayout = React.forwardRef(({
     >
       {/* Timer section */}
       {timer && (
-        <div className="flex-shrink-0 bg-card border-b border-border-light">
+        <div className="border-border-light shrink-0 border-b bg-card">
           <Container padding="default">
             <div className="py-6 text-center">
               {timer}
@@ -329,9 +329,9 @@ const PracticeLayout = React.forwardRef(({
       )}
 
       {/* Main pose content */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex flex-1 flex-col">
         {pose && (
-          <div className="flex-1 flex items-center justify-center p-6">
+          <div className="flex flex-1 items-center justify-center p-6">
             {pose}
           </div>
         )}
@@ -339,7 +339,7 @@ const PracticeLayout = React.forwardRef(({
 
       {/* Controls section */}
       {controls && (
-        <div className="flex-shrink-0 bg-card border-t border-border-light">
+        <div className="border-border-light shrink-0 border-t bg-card">
           <Container padding="default">
             <div className="py-4">
               {controls}

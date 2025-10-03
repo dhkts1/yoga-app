@@ -122,15 +122,15 @@ export function getSessionAccentColor(sessionId) {
     return 'text-accent';
   }
   if (sessionId === 'lunch-break-relief') {
-    return 'text-primary';
+    return 'text-foreground';
   }
   if (sessionId === 'evening-wind-down') {
-    return 'text-primary';
+    return 'text-foreground';
   }
   if (sessionId?.startsWith('custom-')) {
     return 'text-accent';
   }
-  return 'text-primary';
+  return 'text-foreground';
 }
 
 /**

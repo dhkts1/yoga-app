@@ -78,7 +78,7 @@ function ProgramProgressCard() {
             <div className="mb-0.5 flex flex-wrap items-center gap-1.5">
               <Text
                 variant="heading"
-                className="text-base font-semibold text-primary"
+                className="text-base font-semibold text-foreground"
               >
                 {program.name}
               </Text>
@@ -89,7 +89,7 @@ function ProgramProgressCard() {
               </span>
             </div>
 
-            <div className="flex items-center gap-1.5 text-xs text-secondary">
+            <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
               <Calendar className="size-3.5" />
               <span>
                 Week {currentWeek} of {totalWeeks}
@@ -107,11 +107,11 @@ function ProgramProgressCard() {
         <div className="mb-2">
           <Text
             variant="body"
-            className="text-sm font-medium text-card-foreground"
+            className="text-sm font-medium text-foreground"
           >
             {currentWeekData.name}
           </Text>
-          <Text variant="caption" className="mt-0.5 text-xs text-secondary">
+          <Text variant="caption" className="mt-0.5 text-xs text-muted-foreground">
             {currentWeekData.focus}
           </Text>
         </div>
@@ -126,7 +126,7 @@ function ProgramProgressCard() {
           size="sm"
         />
         <div className="mt-1 flex justify-between text-xs">
-          <Text variant="caption" className="text-secondary">
+          <Text variant="caption" className="text-muted-foreground">
             {progressPercentage}% Complete
           </Text>
           <Text variant="caption" className="font-medium text-muted-foreground">

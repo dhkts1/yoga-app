@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { useRef, useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Sun, Moon, Sunrise, Flame, Star, ChevronRight, Sparkles, BookOpen, Calendar } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import PullToRefresh from 'react-simple-pull-to-refresh';
@@ -9,7 +9,6 @@ import { PageHeader } from '../components/headers';
 import useProgressStore from '../stores/progress';
 import usePreferencesStore from '../stores/preferences';
 import useProgramProgressStore from '../stores/programProgress';
-import FeatureTooltip from '../components/FeatureTooltip';
 import { getSessionById } from '../data/sessions';
 import { getBreathingExerciseById } from '../data/breathing';
 import { getSmartRecommendation, getRecommendationButtonText } from '../utils/recommendations';
@@ -20,9 +19,6 @@ import { haptics } from '../utils/haptics';
 function Welcome() {
   const navigate = useNavigate();
   const { t, isRTL } = useTranslation();
-
-  // Refs for tooltip targeting
-  const quickStartRef = useRef(null);
 
   // Optimize Zustand selectors for progress store
   const getStreakStatus = useProgressStore(state => state.getStreakStatus);
@@ -37,80 +33,40 @@ function Welcome() {
   const getCurrentWeek = useProgramProgressStore(state => state.getCurrentWeek);
 
   // Optimize Zustand selectors for preferences store
-  const isTooltipDismissed = usePreferencesStore(state => state.isTooltipDismissed);
-  const dismissTooltip = usePreferencesStore(state => state.dismissTooltip);
-  const getTooltipShownCount = usePreferencesStore(state => state.getTooltipShownCount);
-  const incrementTooltipShown = usePreferencesStore(state => state.incrementTooltipShown);
   const isMilestoneCelebrated = usePreferencesStore(state => state.isMilestoneCelebrated);
   const markMilestoneCelebrated = usePreferencesStore(state => state.markMilestoneCelebrated);
 
-  // Memoize smart recommendation based on user history
-  const allHistory = useMemo(() =>
-    [...(practiceHistory || []), ...(breathingHistory || [])],
-    [practiceHistory, breathingHistory]
-  );
-  const primaryRecommendation = useMemo(() =>
-    getSmartRecommendation(new Date(), allHistory),
-    [allHistory]
-  );
-
-  // Memoize recently practiced sessions
-  const recentSessions = useMemo(() =>
-    getRecentAllSessions(3),
-    [getRecentAllSessions]
-  );
-
-  // Tooltip visibility state
-  const [showQuickStartTooltip, setShowQuickStartTooltip] = useState(false);
-  const [hasUsedQuickStart, setHasUsedQuickStart] = useState(false);
+  // React Compiler handles memoization automatically
+  const allHistory = [...(practiceHistory || []), ...(breathingHistory || [])];
+  const primaryRecommendation = getSmartRecommendation(new Date(), allHistory);
+  const recentSessions = getRecentAllSessions(3);
 
   // Milestone celebration state
-  const [showMilestoneCelebration, setShowMilestoneCelebration] = useState(false);
-  const [celebratedMilestone, setCelebratedMilestone] = useState(null);
+  const [milestoneState, setMilestoneState] = useState({ show: false, milestone: null });
 
   // Milestone values
   const MILESTONES = [3, 7, 30];
 
-  // Check tooltip conditions on mount and when dependencies change
-  useEffect(() => {
-    // Tooltip: Quick Start
-    // Show when: First 2 visits, hasn't used Quick Start yet
-    const quickStartDismissed = isTooltipDismissed('tooltip-quick-start');
-    const quickStartShownCount = getTooltipShownCount('tooltip-quick-start');
-
-    if (!quickStartDismissed && quickStartShownCount < 2 && !hasUsedQuickStart) {
-      setShowQuickStartTooltip(true);
-      incrementTooltipShown('tooltip-quick-start');
-    }
-  }, [totalSessions]);
-
-  // Check for milestone achievements and trigger celebration
+  // Check for milestone achievements
   useEffect(() => {
     const currentStreak = streakStatus.streak;
 
     // Find the highest milestone achieved that hasn't been celebrated yet
     for (const milestone of MILESTONES) {
       if (currentStreak >= milestone && !isMilestoneCelebrated(milestone)) {
-        // Trigger celebration
-        setCelebratedMilestone(milestone);
-        setShowMilestoneCelebration(true);
+        // Set milestone state in one update
+        setMilestoneState({ show: true, milestone });
         markMilestoneCelebrated(milestone);
 
         // Auto-hide after 3 seconds
         const timer = setTimeout(() => {
-          setShowMilestoneCelebration(false);
+          setMilestoneState(prev => ({ ...prev, show: false }));
         }, 3000);
 
         return () => clearTimeout(timer);
       }
     }
   }, [streakStatus.streak, isMilestoneCelebrated, markMilestoneCelebrated]);
-
-  // Handle Quick Start tooltip dismiss
-  const handleQuickStartDismiss = () => {
-    setShowQuickStartTooltip(false);
-    dismissTooltip('tooltip-quick-start');
-  };
 
   // Time-based greeting per PRD requirements
   const getGreeting = () => {
@@ -125,13 +81,6 @@ function Welcome() {
 
   // Quick Start handler - smart recommendation based on patterns
   const handleQuickStart = () => {
-    // Mark that Quick Start has been used (dismiss tooltip)
-    setHasUsedQuickStart(true);
-    if (showQuickStartTooltip) {
-      dismissTooltip('tooltip-quick-start');
-      setShowQuickStartTooltip(false);
-    }
-
     if (!primaryRecommendation) {
       // Fallback to default
       navigate('/practice?session=morning-energizer');
@@ -172,8 +121,8 @@ function Welcome() {
       <PullToRefresh onRefresh={handleRefresh} pullingContent="" className="h-full">
         <ContentBody size="sm" spacing="none">
         {/* Time-based greeting */}
-        <div className="flex flex-col items-center justify-start mb-4 text-center -mt-6">
-          <GreetingIcon className="mx-auto mb-1 h-12 w-12 text-muted-foreground" />
+        <div className="-mt-6 mb-4 flex flex-col items-center justify-start text-center">
+          <GreetingIcon className="mx-auto mb-1 size-12 text-muted-foreground" />
           <Heading level={1}>
             {greeting.text}
           </Heading>
@@ -183,35 +132,35 @@ function Welcome() {
         {totalSessions > 0 && streakStatus.streak > 0 && (
           <motion.div
             initial={{ scale: 1 }}
-            animate={showMilestoneCelebration ? {
+            animate={milestoneState.show ? {
               scale: [1, 1.3, 1],
               rotate: [0, 5, -5, 0]
             } : {}}
             transition={{ duration: 0.6, times: [0, 0.5, 1] }}
-            className="mb-4 -mt-4 inline-flex items-center gap-2 px-4 py-2 bg-accent/10 rounded-full relative"
+            className="relative -mt-4 mb-4 inline-flex items-center gap-2 rounded-full bg-accent/10 px-4 py-2"
           >
-            <Flame className="h-4 w-4 text-accent" />
+            <Flame className="size-4 text-accent" />
             <Text variant="caption" className="font-medium text-accent">
               {streakStatus.streak} {t('screens.welcome.dayStreak')}
             </Text>
             <div className="flex space-x-0.5">
               {Array.from({ length: Math.min(streakStatus.streak, 3) }).map((_, i) => (
-                <Star key={i} className="h-3 w-3 text-accent fill-current" />
+                <Star key={i} className="size-3 fill-current text-accent" />
               ))}
             </div>
 
             {/* Sparkle effects during celebration */}
             <AnimatePresence>
-              {showMilestoneCelebration && (
+              {milestoneState.show && (
                 <>
                   <motion.div
                     initial={{ opacity: 0, scale: 0.5, rotate: 0 }}
                     animate={{ opacity: 1, scale: 1.5, rotate: 180 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.6 }}
-                    className="absolute -top-2 -right-2"
+                    className="absolute -right-2 -top-2"
                   >
-                    <Sparkles className="h-5 w-5 text-accent" />
+                    <Sparkles className="size-5 text-accent" />
                   </motion.div>
                   <motion.div
                     initial={{ opacity: 0, scale: 0.5, rotate: 0 }}
@@ -220,7 +169,7 @@ function Welcome() {
                     transition={{ duration: 0.6, delay: 0.1 }}
                     className="absolute -bottom-2 -left-2"
                   >
-                    <Sparkles className="h-5 w-5 text-accent" />
+                    <Sparkles className="size-5 text-accent" />
                   </motion.div>
                 </>
               )}
@@ -230,48 +179,35 @@ function Welcome() {
 
         {/* Milestone Achievement Message */}
         <AnimatePresence>
-          {showMilestoneCelebration && celebratedMilestone && (
+          {milestoneState.show && milestoneState.milestone && (
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.3 }}
-              className="mb-3 px-4 py-2 bg-gold/20 rounded-lg"
+              className="mb-3 rounded-lg bg-gold/20 px-4 py-2"
             >
               <Text variant="body" className="text-center font-medium text-accent">
-                🎉 {celebratedMilestone} {t('screens.welcome.milestoneCelebration')}
+                🎉 {milestoneState.milestone} {t('screens.welcome.milestoneCelebration')}
               </Text>
             </motion.div>
           )}
         </AnimatePresence>
 
         {/* Main CTA - ONE dominant action */}
-        <div className="w-full mb-4">
-          <div ref={quickStartRef} className="relative">
-            <Button
-              onClick={handleQuickStart}
-              variant="primary"
-              size="lg"
-              className="w-full h-16 text-lg"
-            >
-              {getRecommendationButtonText(primaryRecommendation, totalSessions > 0)}
-            </Button>
-
-            {/* Tooltip: Quick Start */}
-            <FeatureTooltip
-              id="tooltip-quick-start"
-              content="Start your practice instantly!"
-              position="bottom"
-              target={quickStartRef}
-              show={showQuickStartTooltip}
-              onDismiss={handleQuickStartDismiss}
-              delay={2000}
-            />
-          </div>
+        <div className="mb-4 w-full">
+          <Button
+            onClick={handleQuickStart}
+            variant="primary"
+            size="lg"
+            className="h-16 w-full text-lg"
+          >
+            {getRecommendationButtonText(primaryRecommendation, totalSessions > 0)}
+          </Button>
 
           {/* Recommendation reason below button */}
           {primaryRecommendation && primaryRecommendation.reason && (
-            <Text variant="caption" className="mt-3 text-center text-secondary block">
+            <Text variant="caption" className="mt-3 block text-center text-muted-foreground">
               {primaryRecommendation.reason}
             </Text>
           )}
@@ -280,17 +216,17 @@ function Welcome() {
         {/* Secondary CTA - Browse All */}
         <button
           onClick={() => navigate('/sessions')}
-          className="mb-3 text-muted-foreground hover:text-muted-foreground font-medium text-sm flex items-center gap-1 transition-colors"
+          className="mb-3 flex items-center gap-1 text-sm font-medium text-muted-foreground transition-colors hover:text-muted-foreground"
         >
           {t('screens.welcome.browseAll')}
-          {isRTL ? <ChevronRight className="h-4 w-4 rtl-flip" /> : <ChevronRight className="h-4 w-4" />}
+          {isRTL ? <ChevronRight className="rtl-flip size-4" /> : <ChevronRight className="size-4" />}
         </button>
 
         {/* Program Discovery Section */}
         {activeProgram ? (
           // Active Program Card
-          <div className="w-full mb-6">
-            <Text variant="body" className="text-secondary font-medium mb-4 block">
+          <div className="mb-6 w-full">
+            <Text variant="body" className="mb-4 block font-medium text-muted-foreground">
               {t('screens.welcome.yourProgram')}
             </Text>
             <button
@@ -301,51 +237,51 @@ function Welcome() {
                   navigate(`/programs/${activeProgram.programId}/week/${currentWeek}`);
                 }
               }}
-              className="w-full p-4 bg-card rounded-xl shadow-sm hover:shadow-md transition-all text-left border border-border hover:border-primary"
+              className="w-full rounded-xl border border-border bg-card p-4 text-left shadow-sm transition-all hover:border-primary hover:shadow-md"
             >
-              <div className="flex items-start justify-between mb-2">
-                <div className="flex-1 min-w-0 mr-3">
-                  <div className="flex items-center gap-2 mb-2">
-                    <BookOpen className="h-5 w-5 text-muted-foreground flex-shrink-0" />
-                    <Text variant="body" className="font-medium text-primary">
+              <div className="mb-2 flex items-start justify-between">
+                <div className="mr-3 min-w-0 flex-1">
+                  <div className="mb-2 flex items-center gap-2">
+                    <BookOpen className="size-5 shrink-0 text-muted-foreground" />
+                    <Text variant="body" className="font-medium text-foreground">
                       {getProgramById(activeProgram.programId)?.name}
                     </Text>
                   </div>
-                  <div className="flex items-center gap-2 text-sm text-secondary">
-                    <Calendar className="h-4 w-4 flex-shrink-0" />
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <Calendar className="size-4 shrink-0" />
                     <span>{t('common.week')} {getCurrentWeek(activeProgram.programId)} {t('common.of')} {getProgramById(activeProgram.programId)?.totalWeeks}</span>
                   </div>
                 </div>
               </div>
 
-              <div className="flex items-center justify-between mt-3">
+              <div className="mt-3 flex items-center justify-between">
                 <Text variant="caption" className="text-muted-foreground">
                   {t('screens.welcome.continueJourney')}
                 </Text>
-                {isRTL ? <ChevronRight className="h-5 w-5 text-muted-foreground rtl-flip" /> : <ChevronRight className="h-5 w-5 text-muted-foreground" />}
+                {isRTL ? <ChevronRight className="rtl-flip size-5 text-muted-foreground" /> : <ChevronRight className="size-5 text-muted-foreground" />}
               </div>
             </button>
           </div>
         ) : (
           // Discover Programs CTA
-          <div className="w-full mb-6">
+          <div className="mb-6 w-full">
             <button
               onClick={() => navigate('/programs')}
-              className="w-full p-4 bg-card rounded-xl shadow-sm hover:shadow-md transition-all text-left border border-border hover:border-primary"
+              className="w-full rounded-xl border border-border bg-card p-4 text-left shadow-sm transition-all hover:border-primary hover:shadow-md"
             >
               <div className="flex items-start justify-between">
-                <div className="flex-1 min-w-0 mr-3">
-                  <div className="flex items-center gap-2 mb-2">
-                    <BookOpen className="h-5 w-5 text-accent flex-shrink-0" />
-                    <Text variant="body" className="font-medium text-primary">
+                <div className="mr-3 min-w-0 flex-1">
+                  <div className="mb-2 flex items-center gap-2">
+                    <BookOpen className="size-5 shrink-0 text-accent" />
+                    <Text variant="body" className="font-medium text-foreground">
                       {t('screens.welcome.discoverPrograms')}
                     </Text>
                   </div>
-                  <Text variant="caption" className="text-muted-foreground leading-relaxed">
+                  <Text variant="caption" className="leading-relaxed text-muted-foreground">
                     {t('screens.welcome.programsDescription')}
                   </Text>
                 </div>
-                {isRTL ? <ChevronRight className="h-5 w-5 text-accent flex-shrink-0 mt-1 rtl-flip" /> : <ChevronRight className="h-5 w-5 text-accent flex-shrink-0 mt-1" />}
+                {isRTL ? <ChevronRight className="rtl-flip mt-1 size-5 shrink-0 text-accent" /> : <ChevronRight className="mt-1 size-5 shrink-0 text-accent" />}
               </div>
             </button>
           </div>
@@ -354,7 +290,7 @@ function Welcome() {
         {/* Recently Practiced - only show if user has history */}
         {recentSessions.length > 0 && (
           <div className="w-full">
-            <Text variant="body" className="text-secondary font-medium mb-3 block">
+            <Text variant="body" className="mb-3 block font-medium text-muted-foreground">
               {t('screens.welcome.recentlyPracticed')}
             </Text>
             <div className="space-y-2">
@@ -373,20 +309,20 @@ function Welcome() {
                   <button
                     key={`recent-${index}`}
                     onClick={() => handleRecentSessionClick(session)}
-                    className="w-full p-3 bg-card rounded-xl shadow-sm hover:shadow-md transition-all text-left border border-border hover:border-primary"
+                    className="w-full rounded-xl border border-border bg-card p-3 text-left shadow-sm transition-all hover:border-primary hover:shadow-md"
                   >
                     <div className="flex items-center justify-between">
-                      <div className="flex-1 min-w-0 mr-3">
-                        <Text variant="body" className="font-medium text-primary">
+                      <div className="mr-3 min-w-0 flex-1">
+                        <Text variant="body" className="font-medium text-foreground">
                           {sessionName}
                         </Text>
                         {sanskritName && (
-                          <Text variant="caption" className="text-secondary">
+                          <Text variant="caption" className="text-muted-foreground">
                             {sanskritName}
                           </Text>
                         )}
                       </div>
-                      <Text variant="body" className="text-secondary flex-shrink-0">
+                      <Text variant="body" className="shrink-0 text-muted-foreground">
                         {duration} {t('common.min')}
                       </Text>
                     </div>

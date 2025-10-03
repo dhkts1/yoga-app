@@ -66,14 +66,14 @@ class ErrorBoundary extends React.Component {
     if (this.state.hasError) {
       // Render fallback UI
       return (
-        <div className="min-h-screen bg-background flex items-center justify-center p-4">
+        <div className="flex min-h-screen items-center justify-center bg-background p-4">
           <ContentBody size="sm" centered>
-            <div className="text-center space-y-6">
+            <div className="space-y-6 text-center">
               {/* Icon */}
               <div className="flex justify-center">
                 <div className="rounded-full bg-accent/10 p-6">
                   <AlertTriangle
-                    className="h-12 w-12 text-accent"
+                    className="size-12 text-accent"
                     strokeWidth={1.5}
                   />
                 </div>
@@ -102,7 +102,7 @@ class ErrorBoundary extends React.Component {
                   onClick={this.handleReset}
                   variant="primary"
                   fullWidth
-                  icon={<RefreshCw className="h-5 w-5" />}
+                  icon={<RefreshCw className="size-5" />}
                   iconPosition="left"
                 >
                   Try Again
@@ -112,7 +112,7 @@ class ErrorBoundary extends React.Component {
                   onClick={this.handleGoHome}
                   variant="secondary"
                   fullWidth
-                  icon={<Home className="h-5 w-5" />}
+                  icon={<Home className="size-5" />}
                   iconPosition="left"
                 >
                   Go Home
@@ -120,7 +120,7 @@ class ErrorBoundary extends React.Component {
               </div>
 
               {/* Helpful guidance */}
-              <div className="pt-6 border-t border-border">
+              <div className="border-t border-border pt-6">
                 <Text variant="caption" className="text-center">
                   If this keeps happening, try refreshing the page or clearing your browser cache
                 </Text>

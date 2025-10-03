@@ -227,6 +227,7 @@ fabric.properties
 test-results/
 playwright-report/
 test-output.txt
+tests/screenshots/
 
 # Temporary documentation files (root level only, docs/ is tracked)
 # Note: Documentation in docs/ directory is intentionally tracked

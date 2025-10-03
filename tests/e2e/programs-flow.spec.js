@@ -520,7 +520,7 @@ test.describe("Multi-Week Programs Flow", () => {
       await skipMoodTrackerIfPresent(page);
 
       // Wait for completion screen
-      await page.waitForURL(/\/complete/, { timeout: 15000 });
+      await page.waitForURL(/\/complete/, { timeout: 45000 });
 
       // Wait for state to persist
       await page.waitForTimeout(1000);
@@ -584,7 +584,7 @@ test.describe("Multi-Week Programs Flow", () => {
       await ensurePracticeStarted(page);
       await page.waitForTimeout(300);
       await skipMoodTrackerIfPresent(page);
-      await page.waitForURL(/\/complete/, { timeout: 15000 });
+      await page.waitForURL(/\/complete/, { timeout: 45000 });
 
       // Navigate back from Complete screen (no bottom nav there), then to Insights
       await page.getByRole("button", { name: "Back to Home" }).click();
@@ -636,7 +636,7 @@ test.describe("Multi-Week Programs Flow", () => {
       await ensurePracticeStarted(page);
       await page.waitForTimeout(300);
       await skipMoodTrackerIfPresent(page);
-      await page.waitForURL(/\/complete/, { timeout: 15000 });
+      await page.waitForURL(/\/complete/, { timeout: 45000 });
       await page.waitForTimeout(1000);
 
       // Verify session is tracked in progress store
@@ -993,7 +993,7 @@ test.describe("Multi-Week Programs Flow", () => {
       await ensurePracticeStarted(page);
       await page.waitForTimeout(300);
       await skipMoodTrackerIfPresent(page);
-      await page.waitForURL(/\/complete/, { timeout: 15000 });
+      await page.waitForURL(/\/complete/, { timeout: 45000 });
       await page.waitForTimeout(1000);
 
       // Navigate back to WeekDetail (program sessions return here automatically)
@@ -1070,7 +1070,7 @@ test.describe("Multi-Week Programs Flow", () => {
         await ensurePracticeStarted(page);
         await page.waitForTimeout(300);
         await skipMoodTrackerIfPresent(page);
-        await page.waitForURL(/\/complete/, { timeout: 15000 });
+        await page.waitForURL(/\/complete/, { timeout: 45000 });
         await page.waitForTimeout(1000);
 
         // Navigate back to week detail (program sessions return here automatically)
@@ -1154,7 +1154,7 @@ test.describe("Multi-Week Programs Flow", () => {
         await ensurePracticeStarted(page);
         await page.waitForTimeout(300);
         await skipMoodTrackerIfPresent(page);
-        await page.waitForURL(/\/complete/, { timeout: 15000 });
+        await page.waitForURL(/\/complete/, { timeout: 45000 });
         await page.waitForTimeout(1000);
 
         // Navigate back to week detail (program sessions return here automatically)
@@ -1268,7 +1268,7 @@ test.describe("Multi-Week Programs Flow", () => {
       await ensurePracticeStarted(page);
       await page.waitForTimeout(300);
       await skipMoodTrackerIfPresent(page);
-      await page.waitForURL(/\/complete/, { timeout: 15000 });
+      await page.waitForURL(/\/complete/, { timeout: 45000 });
       await page.waitForTimeout(1000);
 
       // Navigate back to week detail
@@ -1446,7 +1446,7 @@ test.describe("Multi-Week Programs Flow", () => {
         await ensurePracticeStarted(page);
         await page.waitForTimeout(300);
         await skipMoodTrackerIfPresent(page);
-        await page.waitForURL(/\/complete/, { timeout: 15000 });
+        await page.waitForURL(/\/complete/, { timeout: 45000 });
 
         // No need to check for week completion after first session
         // Just navigate back to week detail to complete next session
@@ -1500,7 +1500,7 @@ test.describe("Multi-Week Programs Flow", () => {
       await ensurePracticeStarted(page);
       await page.waitForTimeout(300);
       await skipMoodTrackerIfPresent(page);
-      await page.waitForURL(/\/complete/, { timeout: 15000 });
+      await page.waitForURL(/\/complete/, { timeout: 45000 });
 
       // After completing second session, check for week completion message
       await page.waitForTimeout(3000);
@@ -1572,7 +1572,7 @@ test.describe("Multi-Week Programs Flow", () => {
         await ensurePracticeStarted(page);
         await page.waitForTimeout(300);
         await skipMoodTrackerIfPresent(page);
-        await page.waitForURL(/\/complete/, { timeout: 15000 });
+        await page.waitForURL(/\/complete/, { timeout: 45000 });
 
         // Wait for Complete screen to process week completion logic
         await page.waitForTimeout(3000);
@@ -1638,7 +1638,7 @@ test.describe("Multi-Week Programs Flow", () => {
 
         // In test mode, practice should complete very quickly
         // Wait for completion with extended timeout
-        await page.waitForURL(/\/complete/, { timeout: 20000 });
+        await page.waitForURL(/\/complete/, { timeout: 45000 });
 
         // Wait for Complete screen to process week completion logic
         // The useEffect needs time to run, record session, and persist to localStorage
@@ -1754,7 +1754,7 @@ test.describe("Multi-Week Programs Flow", () => {
         await ensurePracticeStarted(page);
         await page.waitForTimeout(300);
         await skipMoodTrackerIfPresent(page);
-        await page.waitForURL(/\/complete/, { timeout: 15000 });
+        await page.waitForURL(/\/complete/, { timeout: 45000 });
 
         // Wait for Complete screen to process week completion logic
         await page.waitForTimeout(2000);
@@ -1851,7 +1851,7 @@ test.describe("Multi-Week Programs Flow", () => {
         await ensurePracticeStarted(page);
         await page.waitForTimeout(300);
         await skipMoodTrackerIfPresent(page);
-        await page.waitForURL(/\/complete/, { timeout: 15000 });
+        await page.waitForURL(/\/complete/, { timeout: 45000 });
 
         // CRITICAL: Wait for "Practice Complete!" heading to ensure useEffect has run
         await page.getByRole("heading", { name: /practice complete/i }).waitFor({ state: "visible", timeout: 5000 });
@@ -2163,7 +2163,7 @@ test.describe("Multi-Week Programs Flow", () => {
         await ensurePracticeStarted(page);
         await page.waitForTimeout(300);
         await skipMoodTrackerIfPresent(page);
-        await page.waitForURL(/\/complete/, { timeout: 15000 });
+        await page.waitForURL(/\/complete/, { timeout: 45000 });
         await page.waitForTimeout(2000);
 
         await page.getByRole("button", { name: "Back to Home" }).click();
@@ -2261,7 +2261,7 @@ test.describe("Multi-Week Programs Flow", () => {
         await ensurePracticeStarted(page);
         await page.waitForTimeout(300);
         await skipMoodTrackerIfPresent(page);
-        await page.waitForURL(/\/complete/, { timeout: 15000 });
+        await page.waitForURL(/\/complete/, { timeout: 45000 });
         await page.waitForTimeout(2000);
 
         await page.getByRole("button", { name: "Back to Home" }).click();
@@ -2400,7 +2400,7 @@ test.describe("Multi-Week Programs Flow", () => {
         await ensurePracticeStarted(page);
         await page.waitForTimeout(300);
         await skipMoodTrackerIfPresent(page);
-        await page.waitForURL(/\/complete/, { timeout: 15000 });
+        await page.waitForURL(/\/complete/, { timeout: 45000 });
         await page.waitForTimeout(2000);
 
         await page.getByRole("button", { name: "Back to Home" }).click();

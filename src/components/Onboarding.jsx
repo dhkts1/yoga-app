@@ -157,7 +157,7 @@ const Onboarding = () => {
       role="dialog"
       aria-modal="true"
       aria-labelledby="onboarding-title"
-      className={`fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm transition-opacity duration-300 ${isVisible ? "opacity-100" : "pointer-events-none opacity-0"} `}
+      className={`fixed inset-0 z-[100] flex items-center justify-center bg-foreground/50 backdrop-blur-sm transition-opacity duration-300 ${isVisible ? "opacity-100" : "pointer-events-none opacity-0"} `}
       onClick={(e) => {
         // Close on backdrop click
         if (e.target === e.currentTarget) {
@@ -175,7 +175,7 @@ const Onboarding = () => {
           className="absolute right-4 top-4 z-10 rounded-full p-2 text-muted-foreground transition-all duration-200 hover:bg-muted hover:text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
           aria-label="Skip onboarding"
         >
-          <X className="h-5 w-5" />
+          <X className="size-5" />
         </button>
 
         {/* Content Container */}
@@ -185,7 +185,7 @@ const Onboarding = () => {
             className={`mb-4 flex justify-center ${currentStepData.interactive ? "mb-3" : "mb-6"}`}
           >
             <div
-              className={`flex items-center justify-center ${currentStepData.interactive ? "h-32 w-32" : "h-48 w-48"}`}
+              className={`flex items-center justify-center ${currentStepData.interactive ? "size-32" : "size-48"}`}
             >
               {currentStepData.illustration}
             </div>
@@ -193,14 +193,14 @@ const Onboarding = () => {
 
           {/* Icon + Title */}
           <div className="mb-4 flex items-center justify-center">
-            <StepIcon className="mr-2 h-6 w-6 text-accent" />
+            <StepIcon className="mr-2 size-6 text-accent" />
             <Heading level={2} className="text-center" id="onboarding-title">
               {currentStepData.title}
             </Heading>
           </div>
 
           {/* Description */}
-          <Text variant="body" className="mb-6 text-center text-secondary">
+          <Text variant="body" className="mb-6 text-center text-muted-foreground">
             {currentStepData.description}
           </Text>
 
@@ -211,28 +211,28 @@ const Onboarding = () => {
               <div className="flex items-center justify-center gap-2">
                 <button
                   onClick={() => setTheme("light")}
-                  className={`flex h-16 w-16 flex-col items-center justify-center rounded-lg transition-all ${
+                  className={`flex size-16 flex-col items-center justify-center rounded-lg transition-all ${
                     theme === "light"
-                      ? "scale-105 bg-primary text-white shadow-sage"
+                      ? "scale-105 bg-primary text-primary-foreground shadow-sage"
                       : "bg-muted text-muted-foreground hover:scale-105 hover:bg-muted/80"
                   }`}
                   aria-label="Light mode"
                   aria-pressed={theme === "light"}
                 >
-                  <Sun className="mb-1 h-5 w-5" />
+                  <Sun className="mb-1 size-5" />
                   <span className="text-[10px] font-medium">Light</span>
                 </button>
                 <button
                   onClick={() => setTheme("dark")}
-                  className={`flex h-16 w-16 flex-col items-center justify-center rounded-lg transition-all ${
+                  className={`flex size-16 flex-col items-center justify-center rounded-lg transition-all ${
                     theme === "dark"
-                      ? "scale-105 bg-primary text-white shadow-sage"
+                      ? "scale-105 bg-primary text-primary-foreground shadow-sage"
                       : "bg-muted text-muted-foreground hover:scale-105 hover:bg-muted/80"
                   }`}
                   aria-label="Dark mode"
                   aria-pressed={theme === "dark"}
                 >
-                  <Moon className="mb-1 h-5 w-5" />
+                  <Moon className="mb-1 size-5" />
                   <span className="text-[10px] font-medium">Dark</span>
                 </button>
               </div>
@@ -261,7 +261,7 @@ const Onboarding = () => {
                             }`}
                           >
                             <div
-                              className="h-6 w-6 rounded-full border-2 border-border"
+                              className="size-6 rounded-full border-2 border-border"
                               style={{ backgroundColor: themeData.preview }}
                             />
                             <span className="text-[9px] font-medium text-foreground">
@@ -280,9 +280,9 @@ const Onboarding = () => {
                           : "border-border hover:border-primary/50"
                       }`}
                     >
-                      <div className="relative h-6 w-6">
+                      <div className="relative size-6">
                         <div
-                          className="h-6 w-6 rounded-full border-2 border-border"
+                          className="size-6 rounded-full border-2 border-border"
                           style={{ backgroundColor: customLightColor }}
                         />
                         <input
@@ -293,7 +293,7 @@ const Onboarding = () => {
                             setLightModeTheme("custom");
                           }}
                           onClick={(e) => e.stopPropagation()}
-                          className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+                          className="absolute inset-0 size-full cursor-pointer opacity-0"
                         />
                       </div>
                       <span className="text-[9px] font-medium text-foreground">
@@ -328,7 +328,7 @@ const Onboarding = () => {
                             }`}
                           >
                             <div
-                              className="h-6 w-6 rounded-full border-2 border-border"
+                              className="size-6 rounded-full border-2 border-border"
                               style={{ backgroundColor: themeData.preview }}
                             />
                             <span className="text-[9px] font-medium text-foreground">
@@ -347,9 +347,9 @@ const Onboarding = () => {
                           : "border-border hover:border-primary/50"
                       }`}
                     >
-                      <div className="relative h-6 w-6">
+                      <div className="relative size-6">
                         <div
-                          className="h-6 w-6 rounded-full border-2 border-border"
+                          className="size-6 rounded-full border-2 border-border"
                           style={{ backgroundColor: customDarkColor }}
                         />
                         <input
@@ -360,7 +360,7 @@ const Onboarding = () => {
                             setDarkModeTheme("custom");
                           }}
                           onClick={(e) => e.stopPropagation()}
-                          className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+                          className="absolute inset-0 size-full cursor-pointer opacity-0"
                         />
                       </div>
                       <span className="text-[9px] font-medium text-foreground">
@@ -382,7 +382,7 @@ const Onboarding = () => {
                 className={`rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 ${
                   index === currentStep
                     ? "h-2 w-8 bg-secondary"
-                    : "h-2 w-2 bg-muted hover:bg-sage-400"
+                    : "size-2 bg-muted hover:bg-sage-400"
                 } `}
                 aria-label={`Go to step ${index + 1}`}
                 aria-current={index === currentStep ? "step" : undefined}
@@ -399,7 +399,7 @@ const Onboarding = () => {
                 variant="secondary"
                 size="lg"
                 className="flex-1"
-                icon={<ChevronLeft className="h-5 w-5" />}
+                icon={<ChevronLeft className="size-5" />}
                 iconPosition="left"
               >
                 Back
@@ -414,7 +414,7 @@ const Onboarding = () => {
               className={currentStep === 0 ? "w-full" : "flex-1"}
               icon={
                 currentStep < steps.length - 1 ? (
-                  <ChevronRight className="h-5 w-5" />
+                  <ChevronRight className="size-5" />
                 ) : undefined
               }
               iconPosition="right"
@@ -424,14 +424,14 @@ const Onboarding = () => {
           </div>
 
           {/* Step Counter */}
-          <Text variant="caption" className="mt-4 text-center text-secondary">
+          <Text variant="caption" className="mt-4 text-center text-muted-foreground">
             Step {currentStep + 1} of {steps.length}
           </Text>
         </div>
 
         {/* Decorative Elements */}
-        <div className="absolute right-0 top-0 h-32 w-32 -translate-y-16 translate-x-16 rounded-full bg-muted opacity-50" />
-        <div className="absolute bottom-0 left-0 h-24 w-24 -translate-x-12 translate-y-12 rounded-full bg-accent/20 opacity-50" />
+        <div className="absolute right-0 top-0 size-32 -translate-y-16 translate-x-16 rounded-full bg-muted opacity-50" />
+        <div className="absolute bottom-0 left-0 size-24 -translate-x-12 translate-y-12 rounded-full bg-accent/20 opacity-50" />
       </div>
     </div>
   );
@@ -440,7 +440,7 @@ const Onboarding = () => {
 // Abstract SVG Illustrations matching app design system
 
 const WelcomeIllustration = () => (
-  <svg viewBox="0 0 200 200" className="h-full w-full">
+  <svg viewBox="0 0 200 200" className="size-full">
     {/* Calming lotus-like shapes */}
     <circle cx="100" cy="100" r="60" fill="#8FA68E" opacity="0.2" />
     <circle cx="100" cy="100" r="45" fill="#8FA68E" opacity="0.3" />
@@ -458,7 +458,7 @@ const WelcomeIllustration = () => (
 );
 
 const QuickStartIllustration = () => (
-  <svg viewBox="0 0 200 200" className="h-full w-full">
+  <svg viewBox="0 0 200 200" className="size-full">
     {/* Lightning bolt / energy shape */}
     <circle
       cx="100"
@@ -501,7 +501,7 @@ const QuickStartIllustration = () => (
 );
 
 const NavigationIllustration = () => (
-  <svg viewBox="0 0 200 200" className="h-full w-full">
+  <svg viewBox="0 0 200 200" className="size-full">
     {/* Bottom navigation bar representation */}
     <rect
       x="30"
@@ -583,7 +583,7 @@ const NavigationIllustration = () => (
 );
 
 const MoodIllustration = () => (
-  <svg viewBox="0 0 200 200" className="h-full w-full">
+  <svg viewBox="0 0 200 200" className="size-full">
     {/* Heart shape */}
     <path
       d="M100,170 C100,170 40,130 40,90 C40,70 50,60 65,60 C80,60 90,70 100,85 C110,70 120,60 135,60 C150,60 160,70 160,90 C160,130 100,170 100,170 Z"
@@ -615,7 +615,7 @@ const MoodIllustration = () => (
 );
 
 const VoiceIllustration = () => (
-  <svg viewBox="0 0 200 200" className="h-full w-full">
+  <svg viewBox="0 0 200 200" className="size-full">
     {/* Microphone/speaker center */}
     <ellipse cx="100" cy="100" rx="30" ry="40" fill="#8FA68E" opacity="0.6" />
     <ellipse cx="100" cy="100" rx="20" ry="30" fill="#F5F3F0" />
@@ -681,7 +681,7 @@ const VoiceIllustration = () => (
 );
 
 const ThemeIllustration = () => (
-  <svg viewBox="0 0 200 200" className="h-full w-full">
+  <svg viewBox="0 0 200 200" className="size-full">
     {/* Split circle - half light, half dark */}
     <defs>
       <linearGradient id="themeGradient" x1="0%" y1="0%" x2="100%" y2="0%">

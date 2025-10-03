@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useReducer, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Clock, AlertCircle } from "lucide-react";
 import { poses } from "../data/poses";
@@ -29,27 +29,182 @@ import { DefaultLayout } from "../components/layouts";
 import PageHeader from "../components/headers/PageHeader";
 import useTranslation from "../hooks/useTranslation";
 
-function SessionBuilder() {
-  const navigate = useNavigate();
-  const [validationErrors, setValidationErrors] = useState([]);
-  const [showClearConfirm, setShowClearConfirm] = useState(false);
-  const [activeTab, setActiveTab] = useState("sequence");
-  const { t } = useTranslation();
+// Action types
+const ACTIONS = {
+  SET_SESSION_NAME: "SET_SESSION_NAME",
+  SET_SEQUENCE_POSES: "SET_SEQUENCE_POSES",
+  ADD_POSES: "ADD_POSES",
+  REMOVE_POSE: "REMOVE_POSE",
+  UPDATE_POSE_DURATION: "UPDATE_POSE_DURATION",
+  REORDER_POSES: "REORDER_POSES",
+  TOGGLE_POSE_SELECTION: "TOGGLE_POSE_SELECTION",
+  CLEAR_POSE_SELECTION: "CLEAR_POSE_SELECTION",
+  SET_ACTIVE_TAB: "SET_ACTIVE_TAB",
+  OPEN_DURATION_DIALOG: "OPEN_DURATION_DIALOG",
+  CLOSE_DURATION_DIALOG: "CLOSE_DURATION_DIALOG",
+  OPEN_ADD_POSES_DIALOG: "OPEN_ADD_POSES_DIALOG",
+  CLOSE_ADD_POSES_DIALOG: "CLOSE_ADD_POSES_DIALOG",
+  OPEN_CLEAR_CONFIRM: "OPEN_CLEAR_CONFIRM",
+  CLOSE_CLEAR_CONFIRM: "CLOSE_CLEAR_CONFIRM",
+  SET_DRAG_INDEX: "SET_DRAG_INDEX",
+  CLEAR_DRAG_INDEX: "CLEAR_DRAG_INDEX",
+  SET_VALIDATION_ERRORS: "SET_VALIDATION_ERRORS",
+  CLEAR_VALIDATION_ERRORS: "CLEAR_VALIDATION_ERRORS",
+  RESET_BUILDER: "RESET_BUILDER",
+  LOAD_DRAFT: "LOAD_DRAFT",
+};
 
-  // Duration edit dialog state
-  const [durationDialog, setDurationDialog] = useState({
+// Initial state
+const initialState = {
+  sessionName: "",
+  sequencePoses: [],
+  selectedPoseIds: [],
+  activeTab: "sequence",
+  durationDialog: {
     isOpen: false,
     poseId: null,
     duration: 30,
     index: null,
-  });
+  },
+  showAddPosesDialog: false,
+  showClearConfirm: false,
+  draggedIndex: null,
+  validationErrors: [],
+};
 
-  // Multi-select state
-  const [selectedPoseIds, setSelectedPoseIds] = useState([]);
-  const [showAddPosesDialog, setShowAddPosesDialog] = useState(false);
+// Reducer function (defined outside component for React Compiler compatibility)
+function sessionBuilderReducer(state, action) {
+  switch (action.type) {
+    case ACTIONS.SET_SESSION_NAME:
+      return { ...state, sessionName: action.payload };
 
-  // Drag and drop state
-  const [draggedIndex, setDraggedIndex] = useState(null);
+    case ACTIONS.SET_SEQUENCE_POSES:
+      return { ...state, sequencePoses: action.payload };
+
+    case ACTIONS.ADD_POSES:
+      return {
+        ...state,
+        sequencePoses: [...state.sequencePoses, ...action.payload],
+        selectedPoseIds: [],
+        activeTab: "sequence",
+      };
+
+    case ACTIONS.REMOVE_POSE:
+      return {
+        ...state,
+        sequencePoses: state.sequencePoses.filter((_, i) => i !== action.payload),
+      };
+
+    case ACTIONS.UPDATE_POSE_DURATION:
+      return {
+        ...state,
+        sequencePoses: state.sequencePoses.map((pose, i) =>
+          i === action.payload.index
+            ? { ...pose, duration: action.payload.duration }
+            : pose,
+        ),
+      };
+
+    case ACTIONS.REORDER_POSES: {
+      const { draggedIndex, targetIndex } = action.payload;
+      const newSequence = [...state.sequencePoses];
+      const draggedItem = newSequence[draggedIndex];
+      newSequence.splice(draggedIndex, 1);
+      newSequence.splice(targetIndex, 0, draggedItem);
+      return {
+        ...state,
+        sequencePoses: newSequence,
+        draggedIndex: targetIndex,
+      };
+    }
+
+    case ACTIONS.TOGGLE_POSE_SELECTION: {
+      const poseId = action.payload;
+      const isSelected = state.selectedPoseIds.includes(poseId);
+      return {
+        ...state,
+        selectedPoseIds: isSelected
+          ? state.selectedPoseIds.filter((id) => id !== poseId)
+          : [...state.selectedPoseIds, poseId],
+      };
+    }
+
+    case ACTIONS.CLEAR_POSE_SELECTION:
+      return { ...state, selectedPoseIds: [] };
+
+    case ACTIONS.SET_ACTIVE_TAB:
+      return { ...state, activeTab: action.payload };
+
+    case ACTIONS.OPEN_DURATION_DIALOG:
+      return {
+        ...state,
+        durationDialog: {
+          isOpen: true,
+          poseId: action.payload.poseId,
+          duration: action.payload.duration,
+          index: action.payload.index,
+        },
+      };
+
+    case ACTIONS.CLOSE_DURATION_DIALOG:
+      return {
+        ...state,
+        durationDialog: {
+          isOpen: false,
+          poseId: null,
+          duration: 30,
+          index: null,
+        },
+      };
+
+    case ACTIONS.OPEN_ADD_POSES_DIALOG:
+      return { ...state, showAddPosesDialog: true };
+
+    case ACTIONS.CLOSE_ADD_POSES_DIALOG:
+      return { ...state, showAddPosesDialog: false };
+
+    case ACTIONS.OPEN_CLEAR_CONFIRM:
+      return { ...state, showClearConfirm: true };
+
+    case ACTIONS.CLOSE_CLEAR_CONFIRM:
+      return { ...state, showClearConfirm: false };
+
+    case ACTIONS.SET_DRAG_INDEX:
+      return { ...state, draggedIndex: action.payload };
+
+    case ACTIONS.CLEAR_DRAG_INDEX:
+      return { ...state, draggedIndex: null };
+
+    case ACTIONS.SET_VALIDATION_ERRORS:
+      return { ...state, validationErrors: action.payload };
+
+    case ACTIONS.CLEAR_VALIDATION_ERRORS:
+      return { ...state, validationErrors: [] };
+
+    case ACTIONS.RESET_BUILDER:
+      return {
+        ...state,
+        sessionName: "",
+        sequencePoses: [],
+        validationErrors: [],
+        showClearConfirm: false,
+      };
+
+    case ACTIONS.LOAD_DRAFT:
+      return {
+        ...state,
+        sessionName: action.payload.name || "",
+        sequencePoses: action.payload.poses || [],
+      };
+
+    default:
+      return state;
+  }
+}
+
+function SessionBuilder() {
+  const navigate = useNavigate();
+  const { t } = useTranslation();
 
   // Use custom sessions hook for saving
   const { add: addCustomSession } = useCustomSessions();
@@ -60,33 +215,32 @@ function SessionBuilder() {
     poses: [],
   });
 
-  // Local state synced with draft
-  const [sessionName, setSessionName] = useState(draft.name || "");
-  const [sequencePoses, setSequencePoses] = useState(draft.poses || []);
+  // Initialize reducer with draft data
+  const [state, dispatch] = useReducer(sessionBuilderReducer, initialState, () => ({
+    ...initialState,
+    sessionName: draft.name || "",
+    sequencePoses: draft.poses || [],
+  }));
 
   // Auto-save draft whenever sessionName or sequencePoses change
   useEffect(() => {
     setDraft({
-      name: sessionName,
-      poses: sequencePoses,
+      name: state.sessionName,
+      poses: state.sequencePoses,
     });
-  }, [sessionName, sequencePoses, setDraft]);
+  }, [state.sessionName, state.sequencePoses, setDraft]);
 
-  const totalDuration = calculateTotalDuration(sequencePoses);
+  const totalDuration = calculateTotalDuration(state.sequencePoses);
 
   // Toggle pose selection
   const handleTogglePoseSelection = (poseId) => {
-    setSelectedPoseIds((prev) =>
-      prev.includes(poseId)
-        ? prev.filter((id) => id !== poseId)
-        : [...prev, poseId],
-    );
+    dispatch({ type: ACTIONS.TOGGLE_POSE_SELECTION, payload: poseId });
   };
 
   // Open add poses dialog
   const handleOpenAddDialog = () => {
-    if (selectedPoseIds.length > 0) {
-      setShowAddPosesDialog(true);
+    if (state.selectedPoseIds.length > 0) {
+      dispatch({ type: ACTIONS.OPEN_ADD_POSES_DIALOG });
     }
   };
 
@@ -99,79 +253,56 @@ function SessionBuilder() {
       id: `${poseId}-${side || "default"}-${Date.now()}-${Math.random()}`, // Unique ID
     }));
 
-    setSequencePoses((prev) => [...prev, ...newPoses]);
-    setSelectedPoseIds([]);
-    setActiveTab("sequence");
+    dispatch({ type: ACTIONS.ADD_POSES, payload: newPoses });
   };
 
   // Open duration edit dialog
   const handleDurationClick = (index, poseId, currentDuration) => {
-    setDurationDialog({
-      isOpen: true,
-      poseId,
-      duration: currentDuration,
-      index,
+    dispatch({
+      type: ACTIONS.OPEN_DURATION_DIALOG,
+      payload: { poseId, duration: currentDuration, index },
     });
   };
 
   // Save duration from dialog
   const handleDurationSave = (newDuration) => {
-    if (durationDialog.index !== null) {
-      handleDurationChange(
-        durationDialog.poseId,
-        newDuration,
-        durationDialog.index,
-      );
+    if (state.durationDialog.index !== null) {
+      dispatch({
+        type: ACTIONS.UPDATE_POSE_DURATION,
+        payload: { index: state.durationDialog.index, duration: newDuration },
+      });
     }
   };
 
   // Close duration dialog
   const closeDurationDialog = () => {
-    setDurationDialog({
-      isOpen: false,
-      poseId: null,
-      duration: 30,
-      index: null,
-    });
+    dispatch({ type: ACTIONS.CLOSE_DURATION_DIALOG });
   };
 
   // Remove pose from sequence
   const handleRemovePose = (index) => {
-    setSequencePoses((prev) => prev.filter((_, i) => i !== index));
-  };
-
-  // Update pose duration
-  const handleDurationChange = (poseId, newDuration, index) => {
-    setSequencePoses((prev) =>
-      prev.map((pose, i) =>
-        i === index ? { ...pose, duration: newDuration } : pose,
-      ),
-    );
+    dispatch({ type: ACTIONS.REMOVE_POSE, payload: index });
   };
 
   // Drag and drop handlers
   const handleDragStart = (e, index) => {
-    setDraggedIndex(index);
+    dispatch({ type: ACTIONS.SET_DRAG_INDEX, payload: index });
     e.dataTransfer.effectAllowed = "move";
   };
 
   const handleDragEnd = () => {
-    setDraggedIndex(null);
+    dispatch({ type: ACTIONS.CLEAR_DRAG_INDEX });
   };
 
   const handleDragOver = (e, index) => {
     e.preventDefault();
     e.dataTransfer.dropEffect = "move";
 
-    if (draggedIndex === null || draggedIndex === index) return;
+    if (state.draggedIndex === null || state.draggedIndex === index) return;
 
-    setSequencePoses((prev) => {
-      const newSequence = [...prev];
-      const draggedItem = newSequence[draggedIndex];
-      newSequence.splice(draggedIndex, 1);
-      newSequence.splice(index, 0, draggedItem);
-      setDraggedIndex(index);
-      return newSequence;
+    dispatch({
+      type: ACTIONS.REORDER_POSES,
+      payload: { draggedIndex: state.draggedIndex, targetIndex: index },
     });
   };
 
@@ -181,19 +312,16 @@ function SessionBuilder() {
 
   // Clear session
   const handleClear = () => {
-    setShowClearConfirm(true);
+    dispatch({ type: ACTIONS.OPEN_CLEAR_CONFIRM });
   };
 
   const confirmClear = () => {
-    setSessionName("");
-    setSequencePoses([]);
-    setValidationErrors([]);
+    dispatch({ type: ACTIONS.RESET_BUILDER });
     clearDraft();
-    setShowClearConfirm(false);
   };
 
   const cancelClear = () => {
-    setShowClearConfirm(false);
+    dispatch({ type: ACTIONS.CLOSE_CLEAR_CONFIRM });
   };
 
   // Validate and save session
@@ -201,33 +329,33 @@ function SessionBuilder() {
     const errors = [];
 
     // Validate session name
-    if (!sessionName.trim()) {
+    if (!state.sessionName.trim()) {
       errors.push("Please enter a session name");
     }
 
     // Validate poses
-    if (sequencePoses.length < 2) {
+    if (state.sequencePoses.length < 2) {
       errors.push("Add at least 2 poses to your sequence");
     }
 
-    if (sequencePoses.length > 20) {
+    if (state.sequencePoses.length > 20) {
       errors.push("Maximum 20 poses allowed per session");
     }
 
     if (errors.length > 0) {
-      setValidationErrors(errors);
+      dispatch({ type: ACTIONS.SET_VALIDATION_ERRORS, payload: errors });
       return;
     }
 
     // Clear errors
-    setValidationErrors([]);
+    dispatch({ type: ACTIONS.CLEAR_VALIDATION_ERRORS });
 
     // Create session object
     const newSession = {
       id: `custom-${Date.now()}`,
-      name: sessionName.trim(),
+      name: state.sessionName.trim(),
       isCustom: true,
-      poses: sequencePoses.map((p, index) => ({
+      poses: state.sequencePoses.map((p, index) => ({
         poseId: p.poseId,
         duration: p.duration,
         ...(p.side && { side: p.side }), // Include side if present
@@ -248,7 +376,7 @@ function SessionBuilder() {
       // Navigate to session preview
       navigate(`/sessions/${newSession.id}/preview?custom=true`);
     } catch (error) {
-      setValidationErrors([error.message]);
+      dispatch({ type: ACTIONS.SET_VALIDATION_ERRORS, payload: [error.message] });
     }
   };
 
@@ -281,8 +409,13 @@ function SessionBuilder() {
               </label>
               <input
                 type="text"
-                value={sessionName}
-                onChange={(e) => setSessionName(e.target.value)}
+                value={state.sessionName}
+                onChange={(e) =>
+                  dispatch({
+                    type: ACTIONS.SET_SESSION_NAME,
+                    payload: e.target.value,
+                  })
+                }
                 placeholder={t("screens.sessionBuilder.sessionNamePlaceholder")}
                 className="w-full rounded-lg border border-border px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-ring"
                 maxLength={50}
@@ -297,10 +430,10 @@ function SessionBuilder() {
                 </div>
                 <span className="text-muted-foreground">•</span>
                 <span className="text-muted-foreground">
-                  {sequencePoses.length} poses
+                  {state.sequencePoses.length} poses
                 </span>
               </div>
-              {sequencePoses.length > 0 && (
+              {state.sequencePoses.length > 0 && (
                 <Button
                   variant="outline"
                   size="sm"
@@ -315,7 +448,7 @@ function SessionBuilder() {
         </Card>
 
         {/* Validation Errors */}
-        {validationErrors.length > 0 && (
+        {state.validationErrors.length > 0 && (
           <Card
             padding="sm"
             className="mt-3 shrink-0 border-state-error/30 bg-state-error/10"
@@ -327,7 +460,7 @@ function SessionBuilder() {
                   Please fix these issues:
                 </h3>
                 <ul className="space-y-1 text-sm text-state-error">
-                  {validationErrors.map((error, index) => (
+                  {state.validationErrors.map((error, index) => (
                     <li key={index}>• {error}</li>
                   ))}
                 </ul>
@@ -338,22 +471,24 @@ function SessionBuilder() {
 
         {/* Tab Navigation */}
         <Tabs
-          value={activeTab}
-          onValueChange={setActiveTab}
+          value={state.activeTab}
+          onValueChange={(tab) =>
+            dispatch({ type: ACTIONS.SET_ACTIVE_TAB, payload: tab })
+          }
           className="mt-4 flex min-h-0 w-full flex-1 flex-col overflow-hidden"
         >
           <TabsList className="grid h-auto w-full grid-cols-2 rounded-none border-b border-border bg-transparent p-0">
             <TabsTrigger
               value="sequence"
-              className="min-h-touch rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:text-primary data-[state=active]:shadow-none"
+              className="min-h-touch rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:text-foreground data-[state=active]:shadow-none"
             >
               {t("screens.sessionBuilder.selectedPoses", {
-                count: sequencePoses.length,
+                count: state.sequencePoses.length,
               })}
             </TabsTrigger>
             <TabsTrigger
               value="library"
-              className="min-h-touch rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:text-primary data-[state=active]:shadow-none"
+              className="min-h-touch rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:text-foreground data-[state=active]:shadow-none"
             >
               {t("screens.sessionBuilder.selectPoses")}
             </TabsTrigger>
@@ -366,7 +501,7 @@ function SessionBuilder() {
           >
             <ScrollableTabContent
               emptyState={
-                sequencePoses.length === 0 ? (
+                state.sequencePoses.length === 0 ? (
                   <EmptyState
                     icon="🧘"
                     title="No poses yet"
@@ -376,7 +511,7 @@ function SessionBuilder() {
               }
             >
               <div className="space-y-2">
-                {sequencePoses.map((pose, index) => (
+                {state.sequencePoses.map((pose, index) => (
                   <SequenceItem
                     key={pose.id}
                     poseId={pose.poseId}
@@ -389,7 +524,7 @@ function SessionBuilder() {
                     onDragEnd={handleDragEnd}
                     onDragOver={handleDragOver}
                     onDrop={handleDrop}
-                    isDragging={draggedIndex === index}
+                    isDragging={state.draggedIndex === index}
                   />
                 ))}
               </div>
@@ -403,14 +538,14 @@ function SessionBuilder() {
           >
             <ScrollableTabContent
               actionButton={
-                selectedPoseIds.length > 0 ? (
+                state.selectedPoseIds.length > 0 ? (
                   <Button
                     variant="primary"
                     onClick={handleOpenAddDialog}
                     fullWidth
                   >
-                    Add {selectedPoseIds.length} Selected Pose
-                    {selectedPoseIds.length !== 1 ? "s" : ""}
+                    Add {state.selectedPoseIds.length} Selected Pose
+                    {state.selectedPoseIds.length !== 1 ? "s" : ""}
                   </Button>
                 ) : null
               }
@@ -421,7 +556,7 @@ function SessionBuilder() {
                     key={pose.id}
                     poseId={pose.id}
                     mode="library"
-                    isSelected={selectedPoseIds.includes(pose.id)}
+                    isSelected={state.selectedPoseIds.includes(pose.id)}
                     onSelect={handleTogglePoseSelection}
                   />
                 ))}
@@ -431,7 +566,7 @@ function SessionBuilder() {
         </Tabs>
 
         {/* Save Button - Fixed at bottom */}
-        {sequencePoses.length > 0 && (
+        {state.sequencePoses.length > 0 && (
           <div className="mt-3 shrink-0">
             <Button
               variant="primary"
@@ -447,7 +582,7 @@ function SessionBuilder() {
 
       {/* Clear Confirmation Dialog */}
       <ConfirmDialog
-        isOpen={showClearConfirm}
+        isOpen={state.showClearConfirm}
         onClose={cancelClear}
         onConfirm={confirmClear}
         title="Clear Session?"
@@ -459,18 +594,18 @@ function SessionBuilder() {
 
       {/* Duration Edit Dialog */}
       <DurationEditDialog
-        isOpen={durationDialog.isOpen}
+        isOpen={state.durationDialog.isOpen}
         onClose={closeDurationDialog}
-        poseId={durationDialog.poseId}
-        currentDuration={durationDialog.duration}
+        poseId={state.durationDialog.poseId}
+        currentDuration={state.durationDialog.duration}
         onSave={handleDurationSave}
       />
 
       {/* Add Poses Dialog */}
       <AddPosesDialog
-        isOpen={showAddPosesDialog}
-        onClose={() => setShowAddPosesDialog(false)}
-        selectedPoseIds={selectedPoseIds}
+        isOpen={state.showAddPosesDialog}
+        onClose={() => dispatch({ type: ACTIONS.CLOSE_ADD_POSES_DIALOG })}
+        selectedPoseIds={state.selectedPoseIds}
         onAdd={handleAddPoses}
       />
     </DefaultLayout>

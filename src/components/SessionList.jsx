@@ -39,7 +39,7 @@ const SessionList = ({
 
   const headerContent = showHeader && title && (
     <h2 className="mb-2 flex items-center justify-center gap-1.5 text-center text-sm font-medium text-foreground">
-      {TitleIcon && <TitleIcon className="h-4 w-4 fill-accent text-accent" />}
+      {TitleIcon && <TitleIcon className="size-4 fill-accent text-accent" />}
       {title}
     </h2>
   );

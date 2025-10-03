@@ -71,7 +71,7 @@ const PoseImage = memo(function PoseImage({
     'flex items-center justify-center',
     'bg-muted dark:bg-sage-900/20',
     'overflow-hidden',
-    'flex-shrink-0',
+    'shrink-0',
     // Border
     borderStyles,
     // Dark mode image adjustment
@@ -85,7 +85,7 @@ const PoseImage = memo(function PoseImage({
     return (
       <div className={baseStyles} {...props}>
         <svg
-          className="w-1/2 h-1/2 text-muted-foreground dark:text-muted-foreground"
+          className="size-1/2 text-muted-foreground dark:text-muted-foreground"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -106,7 +106,7 @@ const PoseImage = memo(function PoseImage({
       <img
         src={imageUrl}
         alt={`${poseId} pose`}
-        className="w-full h-full object-cover"
+        className="size-full object-cover"
         loading="lazy"
       />
     </div>

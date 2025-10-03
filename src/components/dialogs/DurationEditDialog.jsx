@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Clock } from "lucide-react";
 import {
   Dialog,
@@ -28,9 +28,13 @@ const DurationEditDialog = ({
   const [duration, setDuration] = useState(currentDuration);
   const pose = getPoseById(poseId);
 
-  // Update local state when dialog opens with new values
+  // Track the last initialized duration to avoid unnecessary updates
+  const lastInitializedDuration = useRef(currentDuration);
+
+  // Reset duration when dialog opens and duration prop changed
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && currentDuration !== lastInitializedDuration.current) {
+      lastInitializedDuration.current = currentDuration;
       setDuration(currentDuration);
     }
   }, [isOpen, currentDuration]);

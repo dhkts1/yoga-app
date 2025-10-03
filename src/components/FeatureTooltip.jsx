@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import { X } from 'lucide-react';
 import { cn } from '../lib/utils';
 
@@ -28,6 +28,14 @@ function FeatureTooltip({
   const timeoutRef = useRef(null);
   const autoDismissRef = useRef(null);
 
+  // React Compiler handles memoization - no need for useCallback
+  const handleDismiss = () => {
+    setIsVisible(false);
+    if (onDismiss) {
+      onDismiss();
+    }
+  };
+
   // Show tooltip after delay
   useEffect(() => {
     if (show) {
@@ -39,18 +47,23 @@ function FeatureTooltip({
           handleDismiss();
         }, autoDismissDelay);
       }, delay);
-    } else {
-      setIsVisible(false);
     }
+    // Note: When show becomes false, cleanup will handle resetting visibility
 
     return () => {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
       if (autoDismissRef.current) clearTimeout(autoDismissRef.current);
+
+      // Reset visibility in cleanup when show becomes false
+      if (!show) {
+        setIsVisible(false);
+      }
     };
-  }, [show, delay, autoDismissDelay]);
+  }, [show, delay, autoDismissDelay, handleDismiss]);
 
   // Calculate smart positioning to avoid off-screen rendering
-  useEffect(() => {
+  // Use useLayoutEffect for synchronous DOM measurements before paint
+  useLayoutEffect(() => {
     if (!isVisible || !tooltipRef.current || !target?.current) return;
 
     const targetRect = target.current.getBoundingClientRect();
@@ -71,15 +84,9 @@ function FeatureTooltip({
       newPosition = 'right';
     }
 
-    setCalculatedPosition(newPosition);
+    // Only update if position actually changed
+    setCalculatedPosition(prev => prev === newPosition ? prev : newPosition);
   }, [isVisible, position, target]);
-
-  const handleDismiss = () => {
-    setIsVisible(false);
-    if (onDismiss) {
-      onDismiss();
-    }
-  };
 
   // Handle Escape key
   useEffect(() => {
@@ -96,14 +103,16 @@ function FeatureTooltip({
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [isVisible]);
+  }, [isVisible, handleDismiss]);
 
   if (!isVisible || !target?.current) return null;
 
-  const targetRect = target.current.getBoundingClientRect();
-
   // Calculate tooltip position based on target element
   const getTooltipStyle = () => {
+    // Access ref inside function to avoid ref access during render
+    if (!target?.current) return {};
+
+    const targetRect = target.current.getBoundingClientRect();
     const offset = 12; // Distance from target
 
     let style = {
@@ -148,32 +157,32 @@ function FeatureTooltip({
       case 'top':
         return cn(
           baseClasses,
-          'bottom-[-8px] left-1/2 -translate-x-1/2',
-          'border-t-8 border-t-white',
+          '-bottom-2 left-1/2 -translate-x-1/2',
+          'border-t-8 border-t-card',
           'border-l-8 border-l-transparent',
           'border-r-8 border-r-transparent'
         );
       case 'bottom':
         return cn(
           baseClasses,
-          'top-[-8px] left-1/2 -translate-x-1/2',
-          'border-b-8 border-b-white',
+          '-top-2 left-1/2 -translate-x-1/2',
+          'border-b-8 border-b-card',
           'border-l-8 border-l-transparent',
           'border-r-8 border-r-transparent'
         );
       case 'left':
         return cn(
           baseClasses,
-          'right-[-8px] top-1/2 -translate-y-1/2',
-          'border-l-8 border-l-white',
+          '-right-2 top-1/2 -translate-y-1/2',
+          'border-l-8 border-l-card',
           'border-t-8 border-t-transparent',
           'border-b-8 border-b-transparent'
         );
       case 'right':
         return cn(
           baseClasses,
-          'left-[-8px] top-1/2 -translate-y-1/2',
-          'border-r-8 border-r-white',
+          '-left-2 top-1/2 -translate-y-1/2',
+          'border-r-8 border-r-card',
           'border-t-8 border-t-transparent',
           'border-b-8 border-b-transparent'
         );
@@ -189,7 +198,7 @@ function FeatureTooltip({
       aria-label={content}
       style={getTooltipStyle()}
       className={cn(
-        'bg-card rounded-lg p-3 shadow-lg border-2 border-sage-600',
+        'rounded-lg border-2 border-sage-600 bg-card p-3 shadow-lg',
         'animate-fade-in',
         className
       )}
@@ -199,15 +208,15 @@ function FeatureTooltip({
 
       {/* Content */}
       <div className="flex items-start justify-between gap-2">
-        <p className="text-sm text-card-foreground leading-relaxed flex-1">
+        <p className="flex-1 text-sm leading-relaxed text-foreground">
           {content}
         </p>
         <button
           onClick={handleDismiss}
-          className="flex-shrink-0 w-5 h-5 flex items-center justify-center rounded-full hover:bg-muted transition-colors"
+          className="flex size-5 shrink-0 items-center justify-center rounded-full transition-colors hover:bg-muted"
           aria-label="Dismiss tooltip"
         >
-          <X className="h-3 w-3 text-muted-foreground" />
+          <X className="size-3 text-muted-foreground" />
         </button>
       </div>
 

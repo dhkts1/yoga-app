@@ -34,7 +34,8 @@ export async function clearAppData(page) {
           tooltipsDismissed: [],
           tooltipsShownCount: {},
           favoriteSessions: [],
-          favoriteExercises: []
+          favoriteExercises: [],
+          theme: 'light' // Explicitly set default theme for tests
         },
         version: 0
       };
@@ -146,10 +147,10 @@ export async function ensurePracticeStarted(page) {
 export async function fastForwardTimer(page) {
   await page.evaluate(() => {
     window.__TEST_MODE__ = true;
-    window.__TIMER_SPEED__ = 100; // 100x speed
+    window.__TIMER_SPEED__ = 500; // 500x speed for faster tests
     // Store in sessionStorage so it persists across navigation
     sessionStorage.setItem('__TEST_MODE__', 'true');
-    sessionStorage.setItem('__TIMER_SPEED__', '100');
+    sessionStorage.setItem('__TIMER_SPEED__', '500');
   });
 }
 
@@ -233,6 +234,27 @@ export async function hasStreakBadge(page, expectedCount) {
   } catch {
     return false;
   }
+}
+
+/**
+ * Navigate to session builder via UI (not direct URL)
+ * This ensures proper state initialization
+ *
+ * @param {import('@playwright/test').Page} page - Playwright page object
+ */
+export async function navigateToSessionBuilder(page) {
+  // Go to sessions page first
+  await page.goto('/sessions');
+  await page.waitForLoadState('networkidle');
+
+  // Click create custom session button
+  const createButton = page.getByRole('button', { name: /create custom session/i });
+  await createButton.waitFor({ state: 'visible', timeout: 5000 });
+  await createButton.click();
+
+  // Wait for navigation to builder
+  await page.waitForURL(/\/sessions\/builder/);
+  await page.waitForLoadState('networkidle');
 }
 
 /**

@@ -93,7 +93,7 @@ const SelectablePoseCard = ({
           <div className="min-w-0 flex-1">
             <h3
               className={`truncate text-sm font-medium ${
-                isSelected ? "text-card-foreground" : "text-foreground"
+                isSelected ? "text-foreground" : "text-foreground"
               }`}
             >
               {pose.nameEnglish}

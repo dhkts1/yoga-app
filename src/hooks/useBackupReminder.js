@@ -5,21 +5,26 @@
  * Prevents data loss by encouraging regular backups
  */
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { shouldShowBackupReminder, getBackupInfo } from '../utils/dataExport';
 
 export function useBackupReminder() {
   const [showReminder, setShowReminder] = useState(false);
   const [backupInfo, setBackupInfo] = useState(null);
+  const initialized = useRef(false);
 
   useEffect(() => {
-    // Check if reminder should be shown
-    const shouldShow = shouldShowBackupReminder();
-    setShowReminder(shouldShow);
+    if (!initialized.current) {
+      initialized.current = true;
 
-    // Get backup info
-    const info = getBackupInfo();
-    setBackupInfo(info);
+      // Check if reminder should be shown
+      const shouldShow = shouldShowBackupReminder();
+      setShowReminder(shouldShow);
+
+      // Get backup info
+      const info = getBackupInfo();
+      setBackupInfo(info);
+    }
   }, []);
 
   return {

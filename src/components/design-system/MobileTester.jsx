@@ -46,20 +46,20 @@ const MobileTester = ({ children, showIndicator = true, testSizes = [375, 414, 4
 
       {showIndicator && (
         <div className={cn(
-          'fixed top-4 right-4 z-50',
-          'bg-black/80 text-white px-3 py-2 rounded-lg text-sm font-mono',
-          'backdrop-blur-sm shadow-lg',
-          hasHorizontalScroll && 'bg-red-600 animate-pulse'
+          'fixed right-4 top-4 z-50',
+          'rounded-lg bg-foreground/80 px-3 py-2 font-mono text-sm text-primary-foreground',
+          'shadow-lg backdrop-blur-sm',
+          hasHorizontalScroll && 'animate-pulse bg-state-error'
         )}>
           <div className="space-y-1">
             <div>Viewport: {viewportWidth}px</div>
             <div className={cn(
               'flex items-center gap-2',
-              hasHorizontalScroll ? 'text-red-200' : 'text-green-200'
+              hasHorizontalScroll ? 'text-state-error' : 'text-state-success'
             )}>
               <div className={cn(
-                'w-2 h-2 rounded-full',
-                hasHorizontalScroll ? 'bg-red-400' : 'bg-green-400'
+                'size-2 rounded-full',
+                hasHorizontalScroll ? 'bg-state-error' : 'bg-state-success'
               )} />
               {hasHorizontalScroll ? 'H-Scroll' : 'Mobile Safe'}
             </div>
@@ -72,8 +72,8 @@ const MobileTester = ({ children, showIndicator = true, testSizes = [375, 414, 4
         <button
           onClick={() => setTestMode(!testMode)}
           className={cn(
-            'bg-primary text-primary-foreground px-3 py-2 rounded-lg text-sm font-medium',
-            'hover:bg-primary transition-colors',
+            'rounded-lg bg-primary px-3 py-2 text-sm font-medium text-primary-foreground',
+            'transition-colors hover:bg-primary',
             'shadow-lg backdrop-blur-sm'
           )}
         >
@@ -93,8 +93,8 @@ const MobileTester = ({ children, showIndicator = true, testSizes = [375, 414, 4
                   document.documentElement.style.boxSizing = 'border-box';
                 }}
                 className={cn(
-                  'block w-full bg-card text-muted-foreground px-3 py-2 rounded text-sm',
-                  'hover:bg-muted transition-colors border border-border',
+                  'block w-full rounded bg-card px-3 py-2 text-sm text-muted-foreground',
+                  'border border-border transition-colors hover:bg-muted',
                   viewportWidth === size && 'bg-muted font-medium'
                 )}
               >
@@ -111,7 +111,7 @@ const MobileTester = ({ children, showIndicator = true, testSizes = [375, 414, 4
                 document.documentElement.style.margin = '';
                 document.documentElement.style.border = '';
               }}
-              className="block w-full bg-gray-600 text-white px-3 py-2 rounded text-sm hover:bg-gray-700 transition-colors"
+              className="block w-full rounded bg-muted px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted/80"
             >
               Reset
             </button>
@@ -121,7 +121,7 @@ const MobileTester = ({ children, showIndicator = true, testSizes = [375, 414, 4
 
       {/* Overflow Warning */}
       {hasHorizontalScroll && (
-        <div className="fixed inset-x-0 top-0 z-40 bg-red-600 text-white text-center py-2 text-sm font-medium">
+        <div className="fixed inset-x-0 top-0 z-40 bg-state-error py-2 text-center text-sm font-medium text-primary-foreground">
           ⚠️ Horizontal scroll detected - check component widths!
         </div>
       )}
@@ -171,13 +171,13 @@ const ComponentValidator = ({ children, name, className }) => {
       ref={ref}
       className={cn(
         className,
-        hasOverflow && 'ring-2 ring-red-500 ring-offset-2'
+        hasOverflow && 'ring-2 ring-state-error ring-offset-2'
       )}
       data-component={name}
     >
       {children}
       {hasOverflow && (
-        <div className="absolute top-0 right-0 bg-red-500 text-white px-2 py-1 text-xs rounded-bl">
+        <div className="absolute right-0 top-0 rounded-bl bg-state-error px-2 py-1 text-xs text-primary-foreground">
           Overflow: {name}
         </div>
       )}
