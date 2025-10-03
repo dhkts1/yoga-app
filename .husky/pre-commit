@@ -7,7 +7,3 @@ npx lint-staged
 # 2. Run tests (only show failures)
 echo "🧪 Running tests..."
 npm test -- --run --reporter=dot --silent
-
-# 3. Update documentation if needed
-echo "📚 Checking documentation..."
-sh .husky/update-docs.sh

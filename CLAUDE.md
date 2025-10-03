@@ -211,13 +211,11 @@ Complete token-based system with:
 - Automatically runs before every `git commit`
 - **Step 1**: Lints staged files with ESLint (auto-fixes when possible)
 - **Step 2**: Formats staged files with Prettier
-- **Step 3**: Runs all tests (`npm test`)
-- **Step 4**: Updates documentation via Claude CLI (optional)
+- **Step 3**: Runs all tests (`npm test` with dot reporter)
 - Blocks commits if ESLint errors or tests fail
 
 **Configuration:**
 - `.husky/pre-commit` - Main hook script
-- `.husky/update-docs.sh` - Claude CLI documentation updater
 - `package.json` → `lint-staged` - File patterns and commands
 - Only processes staged files (fast & efficient)
 
@@ -227,14 +225,12 @@ git commit -m "Your message"
 # → Runs ESLint --fix on *.{js,jsx}
 # → Runs Prettier --write on *.{js,jsx}
 # → Runs npm test (all unit/integration tests)
-# → Runs Claude CLI to update docs (if installed)
 # → Commits if all checks pass
 ```
 
 **Benefits:**
 - Zero ESLint errors in codebase at all times
 - All tests pass before any commit
-- Documentation stays current automatically (via Claude CLI)
 - Consistent code formatting automatically
 - Catch issues before code review
 - No manual `npm run lint` or `npm test` needed
