@@ -225,7 +225,7 @@ function Sessions() {
                     {firstPoseId && (
                       <PoseImage
                         poseId={firstPoseId}
-                        size={isHero ? 'lg' : 'md'}
+                        size="sm"
                         shape="circular"
                       />
                     )}
@@ -278,7 +278,7 @@ function Sessions() {
         sessions={favoriteCustomSessionsList.map(session => ({
           ...session,
           poseImage: session.poses?.[0]?.poseId ? (
-            <PoseImage poseId={session.poses[0].poseId} size="md" shape="circular" />
+            <PoseImage poseId={session.poses[0].poseId} size="sm" shape="circular" />
           ) : null,
           gradient: 'bg-card'
         }))}
@@ -294,7 +294,7 @@ function Sessions() {
         sessions={nonFavoriteCustomSessionsList.map(session => ({
           ...session,
           poseImage: session.poses?.[0]?.poseId ? (
-            <PoseImage poseId={session.poses[0].poseId} size="md" shape="circular" />
+            <PoseImage poseId={session.poses[0].poseId} size="sm" shape="circular" />
           ) : null,
           gradient: 'bg-card'
         }))}
@@ -311,7 +311,7 @@ function Sessions() {
         sessions={favoriteSessionsList.map(session => ({
           ...session,
           poseImage: session.poses?.[0]?.poseId ? (
-            <PoseImage poseId={session.poses[0].poseId} size="md" shape="circular" />
+            <PoseImage poseId={session.poses[0].poseId} size="sm" shape="circular" />
           ) : null,
           gradient: 'bg-card'
         }))}
@@ -328,7 +328,7 @@ function Sessions() {
         sessions={nonFavoriteSessionsList.map(session => ({
           ...session,
           poseImage: session.poses?.[0]?.poseId ? (
-            <PoseImage poseId={session.poses[0].poseId} size="md" shape="circular" />
+            <PoseImage poseId={session.poses[0].poseId} size="sm" shape="circular" />
           ) : null,
           gradient: 'bg-card'
         }))}

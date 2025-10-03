@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
-import { HelpCircle, BookMarked } from 'lucide-react';
+import { HelpCircle } from 'lucide-react';
 import { getSessionById } from '../data/sessions';
 import { getPoseById } from '../data/poses';
 import { getCustomSessionWithPoses } from '../data/customSessions';
@@ -308,7 +308,7 @@ function Practice() {
   // Render header content
   const renderHeader = () => (
     <PracticeHeader
-      title={session.name}
+      title=""
       onExit={handleExit}
       exitButtonStyle="circular"
       actions={
@@ -375,27 +375,35 @@ function Practice() {
         header={renderHeader()}
         footer={renderFooter()}
       >
-        <ContentBody size="sm" centered padding="md" {...swipeHandlers}>
-          {programContext && (
-            <div className="flex items-center justify-center mb-4">
-              <div className="flex items-center gap-1.5 bg-muted border border-border rounded-full px-3 py-1.5 max-w-full">
-                <BookMarked className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0" />
-                <p className="text-xs sm:text-sm text-muted-foreground truncate">
-                  {programName} • Week {weekNumber}, Day {dayNumber}
+        <ContentBody size="sm" centered padding="none" {...swipeHandlers}>
+          {/* Session name and program context - directly under header */}
+          <div className="text-center px-4 -mt-1">
+            {programContext && (
+              <div className="mb-1">
+                <p className="text-lg sm:text-xl font-medium text-foreground">
+                  {programName}
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  Week {weekNumber}, Day {dayNumber}
                 </p>
               </div>
-            </div>
-          )}
+            )}
+            <h1 className="text-xl font-medium text-muted-foreground">
+              {session.name}
+            </h1>
+          </div>
+
+          <div className="px-4 pt-3">
 
           {/* Rest Screen */}
           <div className="animate-fade-in">
           <div className="text-center space-y-6">
             {/* Rest Message */}
             <div>
-              <h2 className="text-2xl sm:text-3xl font-light text-muted-foreground mb-2">
+              <h2 className="text-3xl sm:text-4xl font-light text-muted-foreground mb-2">
                 {t('screens.practice.restTransition')}
               </h2>
-              <p className="text-sm sm:text-base text-muted-foreground">
+              <p className="text-base sm:text-lg text-muted-foreground">
                 {t('screens.practice.prepareNext')}
               </p>
             </div>
@@ -403,28 +411,28 @@ function Practice() {
             {/* Countdown Timer with ARIA live region */}
             <div className="my-8">
               <div
-                className="text-6xl sm:text-7xl font-light text-primary mb-2"
+                className="text-7xl sm:text-8xl font-light text-primary mb-2"
                 aria-live="assertive"
                 aria-atomic="true"
               >
                 {restTimeRemaining}
               </div>
-              <p className="text-sm sm:text-base text-secondary">{t('screens.practice.secondsRemaining')}</p>
+              <p className="text-base sm:text-lg text-secondary">{t('screens.practice.secondsRemaining')}</p>
             </div>
 
             {/* Next Pose Preview */}
             {nextPose && (
-              <div className="bg-muted rounded-xl p-4 border border-border">
-                <p className="text-xs sm:text-sm text-muted-foreground mb-1">{t('screens.practice.nextPoseLabel')}</p>
-                <p className="text-lg sm:text-xl font-medium text-foreground">
+              <div className="mb-8">
+                <p className="text-sm text-muted-foreground mb-2">{t('screens.practice.nextPoseLabel')}</p>
+                <p className="text-3xl sm:text-4xl font-medium text-foreground mb-1">
                   {nextPose.nameEnglish}
                   {nextPoseData?.side && (
-                    <span className="ml-2 text-base font-normal text-muted-foreground">
+                    <span className="ml-2 text-xl font-normal text-muted-foreground">
                       ({nextPoseData.side === 'right' ? t('screens.practice.rightSide') : t('screens.practice.leftSide')})
                     </span>
                   )}
                 </p>
-                <p className="text-xs sm:text-sm text-muted-foreground italic">
+                <p className="text-lg sm:text-xl text-muted-foreground italic">
                   {nextPose.nameSanskrit}
                 </p>
               </div>
@@ -439,6 +447,7 @@ function Practice() {
             </button>
           </div>
           </div>
+          </div>
         </ContentBody>
       </PracticeLayout>
     );
@@ -449,18 +458,25 @@ function Practice() {
       header={renderHeader()}
       footer={renderFooter()}
     >
-      <ContentBody size="sm" centered padding="md" {...swipeHandlers}>
-        {/* Program context badge - moved from header */}
-        {programContext && (
-          <div className="flex items-center justify-center mb-4">
-            <div className="flex items-center gap-1.5 bg-muted border border-border rounded-full px-3 py-1.5 max-w-full">
-              <BookMarked className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0" />
-              <p className="text-xs sm:text-sm text-muted-foreground truncate">
-                {programName} • Week {weekNumber}, Day {dayNumber}
+      <ContentBody size="sm" centered padding="none" {...swipeHandlers}>
+        {/* Session name and program context - directly under header */}
+        <div className="text-center px-4 -mt-1">
+          {programContext && (
+            <div className="mb-1">
+              <p className="text-lg sm:text-xl font-medium text-foreground">
+                {programName}
+              </p>
+              <p className="text-sm text-muted-foreground">
+                Week {weekNumber}, Day {dayNumber}
               </p>
             </div>
-          </div>
-        )}
+          )}
+          <h1 className="text-xl font-medium text-muted-foreground">
+            {session.name}
+          </h1>
+        </div>
+
+        <div className="px-4 pt-3">
 
         {/* Pose illustration with beautiful SVG */}
         <div className="mx-auto mb-3 flex items-center justify-center">
@@ -473,40 +489,55 @@ function Practice() {
 
         {/* Pose Info */}
         <div className="text-center">
-          <h2 className="mb-1 text-lg sm:text-xl font-medium text-primary">
+          <h2 className="mb-1 text-xl sm:text-2xl font-medium text-primary">
             {pose.nameEnglish}
             {currentPoseData?.side && (
-              <span className="ml-2 text-base font-normal text-muted-foreground">
+              <span className="ml-2 text-lg font-normal text-muted-foreground">
                 ({currentPoseData.side === 'right' ? t('screens.practice.rightSide') : t('screens.practice.leftSide')})
               </span>
             )}
           </h2>
-          <p className="mb-1 text-xs sm:text-sm text-secondary italic">
+          <p className="mb-1 text-sm sm:text-base text-secondary italic">
             {pose.nameSanskrit}
           </p>
           {/* Pose count - moved from header */}
-          <p className="text-xs text-muted-foreground mb-1">
+          <p className="text-sm text-muted-foreground mb-1">
             {t('screens.practice.poseOf', { current: currentPoseIndex + 1, total: session?.poses?.length || 0 })}
           </p>
 
           {/* Timer with ARIA live region */}
           <div className="mb-2">
             <div
-              className="text-2xl sm:text-3xl font-light text-primary"
+              className="text-3xl sm:text-4xl font-light text-primary"
               aria-live="polite"
               aria-atomic="true"
             >
               {formatTime(timeRemaining)}
             </div>
-            <p className="text-xs sm:text-sm text-secondary">{t('screens.practice.remaining')}</p>
+            <p className="text-sm sm:text-base text-secondary">{t('screens.practice.remaining')}</p>
           </div>
+
+          {/* Next Pose Preview */}
+          {currentPoseIndex < session.poses.length - 1 && (
+            <div className="mb-3">
+              <p className="text-lg sm:text-xl font-medium text-foreground">
+                {t('screens.practice.nextPoseLabel')} {getPoseById(session.poses[currentPoseIndex + 1].poseId)?.nameEnglish}
+                {session.poses[currentPoseIndex + 1]?.side && (
+                  <span className="ml-1 text-lg font-normal text-muted-foreground">
+                    ({session.poses[currentPoseIndex + 1].side === 'right' ? t('screens.practice.rightSide') : t('screens.practice.leftSide')})
+                  </span>
+                )}
+              </p>
+            </div>
+          )}
 
           {/* Pose description - hidden on very small screens */}
           {pose.description && (
-            <p className="hidden sm:block mb-3 text-sm text-muted-foreground px-4 leading-relaxed">
+            <p className="hidden sm:block mb-3 text-base text-muted-foreground leading-relaxed">
               {pose.description}
             </p>
           )}
+        </div>
         </div>
       </ContentBody>
 

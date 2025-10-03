@@ -14,7 +14,7 @@ export const posesExtended = [
     category: 'standing',
     difficulty: 'beginner',
     duration: 30,
-    imageUrl: '/src/assets/poses/chair-pose.svg',
+    imageUrl: '/poses/chair-pose.jpg',
     iyengarPhotoReference: 'Photo 42',
     description: 'A powerful standing pose that builds heat and strength in the legs while opening the chest. Chair Pose cultivates determination and mental focus, preparing the body for deeper asanas.',
     instructions: [
@@ -189,7 +189,7 @@ export const posesExtended = [
     category: 'standing',
     difficulty: 'beginner',
     duration: 45,
-    imageUrl: '/src/assets/poses/wide-legged-forward-fold.svg',
+    imageUrl: '/poses/wide-legged-forward-fold.jpg',
     iyengarPhotoReference: 'Photos 33-36',
     description: 'A calming standing forward fold that deeply stretches the inner legs and hamstrings while bringing blood flow to the head. This pose builds strength in the legs while cultivating introspection.',
     instructions: [
@@ -249,7 +249,7 @@ export const posesExtended = [
     difficulty: 'intermediate',
     duration: 30,
     requiresBothSides: true,
-    imageUrl: '/src/assets/poses/revolved-triangle.svg',
+    imageUrl: '/poses/revolved-triangle.jpg',
     iyengarPhotoReference: 'Photo 6',
     description: 'An intense twisting pose that challenges balance while deeply massaging the internal organs. This pose requires and builds strength, flexibility, and concentration.',
     instructions: [
@@ -310,7 +310,7 @@ export const posesExtended = [
     difficulty: 'intermediate',
     duration: 30,
     requiresBothSides: true,
-    imageUrl: '/src/assets/poses/warrior-three.svg',
+    imageUrl: '/poses/warrior-three.jpg',
     iyengarPhotoReference: 'Photo 89',
     description: 'A challenging balancing pose that requires full-body integration and concentration. Warrior III builds strength, focus, and the confidence of a peaceful warrior.',
     instructions: [
@@ -371,7 +371,7 @@ export const posesExtended = [
     difficulty: 'advanced',
     duration: 30,
     requiresBothSides: true,
-    imageUrl: '/src/assets/poses/standing-split.svg',
+    imageUrl: '/poses/standing-split.jpg',
     iyengarPhotoReference: 'Photo 49',
     description: 'An advanced balance pose combining deep hamstring flexibility with core strength. This pose requires patience, dedication, and complete body awareness.',
     instructions: [
@@ -494,7 +494,7 @@ export const posesExtended = [
     category: 'seated',
     difficulty: 'beginner',
     duration: 45,
-    imageUrl: '/src/assets/poses/staff-pose.svg',
+    imageUrl: '/poses/staff-pose.jpg',
     iyengarPhotoReference: 'Photo 77',
     description: 'The foundational seated pose from which all other seated poses arise. Staff Pose teaches proper spinal alignment and active sitting, essential for meditation and forward bends.',
     instructions: [
@@ -722,7 +722,7 @@ export const posesExtended = [
     difficulty: 'intermediate',
     duration: 45,
     requiresBothSides: true,
-    imageUrl: '/src/assets/poses/cow-face-pose.svg',
+    imageUrl: '/poses/cow-face-pose.jpg',
     iyengarPhotoReference: 'Photo 80',
     description: 'A deep hip and shoulder opener that stacks the knees and binds the arms. This pose reveals asymmetries in the body and requires patience to master.',
     instructions: [
@@ -780,7 +780,7 @@ export const posesExtended = [
     difficulty: 'intermediate',
     duration: 60,
     requiresBothSides: true,
-    imageUrl: '/src/assets/poses/head-to-knee-pose.svg',
+    imageUrl: '/poses/head-to-knee-pose.jpg',
     iyengarPhotoReference: 'Photo 125',
     description: 'An asymmetrical forward bend that deeply stretches one leg at a time. This pose combines hamstring flexibility with a gentle hip opener and calming forward fold.',
     instructions: [
@@ -839,7 +839,7 @@ export const posesExtended = [
     category: 'backbend',
     difficulty: 'beginner',
     duration: 45,
-    imageUrl: '/src/assets/poses/sphinx-pose.svg',
+    imageUrl: '/poses/sphinx-pose.jpg',
     iyengarPhotoReference: 'Photo 68',
     description: 'A gentle, accessible backbend that strengthens the spine while opening the chest. The forearm support makes this sustainable for longer holds, allowing deep breath work.',
     instructions: [
@@ -898,7 +898,7 @@ export const posesExtended = [
     category: 'backbend',
     difficulty: 'beginner',
     duration: 30,
-    imageUrl: '/src/assets/poses/locust-pose.svg',
+    imageUrl: '/poses/locust-pose.jpg',
     iyengarPhotoReference: 'Photo 60',
     description: 'A strengthening backbend that lifts the entire body against gravity. Builds back, glute, and hamstring strength while improving stamina.',
     instructions: [
@@ -958,7 +958,7 @@ export const posesExtended = [
     category: 'backbend',
     difficulty: 'intermediate',
     duration: 30,
-    imageUrl: '/src/assets/poses/bow-pose.svg',
+    imageUrl: '/poses/bow-pose.jpg',
     iyengarPhotoReference: 'Photo 63',
     description: 'A deep backbend that creates a bow shape with the body. Opens the entire front body while strengthening the back, combining flexibility and strength.',
     instructions: [
@@ -1018,7 +1018,7 @@ export const posesExtended = [
     category: 'backbend',
     difficulty: 'intermediate',
     duration: 30,
-    imageUrl: '/src/assets/poses/camel-pose.svg',
+    imageUrl: '/poses/camel-pose.jpg',
     iyengarPhotoReference: 'Photo 41',
     description: 'A kneeling backbend that opens the entire front body. Can be emotionally releasing as it opens the heart center while building back strength.',
     instructions: [
@@ -1083,7 +1083,7 @@ export const posesExtended = [
     difficulty: 'intermediate',
     duration: 45,
     requiresBothSides: true,
-    imageUrl: '/src/assets/poses/seated-spinal-twist.svg',
+    imageUrl: '/poses/seated-spinal-twist.jpg',
     iyengarPhotoReference: 'Photo 311',
     description: 'A classic seated twist that wrings out the spine and massages internal organs. Named after the great yogi Matsyendra, this pose improves spinal flexibility and digestion.',
     instructions: [
@@ -1276,7 +1276,7 @@ export const posesExtended = [
     difficulty: 'intermediate',
     duration: 60,
     iyengarPhotoReference: 'Photo 223',
-    imageUrl: '/src/assets/poses/shoulder-stand-prep.svg',
+    imageUrl: '/poses/shoulder-stand-prep.jpg',
     description: 'The "Queen of Asanas" in Iyengar yoga. A supported inversion that calms the nervous system, improves circulation, and reverses the effects of gravity. This preparatory version uses props for safety and accessibility.',
     instructions: [
       'Place 2-3 folded blankets under shoulders, head on floor',
@@ -1351,7 +1351,7 @@ export const posesExtended = [
     difficulty: 'intermediate',
     duration: 45,
     iyengarPhotoReference: 'Photo 244',
-    imageUrl: '/src/assets/poses/plow-pose.svg',
+    imageUrl: '/poses/plow-pose.jpg',
     description: 'An inversion that deeply stretches the spine and shoulders. Often practiced after Shoulder Stand as a natural progression or alternative. Calms the nervous system and stimulates abdominal organs.',
     instructions: [
       'Begin from Shoulder Stand prep position',
@@ -1425,7 +1425,7 @@ export const posesExtended = [
     difficulty: 'intermediate',
     duration: 30,
     iyengarPhotoReference: 'Photo 477',
-    imageUrl: '/src/assets/poses/dolphin-pose.svg',
+    imageUrl: '/poses/dolphin-pose.jpg',
     description: 'A forearm variation of Downward Dog that builds shoulder strength and prepares for Forearm Stand. Safer inversion for those with wrist issues.',
     instructions: [
       'Start on hands and knees',
@@ -1500,7 +1500,7 @@ export const posesExtended = [
     duration: 30,
     requiresBothSides: true,
     iyengarPhotoReference: 'Photo 398',
-    imageUrl: '/src/assets/poses/side-plank.svg',
+    imageUrl: '/poses/side-plank.jpg',
     description: 'A powerful arm balance that strengthens the entire side body, arms, and core. Builds mental focus and physical stamina.',
     instructions: [
       'Start in Plank Pose',
@@ -1569,7 +1569,7 @@ export const posesExtended = [
     difficulty: 'advanced',
     duration: 20,
     iyengarPhotoReference: 'Photo 406',
-    imageUrl: '/src/assets/poses/crow-pose.svg',
+    imageUrl: '/poses/crow-pose.jpg',
     description: 'An arm balance that requires strength, balance, and courage. Crow Pose builds confidence and mental focus while strengthening the entire upper body.',
     instructions: [
       'Start in a squat with feet hip-width apart',
@@ -1643,7 +1643,7 @@ export const posesExtended = [
     duration: 30,
     requiresBothSides: true,
     iyengarPhotoReference: 'Photo 53',
-    imageUrl: '/src/assets/poses/low-lunge.svg',
+    imageUrl: '/poses/low-lunge.jpg',
     description: 'A gentle hip opener that stretches the hip flexors and strengthens the legs. Creates length in the front body while building stability.',
     instructions: [
       'From Downward Dog, step right foot between hands',
@@ -1713,7 +1713,7 @@ export const posesExtended = [
     difficulty: 'beginner',
     duration: 30,
     requiresBothSides: true,
-    imageUrl: '/src/assets/poses/high-lunge.svg',
+    imageUrl: '/poses/high-lunge.jpg',
     description: 'An energizing standing pose that builds leg strength and opens the hip flexors. Creates heat and develops focus while improving balance.',
     instructions: [
       'From Downward Dog, step right foot forward between hands',

@@ -10,7 +10,7 @@ export const poses = [
     category: 'standing',
     difficulty: 'beginner',
     duration: 30,
-    imageUrl: '/src/assets/poses/mountain-pose.svg',
+    imageUrl: '/poses/mountain-pose.jpg',
     description: 'The foundation of all standing poses, Mountain Pose teaches us how to ground ourselves and find our center. Though it appears simple, this pose is actively engaging every muscle.',
     instructions: [
       'Stand with feet hip-width apart, parallel to each other',
@@ -58,7 +58,7 @@ export const poses = [
     category: 'standing',
     difficulty: 'beginner',
     duration: 45,
-    imageUrl: '/src/assets/poses/downward-dog.svg',
+    imageUrl: '/poses/downward-dog.jpg',
     description: 'One of the most recognized yoga poses, Downward Dog is both energizing and restorative. It creates length through the entire back body while building strength in the arms and shoulders.',
     instructions: [
       'Start on hands and knees in table top position',
@@ -107,7 +107,7 @@ export const poses = [
     difficulty: 'beginner',
     duration: 30,
     requiresBothSides: true,
-    imageUrl: '/src/assets/poses/warrior-one.svg',
+    imageUrl: '/poses/warrior-one.jpg',
     description: 'A powerful standing pose that builds focus, power, and stability. Warrior I creates a strong foundation while opening the chest and hips.',
     instructions: [
       'From Mountain Pose, step left foot back 3-4 feet',
@@ -156,7 +156,7 @@ export const poses = [
     difficulty: 'beginner',
     duration: 30,
     requiresBothSides: true,
-    imageUrl: '/src/assets/poses/warrior-two.svg',
+    imageUrl: '/poses/warrior-two.jpg',
     description: 'A pose of strength and grace, Warrior II cultivates concentration while strengthening the legs and opening the hips. It teaches us to stay centered even in challenge.',
     instructions: [
       'From Mountain Pose, step feet 3-4 feet apart',
@@ -205,7 +205,7 @@ export const poses = [
     difficulty: 'beginner',
     duration: 30,
     requiresBothSides: true,
-    imageUrl: '/src/assets/poses/tree-pose.svg',
+    imageUrl: '/poses/tree-pose.jpg',
     description: 'Tree Pose teaches us to find balance and grace while remaining grounded. It strengthens the legs while opening the hips and improving focus.',
     instructions: [
       'Begin in Mountain Pose',
@@ -254,7 +254,7 @@ export const poses = [
     difficulty: 'beginner',
     duration: 30,
     requiresBothSides: true,
-    imageUrl: '/src/assets/poses/triangle-pose.svg',
+    imageUrl: '/poses/triangle-pose.jpg',
     description: 'Triangle Pose is a standing pose that stretches and strengthens the entire body. It improves digestion and relieves stress while building core strength.',
     instructions: [
       'Stand with feet 3-4 feet apart',
@@ -302,7 +302,7 @@ export const poses = [
     category: 'seated',
     difficulty: 'beginner',
     duration: 60,
-    imageUrl: '/src/assets/poses/child-pose.svg',
+    imageUrl: '/poses/child-pose.jpg',
     description: 'A restful pose that can be used anytime you need a break. Child\'s Pose gently stretches the body while calming the mind and relieving stress.',
     instructions: [
       'Kneel on the floor with big toes touching',
@@ -349,7 +349,7 @@ export const poses = [
     category: 'flexibility',
     difficulty: 'beginner',
     duration: 45,
-    imageUrl: '/src/assets/poses/cat-cow.svg',
+    imageUrl: '/poses/cat-cow.jpg',
     description: 'A gentle flow between two poses that warms up the body and brings flexibility to the spine. This movement coordinates breath and movement.',
     instructions: [
       'Start on hands and knees in tabletop position',
@@ -395,7 +395,7 @@ export const poses = [
     category: 'backbend',
     difficulty: 'beginner',
     duration: 30,
-    imageUrl: '/src/assets/poses/cobra-pose.svg',
+    imageUrl: '/poses/cobra-pose.jpg',
     description: 'A gentle backbend that strengthens the spine and opens the chest. Cobra pose is energizing and helps improve posture.',
     instructions: [
       'Lie face down with legs extended',
@@ -443,7 +443,7 @@ export const poses = [
     category: 'backbend',
     difficulty: 'beginner',
     duration: 45,
-    imageUrl: '/src/assets/poses/bridge-pose.svg',
+    imageUrl: '/poses/bridge-pose.jpg',
     description: 'Bridge Pose is an energizing backbend that opens the chest and strengthens the legs and glutes. It\'s both calming and rejuvenating.',
     instructions: [
       'Lie on back with knees bent, feet hip-width apart',
@@ -491,7 +491,7 @@ export const poses = [
     category: 'seated',
     difficulty: 'beginner',
     duration: 60,
-    imageUrl: '/src/assets/poses/seated-forward-fold.svg',
+    imageUrl: '/poses/seated-forward-fold.jpg',
     description: 'A calming forward fold that stretches the entire back body. This pose helps quiet the mind and relieve stress while improving flexibility.',
     instructions: [
       'Sit with legs extended straight in front',
@@ -538,7 +538,7 @@ export const poses = [
     category: 'restorative',
     difficulty: 'beginner',
     duration: 180,
-    imageUrl: '/src/assets/poses/corpse-pose.svg',
+    imageUrl: '/poses/corpse-pose.jpg',
     description: 'The most important pose in yoga, Savasana allows the body to absorb the benefits of practice. Though it looks easy, true relaxation can be challenging.',
     instructions: [
       'Lie flat on back with legs extended',
@@ -586,7 +586,7 @@ export const poses = [
     category: 'core',
     difficulty: 'beginner',
     duration: 30,
-    imageUrl: '/src/assets/poses/plank-pose.svg',
+    imageUrl: '/poses/plank-pose.jpg',
     description: 'A foundational strength-building pose that engages the entire body. Plank builds core stability, arm strength, and mental endurance.',
     instructions: [
       'Start on hands and knees in tabletop position',
@@ -635,7 +635,7 @@ export const poses = [
     difficulty: 'intermediate',
     duration: 30,
     requiresBothSides: true,
-    imageUrl: '/src/assets/poses/extended-side-angle.svg',
+    imageUrl: '/poses/extended-side-angle.jpg',
     description: 'A powerful standing pose that stretches the entire side body while building leg strength. Creates length and opening from heel to fingertips.',
     instructions: [
       'Start in Warrior II with right knee bent',
@@ -684,7 +684,7 @@ export const poses = [
     difficulty: 'intermediate',
     duration: 30,
     requiresBothSides: true,
-    imageUrl: '/src/assets/poses/pyramid-pose.svg',
+    imageUrl: '/poses/pyramid-pose.jpg',
     description: 'An intense hamstring stretch that also improves balance and calms the mind. Pyramid pose teaches patience and alignment.',
     instructions: [
       'Stand with feet 3 feet apart',
@@ -733,7 +733,7 @@ export const poses = [
     difficulty: 'intermediate',
     duration: 60,
     requiresBothSides: true,
-    imageUrl: '/src/assets/poses/pigeon-pose.svg',
+    imageUrl: '/poses/pigeon-pose.jpg',
     description: 'A deep hip opener that releases tension stored in the hips. Often emotional, this pose teaches surrender and patience.',
     instructions: [
       'From Downward Dog, bring right knee forward',
@@ -781,7 +781,7 @@ export const poses = [
     category: 'seated',
     difficulty: 'beginner',
     duration: 45,
-    imageUrl: '/src/assets/poses/happy-baby.svg',
+    imageUrl: '/poses/happy-baby.jpg',
     description: 'A playful, calming pose that gently opens the hips and releases the lower back. Often brings a smile to practitioners.',
     instructions: [
       'Lie on back and draw knees toward chest',
@@ -830,7 +830,7 @@ export const poses = [
     difficulty: 'intermediate',
     duration: 30,
     requiresBothSides: true,
-    imageUrl: '/src/assets/poses/eagle-pose.svg',
+    imageUrl: '/poses/eagle-pose.jpg',
     description: 'A challenging balance pose that wraps and stretches the shoulders and outer hips. Builds focus and coordination.',
     instructions: [
       'Stand in Mountain Pose',
@@ -879,7 +879,7 @@ export const poses = [
     difficulty: 'advanced',
     duration: 30,
     requiresBothSides: true,
-    imageUrl: '/src/assets/poses/half-moon.svg',
+    imageUrl: '/poses/half-moon.jpg',
     description: 'An advanced balancing pose that builds strength, flexibility, and concentration. Creates a crescent moon shape with the body.',
     instructions: [
       'From Triangle Pose, bend front knee',
@@ -927,7 +927,7 @@ export const poses = [
     category: 'core',
     difficulty: 'intermediate',
     duration: 30,
-    imageUrl: '/src/assets/poses/boat-pose.svg',
+    imageUrl: '/poses/boat-pose.jpg',
     description: 'A powerful core-strengthening pose that builds abdominal strength and hip flexor flexibility. Challenges both body and mind.',
     instructions: [
       'Sit with knees bent, feet flat on floor',
@@ -976,7 +976,7 @@ export const poses = [
     difficulty: 'beginner',
     duration: 45,
     requiresBothSides: true,
-    imageUrl: '/src/assets/poses/supine-twist.svg',
+    imageUrl: '/poses/supine-twist.jpg',
     description: 'A gentle restorative twist that releases the spine and hips. Perfect for ending practice or before bed.',
     instructions: [
       'Lie on back with knees bent',

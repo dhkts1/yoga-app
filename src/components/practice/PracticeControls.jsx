@@ -85,29 +85,6 @@ export function PracticeControls({
           <SkipForward className="h-5 w-5" />
         </button>
       </div>
-
-      {/* Next pose preview OR End Session button */}
-      {!isLastPose ? (
-        <div className="mt-3 text-center">
-          <p className="text-xs text-secondary">
-            Next: {getPoseById(session.poses[currentPoseIndex + 1].poseId)?.nameEnglish}
-            {session.poses[currentPoseIndex + 1]?.side && (
-              <span className="ml-1">
-                ({session.poses[currentPoseIndex + 1].side === 'right' ? 'Right' : 'Left'})
-              </span>
-            )}
-          </p>
-        </div>
-      ) : (
-        <div className="mt-3 flex justify-center">
-          <button
-            onClick={handleNextPose}
-            className="px-6 py-2.5 rounded-full bg-secondary hover:bg-primary text-white text-sm font-medium transition-colors"
-          >
-            End Session
-          </button>
-        </div>
-      )}
     </div>
   );
 }

@@ -172,8 +172,8 @@ function Welcome() {
       <PullToRefresh onRefresh={handleRefresh} pullingContent="" className="h-full">
         <ContentBody size="sm" spacing="none">
         {/* Time-based greeting */}
-        <div className="min-h-[20vh] flex flex-col items-center justify-center mb-0 text-center">
-          <GreetingIcon className="mx-auto mb-3 h-12 w-12 text-muted-foreground" />
+        <div className="flex flex-col items-center justify-start mb-4 text-center -mt-6">
+          <GreetingIcon className="mx-auto mb-1 h-12 w-12 text-muted-foreground" />
           <Heading level={1}>
             {greeting.text}
           </Heading>
@@ -280,7 +280,7 @@ function Welcome() {
         {/* Secondary CTA - Browse All */}
         <button
           onClick={() => navigate('/sessions')}
-          className="mb-6 text-muted-foreground hover:text-muted-foreground font-medium text-sm flex items-center gap-1 transition-colors"
+          className="mb-3 text-muted-foreground hover:text-muted-foreground font-medium text-sm flex items-center gap-1 transition-colors"
         >
           {t('screens.welcome.browseAll')}
           {isRTL ? <ChevronRight className="h-4 w-4 rtl-flip" /> : <ChevronRight className="h-4 w-4" />}
