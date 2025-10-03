@@ -1,23 +1,32 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
+import { lazy, Suspense } from 'react';
+
+// Eager-loaded screens (instant initial render for core UX)
 import Welcome from './screens/Welcome';
-import Sessions from './screens/Sessions';
-import SessionDetail from './screens/SessionDetail';
-import SessionBuilder from './screens/SessionBuilder';
 import Practice from './screens/Practice';
 import Complete from './screens/Complete';
-import Breathing from './screens/Breathing';
-import BreathingPractice from './screens/BreathingPractice';
-import Insights from './screens/Insights';
-import Settings from './screens/Settings';
-import PoseLibrary from './screens/PoseLibrary';
-import Programs from './screens/Programs';
-import ProgramDetail from './screens/ProgramDetail';
-import WeekDetail from './screens/WeekDetail';
+
+// Lazy-loaded screens (code-split for bundle optimization)
+const Sessions = lazy(() => import('./screens/Sessions'));
+const SessionDetail = lazy(() => import('./screens/SessionDetail'));
+const SessionBuilder = lazy(() => import('./screens/SessionBuilder'));
+const Breathing = lazy(() => import('./screens/Breathing'));
+const BreathingPractice = lazy(() => import('./screens/BreathingPractice'));
+const Insights = lazy(() => import('./screens/Insights'));
+const Settings = lazy(() => import('./screens/Settings'));
+const PoseLibrary = lazy(() => import('./screens/PoseLibrary'));
+const Programs = lazy(() => import('./screens/Programs'));
+const ProgramDetail = lazy(() => import('./screens/ProgramDetail'));
+const WeekDetail = lazy(() => import('./screens/WeekDetail'));
+
 import OfflineIndicator from './components/design-system/OfflineIndicator';
 import Onboarding from './components/Onboarding';
 import AnimatedRoute from './components/AnimatedRoute';
 import ThemeProvider from './components/ThemeProvider';
+import RouteLoadingFallback from './components/RouteLoadingFallback';
+import ErrorBoundary from './components/ErrorBoundary';
+import './utils/errorLogging'; // Initialize error logging
 
 // Animated routes wrapper component
 function AnimatedRoutes() {
@@ -25,23 +34,25 @@ function AnimatedRoutes() {
 
   return (
     <AnimatePresence mode="wait">
-      <Routes location={location} key={location.pathname}>
-        <Route path="/" element={<AnimatedRoute component={Welcome} />} />
-        <Route path="/sessions" element={<AnimatedRoute component={Sessions} />} />
-        <Route path="/sessions/:sessionId/preview" element={<AnimatedRoute component={SessionDetail} />} />
-        <Route path="/sessions/builder" element={<AnimatedRoute component={SessionBuilder} />} />
-        <Route path="/practice" element={<AnimatedRoute component={Practice} />} />
-        <Route path="/breathing" element={<AnimatedRoute component={Breathing} />} />
-        <Route path="/breathing/practice" element={<AnimatedRoute component={BreathingPractice} />} />
-        <Route path="/insights" element={<AnimatedRoute component={Insights} />} />
-        <Route path="/progress" element={<AnimatedRoute component={Insights} />} />
-        <Route path="/settings" element={<AnimatedRoute component={Settings} />} />
-        <Route path="/complete" element={<AnimatedRoute component={Complete} />} />
-        <Route path="/poses" element={<AnimatedRoute component={PoseLibrary} />} />
-        <Route path="/programs" element={<AnimatedRoute component={Programs} />} />
-        <Route path="/programs/:programId" element={<AnimatedRoute component={ProgramDetail} />} />
-        <Route path="/programs/:programId/week/:weekNumber" element={<AnimatedRoute component={WeekDetail} />} />
-      </Routes>
+      <Suspense fallback={<RouteLoadingFallback />}>
+        <Routes location={location} key={location.pathname}>
+          <Route path="/" element={<ErrorBoundary><AnimatedRoute component={Welcome} /></ErrorBoundary>} />
+          <Route path="/sessions" element={<ErrorBoundary><AnimatedRoute component={Sessions} /></ErrorBoundary>} />
+          <Route path="/sessions/:sessionId/preview" element={<ErrorBoundary><AnimatedRoute component={SessionDetail} /></ErrorBoundary>} />
+          <Route path="/sessions/builder" element={<ErrorBoundary><AnimatedRoute component={SessionBuilder} /></ErrorBoundary>} />
+          <Route path="/practice" element={<ErrorBoundary><AnimatedRoute component={Practice} /></ErrorBoundary>} />
+          <Route path="/breathing" element={<ErrorBoundary><AnimatedRoute component={Breathing} /></ErrorBoundary>} />
+          <Route path="/breathing/practice" element={<ErrorBoundary><AnimatedRoute component={BreathingPractice} /></ErrorBoundary>} />
+          <Route path="/insights" element={<ErrorBoundary><AnimatedRoute component={Insights} /></ErrorBoundary>} />
+          <Route path="/progress" element={<ErrorBoundary><AnimatedRoute component={Insights} /></ErrorBoundary>} />
+          <Route path="/settings" element={<ErrorBoundary><AnimatedRoute component={Settings} /></ErrorBoundary>} />
+          <Route path="/complete" element={<ErrorBoundary><AnimatedRoute component={Complete} /></ErrorBoundary>} />
+          <Route path="/poses" element={<ErrorBoundary><AnimatedRoute component={PoseLibrary} /></ErrorBoundary>} />
+          <Route path="/programs" element={<ErrorBoundary><AnimatedRoute component={Programs} /></ErrorBoundary>} />
+          <Route path="/programs/:programId" element={<ErrorBoundary><AnimatedRoute component={ProgramDetail} /></ErrorBoundary>} />
+          <Route path="/programs/:programId/week/:weekNumber" element={<ErrorBoundary><AnimatedRoute component={WeekDetail} /></ErrorBoundary>} />
+        </Routes>
+      </Suspense>
     </AnimatePresence>
   );
 }

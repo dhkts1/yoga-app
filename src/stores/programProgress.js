@@ -399,6 +399,35 @@ const useProgramProgressStore = create(
     {
       name: 'yoga-program-progress',
       version: 1,
+      // Error handling for localStorage operations
+      onRehydrateStorage: () => (state, error) => {
+        if (error) {
+          console.error('Failed to load saved program progress data:', error);
+        }
+      },
+      serialize: (state) => {
+        try {
+          return JSON.stringify(state);
+        } catch (error) {
+          console.error('Failed to save program progress data:', error);
+
+          // Check if it's a quota exceeded error
+          if (error.name === 'QuotaExceededError' || error.code === 22) {
+            console.warn('localStorage quota exceeded for program progress');
+          }
+
+          return '{}';
+        }
+      },
+      deserialize: (str) => {
+        try {
+          return JSON.parse(str);
+        } catch (error) {
+          console.error('Failed to parse saved program progress data:', error);
+          console.warn('Program progress data corrupted - resetting to defaults');
+          return undefined;
+        }
+      }
     }
   )
 );

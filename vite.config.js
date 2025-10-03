@@ -75,8 +75,18 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
+          // Core React libraries
+          'vendor-react': ['react', 'react-dom', 'react-router-dom'],
+          // State management
+          'vendor-state': ['zustand'],
+          // UI libraries
+          'vendor-ui': ['framer-motion', 'lucide-react'],
+          // Design system components
           'design-system': ['./src/components/design-system/index.js'],
-          'yoga-data': ['./src/data/poses.js', './src/data/sessions.js']
+          // Yoga data (poses, sessions, programs)
+          'yoga-data': ['./src/data/poses.js', './src/data/poses_extended.js', './src/data/sessions.js', './src/data/programs.js', './src/data/breathing.js'],
+          // Charts (heavy components from Insights)
+          'charts': ['./src/components/charts/SimpleBarChart.jsx', './src/components/charts/HeatmapCalendar.jsx']
         }
       }
     }

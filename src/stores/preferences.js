@@ -584,6 +584,35 @@ const usePreferencesStore = create(
           };
         }
         return persistedState;
+      },
+      // Error handling for localStorage operations
+      onRehydrateStorage: () => (state, error) => {
+        if (error) {
+          console.error('Failed to load saved preferences:', error);
+        }
+      },
+      serialize: (state) => {
+        try {
+          return JSON.stringify(state);
+        } catch (error) {
+          console.error('Failed to save preferences:', error);
+
+          // Check if it's a quota exceeded error
+          if (error.name === 'QuotaExceededError' || error.code === 22) {
+            console.warn('localStorage quota exceeded for preferences');
+          }
+
+          return '{}';
+        }
+      },
+      deserialize: (str) => {
+        try {
+          return JSON.parse(str);
+        } catch (error) {
+          console.error('Failed to parse saved preferences:', error);
+          console.warn('Preferences data corrupted - resetting to defaults');
+          return undefined;
+        }
       }
     }
   )

@@ -4,6 +4,22 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
+// Helper function to handle localStorage quota exceeded
+const handleQuotaExceeded = (storeName) => {
+  console.warn(`localStorage quota exceeded for ${storeName} - attempting cleanup`);
+  try {
+    // This would be called if we need to trim old data
+    // For now, just log - could implement automatic cleanup in future
+    const keys = Object.keys(localStorage);
+    console.log('Current localStorage usage:', keys.map(key => ({
+      key,
+      size: localStorage.getItem(key)?.length || 0
+    })));
+  } catch (error) {
+    console.error('Failed to analyze localStorage:', error);
+  }
+};
+
 // Helper function to check if two dates are the same day
 const isSameDay = (date1, date2) => {
   if (!date1 || !date2) return false;
@@ -829,6 +845,38 @@ const useProgressStore = create(
           };
         }
         return persistedState;
+      },
+      // Error handling for localStorage operations
+      onRehydrateStorage: () => (state, error) => {
+        if (error) {
+          console.error('Failed to load saved progress data:', error);
+          // Could show user notification here in future
+        }
+      },
+      serialize: (state) => {
+        try {
+          return JSON.stringify(state);
+        } catch (error) {
+          console.error('Failed to save progress data:', error);
+
+          // Check if it's a quota exceeded error
+          if (error.name === 'QuotaExceededError' || error.code === 22) {
+            handleQuotaExceeded('yoga-progress');
+          }
+
+          // Return empty object to prevent crashes
+          return '{}';
+        }
+      },
+      deserialize: (str) => {
+        try {
+          return JSON.parse(str);
+        } catch (error) {
+          console.error('Failed to parse saved progress data:', error);
+          console.warn('Progress data corrupted - resetting to defaults');
+          // Return undefined to use initial state
+          return undefined;
+        }
       }
     }
   )
