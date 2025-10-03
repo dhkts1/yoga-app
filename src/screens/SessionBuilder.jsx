@@ -17,6 +17,7 @@ import {
   Card,
   ContentBody,
   EmptyState,
+  ScrollableTabContent,
 } from "../components/design-system";
 import {
   Tabs,
@@ -360,53 +361,53 @@ function SessionBuilder() {
 
           {/* Sequence Tab */}
           <TabsContent value="sequence" className="mt-3">
-            <Card padding="none" className="overflow-hidden">
-              {sequencePoses.length === 0 ? (
-                <div className="flex min-h-[300px] items-center justify-center p-3 sm:p-4">
+            <ScrollableTabContent
+              emptyState={
+                sequencePoses.length === 0 ? (
                   <EmptyState
                     icon="🧘"
                     title="No poses yet"
                     description="Switch to 'Select Poses' to build your sequence"
                   />
-                </div>
-              ) : (
-                <div className="overflow-y-auto p-3 sm:p-4">
-                  <div className="space-y-2">
-                    {sequencePoses.map((pose, index) => (
-                      <SequenceItem
-                        key={pose.id}
-                        poseId={pose.poseId}
-                        duration={pose.duration}
-                        side={pose.side}
-                        index={index}
-                        onDurationClick={handleDurationClick}
-                        onRemove={handleRemovePose}
-                        onDragStart={handleDragStart}
-                        onDragEnd={handleDragEnd}
-                        onDragOver={handleDragOver}
-                        onDrop={handleDrop}
-                        isDragging={draggedIndex === index}
-                      />
-                    ))}
-                  </div>
-                </div>
-              )}
-            </Card>
+                ) : null
+              }
+            >
+              <div className="space-y-2">
+                {sequencePoses.map((pose, index) => (
+                  <SequenceItem
+                    key={pose.id}
+                    poseId={pose.poseId}
+                    duration={pose.duration}
+                    side={pose.side}
+                    index={index}
+                    onDurationClick={handleDurationClick}
+                    onRemove={handleRemovePose}
+                    onDragStart={handleDragStart}
+                    onDragEnd={handleDragEnd}
+                    onDragOver={handleDragOver}
+                    onDrop={handleDrop}
+                    isDragging={draggedIndex === index}
+                  />
+                ))}
+              </div>
+            </ScrollableTabContent>
           </TabsContent>
 
           {/* Library Tab */}
-          <TabsContent value="library" className="mt-3 space-y-3">
-            {/* Add Selected Button */}
-            {selectedPoseIds.length > 0 && (
-              <Button variant="primary" onClick={handleOpenAddDialog} fullWidth>
-                Add {selectedPoseIds.length} Selected Pose
-                {selectedPoseIds.length !== 1 ? "s" : ""}
-              </Button>
-            )}
-
-            <Card
-              padding="sm"
-              className="max-h-[calc(100vh-400px)] overflow-y-auto"
+          <TabsContent value="library" className="mt-3">
+            <ScrollableTabContent
+              actionButton={
+                selectedPoseIds.length > 0 ? (
+                  <Button
+                    variant="primary"
+                    onClick={handleOpenAddDialog}
+                    fullWidth
+                  >
+                    Add {selectedPoseIds.length} Selected Pose
+                    {selectedPoseIds.length !== 1 ? "s" : ""}
+                  </Button>
+                ) : null
+              }
             >
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 {poses.map((pose) => (
@@ -419,7 +420,7 @@ function SessionBuilder() {
                   />
                 ))}
               </div>
-            </Card>
+            </ScrollableTabContent>
           </TabsContent>
         </Tabs>
 
