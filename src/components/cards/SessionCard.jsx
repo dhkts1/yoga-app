@@ -2,7 +2,6 @@ import { memo } from "react";
 import PropTypes from "prop-types";
 import { Clock, Star } from "lucide-react";
 import { motion } from "framer-motion";
-import { Heading } from "../design-system";
 
 /**
  * Unified SessionCard component that handles all session card variants

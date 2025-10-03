@@ -1,10 +1,7 @@
 import { useNavigate, useLocation } from "react-router-dom";
-import { useRef, useState, useEffect, useMemo, useCallback, memo } from "react";
+import { useMemo, memo, useCallback } from "react";
 import { Sun, Compass, Wind, Calendar, TrendingUp, User } from "lucide-react";
 import { cn } from "../lib/utils";
-import useProgressStore from "../stores/progress";
-import usePreferencesStore from "../stores/preferences";
-import FeatureTooltip from "./FeatureTooltip";
 
 /**
  * BottomNav - Persistent bottom tab navigation
@@ -16,7 +13,6 @@ import FeatureTooltip from "./FeatureTooltip";
  * - Fixed position with safe area handling
  * - 44px minimum touch targets
  * - Mobile-optimized with smooth transitions
- * - Feature discovery tooltip for Progress tab
  */
 const BottomNav = memo(function BottomNav({ className }) {
   const navigate = useNavigate();
@@ -24,51 +20,6 @@ const BottomNav = memo(function BottomNav({ className }) {
 
   // Extract only pathname to minimize rerenders
   const pathname = location.pathname;
-
-  // Refs for tooltip targeting
-  const progressTabRef = useRef(null);
-
-  // Progress store - only subscribe to totalSessions for tooltip logic
-  const totalSessions = useProgressStore((state) => state.totalSessions);
-
-  // Preferences store for tooltips - only subscribe to tooltip methods
-  const isTooltipDismissed = usePreferencesStore(
-    (state) => state.isTooltipDismissed,
-  );
-  const dismissTooltip = usePreferencesStore((state) => state.dismissTooltip);
-
-  // Tooltip visibility state
-  const [showProgressTooltip, setShowProgressTooltip] = useState(false);
-
-  // Check tooltip conditions
-  useEffect(() => {
-    // Tooltip 3: Bottom Nav - Progress
-    // Show when: After 1 session completed, hasn't opened Progress, on home screen
-    const progressDismissed = isTooltipDismissed("tooltip-bottom-nav-progress");
-    const isOnHomeScreen = pathname === "/";
-    const hasNotVisitedProgress =
-      pathname !== "/insights" && pathname !== "/progress";
-
-    if (
-      !progressDismissed &&
-      totalSessions >= 1 &&
-      isOnHomeScreen &&
-      hasNotVisitedProgress
-    ) {
-      // Show tooltip after a delay
-      const timer = setTimeout(() => {
-        setShowProgressTooltip(true);
-      }, 3000); // Wait 3 seconds after home screen loads
-
-      return () => clearTimeout(timer);
-    }
-  }, [totalSessions, pathname, isTooltipDismissed]);
-
-  // Handle Progress tooltip dismiss - memoized
-  const handleProgressTooltipDismiss = useCallback(() => {
-    setShowProgressTooltip(false);
-    dismissTooltip("tooltip-bottom-nav-progress");
-  }, [dismissTooltip]);
 
   // Memoize tabs array - only recompute when pathname changes
   const tabs = useMemo(
@@ -128,15 +79,9 @@ const BottomNav = memo(function BottomNav({ className }) {
   // Memoize tab click handler
   const handleTabClick = useCallback(
     (tab) => {
-      // Dismiss tooltip if clicking Progress
-      if (tab.id === "progress" && showProgressTooltip) {
-        dismissTooltip("tooltip-bottom-nav-progress");
-        setShowProgressTooltip(false);
-      }
-
       navigate(tab.path);
     },
-    [showProgressTooltip, dismissTooltip, navigate],
+    [navigate],
   );
 
   return (
@@ -162,7 +107,6 @@ const BottomNav = memo(function BottomNav({ className }) {
           return (
             <button
               key={tab.id}
-              ref={tab.id === "progress" ? progressTabRef : null}
               onClick={() => handleTabClick(tab)}
               className={cn(
                 // Layout - equal width tabs
@@ -207,17 +151,6 @@ const BottomNav = memo(function BottomNav({ className }) {
           );
         })}
       </div>
-
-      {/* Tooltip 3: Bottom Nav - Progress */}
-      <FeatureTooltip
-        id="tooltip-bottom-nav-progress"
-        content="Track your practice journey and view insights"
-        position="top"
-        target={progressTabRef}
-        show={showProgressTooltip}
-        onDismiss={handleProgressTooltipDismiss}
-        delay={0}
-      />
     </nav>
   );
 });

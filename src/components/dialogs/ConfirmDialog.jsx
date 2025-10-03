@@ -1,9 +1,9 @@
-import PropTypes from 'prop-types';
-import { AlertTriangle, Info, AlertCircle, X } from 'lucide-react';
-import { useEffect } from 'react';
-import { Heading, Text } from '../design-system/Typography';
-import { Button } from '../design-system/Button';
-import { useFocusTrap } from '../../hooks/useFocusTrap';
+import PropTypes from "prop-types";
+import { AlertTriangle, Info, AlertCircle, X } from "lucide-react";
+import { useEffect } from "react";
+import { Heading, Text } from "../design-system/Typography";
+import { Button } from "../design-system/Button";
+import { useFocusTrap } from "../../hooks/useFocusTrap";
 
 /**
  * ConfirmDialog Component
@@ -34,12 +34,12 @@ function ConfirmDialog({
   isOpen = false,
   onClose,
   onConfirm,
-  title = 'Confirm Action',
+  title = "Confirm Action",
   message,
-  confirmText = 'Confirm',
-  cancelText = 'Cancel',
-  confirmVariant = 'danger',
-  icon = 'warning',
+  confirmText = "Confirm",
+  cancelText = "Cancel",
+  confirmVariant = "danger",
+  icon = "warning",
 }) {
   // Focus trap for accessibility
   const dialogRef = useFocusTrap(isOpen, onClose);
@@ -49,26 +49,26 @@ function ConfirmDialog({
     if (!isOpen) return;
 
     const handleKeyDown = (e) => {
-      if (e.key === 'Enter') {
+      if (e.key === "Enter") {
         e.preventDefault();
         onConfirm();
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isOpen, onConfirm]);
 
   // Prevent body scroll when dialog is open
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = '';
+      document.body.style.overflow = "";
     }
 
     return () => {
-      document.body.style.overflow = '';
+      document.body.style.overflow = "";
     };
   }, [isOpen]);
 
@@ -85,26 +85,27 @@ function ConfirmDialog({
 
   // Icon background color mapping
   const iconBgColors = {
-    warning: 'bg-state-warning/20',
-    error: 'bg-state-error/20',
-    info: 'bg-muted',
+    warning: "bg-state-warning/20",
+    error: "bg-state-error/20",
+    info: "bg-muted",
   };
 
   // Icon color mapping
   const iconColors = {
-    warning: 'text-state-warning',
-    error: 'text-state-error',
-    info: 'text-muted-foreground',
+    warning: "text-state-warning",
+    error: "text-state-error",
+    info: "text-muted-foreground",
   };
 
   // Confirm button styling
-  const confirmButtonClass = confirmVariant === 'danger'
-    ? 'bg-state-error hover:bg-state-error/90 shadow-lg'
-    : 'bg-secondary hover:bg-primary shadow-lg';
+  const confirmButtonClass =
+    confirmVariant === "danger"
+      ? "bg-state-error hover:bg-state-error/90 shadow-lg"
+      : "bg-secondary hover:bg-primary shadow-lg";
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-foreground bg-opacity-50 p-4 backdrop-blur-sm duration-300 animate-in fade-in"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/50 p-4 backdrop-blur-sm duration-300 animate-in fade-in"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
@@ -122,7 +123,11 @@ function ConfirmDialog({
             <div className={`rounded-xl p-3 ${iconBgColors[icon]}`}>
               <IconComponent className={`size-6 ${iconColors[icon]}`} />
             </div>
-            <Heading level={2} id="confirm-dialog-title" className="text-foreground">
+            <Heading
+              level={2}
+              id="confirm-dialog-title"
+              className="text-foreground"
+            >
               {title}
             </Heading>
           </div>
@@ -181,9 +186,9 @@ ConfirmDialog.propTypes = {
   /** Cancel button text */
   cancelText: PropTypes.string,
   /** Confirm button variant (danger for destructive actions) */
-  confirmVariant: PropTypes.oneOf(['danger', 'primary']),
+  confirmVariant: PropTypes.oneOf(["danger", "primary"]),
   /** Icon type to display */
-  icon: PropTypes.oneOf(['warning', 'error', 'info']),
+  icon: PropTypes.oneOf(["warning", "error", "info"]),
 };
 
 export default ConfirmDialog;
