@@ -270,9 +270,9 @@ function SessionBuilder() {
         />
       }
     >
-      <ContentBody size="lg" spacing="sm">
+      <ContentBody size="lg" spacing="none" className="flex h-full flex-col">
         {/* Session Details */}
-        <Card padding="sm">
+        <Card padding="sm" className="shrink-0">
           <div className="space-y-3">
             <div>
               <label className="mb-2 block text-sm font-medium text-muted-foreground">
@@ -291,10 +291,10 @@ function SessionBuilder() {
             <div className="flex flex-wrap items-center justify-between gap-2 text-sm">
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-1 text-muted-foreground">
-                  <Clock className="h-4 w-4" />
+                  <Clock className="size-4" />
                   <span>{formatDuration(totalDuration)}</span>
                 </div>
-                <span className="text-gray-400">•</span>
+                <span className="text-muted-foreground">•</span>
                 <span className="text-muted-foreground">
                   {sequencePoses.length} poses
                 </span>
@@ -317,10 +317,10 @@ function SessionBuilder() {
         {validationErrors.length > 0 && (
           <Card
             padding="sm"
-            className="border-state-error/30 bg-state-error/10"
+            className="mt-3 shrink-0 border-state-error/30 bg-state-error/10"
           >
             <div className="flex items-start gap-2">
-              <AlertCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-state-error" />
+              <AlertCircle className="mt-0.5 size-5 shrink-0 text-state-error" />
               <div>
                 <h3 className="mb-1 font-medium text-state-error">
                   Please fix these issues:
@@ -336,11 +336,15 @@ function SessionBuilder() {
         )}
 
         {/* Tab Navigation */}
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-2 bg-muted">
+        <Tabs
+          value={activeTab}
+          onValueChange={setActiveTab}
+          className="mt-4 flex min-h-0 w-full flex-1 flex-col overflow-hidden"
+        >
+          <TabsList className="grid h-auto w-full grid-cols-2 rounded-none border-b border-border bg-transparent p-0">
             <TabsTrigger
               value="sequence"
-              className="data-[state=active]:bg-card data-[state=active]:text-card-foreground"
+              className="min-h-touch rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:text-primary data-[state=active]:shadow-none"
             >
               {t("screens.sessionBuilder.selectedPoses", {
                 count: sequencePoses.length,
@@ -348,7 +352,7 @@ function SessionBuilder() {
             </TabsTrigger>
             <TabsTrigger
               value="library"
-              className="data-[state=active]:bg-card data-[state=active]:text-card-foreground"
+              className="min-h-touch rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:text-primary data-[state=active]:shadow-none"
             >
               {t("screens.sessionBuilder.selectPoses")}
             </TabsTrigger>
@@ -356,65 +360,64 @@ function SessionBuilder() {
 
           {/* Sequence Tab */}
           <TabsContent value="sequence" className="mt-3">
-            <Card padding="sm">
+            <Card padding="none" className="overflow-hidden">
               {sequencePoses.length === 0 ? (
-                <EmptyState
-                  icon="🧘"
-                  title="No poses yet"
-                  description="Switch to 'Select Poses' to build your sequence"
-                />
+                <div className="flex min-h-[300px] items-center justify-center p-3 sm:p-4">
+                  <EmptyState
+                    icon="🧘"
+                    title="No poses yet"
+                    description="Switch to 'Select Poses' to build your sequence"
+                  />
+                </div>
               ) : (
-                <div className="max-h-[calc(100vh-450px)] space-y-2 overflow-y-auto pr-1">
-                  {sequencePoses.map((pose, index) => (
-                    <SequenceItem
-                      key={pose.id}
-                      poseId={pose.poseId}
-                      duration={pose.duration}
-                      side={pose.side}
-                      index={index}
-                      onDurationClick={handleDurationClick}
-                      onRemove={handleRemovePose}
-                      onDragStart={handleDragStart}
-                      onDragEnd={handleDragEnd}
-                      onDragOver={handleDragOver}
-                      onDrop={handleDrop}
-                      isDragging={draggedIndex === index}
-                    />
-                  ))}
+                <div className="overflow-y-auto p-3 sm:p-4">
+                  <div className="space-y-2">
+                    {sequencePoses.map((pose, index) => (
+                      <SequenceItem
+                        key={pose.id}
+                        poseId={pose.poseId}
+                        duration={pose.duration}
+                        side={pose.side}
+                        index={index}
+                        onDurationClick={handleDurationClick}
+                        onRemove={handleRemovePose}
+                        onDragStart={handleDragStart}
+                        onDragEnd={handleDragEnd}
+                        onDragOver={handleDragOver}
+                        onDrop={handleDrop}
+                        isDragging={draggedIndex === index}
+                      />
+                    ))}
+                  </div>
                 </div>
               )}
             </Card>
           </TabsContent>
 
           {/* Library Tab */}
-          <TabsContent value="library" className="mt-3 space-y-2">
+          <TabsContent value="library" className="mt-3 space-y-3">
             {/* Add Selected Button */}
             {selectedPoseIds.length > 0 && (
-              <div className="sticky top-0 z-10 bg-background pb-2">
-                <Button
-                  variant="primary"
-                  onClick={handleOpenAddDialog}
-                  fullWidth
-                >
-                  Add {selectedPoseIds.length} Selected Pose
-                  {selectedPoseIds.length !== 1 ? "s" : ""}
-                </Button>
-              </div>
+              <Button variant="primary" onClick={handleOpenAddDialog} fullWidth>
+                Add {selectedPoseIds.length} Selected Pose
+                {selectedPoseIds.length !== 1 ? "s" : ""}
+              </Button>
             )}
 
-            <Card padding="sm">
-              <div className="max-h-[calc(100vh-450px)] overflow-y-auto overflow-x-hidden pr-1">
-                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                  {poses.map((pose) => (
-                    <SelectablePoseCard
-                      key={pose.id}
-                      poseId={pose.id}
-                      mode="library"
-                      isSelected={selectedPoseIds.includes(pose.id)}
-                      onSelect={handleTogglePoseSelection}
-                    />
-                  ))}
-                </div>
+            <Card
+              padding="sm"
+              className="max-h-[calc(100vh-400px)] overflow-y-auto"
+            >
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                {poses.map((pose) => (
+                  <SelectablePoseCard
+                    key={pose.id}
+                    poseId={pose.id}
+                    mode="library"
+                    isSelected={selectedPoseIds.includes(pose.id)}
+                    onSelect={handleTogglePoseSelection}
+                  />
+                ))}
               </div>
             </Card>
           </TabsContent>
@@ -422,7 +425,7 @@ function SessionBuilder() {
 
         {/* Save Button - Fixed at bottom */}
         {sequencePoses.length > 0 && (
-          <div className="sticky bottom-0 left-0 right-0 bg-gradient-to-t from-background via-background to-transparent pb-2 pt-3">
+          <div className="mt-3 shrink-0">
             <Button
               variant="primary"
               size="lg"

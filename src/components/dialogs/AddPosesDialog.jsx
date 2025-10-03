@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Plus } from 'lucide-react';
+import { useState } from "react";
+import { Plus } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -7,38 +7,38 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '../ui/dialog';
-import { Button } from '../design-system';
-import { Checkbox } from '../ui/checkbox';
-import { Label } from '../ui/label';
-import { getPoseById } from '../../data/poses';
+} from "../ui/dialog";
+import { Button } from "../design-system";
+import { Checkbox } from "../ui/checkbox";
+import { Label } from "../ui/label";
+import { getPoseById } from "../../data/poses";
 
 /**
  * AddPosesDialog - Dialog for adding selected poses with left/right side options
  */
-const AddPosesDialog = ({
-  isOpen,
-  onClose,
-  selectedPoseIds,
-  onAdd
-}) => {
+const AddPosesDialog = ({ isOpen, onClose, selectedPoseIds, onAdd }) => {
   // Asymmetric poses that need left/right side options
-  const asymmetricPoses = new Set(['warrior-one', 'warrior-two', 'triangle-pose', 'supine-twist']);
+  const asymmetricPoses = new Set([
+    "warrior-one",
+    "warrior-two",
+    "triangle-pose",
+    "supine-twist",
+  ]);
 
   // Track which poses should be added with both sides
   const [bothSides, setBothSides] = useState({});
 
   const handleToggleBothSides = (poseId) => {
-    setBothSides(prev => ({
+    setBothSides((prev) => ({
       ...prev,
-      [poseId]: !prev[poseId]
+      [poseId]: !prev[poseId],
     }));
   };
 
   const handleAdd = () => {
     const posesToAdd = [];
 
-    selectedPoseIds.forEach(poseId => {
+    selectedPoseIds.forEach((poseId) => {
       const pose = getPoseById(poseId);
       if (!pose) return;
 
@@ -46,20 +46,20 @@ const AddPosesDialog = ({
         // Add both left and right side
         posesToAdd.push({
           poseId,
-          side: 'left',
-          duration: 30
+          side: "left",
+          duration: 30,
         });
         posesToAdd.push({
           poseId,
-          side: 'right',
-          duration: 30
+          side: "right",
+          duration: 30,
         });
       } else {
         // Add pose once (or specify side if asymmetric)
         posesToAdd.push({
           poseId,
-          side: asymmetricPoses.has(poseId) ? 'right' : null,
-          duration: 30
+          side: asymmetricPoses.has(poseId) ? "right" : null,
+          duration: 30,
         });
       }
     });
@@ -69,15 +69,18 @@ const AddPosesDialog = ({
     onClose();
   };
 
-  const asymmetricPosesInSelection = selectedPoseIds.filter(id => asymmetricPoses.has(id));
+  const asymmetricPosesInSelection = selectedPoseIds.filter((id) =>
+    asymmetricPoses.has(id),
+  );
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <Plus className="h-5 w-5" />
-            Add {selectedPoseIds.length} Pose{selectedPoseIds.length !== 1 ? 's' : ''}
+            <Plus className="size-5" />
+            Add {selectedPoseIds.length} Pose
+            {selectedPoseIds.length !== 1 ? "s" : ""}
           </DialogTitle>
           <DialogDescription>
             Configure how to add selected poses to your sequence
@@ -91,10 +94,13 @@ const AddPosesDialog = ({
               <h4 className="text-sm font-medium text-muted-foreground">
                 Side Options (Asymmetric Poses)
               </h4>
-              {asymmetricPosesInSelection.map(poseId => {
+              {asymmetricPosesInSelection.map((poseId) => {
                 const pose = getPoseById(poseId);
                 return (
-                  <div key={poseId} className="flex items-center space-x-2 p-2 bg-muted rounded-lg">
+                  <div
+                    key={poseId}
+                    className="flex items-center space-x-2 rounded-lg bg-muted p-2"
+                  >
                     <Checkbox
                       id={`both-${poseId}`}
                       checked={bothSides[poseId] || false}
@@ -102,28 +108,38 @@ const AddPosesDialog = ({
                     />
                     <Label
                       htmlFor={`both-${poseId}`}
-                      className="flex items-center gap-2 text-sm cursor-pointer flex-1"
+                      className="flex flex-1 cursor-pointer items-center gap-2 text-sm"
                     >
                       <span className="text-lg">{pose.emoji}</span>
                       <span>
-                        {pose.nameEnglish} - <span className="font-medium">Both sides</span>
+                        {pose.nameEnglish} -{" "}
+                        <span className="font-medium">Both sides</span>
                       </span>
                     </Label>
                   </div>
                 );
               })}
-              <p className="text-xs text-gray-500">
-                Unchecked poses will be added once (right side for asymmetric poses)
+              <p className="text-xs text-muted-foreground">
+                Unchecked poses will be added once (right side for asymmetric
+                poses)
               </p>
             </div>
           )}
 
           {/* Summary */}
-          <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
-            <p className="text-sm text-blue-900">
+          <div className="rounded-lg border border-state-info/30 bg-state-info/10 p-3">
+            <p className="text-sm text-state-info">
               <strong>
-                {selectedPoseIds.length + Object.values(bothSides).filter(Boolean).length}
-              </strong> pose{(selectedPoseIds.length + Object.values(bothSides).filter(Boolean).length) !== 1 ? 's' : ''} will be added
+                {selectedPoseIds.length +
+                  Object.values(bothSides).filter(Boolean).length}
+              </strong>{" "}
+              pose
+              {selectedPoseIds.length +
+                Object.values(bothSides).filter(Boolean).length !==
+              1
+                ? "s"
+                : ""}{" "}
+              will be added
             </p>
           </div>
         </div>
@@ -132,10 +148,7 @@ const AddPosesDialog = ({
           <Button variant="outline" onClick={onClose}>
             Cancel
           </Button>
-          <Button
-            onClick={handleAdd}
-            className="bg-secondary hover:bg-primary"
-          >
+          <Button onClick={handleAdd} className="bg-secondary hover:bg-primary">
             Add to Sequence
           </Button>
         </DialogFooter>

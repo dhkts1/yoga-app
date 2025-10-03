@@ -73,14 +73,14 @@ const SelectablePoseCard = ({
         className={`cursor-pointer p-2 transition-all ${
           isSelected
             ? "border-2 border-primary bg-muted shadow-sm"
-            : "border border-gray-200 hover:bg-gray-50"
+            : "border border-border hover:bg-muted/50"
         } ${className}`}
         onClick={() => onSelect?.(poseId)}
       >
         <div className="flex items-center gap-2">
           {/* Small selection indicator */}
           <div
-            className={`h-8 w-1 flex-shrink-0 rounded-full ${
+            className={`h-8 w-1 shrink-0 rounded-full ${
               isSelected ? "bg-secondary" : "bg-transparent"
             }`}
           />
@@ -88,17 +88,17 @@ const SelectablePoseCard = ({
             poseId={poseId}
             size="sm"
             shape="circular"
-            className="flex-shrink-0"
+            className="shrink-0"
           />
           <div className="min-w-0 flex-1">
             <h3
               className={`truncate text-sm font-medium ${
-                isSelected ? "text-card-foreground" : "text-gray-900"
+                isSelected ? "text-card-foreground" : "text-foreground"
               }`}
             >
               {pose.nameEnglish}
             </h3>
-            <p className="truncate text-xs italic text-gray-500">
+            <p className="truncate text-xs italic text-muted-foreground">
               {pose.nameSanskrit}
             </p>
           </div>
@@ -118,30 +118,30 @@ const SelectablePoseCard = ({
               poseId={poseId}
               size="sm"
               shape="circular"
-              className="flex-shrink-0"
+              className="shrink-0"
             />
             <div className="min-w-0 flex-1">
-              <h3 className="truncate font-medium text-gray-900">
+              <h3 className="truncate font-medium text-foreground">
                 {pose.nameEnglish}
               </h3>
-              <p className="truncate text-sm text-gray-500">
+              <p className="truncate text-sm text-muted-foreground">
                 {pose.nameSanskrit}
               </p>
             </div>
           </div>
 
           {/* Action Buttons */}
-          <div className="flex flex-shrink-0 items-center space-x-2">
+          <div className="flex shrink-0 items-center space-x-2">
             {/* Move Up Button */}
             <Button
               variant="ghost"
               size="sm"
               onClick={handleMoveUpClick}
               disabled={!canMoveUp}
-              className="min-h-[44px] min-w-[44px] p-2"
+              className="min-h-touch min-w-touch p-2"
               aria-label="Move pose up"
             >
-              <ChevronUp className="h-4 w-4" />
+              <ChevronUp className="size-4" />
             </Button>
 
             {/* Move Down Button */}
@@ -150,10 +150,10 @@ const SelectablePoseCard = ({
               size="sm"
               onClick={handleMoveDownClick}
               disabled={!canMoveDown}
-              className="min-h-[44px] min-w-[44px] p-2"
+              className="min-h-touch min-w-touch p-2"
               aria-label="Move pose down"
             >
-              <ChevronDown className="h-4 w-4" />
+              <ChevronDown className="size-4" />
             </Button>
 
             {/* Remove Button */}
@@ -161,10 +161,10 @@ const SelectablePoseCard = ({
               variant="ghost"
               size="sm"
               onClick={handleRemovePose}
-              className="min-h-[44px] min-w-[44px] p-2 text-red-500 hover:bg-red-50 hover:text-red-600"
+              className="min-h-touch min-w-touch p-2 text-destructive hover:bg-destructive/10 hover:text-destructive"
               aria-label="Remove pose"
             >
-              <Trash2 className="h-4 w-4" />
+              <Trash2 className="size-4" />
             </Button>
           </div>
         </div>
@@ -181,7 +181,7 @@ const SelectablePoseCard = ({
                 variant={duration === option.value ? "primary" : "outline"}
                 size="sm"
                 onClick={() => handleDurationSelect(option.value)}
-                className="min-h-[44px] px-3 py-2 text-xs"
+                className="min-h-touch px-3 py-2 text-xs"
               >
                 {option.label}
               </Button>

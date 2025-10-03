@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { Clock } from 'lucide-react';
+import { useState, useEffect } from "react";
+import { Clock } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -7,11 +7,11 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '../ui/dialog';
-import { Button } from '../design-system';
-import { Slider } from '../ui/slider';
-import { getPoseById } from '../../data/poses';
-import { formatDuration } from '../../data/customSessions';
+} from "../ui/dialog";
+import { Button } from "../design-system";
+import { Slider } from "../ui/slider";
+import { getPoseById } from "../../data/poses";
+import { formatDuration } from "../../data/customSessions";
 
 /**
  * DurationEditDialog - Modal for editing pose duration with slider and quick options
@@ -23,7 +23,7 @@ const DurationEditDialog = ({
   onClose,
   poseId,
   currentDuration,
-  onSave
+  onSave,
 }) => {
   const [duration, setDuration] = useState(currentDuration);
   const pose = getPoseById(poseId);
@@ -36,12 +36,12 @@ const DurationEditDialog = ({
   }, [isOpen, currentDuration]);
 
   const quickOptions = [
-    { label: '15s', value: 15 },
-    { label: '30s', value: 30 },
-    { label: '45s', value: 45 },
-    { label: '60s', value: 60 },
-    { label: '90s', value: 90 },
-    { label: '2min', value: 120 },
+    { label: "15s", value: 15 },
+    { label: "30s", value: 30 },
+    { label: "45s", value: 45 },
+    { label: "60s", value: 60 },
+    { label: "90s", value: 90 },
+    { label: "2min", value: 120 },
   ];
 
   const handleSave = () => {
@@ -72,7 +72,7 @@ const DurationEditDialog = ({
         <div className="space-y-6 py-4">
           {/* Current Duration Display */}
           <div className="flex items-center justify-center gap-2 text-2xl font-medium text-muted-foreground">
-            <Clock className="h-6 w-6" />
+            <Clock className="size-6" />
             {formatDuration(duration)}
           </div>
 
@@ -89,7 +89,7 @@ const DurationEditDialog = ({
               step={15}
               className="w-full"
             />
-            <div className="flex justify-between text-xs text-gray-500">
+            <div className="flex justify-between text-xs text-muted-foreground">
               <span>15s</span>
               <span>3min</span>
             </div>

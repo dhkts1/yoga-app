@@ -147,13 +147,13 @@ function WeekDetail() {
           <div className="flex items-center gap-2">
             {completed && (
               <Badge className="border-0 bg-state-success text-white">
-                <CheckCircle2 className="mr-1 h-3 w-3" />
+                <CheckCircle2 className="mr-1 size-3" />
                 {t("screens.weekDetail.completed")}
               </Badge>
             )}
             {week.isMilestone && (
-              <Badge className="border-0 bg-amber-500 text-white">
-                <Award className="mr-1 h-3 w-3" />
+              <Badge className="border-0 bg-accent text-accent-foreground">
+                <Award className="mr-1 size-3" />
                 Milestone Week
               </Badge>
             )}
@@ -182,7 +182,7 @@ function WeekDetail() {
 
         {/* Practice Frequency */}
         <div className="mb-4 flex items-center gap-2 text-sm text-muted-foreground">
-          <Clock className="h-4 w-4 flex-shrink-0" />
+          <Clock className="size-4 shrink-0" />
           <span>{week.practiceFrequency}</span>
         </div>
 
@@ -204,7 +204,7 @@ function WeekDetail() {
           </div>
           {progressPercentage === 100 && !completed && (
             <p className="mt-2 flex items-center gap-1 text-xs text-state-success">
-              <CheckCircle2 className="h-3 w-3" />
+              <CheckCircle2 className="size-3" />
               All sessions complete! Mark week as complete below.
             </p>
           )}
@@ -215,7 +215,7 @@ function WeekDetail() {
       {week.notes && (
         <div className="mb-6 rounded-xl border border-border bg-muted p-5">
           <div className="flex items-start gap-3">
-            <Lightbulb className="mt-0.5 h-5 w-5 flex-shrink-0 text-muted-foreground" />
+            <Lightbulb className="mt-0.5 size-5 shrink-0 text-muted-foreground" />
             <div>
               <h3 className="mb-2 text-sm font-medium text-card-foreground">
                 Guidance for This Week
@@ -268,7 +268,7 @@ function WeekDetail() {
                       </span>
                       {isCompleted && (
                         <Badge className="h-5 border-0 bg-state-success px-2 py-0 text-xs text-white">
-                          <CheckCircle2 className="mr-1 h-3 w-3" />
+                          <CheckCircle2 className="mr-1 size-3" />
                           {t("screens.weekDetail.completed")}
                         </Badge>
                       )}
@@ -282,7 +282,7 @@ function WeekDetail() {
                     {/* Metadata */}
                     <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
                       <div className="flex items-center gap-1">
-                        <Clock className="h-4 w-4 flex-shrink-0" />
+                        <Clock className="size-4 shrink-0" />
                         <span>
                           {t("screens.weekDetail.sessionDuration", {
                             duration: session.duration,
@@ -291,7 +291,7 @@ function WeekDetail() {
                       </div>
                       <span>•</span>
                       <div className="flex items-center gap-1">
-                        <BookOpen className="h-4 w-4 flex-shrink-0" />
+                        <BookOpen className="size-4 shrink-0" />
                         <span>
                           {t("screens.weekDetail.posesCount", {
                             count: session.poses?.length || 0,
@@ -306,11 +306,11 @@ function WeekDetail() {
                   </div>
 
                   {/* Arrow or checkmark */}
-                  <div className="flex flex-shrink-0 items-center">
+                  <div className="flex shrink-0 items-center">
                     {isCompleted ? (
-                      <CheckCircle2 className="h-6 w-6 text-state-success" />
+                      <CheckCircle2 className="size-6 text-state-success" />
                     ) : (
-                      <ChevronRight className="h-5 w-5 text-muted-foreground" />
+                      <ChevronRight className="size-5 text-muted-foreground" />
                     )}
                   </div>
                 </div>
@@ -323,7 +323,7 @@ function WeekDetail() {
       {/* Personal Notes Section */}
       <div className="mb-36 rounded-xl border border-border bg-card p-5 shadow-sm">
         <div className="mb-3 flex items-center gap-2">
-          <MessageSquare className="h-5 w-5 text-muted-foreground" />
+          <MessageSquare className="size-5 text-muted-foreground" />
           <h3 className="text-base font-medium text-card-foreground">
             Your Notes
           </h3>
@@ -339,7 +339,7 @@ function WeekDetail() {
           onChange={(e) => setNote(e.target.value)}
           onBlur={handleSaveNote}
           placeholder="Write your thoughts here..."
-          className="min-h-[120px] w-full resize-none rounded-lg border border-border px-4 py-3 text-sm text-card-foreground placeholder-sage-400 outline-none focus:border-primary focus:ring-2 focus:ring-sage-400/20"
+          className="min-h-[120px] w-full resize-none rounded-lg border border-border px-4 py-3 text-sm text-card-foreground outline-none placeholder:text-sage-400 focus:border-primary focus:ring-2 focus:ring-sage-400/20"
           disabled={completed}
         />
 
@@ -352,14 +352,14 @@ function WeekDetail() {
 
       {/* Complete Week Button (Fixed at bottom) */}
       {!completed && (
-        <div className="fixed bottom-[calc(48px+env(safe-area-inset-bottom))] left-0 right-0 border-t border-border bg-card p-4 shadow-lg">
+        <div className="fixed inset-x-0 bottom-[calc(48px+env(safe-area-inset-bottom))] border-t border-border bg-card p-4 shadow-lg">
           <div className="mx-auto max-w-md">
             <Button
               onClick={handleCompleteWeek}
               variant={showCompleteConfirm ? "primary" : "secondary"}
               className="w-full"
             >
-              <CheckCircle2 className="mr-2 h-4 w-4" />
+              <CheckCircle2 className="mr-2 size-4" />
               {showCompleteConfirm
                 ? "Confirm - Mark Week Complete"
                 : "Mark Week as Complete"}

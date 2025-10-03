@@ -180,14 +180,14 @@ function ProgramDetail() {
         {/* Metadata */}
         <div className="mb-5 flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
           <div className="flex items-center gap-1.5">
-            <Calendar className="h-4 w-4 flex-shrink-0" />
+            <Calendar className="size-4 shrink-0" />
             <span>
               {t("screens.programDetail.weeks", { count: program.totalWeeks })}
             </span>
           </div>
           <span>•</span>
           <div className="flex items-center gap-1.5">
-            <BookOpen className="h-4 w-4 flex-shrink-0" />
+            <BookOpen className="size-4 shrink-0" />
             <span className="capitalize">{program.difficulty}</span>
           </div>
           {program.author && (
@@ -206,7 +206,7 @@ function ProgramDetail() {
               variant="primary"
               className="flex-1"
             >
-              <Play className="mr-2 h-4 w-4" />
+              <Play className="mr-2 size-4" />
               {t("screens.programDetail.startProgram")}
             </Button>
           )}
@@ -217,7 +217,7 @@ function ProgramDetail() {
               variant="secondary"
               className="flex-1"
             >
-              <Pause className="mr-2 h-4 w-4" />
+              <Pause className="mr-2 size-4" />
               {t("screens.programDetail.pauseProgram")}
             </Button>
           )}
@@ -228,7 +228,7 @@ function ProgramDetail() {
               variant="primary"
               className="flex-1"
             >
-              <Play className="mr-2 h-4 w-4" />
+              <Play className="mr-2 size-4" />
               {t("screens.programDetail.resumeProgram")}
             </Button>
           )}
@@ -237,9 +237,9 @@ function ProgramDetail() {
             <Button
               onClick={handleResetProgram}
               variant={showResetConfirm ? "destructive" : "outline"}
-              className="flex-shrink-0"
+              className="shrink-0"
             >
-              <RotateCcw className="mr-2 h-4 w-4" />
+              <RotateCcw className="mr-2 size-4" />
               {showResetConfirm ? "Confirm Reset" : "Reset"}
             </Button>
           )}
@@ -276,9 +276,9 @@ function ProgramDetail() {
                 className={`w-full rounded-xl border bg-card p-4 text-left shadow-sm transition-all duration-300 ${
                   unlocked
                     ? "border-border hover:scale-[1.01] hover:shadow-md active:scale-[0.99]"
-                    : "cursor-not-allowed border-gray-200 opacity-60"
-                } ${completed ? "border-l-4 border-l-green-500" : ""} ${
-                  isCurrent && isActive ? "border-l-4 border-l-sage-600" : ""
+                    : "cursor-not-allowed border-border opacity-60"
+                } ${completed ? "border-l-4 border-l-state-success" : ""} ${
+                  isCurrent && isActive ? "border-l-4 border-l-primary" : ""
                 }`}
               >
                 <div className="flex items-start justify-between gap-3">
@@ -289,7 +289,7 @@ function ProgramDetail() {
                         Week {week.weekNumber}
                       </span>
                       {week.isMilestone && (
-                        <Award className="h-4 w-4 flex-shrink-0 text-amber-500" />
+                        <Award className="size-4 shrink-0 text-accent" />
                       )}
                       {getWeekBadge(week)}
                     </div>
@@ -307,7 +307,7 @@ function ProgramDetail() {
                     {/* Metadata */}
                     <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
                       <div className="flex items-center gap-1">
-                        <Clock className="h-3 w-3 flex-shrink-0" />
+                        <Clock className="size-3 shrink-0" />
                         <span>{week.practiceFrequency}</span>
                       </div>
                       <span>•</span>
@@ -316,11 +316,11 @@ function ProgramDetail() {
                   </div>
 
                   {/* Arrow or Lock Icon */}
-                  <div className="flex flex-shrink-0 items-center">
+                  <div className="flex shrink-0 items-center">
                     {unlocked ? (
-                      <ChevronRight className="h-5 w-5 text-muted-foreground" />
+                      <ChevronRight className="size-5 text-muted-foreground" />
                     ) : (
-                      <Lock className="h-5 w-5 text-gray-400" />
+                      <Lock className="size-5 text-muted-foreground" />
                     )}
                   </div>
                 </div>

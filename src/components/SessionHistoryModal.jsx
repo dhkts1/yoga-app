@@ -1,7 +1,7 @@
-import { useNavigate } from 'react-router-dom';
-import { Activity, Wind, Clock, TrendingUp, Repeat } from 'lucide-react';
-import { Modal, Button, Text, Heading } from './design-system';
-import { getSessionById } from '../data/sessions';
+import { useNavigate } from "react-router-dom";
+import { Activity, Wind, Clock, TrendingUp, Repeat } from "lucide-react";
+import { Modal, Button, Text, Heading } from "./design-system";
+import { getSessionById } from "../data/sessions";
 
 /**
  * SessionHistoryModal - Display all sessions practiced on a selected day
@@ -11,7 +11,7 @@ function SessionHistoryModal({
   isOpen = false,
   onClose,
   selectedDate,
-  sessions = []
+  sessions = [],
 }) {
   const navigate = useNavigate();
 
@@ -21,31 +21,46 @@ function SessionHistoryModal({
 
   // Format date for display
   const dateObj = new Date(selectedDate);
-  const formattedDate = dateObj.toLocaleDateString('en-US', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
+  const formattedDate = dateObj.toLocaleDateString("en-US", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
   });
 
   // Calculate totals for the day
   const totalSessions = sessions.length;
-  const totalMinutes = sessions.reduce((sum, session) => sum + session.duration, 0);
-  const yogaSessions = sessions.filter(s => s.type !== 'breathing').length;
-  const breathingSessions = sessions.filter(s => s.type === 'breathing').length;
+  const totalMinutes = sessions.reduce(
+    (sum, session) => sum + session.duration,
+    0,
+  );
+  const yogaSessions = sessions.filter((s) => s.type !== "breathing").length;
+  const breathingSessions = sessions.filter(
+    (s) => s.type === "breathing",
+  ).length;
 
   // Get mood improvements
-  const sessionsWithMood = sessions.filter(s => s.moodImprovement !== null);
-  const avgMoodImprovement = sessionsWithMood.length > 0
-    ? (sessionsWithMood.reduce((sum, s) => sum + s.moodImprovement, 0) / sessionsWithMood.length).toFixed(1)
-    : null;
-  const avgEnergyImprovement = sessionsWithMood.length > 0
-    ? (sessionsWithMood.reduce((sum, s) => sum + (s.energyImprovement || 0), 0) / sessionsWithMood.length).toFixed(1)
-    : null;
+  const sessionsWithMood = sessions.filter((s) => s.moodImprovement !== null);
+  const avgMoodImprovement =
+    sessionsWithMood.length > 0
+      ? (
+          sessionsWithMood.reduce((sum, s) => sum + s.moodImprovement, 0) /
+          sessionsWithMood.length
+        ).toFixed(1)
+      : null;
+  const avgEnergyImprovement =
+    sessionsWithMood.length > 0
+      ? (
+          sessionsWithMood.reduce(
+            (sum, s) => sum + (s.energyImprovement || 0),
+            0,
+          ) / sessionsWithMood.length
+        ).toFixed(1)
+      : null;
 
   // Handle repeat session
   const handleRepeatSession = (session) => {
-    if (session.type === 'breathing') {
+    if (session.type === "breathing") {
       // Navigate to breathing practice
       navigate(`/breathing/${session.exerciseId}`);
     } else {
@@ -58,19 +73,19 @@ function SessionHistoryModal({
   // Format time of day
   const formatTime = (timestamp) => {
     const date = new Date(timestamp);
-    return date.toLocaleTimeString('en-US', {
-      hour: 'numeric',
-      minute: '2-digit',
-      hour12: true
+    return date.toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
     });
   };
 
   // Get session type badge
   const getSessionTypeBadge = (session) => {
-    if (session.type === 'breathing') {
+    if (session.type === "breathing") {
       return (
-        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-state-info/10 text-state-info">
-          <Wind className="w-3 h-3 mr-1" />
+        <span className="inline-flex items-center rounded-full bg-state-info/10 px-2 py-1 text-xs font-medium text-state-info">
+          <Wind className="mr-1 size-3" />
           Breathing
         </span>
       );
@@ -80,41 +95,36 @@ function SessionHistoryModal({
     const sessionData = getSessionById(session.sessionId);
     if (!sessionData) {
       return (
-        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-muted text-foreground">
-          <Activity className="w-3 h-3 mr-1" />
+        <span className="inline-flex items-center rounded-full bg-muted px-2 py-1 text-xs font-medium text-foreground">
+          <Activity className="mr-1 size-3" />
           Yoga
         </span>
       );
     }
 
     // Custom session if not in pre-built sessions
-    if (session.sessionId.startsWith('custom-')) {
+    if (session.sessionId.startsWith("custom-")) {
       return (
-        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
-          <Activity className="w-3 h-3 mr-1" />
+        <span className="inline-flex items-center rounded-full bg-accent/20 px-2 py-1 text-xs font-medium text-accent">
+          <Activity className="mr-1 size-3" />
           Custom
         </span>
       );
     }
 
     return (
-      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-muted text-foreground">
-        <Activity className="w-3 h-3 mr-1" />
+      <span className="inline-flex items-center rounded-full bg-muted px-2 py-1 text-xs font-medium text-foreground">
+        <Activity className="mr-1 size-3" />
         Yoga
       </span>
     );
   };
 
   return (
-    <Modal
-      open={isOpen}
-      onClose={onClose}
-      size="mobile"
-      showCloseButton={true}
-    >
+    <Modal open={isOpen} onClose={onClose} size="mobile" showCloseButton={true}>
       <div className="space-y-6">
         {/* Header */}
-        <div className="text-center border-b border-border pb-4">
+        <div className="border-b border-border pb-4 text-center">
           <Heading level={2} className="mb-2">
             Practice History
           </Heading>
@@ -124,34 +134,34 @@ function SessionHistoryModal({
         </div>
 
         {/* Day Summary Stats */}
-        <div className="grid grid-cols-2 gap-3 bg-muted rounded-lg p-4">
+        <div className="grid grid-cols-2 gap-3 rounded-lg bg-muted p-4">
           <div className="text-center">
-            <div className="flex items-center justify-center mb-1">
-              <Activity className="w-4 h-4 text-muted-foreground mr-1" />
+            <div className="mb-1 flex items-center justify-center">
+              <Activity className="mr-1 size-4 text-muted-foreground" />
               <Text variant="caption" className="text-secondary">
                 Total Sessions
               </Text>
             </div>
-            <Text variant="body" className="font-semibold text-lg">
+            <Text variant="body" className="text-lg font-semibold">
               {totalSessions}
             </Text>
-            <Text variant="caption" className="text-muted text-xs">
+            <Text variant="caption" className="text-xs text-muted">
               {yogaSessions > 0 && `${yogaSessions} yoga`}
-              {yogaSessions > 0 && breathingSessions > 0 && ' • '}
+              {yogaSessions > 0 && breathingSessions > 0 && " • "}
               {breathingSessions > 0 && `${breathingSessions} breathing`}
             </Text>
           </div>
           <div className="text-center">
-            <div className="flex items-center justify-center mb-1">
-              <Clock className="w-4 h-4 text-muted-foreground mr-1" />
+            <div className="mb-1 flex items-center justify-center">
+              <Clock className="mr-1 size-4 text-muted-foreground" />
               <Text variant="caption" className="text-secondary">
                 Total Time
               </Text>
             </div>
-            <Text variant="body" className="font-semibold text-lg">
+            <Text variant="body" className="text-lg font-semibold">
               {totalMinutes}
             </Text>
-            <Text variant="caption" className="text-muted text-xs">
+            <Text variant="caption" className="text-xs text-muted">
               minutes
             </Text>
           </div>
@@ -159,9 +169,9 @@ function SessionHistoryModal({
 
         {/* Mood Improvement Summary */}
         {avgMoodImprovement && (
-          <div className="bg-accent/10 rounded-lg p-4 border border-accent/20">
-            <div className="flex items-center justify-center mb-2">
-              <TrendingUp className="w-5 h-5 text-accent mr-2" />
+          <div className="rounded-lg border border-accent/20 bg-accent/10 p-4">
+            <div className="mb-2 flex items-center justify-center">
+              <TrendingUp className="mr-2 size-5 text-accent" />
               <Heading level={4} className="text-foreground">
                 Wellbeing Impact
               </Heading>
@@ -171,7 +181,10 @@ function SessionHistoryModal({
                 <Text variant="body" className="font-semibold text-accent">
                   +{avgMoodImprovement}
                 </Text>
-                <Text variant="caption" className="text-muted-foreground text-xs">
+                <Text
+                  variant="caption"
+                  className="text-xs text-muted-foreground"
+                >
                   Avg Mood
                 </Text>
               </div>
@@ -180,7 +193,10 @@ function SessionHistoryModal({
                   <Text variant="body" className="font-semibold text-accent">
                     +{avgEnergyImprovement}
                   </Text>
-                  <Text variant="caption" className="text-muted-foreground text-xs">
+                  <Text
+                    variant="caption"
+                    className="text-xs text-muted-foreground"
+                  >
                     Avg Energy
                   </Text>
                 </div>
@@ -194,21 +210,22 @@ function SessionHistoryModal({
           <Heading level={4} className="text-sm font-medium text-secondary">
             Sessions ({totalSessions})
           </Heading>
-          <div className="space-y-2 max-h-64 overflow-y-auto">
+          <div className="max-h-64 space-y-2 overflow-y-auto">
             {sessions.map((session, index) => {
-              const sessionName = session.type === 'breathing'
-                ? session.exerciseName
-                : session.sessionName;
+              const sessionName =
+                session.type === "breathing"
+                  ? session.exerciseName
+                  : session.sessionName;
 
               return (
                 <div
                   key={`${session.id}-${index}`}
-                  className="bg-card border border-border rounded-lg p-3 hover:border-primary transition-colors"
+                  className="rounded-lg border border-border bg-card p-3 transition-colors hover:border-primary"
                 >
                   {/* Session Header */}
-                  <div className="flex items-start justify-between mb-2">
+                  <div className="mb-2 flex items-start justify-between">
                     <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-1">
+                      <div className="mb-1 flex items-center gap-2">
                         <Text variant="body" className="font-medium">
                           {sessionName}
                         </Text>
@@ -216,25 +233,29 @@ function SessionHistoryModal({
                       </div>
                       <div className="flex items-center gap-3 text-xs text-secondary">
                         <span className="flex items-center">
-                          <Clock className="w-3 h-3 mr-1" />
+                          <Clock className="mr-1 size-3" />
                           {session.duration} min
                         </span>
-                        <span>
-                          {formatTime(session.completedAt)}
-                        </span>
+                        <span>{formatTime(session.completedAt)}</span>
                       </div>
                     </div>
                   </div>
 
                   {/* Mood Data */}
                   {session.moodImprovement !== null && (
-                    <div className="flex items-center gap-4 text-xs mb-2 bg-muted rounded px-2 py-1">
-                      <span className={`font-medium ${session.moodImprovement >= 0 ? 'text-state-success' : 'text-state-error'}`}>
-                        {session.moodImprovement >= 0 ? '+' : ''}{session.moodImprovement} mood
+                    <div className="mb-2 flex items-center gap-4 rounded bg-muted px-2 py-1 text-xs">
+                      <span
+                        className={`font-medium ${session.moodImprovement >= 0 ? "text-state-success" : "text-state-error"}`}
+                      >
+                        {session.moodImprovement >= 0 ? "+" : ""}
+                        {session.moodImprovement} mood
                       </span>
                       {session.energyImprovement !== null && (
-                        <span className={`font-medium ${session.energyImprovement >= 0 ? 'text-state-success' : 'text-state-error'}`}>
-                          {session.energyImprovement >= 0 ? '+' : ''}{session.energyImprovement} energy
+                        <span
+                          className={`font-medium ${session.energyImprovement >= 0 ? "text-state-success" : "text-state-error"}`}
+                        >
+                          {session.energyImprovement >= 0 ? "+" : ""}
+                          {session.energyImprovement} energy
                         </span>
                       )}
                     </div>
@@ -245,9 +266,9 @@ function SessionHistoryModal({
                     variant="secondary"
                     size="sm"
                     onClick={() => handleRepeatSession(session)}
-                    className="w-full mt-2"
+                    className="mt-2 w-full"
                   >
-                    <Repeat className="w-4 h-4 mr-2" />
+                    <Repeat className="mr-2 size-4" />
                     Repeat This Session
                   </Button>
                 </div>
@@ -257,12 +278,8 @@ function SessionHistoryModal({
         </div>
 
         {/* Close Button */}
-        <div className="pt-4 border-t border-border">
-          <Button
-            variant="primary"
-            onClick={onClose}
-            className="w-full"
-          >
+        <div className="border-t border-border pt-4">
+          <Button variant="primary" onClick={onClose} className="w-full">
             Close
           </Button>
         </div>

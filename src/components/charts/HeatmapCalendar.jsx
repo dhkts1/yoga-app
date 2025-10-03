@@ -1,5 +1,5 @@
-import { memo } from 'react';
-import { Card, Text } from '../design-system';
+import { memo } from "react";
+import { Card, Text } from "../design-system";
 
 /**
  * HeatmapCalendar - GitHub-style practice frequency calendar
@@ -8,12 +8,12 @@ import { Card, Text } from '../design-system';
  * Memoized for performance optimization
  */
 const HeatmapCalendar = memo(function HeatmapCalendar({
-  title = 'Practice Calendar',
+  title = "Practice Calendar",
   practiceData = {},
   days = 30,
-  className = '',
+  className = "",
   onDayClick = null, // Callback when a day is clicked
-  selectedDate = null // Currently selected date for highlighting
+  selectedDate = null, // Currently selected date for highlighting
 }) {
   // Generate array of last N days
   const generateDays = () => {
@@ -25,7 +25,10 @@ const HeatmapCalendar = memo(function HeatmapCalendar({
       date.setDate(today.getDate() - i);
 
       const dateString = date.toDateString();
-      const practiceInfo = practiceData[dateString] || { sessions: 0, totalMinutes: 0 };
+      const practiceInfo = practiceData[dateString] || {
+        sessions: 0,
+        totalMinutes: 0,
+      };
 
       daysList.push({
         date,
@@ -35,7 +38,10 @@ const HeatmapCalendar = memo(function HeatmapCalendar({
         year: date.getFullYear(),
         sessions: practiceInfo.sessions,
         totalMinutes: practiceInfo.totalMinutes,
-        intensity: getIntensity(practiceInfo.sessions, practiceInfo.totalMinutes)
+        intensity: getIntensity(
+          practiceInfo.sessions,
+          practiceInfo.totalMinutes,
+        ),
       });
     }
 
@@ -54,23 +60,29 @@ const HeatmapCalendar = memo(function HeatmapCalendar({
   // Get color class for intensity level
   const getIntensityColor = (intensity) => {
     switch (intensity) {
-      case 0: return 'bg-muted'; // No practice
-      case 1: return 'bg-muted'; // Light practice
-      case 2: return 'bg-muted'; // Moderate practice
-      case 3: return 'bg-muted0'; // Good practice
-      case 4: return 'bg-secondary'; // Intense practice
-      default: return 'bg-muted';
+      case 0:
+        return "bg-muted"; // No practice
+      case 1:
+        return "bg-muted"; // Light practice
+      case 2:
+        return "bg-muted"; // Moderate practice
+      case 3:
+        return "bg-muted0"; // Good practice
+      case 4:
+        return "bg-secondary"; // Intense practice
+      default:
+        return "bg-muted";
     }
   };
 
   const daysList = generateDays();
-  const totalPracticeDays = daysList.filter(day => day.sessions > 0).length;
+  const totalPracticeDays = daysList.filter((day) => day.sessions > 0).length;
   const currentStreak = calculateCurrentStreak(daysList);
 
   // Get month label for first day of each month in the range
   const getMonthLabel = (day, index) => {
     if (day.day === 1 || index === 0) {
-      return day.date.toLocaleDateString('en-US', { month: 'short' });
+      return day.date.toLocaleDateString("en-US", { month: "short" });
     }
     return null;
   };
@@ -78,46 +90,56 @@ const HeatmapCalendar = memo(function HeatmapCalendar({
   return (
     <Card className={`p-4 ${className}`}>
       {/* Title */}
-      <Text variant="body" className="font-medium mb-4">
+      <Text variant="body" className="mb-4 font-medium">
         {title}
       </Text>
 
       {/* Calendar Grid */}
       <div className="space-y-3">
         {/* Month labels */}
-        <div className="flex items-center gap-2 mb-2">
-          {daysList.map((day, index) => {
-            const monthLabel = getMonthLabel(day, index);
-            if (monthLabel && (index === 0 || day.day === 1)) {
-              return (
-                <Text key={`month-${index}`} variant="caption" className="text-muted-foreground font-medium text-xs">
-                  {monthLabel}
-                </Text>
-              );
-            }
-            return null;
-          }).filter(Boolean)}
+        <div className="mb-2 flex items-center gap-2">
+          {daysList
+            .map((day, index) => {
+              const monthLabel = getMonthLabel(day, index);
+              if (monthLabel && (index === 0 || day.day === 1)) {
+                return (
+                  <Text
+                    key={`month-${index}`}
+                    variant="caption"
+                    className="text-xs font-medium text-muted-foreground"
+                  >
+                    {monthLabel}
+                  </Text>
+                );
+              }
+              return null;
+            })
+            .filter(Boolean)}
         </div>
 
         {/* Days grid - 7 columns for weeks */}
         <div className="grid grid-cols-7 gap-1.5">
           {/* Day labels */}
-          {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((dayName, index) => (
+          {["S", "M", "T", "W", "T", "F", "S"].map((dayName, index) => (
             <div key={dayName + index} className="text-center">
-              <Text variant="caption" className="text-secondary text-xs">
+              <Text variant="caption" className="text-xs text-secondary">
                 {dayName}
               </Text>
             </div>
           ))}
 
           {/* Pad beginning to align with correct day of week */}
-          {Array.from({ length: daysList[0]?.date.getDay() || 0 }).map((_, index) => (
-            <div key={`pad-${index}`} className="w-8 h-8" />
-          ))}
+          {Array.from({ length: daysList[0]?.date.getDay() || 0 }).map(
+            (_, index) => (
+              <div key={`pad-${index}`} className="size-8" />
+            ),
+          )}
 
           {/* Practice days */}
           {daysList.map((day, dayIndex) => {
-            const isSelected = selectedDate && day.dateString === new Date(selectedDate).toDateString();
+            const isSelected =
+              selectedDate &&
+              day.dateString === new Date(selectedDate).toDateString();
             const isClickable = onDayClick && day.sessions > 0;
 
             // Calculate which row this day is in (0-indexed)
@@ -128,19 +150,14 @@ const HeatmapCalendar = memo(function HeatmapCalendar({
             // Show tooltip above for bottom 2 rows, below for others
             const totalRows = Math.ceil((daysList.length + paddingDays) / 7);
             const isBottomRows = rowNumber >= totalRows - 2;
-            const tooltipPositionClass = isBottomRows ? 'bottom-16' : 'top-16';
+            const tooltipPositionClass = isBottomRows ? "bottom-16" : "top-16";
 
             return (
               <button
                 key={day.dateString}
                 onClick={() => isClickable && onDayClick(day)}
                 disabled={!isClickable}
-                className={`w-8 h-8 rounded-md ${getIntensityColor(day.intensity)}
-                           hover:ring-2 hover:ring-sage-400 transition-all duration-200
-                           ${isClickable ? 'cursor-pointer' : 'cursor-default'}
-                           ${isSelected ? 'ring-2 ring-gold-500' : ''}
-                           relative group flex items-center justify-center
-                           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring`}
+                className={`size-8 rounded-md ${getIntensityColor(day.intensity)} transition-all duration-200 hover:ring-2 hover:ring-sage-400 ${isClickable ? "cursor-pointer" : "cursor-default"} ${isSelected ? "ring-2 ring-gold-500" : ""} group relative flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring`}
                 aria-label={`${day.date.toLocaleDateString()} - ${day.sessions} sessions, ${day.totalMinutes} minutes`}
               >
                 {/* Day number displayed inside cell */}
@@ -149,14 +166,20 @@ const HeatmapCalendar = memo(function HeatmapCalendar({
                 </span>
 
                 {/* Tooltip on hover - positioned dynamically based on row */}
-                <div className={`absolute ${tooltipPositionClass} left-1/2 -translate-x-1/2
-                              bg-gray-800 text-white text-xs rounded px-2 py-1
-                              opacity-0 group-hover:opacity-100 transition-opacity
-                              pointer-events-none z-50 whitespace-nowrap shadow-lg min-w-max`}>
-                  {day.date.toLocaleDateString()}<br />
-                  {day.sessions} session{day.sessions !== 1 ? 's' : ''}<br />
+                <div
+                  className={`absolute ${tooltipPositionClass} pointer-events-none left-1/2 z-50 min-w-max -translate-x-1/2 whitespace-nowrap rounded border border-border bg-popover px-2 py-1 text-xs text-popover-foreground opacity-0 shadow-lg transition-opacity group-hover:opacity-100`}
+                >
+                  {day.date.toLocaleDateString()}
+                  <br />
+                  {day.sessions} session{day.sessions !== 1 ? "s" : ""}
+                  <br />
                   {day.totalMinutes} min
-                  {day.sessions > 0 && <><br /><span className="text-accent">Click to view details</span></>}
+                  {day.sessions > 0 && (
+                    <>
+                      <br />
+                      <span className="text-accent">Click to view details</span>
+                    </>
+                  )}
                 </div>
               </button>
             );
@@ -169,10 +192,10 @@ const HeatmapCalendar = memo(function HeatmapCalendar({
             <Text variant="caption" className="text-secondary">
               Less
             </Text>
-            {[0, 1, 2, 3, 4].map(level => (
+            {[0, 1, 2, 3, 4].map((level) => (
               <div
                 key={level}
-                className={`w-3 h-3 rounded-sm ${getIntensityColor(level)}`}
+                className={`size-3 rounded-sm ${getIntensityColor(level)}`}
               />
             ))}
             <Text variant="caption" className="text-secondary">
@@ -182,7 +205,7 @@ const HeatmapCalendar = memo(function HeatmapCalendar({
         </div>
 
         {/* Summary stats */}
-        <div className="flex justify-between pt-2 border-t border-border">
+        <div className="flex justify-between border-t border-border pt-2">
           <div className="text-center">
             <Text variant="caption" className="text-secondary">
               Practice Days
@@ -196,7 +219,7 @@ const HeatmapCalendar = memo(function HeatmapCalendar({
               Current Streak
             </Text>
             <Text variant="body" className="font-medium">
-              {currentStreak} day{currentStreak !== 1 ? 's' : ''}
+              {currentStreak} day{currentStreak !== 1 ? "s" : ""}
             </Text>
           </div>
           <div className="text-center">

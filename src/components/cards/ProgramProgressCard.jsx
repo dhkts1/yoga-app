@@ -1,9 +1,9 @@
-import { useNavigate } from 'react-router-dom';
-import { BookOpen, ArrowRight, Calendar } from 'lucide-react';
-import { Card, Button, Text } from '../design-system';
-import { ProgressBar } from '../design-system/Progress';
-import useProgramProgressStore from '../../stores/programProgress';
-import { getProgramById } from '../../data/programs';
+import { useNavigate } from "react-router-dom";
+import { BookOpen, ArrowRight, Calendar } from "lucide-react";
+import { Card, Button, Text } from "../design-system";
+import { ProgressBar } from "../design-system/Progress";
+import useProgramProgressStore from "../../stores/programProgress";
+import { getProgramById } from "../../data/programs";
 
 /**
  * ProgramProgressCard - Shows active program progress on Insights dashboard
@@ -36,20 +36,25 @@ function ProgramProgressCard() {
   // Calculate progress
   const currentWeek = activeProgram.currentWeek;
   const totalWeeks = program.totalWeeks;
-  const progressPercentage = getProgramProgress(activeProgram.programId, totalWeeks);
+  const progressPercentage = getProgramProgress(
+    activeProgram.programId,
+    totalWeeks,
+  );
 
   // Get current week details
-  const currentWeekData = program.weeks.find(w => w.weekNumber === currentWeek);
+  const currentWeekData = program.weeks.find(
+    (w) => w.weekNumber === currentWeek,
+  );
 
   // Style badge color mapping
   const getStyleColor = (style) => {
     const styleColors = {
-      iyengar: 'bg-muted text-foreground',
-      vinyasa: 'bg-accent/20 text-accent',
-      hatha: 'bg-muted text-foreground',
-      restorative: 'bg-purple-50 text-purple-700',
+      iyengar: "bg-muted text-foreground",
+      vinyasa: "bg-accent/20 text-accent",
+      hatha: "bg-muted text-foreground",
+      restorative: "bg-cream-200 text-sage-700",
     };
-    return styleColors[style.toLowerCase()] || 'bg-muted text-muted-foreground';
+    return styleColors[style.toLowerCase()] || "bg-muted text-muted-foreground";
   };
 
   // Handle navigation to program
@@ -58,38 +63,39 @@ function ProgramProgressCard() {
   };
 
   return (
-    <Card
-      variant="sage"
-      padding="sm"
-      className="w-full"
-    >
-      <div className="flex items-start justify-between mb-2">
-        <div className="flex items-start space-x-2 flex-1 min-w-0">
+    <Card variant="sage" padding="sm" className="w-full">
+      <div className="mb-2 flex items-start justify-between">
+        <div className="flex min-w-0 flex-1 items-start space-x-2">
           {/* Icon */}
-          <div className="flex-shrink-0">
-            <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
-              <BookOpen className="h-4 w-4 text-muted-foreground" />
+          <div className="shrink-0">
+            <div className="flex size-8 items-center justify-center rounded-full bg-muted">
+              <BookOpen className="size-4 text-muted-foreground" />
             </div>
           </div>
 
           {/* Program Info */}
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-1.5 mb-0.5 flex-wrap">
-              <Text variant="heading" className="text-base font-semibold text-primary">
+          <div className="min-w-0 flex-1">
+            <div className="mb-0.5 flex flex-wrap items-center gap-1.5">
+              <Text
+                variant="heading"
+                className="text-base font-semibold text-primary"
+              >
                 {program.name}
               </Text>
-              <span className={`inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium ${getStyleColor(program.style)}`}>
+              <span
+                className={`inline-flex items-center rounded px-1.5 py-0.5 text-xs font-medium ${getStyleColor(program.style)}`}
+              >
                 {program.style}
               </span>
             </div>
 
             <div className="flex items-center gap-1.5 text-xs text-secondary">
-              <Calendar className="h-3.5 w-3.5" />
+              <Calendar className="size-3.5" />
               <span>
                 Week {currentWeek} of {totalWeeks}
               </span>
               {currentWeekData?.isMilestone && (
-                <span className="text-accent font-medium">Milestone</span>
+                <span className="font-medium text-accent">Milestone</span>
               )}
             </div>
           </div>
@@ -99,10 +105,13 @@ function ProgramProgressCard() {
       {/* Current Week Name */}
       {currentWeekData && (
         <div className="mb-2">
-          <Text variant="body" className="text-card-foreground font-medium text-sm">
+          <Text
+            variant="body"
+            className="text-sm font-medium text-card-foreground"
+          >
             {currentWeekData.name}
           </Text>
-          <Text variant="caption" className="text-secondary mt-0.5 text-xs">
+          <Text variant="caption" className="mt-0.5 text-xs text-secondary">
             {currentWeekData.focus}
           </Text>
         </div>
@@ -116,11 +125,11 @@ function ProgramProgressCard() {
           variant="default"
           size="sm"
         />
-        <div className="flex justify-between mt-1 text-xs">
+        <div className="mt-1 flex justify-between text-xs">
           <Text variant="caption" className="text-secondary">
             {progressPercentage}% Complete
           </Text>
-          <Text variant="caption" className="text-muted-foreground font-medium">
+          <Text variant="caption" className="font-medium text-muted-foreground">
             {currentWeek - 1} / {totalWeeks} weeks
           </Text>
         </div>
@@ -134,7 +143,7 @@ function ProgramProgressCard() {
         className="w-full sm:w-auto"
       >
         <span>Continue Week {currentWeek}</span>
-        <ArrowRight className="h-3.5 w-3.5 ml-1.5" />
+        <ArrowRight className="ml-1.5 size-3.5" />
       </Button>
     </Card>
   );

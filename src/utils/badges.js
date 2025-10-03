@@ -15,12 +15,7 @@
  *   renderBadgeWithIcon(getProgramStatusBadge('active'))
  */
 
-import {
-  Play,
-  Pause,
-  CheckCircle2,
-  Lock,
-} from 'lucide-react';
+import { Play, Pause, CheckCircle2, Lock } from "lucide-react";
 
 /**
  * Program Status Badges
@@ -32,33 +27,33 @@ import {
 export function getProgramStatusBadge(status) {
   const configs = {
     active: {
-      className: 'bg-sage-600 text-white border-0',
+      className: "bg-sage-600 text-white border-0",
       Icon: Play,
-      iconProps: { className: 'h-3 w-3 mr-1' },
-      children: 'Active',
+      iconProps: { className: "h-3 w-3 mr-1" },
+      children: "Active",
     },
     paused: {
-      className: 'bg-amber-500 text-white border-0',
+      className: "bg-state-warning text-white border-0",
       Icon: Pause,
-      iconProps: { className: 'h-3 w-3 mr-1' },
-      children: 'Paused',
+      iconProps: { className: "h-3 w-3 mr-1" },
+      children: "Paused",
     },
     completed: {
-      className: 'bg-state-success text-white border-0',
+      className: "bg-state-success text-white border-0",
       Icon: CheckCircle2,
-      iconProps: { className: 'h-3 w-3 mr-1' },
-      children: 'Completed',
+      iconProps: { className: "h-3 w-3 mr-1" },
+      children: "Completed",
     },
-    'not-started': {
-      className: 'bg-white text-sage-700 border-sage-300',
-      variant: 'outline',
+    "not-started": {
+      className: "bg-white text-sage-700 border-sage-300",
+      variant: "outline",
       Icon: Lock,
-      iconProps: { className: 'h-3 w-3 mr-1' },
-      children: 'Not Started',
+      iconProps: { className: "h-3 w-3 mr-1" },
+      children: "Not Started",
     },
   };
 
-  return configs[status] || configs['not-started'];
+  return configs[status] || configs["not-started"];
 }
 
 /**
@@ -68,32 +63,37 @@ export function getProgramStatusBadge(status) {
  * @param {Object} options - { isCompleted, isCurrent, isActive, isUnlocked }
  * @returns {Object|null} Badge config or null if no badge needed
  */
-export function getWeekStatusBadge({ isCompleted, isCurrent, isActive, isUnlocked }) {
+export function getWeekStatusBadge({
+  isCompleted,
+  isCurrent,
+  isActive,
+  isUnlocked,
+}) {
   if (isCompleted) {
     return {
-      className: 'bg-state-success text-white border-0',
+      className: "bg-state-success text-white border-0",
       Icon: CheckCircle2,
-      iconProps: { className: 'h-3 w-3 mr-1' },
-      children: 'Completed',
+      iconProps: { className: "h-3 w-3 mr-1" },
+      children: "Completed",
     };
   }
 
   if (isCurrent && isActive) {
     return {
-      className: 'bg-sage-600 text-white border-0',
+      className: "bg-sage-600 text-white border-0",
       Icon: Play,
-      iconProps: { className: 'h-3 w-3 mr-1' },
-      children: 'Current',
+      iconProps: { className: "h-3 w-3 mr-1" },
+      children: "Current",
     };
   }
 
   if (!isUnlocked) {
     return {
-      className: 'bg-gray-50 text-gray-500 border-gray-300',
-      variant: 'outline',
+      className: "bg-muted text-muted-foreground border-border",
+      variant: "outline",
       Icon: Lock,
-      iconProps: { className: 'h-3 w-3 mr-1' },
-      children: 'Locked',
+      iconProps: { className: "h-3 w-3 mr-1" },
+      children: "Locked",
     };
   }
 
@@ -110,20 +110,20 @@ export function getWeekStatusBadge({ isCompleted, isCurrent, isActive, isUnlocke
 export function getDifficultyBadge(difficulty) {
   const configs = {
     beginner: {
-      className: 'bg-state-info/10 text-state-info border-0',
-      children: 'Beginner',
+      className: "bg-state-info/10 text-state-info border-0",
+      children: "Beginner",
     },
     intermediate: {
-      className: 'bg-purple-100 text-purple-800 border-0',
-      children: 'Intermediate',
+      className: "bg-accent/20 text-accent border-0",
+      children: "Intermediate",
     },
     advanced: {
-      className: 'bg-gold/20 text-accent border-0',
-      children: 'Advanced',
+      className: "bg-gold/20 text-accent border-0",
+      children: "Advanced",
     },
     mixed: {
-      className: 'bg-gray-100 text-gray-800 border-0',
-      children: 'Mixed',
+      className: "bg-muted text-muted-foreground border-0",
+      children: "Mixed",
     },
   };
 
@@ -140,27 +140,29 @@ export function getDifficultyBadge(difficulty) {
 export function getStyleBadge(style) {
   const configs = {
     iyengar: {
-      className: 'bg-sage-100 text-sage-800 border-0',
-      children: 'Iyengar',
+      className: "bg-sage-100 text-sage-800 border-0",
+      children: "Iyengar",
     },
     vinyasa: {
-      className: 'bg-accent/20 text-accent border-0',
-      children: 'Vinyasa',
+      className: "bg-accent/20 text-accent border-0",
+      children: "Vinyasa",
     },
     hatha: {
-      className: 'bg-cream-200 text-sage-800 border-0',
-      children: 'Hatha',
+      className: "bg-cream-200 text-sage-800 border-0",
+      children: "Hatha",
     },
     restorative: {
-      className: 'bg-purple-50 text-purple-700 border-0',
-      children: 'Restorative',
+      className: "bg-cream-200 text-sage-700 border-0",
+      children: "Restorative",
     },
   };
 
-  return configs[style] || {
-    className: 'bg-gray-100 text-gray-800 border-0',
-    children: style.charAt(0).toUpperCase() + style.slice(1),
-  };
+  return (
+    configs[style] || {
+      className: "bg-muted text-muted-foreground border-0",
+      children: style.charAt(0).toUpperCase() + style.slice(1),
+    }
+  );
 }
 
 /**
@@ -173,20 +175,20 @@ export function getStyleBadge(style) {
 export function getCategoryColors(category) {
   const configs = {
     calming: {
-      bg: 'bg-sage-100',
-      text: 'text-sage-700',
+      bg: "bg-sage-100",
+      text: "text-sage-700",
     },
     relaxing: {
-      bg: 'bg-sage-100',
-      text: 'text-sage-700',
+      bg: "bg-sage-100",
+      text: "text-sage-700",
     },
     energizing: {
-      bg: 'bg-gold/20',
-      text: 'text-accent',
+      bg: "bg-gold/20",
+      text: "text-accent",
     },
     balancing: {
-      bg: 'bg-purple-100',
-      text: 'text-purple-700',
+      bg: "bg-accent/20",
+      text: "text-accent",
     },
   };
 
@@ -203,20 +205,20 @@ export function getCategoryColors(category) {
 export function getCategoryBadge(category) {
   const configs = {
     calming: {
-      className: 'bg-sage-100 text-sage-700 border-0',
-      children: 'Calming',
+      className: "bg-sage-100 text-sage-700 border-0",
+      children: "Calming",
     },
     relaxing: {
-      className: 'bg-sage-100 text-sage-700 border-0',
-      children: 'Relaxing',
+      className: "bg-sage-100 text-sage-700 border-0",
+      children: "Relaxing",
     },
     energizing: {
-      className: 'bg-gold/20 text-accent border-0',
-      children: 'Energizing',
+      className: "bg-gold/20 text-accent border-0",
+      children: "Energizing",
     },
     balancing: {
-      className: 'bg-purple-100 text-purple-700 border-0',
-      children: 'Balancing',
+      className: "bg-accent/20 text-accent border-0",
+      children: "Balancing",
     },
   };
 

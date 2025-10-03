@@ -212,9 +212,9 @@ function Settings() {
                     >
                       <div className="flex items-center gap-2.5">
                         {/* Color preview circle */}
-                        <div className="relative flex-shrink-0">
+                        <div className="relative shrink-0">
                           <div
-                            className="h-8 w-8 rounded-full border-2 border-border"
+                            className="size-8 rounded-full border-2 border-border"
                             style={{
                               backgroundColor: isCustom
                                 ? customLightColor
@@ -231,7 +231,7 @@ function Settings() {
                                 setLightModeTheme("custom");
                               }}
                               onClick={(e) => e.stopPropagation()}
-                              className="absolute inset-0 h-full w-full cursor-pointer rounded-full opacity-0"
+                              className="absolute inset-0 size-full cursor-pointer rounded-full opacity-0"
                               title="Pick a custom color"
                             />
                           )}
@@ -252,9 +252,9 @@ function Settings() {
 
                         {/* Selected indicator */}
                         {isSelected && (
-                          <div className="flex-shrink-0 text-primary">
+                          <div className="shrink-0 text-primary">
                             <svg
-                              className="h-5 w-5"
+                              className="size-5"
                               fill="currentColor"
                               viewBox="0 0 20 20"
                             >
@@ -304,9 +304,9 @@ function Settings() {
                     >
                       <div className="flex items-center gap-2.5">
                         {/* Color preview circle */}
-                        <div className="relative flex-shrink-0">
+                        <div className="relative shrink-0">
                           <div
-                            className="h-8 w-8 rounded-full border-2 border-border"
+                            className="size-8 rounded-full border-2 border-border"
                             style={{
                               backgroundColor: isCustom
                                 ? customDarkColor
@@ -323,7 +323,7 @@ function Settings() {
                                 setDarkModeTheme("custom");
                               }}
                               onClick={(e) => e.stopPropagation()}
-                              className="absolute inset-0 h-full w-full cursor-pointer rounded-full opacity-0"
+                              className="absolute inset-0 size-full cursor-pointer rounded-full opacity-0"
                               title="Pick a custom color"
                             />
                           )}
@@ -344,9 +344,9 @@ function Settings() {
 
                         {/* Selected indicator */}
                         {isSelected && (
-                          <div className="flex-shrink-0 text-primary">
+                          <div className="shrink-0 text-primary">
                             <svg
-                              className="h-5 w-5"
+                              className="size-5"
                               fill="currentColor"
                               viewBox="0 0 20 20"
                             >
@@ -402,7 +402,7 @@ function Settings() {
                     setRestDuration(option.value);
                     setShowCustomRest(false);
                   }}
-                  className={`rounded-lg px-3 py-3 text-sm font-medium transition-all duration-300 ${
+                  className={`rounded-lg p-3 text-sm font-medium transition-all duration-300 ${
                     restDuration === option.value && !showCustomRest
                       ? "scale-105 bg-primary text-primary-foreground shadow-md"
                       : "bg-muted text-muted-foreground hover:scale-105 hover:bg-muted"
@@ -416,7 +416,7 @@ function Settings() {
             {/* Custom button */}
             <button
               onClick={() => setShowCustomRest(!showCustomRest)}
-              className={`w-full rounded-lg px-3 py-3 text-sm font-medium transition-all duration-300 ${
+              className={`w-full rounded-lg p-3 text-sm font-medium transition-all duration-300 ${
                 showCustomRest
                   ? "bg-primary text-primary-foreground shadow-md"
                   : "bg-muted text-muted-foreground hover:bg-muted"
@@ -589,7 +589,7 @@ function Settings() {
           {storageQuota && (
             <div className="mb-3 rounded-lg border border-border bg-muted p-4">
               <div className="mb-2 flex items-center gap-2">
-                <Database className="h-4 w-4 text-muted-foreground" />
+                <Database className="size-4 text-muted-foreground" />
                 <Text className="font-medium text-foreground">
                   Storage Used
                 </Text>
@@ -606,7 +606,7 @@ function Settings() {
                     parseFloat(storageQuota.percent) > 80
                       ? "bg-state-error"
                       : parseFloat(storageQuota.percent) > 60
-                        ? "bg-amber-500"
+                        ? "bg-state-warning"
                         : "bg-primary"
                   }`}
                   style={{ width: `${storageQuota.percent}%` }}
@@ -614,7 +614,7 @@ function Settings() {
               </div>
               {parseFloat(storageQuota.percent) > 80 && (
                 <div className="mt-2 flex items-start gap-2 text-state-error">
-                  <AlertTriangle className="mt-0.5 h-4 w-4 flex-shrink-0" />
+                  <AlertTriangle className="mt-0.5 size-4 shrink-0" />
                   <Text variant="caption" className="text-state-error">
                     Storage is running low. Export your data to create a backup.
                   </Text>
@@ -630,10 +630,7 @@ function Settings() {
                 Last Backup
               </Text>
               {backupInfo.hasNeverBackedUp ? (
-                <Text
-                  variant="caption"
-                  className="text-amber-600 dark:text-amber-400"
-                >
+                <Text variant="caption" className="text-state-warning">
                   Never backed up - Export your data to create a backup
                 </Text>
               ) : (
@@ -654,7 +651,7 @@ function Settings() {
             className="group flex w-full items-center gap-3 rounded-lg border border-border p-3 transition-all duration-300 hover:bg-muted"
           >
             <div className="rounded-lg bg-muted p-2 text-muted-foreground transition-colors group-hover:bg-primary/10">
-              <Download className="h-4 w-4" />
+              <Download className="size-4" />
             </div>
             <div className="flex-1 text-left">
               <Text className="font-medium text-foreground">
@@ -673,7 +670,7 @@ function Settings() {
             className="group flex w-full items-center gap-3 rounded-lg border border-border p-3 transition-all duration-300 hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50"
           >
             <div className="rounded-lg bg-muted p-2 text-muted-foreground transition-colors group-hover:bg-primary/10">
-              <Upload className="h-4 w-4" />
+              <Upload className="size-4" />
             </div>
             <div className="flex-1 text-left">
               <Text className="font-medium text-foreground">Import Data</Text>
@@ -689,7 +686,7 @@ function Settings() {
             className="group flex w-full items-center gap-3 rounded-lg border border-state-error/30 p-3 transition-all duration-300 hover:bg-state-error/10"
           >
             <div className="rounded-lg bg-state-error/20 p-2 text-state-error transition-colors group-hover:bg-state-error/30">
-              <Trash2 className="h-4 w-4" />
+              <Trash2 className="size-4" />
             </div>
             <div className="flex-1 text-left">
               <Text className="font-medium text-state-error">
@@ -745,7 +742,7 @@ function Settings() {
             className="group flex w-full items-center gap-3 rounded-lg border border-border p-3 transition-all duration-300 hover:bg-muted"
           >
             <div className="rounded-lg bg-muted p-2 text-muted-foreground transition-colors group-hover:bg-muted">
-              <RefreshCw className="h-4 w-4" />
+              <RefreshCw className="size-4" />
             </div>
             <div className="flex-1 text-left">
               <Text className="font-medium text-foreground">
@@ -784,8 +781,8 @@ function Settings() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 duration-200 animate-in fade-in">
           <div className="w-full max-w-md rounded-lg border border-border bg-card p-6 shadow-xl duration-200 animate-in zoom-in-95">
             <div className="mb-4 flex items-start gap-3">
-              <div className="rounded-lg bg-amber-500/20 p-2 text-amber-500">
-                <AlertTriangle className="h-5 w-5" />
+              <div className="rounded-lg bg-state-warning/20 p-2 text-state-warning">
+                <AlertTriangle className="size-5" />
               </div>
               <div className="flex-1">
                 <h3 className="mb-1 text-lg font-semibold text-foreground">

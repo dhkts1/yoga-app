@@ -1,8 +1,8 @@
-import { GripVertical, Trash2 } from 'lucide-react';
-import { Badge } from './ui/badge';
-import { Button } from './design-system';
-import { getPoseById } from '../data/poses';
-import { formatDuration } from '../data/customSessions';
+import { GripVertical, Trash2 } from "lucide-react";
+import { Badge } from "./ui/badge";
+import { Button } from "./design-system";
+import { getPoseById } from "../data/poses";
+import { formatDuration } from "../data/customSessions";
 
 /**
  * SequenceItem - Draggable compact pose item for sequence builder
@@ -21,7 +21,7 @@ const SequenceItem = ({
   onDragOver,
   onDrop,
   isDragging = false,
-  className = ""
+  className = "",
 }) => {
   const pose = getPoseById(poseId);
 
@@ -37,20 +37,20 @@ const SequenceItem = ({
       onDragEnd={onDragEnd}
       onDragOver={(e) => onDragOver?.(e, index)}
       onDrop={(e) => onDrop?.(e, index)}
-      className={`flex items-center gap-2 p-2 bg-card border border-gray-200 rounded-lg hover:border-primary transition-all cursor-move ${
-        isDragging ? 'opacity-50 scale-95' : ''
+      className={`flex cursor-move items-center gap-2 rounded-lg border border-border bg-card p-2 transition-all hover:border-primary ${
+        isDragging ? "scale-95 opacity-50" : ""
       } ${className}`}
     >
       {/* Drag Handle */}
-      <GripVertical className="h-4 w-4 text-gray-400 flex-shrink-0" />
+      <GripVertical className="size-4 shrink-0 text-muted-foreground" />
 
       {/* Pose Info */}
-      <span className="text-xl flex-shrink-0" aria-label={pose.nameEnglish}>
+      <span className="shrink-0 text-xl" aria-label={pose.nameEnglish}>
         {pose.emoji}
       </span>
 
-      <div className="flex-1 min-w-0">
-        <p className="text-sm font-medium text-gray-900 truncate">
+      <div className="min-w-0 flex-1">
+        <p className="truncate text-sm font-medium text-foreground">
           {pose.nameEnglish}
           {side && (
             <span className="ml-1 text-xs font-normal text-muted-foreground">
@@ -58,15 +58,15 @@ const SequenceItem = ({
             </span>
           )}
         </p>
-        <p className="text-xs text-gray-500 italic truncate">
+        <p className="truncate text-xs italic text-muted-foreground">
           {pose.nameSanskrit}
         </p>
       </div>
 
       {/* Duration Badge - Clickable */}
       <Badge
-        variant="secondary"
-        className="cursor-pointer hover:bg-muted transition-colors flex-shrink-0"
+        variant="default"
+        className="shrink-0 cursor-pointer transition-colors hover:bg-muted"
         onClick={() => onDurationClick?.(index, poseId, duration)}
       >
         {formatDuration(duration)}
@@ -77,10 +77,10 @@ const SequenceItem = ({
         variant="ghost"
         size="sm"
         onClick={() => onRemove?.(index)}
-        className="h-8 w-8 p-0 text-red-500 hover:text-red-600 hover:bg-red-50 flex-shrink-0"
+        className="size-8 shrink-0 p-0 text-destructive hover:bg-destructive/10 hover:text-destructive"
         aria-label="Remove pose"
       >
-        <Trash2 className="h-4 w-4" />
+        <Trash2 className="size-4" />
       </Button>
     </div>
   );

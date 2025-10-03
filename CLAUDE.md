@@ -22,7 +22,7 @@ npm install          # Install dependencies
 npm run dev          # Start dev server (http://localhost:5173)
 npm run build        # Production build
 npm run preview      # Preview production build
-npm run lint         # ESLint check
+npm run lint         # ESLint check (includes Tailwind CSS linting)
 npm run format       # Prettier formatting (with Tailwind plugin)
 
 # Testing
@@ -95,6 +95,14 @@ Complete token-based system with:
 - **Calming sage/gold palette**
 - **44px minimum touch targets**
 - See: `/docs/NEW_APIS.md` for quick reference
+
+**Design System Color Tokens** (MUST USE - No hardcoded Tailwind colors):
+- **State colors**: `state-success`, `state-warning`, `state-error`, `state-info`
+- **Semantic colors**: `primary`, `accent`, `destructive`, `muted`, `foreground`, `background`
+- **Palette colors**: `sage-*`, `cream-*`, `gold-*`
+- **UI tokens**: `border`, `input`, `popover`, `ring`, `card`
+- **Never use**: `green-*`, `red-*`, `blue-*`, `amber-*`, `gray-*`, `purple-*`, etc.
+- Theme-aware: All tokens automatically support light/dark mode
 
 **ContentBody Usage:**
 ```jsx
@@ -348,7 +356,8 @@ npm run test:a11y        # Accessibility tests
 - **Voice coaching** - Toggleable, 3 personalities available
 - **Mood tracking** - Optional, users can skip
 - **Code Style**: Prettier with Tailwind plugin, ESLint with relaxed rules for rapid development (prop-types off, exhaustive-deps off)
-- **Git Hooks**: Pre-commit hook automatically runs ESLint + Prettier + Tests + Claude CLI doc updates
+- **ESLint Tailwind Plugin**: `eslint-plugin-tailwindcss` enforces best practices (no contradicting classes, shorthands, arbitrary values)
+- **Git Hooks**: Pre-commit hook automatically runs ESLint + Prettier + Tests (via Husky + lint-staged)
 
 ---
 
@@ -371,13 +380,15 @@ npm run test:a11y        # Accessibility tests
 
 ### Refactoring Highlights (October 2025)
 - **ContentBody component** - Unified body layout system (eliminated 135 lines of duplication)
+- **Design system color tokens** - Replaced ALL hardcoded Tailwind colors (green-*, red-*, etc.) with semantic tokens
+- **ESLint Tailwind plugin** - Automated Tailwind CSS best practices enforcement
 - 4 new design system components (Badge, Stat, Tab, EmptyState)
 - Badge utility system (eliminated 114 lines of duplication)
 - localStorage hooks (eliminated 94 lines of duplication)
-- Centralized design tokens
+- Centralized design tokens with full light/dark mode support
 - Mobile-first patterns across all components
 - Consistent spacing and responsive behavior across 9 core screens
-- **Git Hooks** - Pre-commit automation: ESLint + Prettier + Tests + Claude CLI doc updates
+- **Git Hooks** - Pre-commit automation: ESLint + Prettier + Tests (via Husky + lint-staged)
 
 ---
 
