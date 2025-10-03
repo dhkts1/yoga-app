@@ -1,53 +1,62 @@
-import { renderHook, act } from '@testing-library/react';
-import { describe, test, expect, beforeEach, vi } from 'vitest';
-import { useMoodTracking } from '../../../src/hooks/useMoodTracking';
+import { renderHook, act } from "@testing-library/react";
+import { describe, test, expect, beforeEach, vi } from "vitest";
+import { useMoodTracking } from "../../../src/hooks/useMoodTracking";
 
 // Mock react-router-dom
 const mockNavigate = vi.fn();
-vi.mock('react-router-dom', () => ({
-  useNavigate: () => mockNavigate
+vi.mock("react-router-dom", () => ({
+  useNavigate: () => mockNavigate,
 }));
 
-// Mock preferences store
-const mockPreferencesStore = {
-  yoga: {
-    showMoodCheck: true
-  }
-};
-
+// Mock preferences store - using a module-level variable
 const mockSetYogaMoodCheck = vi.fn();
+let mockShowMoodCheck = true;
 
-vi.mock('../../../src/stores/preferences', () => ({
-  default: () => mockPreferencesStore,
-  __esModule: true
-}));
+vi.mock("../../../src/stores/preferences", () => {
+  // Create mock store with getState method (mimics Zustand store API)
+  const mockUsePreferencesStore = Object.assign(
+    // The hook function returns the current state
+    () => ({
+      yoga: {
+        get showMoodCheck() {
+          return mockShowMoodCheck;
+        },
+      },
+    }),
+    {
+      // getState returns state + methods
+      getState: () => ({
+        yoga: {
+          get showMoodCheck() {
+            return mockShowMoodCheck;
+          },
+        },
+        setYogaMoodCheck: mockSetYogaMoodCheck,
+      }),
+    },
+  );
 
-describe('useMoodTracking', () => {
+  return {
+    default: mockUsePreferencesStore,
+    __esModule: true,
+  };
+});
+
+describe("useMoodTracking", () => {
   const mockGetFinalPracticeTime = vi.fn(() => 600); // 10 minutes in seconds
   const defaultProps = {
-    sessionId: 'test-session',
+    sessionId: "test-session",
     getFinalPracticeTime: mockGetFinalPracticeTime,
-    programContext: null
+    programContext: null,
   };
 
   beforeEach(() => {
     vi.clearAllMocks();
-    mockPreferencesStore.yoga.showMoodCheck = true;
-
-    // Mock the store's getState method
-    vi.mock('../../../src/stores/preferences', () => ({
-      default: () => mockPreferencesStore,
-      __esModule: true
-    }));
-
-    // Reset the mock implementation for setYogaMoodCheck
-    vi.spyOn(require('../../../src/stores/preferences').default, 'getState').mockReturnValue({
-      setYogaMoodCheck: mockSetYogaMoodCheck
-    });
+    mockShowMoodCheck = true;
   });
 
-  describe('Initial state', () => {
-    test('should initialize with pre-mood tracker visible when preference is true', () => {
+  describe("Initial state", () => {
+    test("should initialize with pre-mood tracker visible when preference is true", () => {
       const { result } = renderHook(() => useMoodTracking(defaultProps));
 
       expect(result.current.showPreMoodTracker).toBe(true);
@@ -55,16 +64,16 @@ describe('useMoodTracking', () => {
       expect(result.current.preMoodData).toBeNull();
     });
 
-    test('should initialize with pre-mood tracker hidden when preference is false', () => {
-      mockPreferencesStore.yoga.showMoodCheck = false;
+    test("should initialize with pre-mood tracker hidden when preference is false", () => {
+      mockShowMoodCheck = false;
 
       const { result } = renderHook(() => useMoodTracking(defaultProps));
 
       expect(result.current.showPreMoodTracker).toBe(false);
     });
 
-    test('should default to showing pre-mood tracker when preference is undefined', () => {
-      mockPreferencesStore.yoga = {};
+    test("should default to showing pre-mood tracker when preference is undefined", () => {
+      mockShowMoodCheck = undefined;
 
       const { result } = renderHook(() => useMoodTracking(defaultProps));
 
@@ -72,13 +81,13 @@ describe('useMoodTracking', () => {
     });
   });
 
-  describe('Pre-practice mood tracking', () => {
-    test('handlePreMoodComplete should store mood data and hide tracker', () => {
+  describe("Pre-practice mood tracking", () => {
+    test("handlePreMoodComplete should store mood data and hide tracker", () => {
       const { result } = renderHook(() => useMoodTracking(defaultProps));
 
       const moodData = {
-        mood: { value: 4, label: 'Happy' },
-        energy: { value: 3, label: 'Moderate' }
+        mood: { value: 4, label: "Happy" },
+        energy: { value: 3, label: "Moderate" },
       };
 
       act(() => {
@@ -89,7 +98,7 @@ describe('useMoodTracking', () => {
       expect(result.current.showPreMoodTracker).toBe(false);
     });
 
-    test('handlePreMoodSkip should hide tracker without storing data', () => {
+    test("handlePreMoodSkip should hide tracker without storing data", () => {
       const { result } = renderHook(() => useMoodTracking(defaultProps));
 
       act(() => {
@@ -100,29 +109,19 @@ describe('useMoodTracking', () => {
       expect(result.current.showPreMoodTracker).toBe(false);
     });
 
-    test('handleDontShowMoodAgain should update preferences', () => {
+    test("handleDontShowMoodAgain should update preferences", () => {
       const { result } = renderHook(() => useMoodTracking(defaultProps));
-
-      // Create a mock for the store's getState
-      const mockGetState = vi.fn(() => ({
-        setYogaMoodCheck: mockSetYogaMoodCheck
-      }));
-
-      // Mock the preferences store
-      const usePreferencesStore = require('../../../src/stores/preferences').default;
-      usePreferencesStore.getState = mockGetState;
 
       act(() => {
         result.current.handleDontShowMoodAgain();
       });
 
-      expect(mockGetState).toHaveBeenCalled();
       expect(mockSetYogaMoodCheck).toHaveBeenCalledWith(false);
     });
   });
 
-  describe('Post-practice mood tracking', () => {
-    test('showPostMood should display post-mood tracker', () => {
+  describe("Post-practice mood tracking", () => {
+    test("showPostMood should display post-mood tracker", () => {
       const { result } = renderHook(() => useMoodTracking(defaultProps));
 
       expect(result.current.showPostMoodTracker).toBe(false);
@@ -134,17 +133,17 @@ describe('useMoodTracking', () => {
       expect(result.current.showPostMoodTracker).toBe(true);
     });
 
-    test('handlePostMoodComplete should navigate with full mood data', () => {
+    test("handlePostMoodComplete should navigate with full mood data", () => {
       const { result } = renderHook(() => useMoodTracking(defaultProps));
 
       const preMoodData = {
-        mood: { value: 3, label: 'Neutral' },
-        energy: { value: 2, label: 'Low' }
+        mood: { value: 3, label: "Neutral" },
+        energy: { value: 2, label: "Low" },
       };
 
       const postMoodData = {
-        mood: { value: 5, label: 'Joyful' },
-        energy: { value: 4, label: 'High' }
+        mood: { value: 5, label: "Joyful" },
+        energy: { value: 4, label: "High" },
       };
 
       // Set pre-mood data first
@@ -163,7 +162,7 @@ describe('useMoodTracking', () => {
       });
 
       expect(mockNavigate).toHaveBeenCalledWith(
-        '/complete?session=test-session&duration=10',
+        "/complete?session=test-session&duration=10",
         {
           state: {
             preMoodData,
@@ -172,14 +171,14 @@ describe('useMoodTracking', () => {
               preMood: 3,
               preEnergy: 2,
               postMood: 5,
-              postEnergy: 4
-            }
-          }
-        }
+              postEnergy: 4,
+            },
+          },
+        },
       );
     });
 
-    test('handlePostMoodComplete should hide tracker after navigation', () => {
+    test("handlePostMoodComplete should hide tracker after navigation", () => {
       const { result } = renderHook(() => useMoodTracking(defaultProps));
 
       act(() => {
@@ -190,15 +189,15 @@ describe('useMoodTracking', () => {
 
       act(() => {
         result.current.handlePostMoodComplete({
-          mood: { value: 4, label: 'Happy' },
-          energy: { value: 3, label: 'Moderate' }
+          mood: { value: 4, label: "Happy" },
+          energy: { value: 3, label: "Moderate" },
         });
       });
 
       expect(result.current.showPostMoodTracker).toBe(false);
     });
 
-    test('handlePostMoodSkip should navigate without mood data', () => {
+    test("handlePostMoodSkip should navigate without mood data", () => {
       const { result } = renderHook(() => useMoodTracking(defaultProps));
 
       act(() => {
@@ -207,30 +206,30 @@ describe('useMoodTracking', () => {
       });
 
       expect(mockNavigate).toHaveBeenCalledWith(
-        '/complete?session=test-session&duration=10',
-        {}
+        "/complete?session=test-session&duration=10",
+        {},
       );
     });
   });
 
-  describe('Program context integration', () => {
-    test('should include program context in navigation state when provided', () => {
+  describe("Program context integration", () => {
+    test("should include program context in navigation state when provided", () => {
       const programContext = {
-        programId: 'prog-123',
+        programId: "prog-123",
         weekNumber: 2,
-        dayNumber: 3
+        dayNumber: 3,
       };
 
       const { result } = renderHook(() =>
         useMoodTracking({
           ...defaultProps,
-          programContext
-        })
+          programContext,
+        }),
       );
 
       const postMoodData = {
-        mood: { value: 4, label: 'Happy' },
-        energy: { value: 3, label: 'Moderate' }
+        mood: { value: 4, label: "Happy" },
+        energy: { value: 3, label: "Moderate" },
       };
 
       act(() => {
@@ -242,24 +241,24 @@ describe('useMoodTracking', () => {
         expect.any(String),
         expect.objectContaining({
           state: expect.objectContaining({
-            programContext
-          })
-        })
+            programContext,
+          }),
+        }),
       );
     });
 
-    test('should include program context when skipping post-mood', () => {
+    test("should include program context when skipping post-mood", () => {
       const programContext = {
-        programId: 'prog-456',
+        programId: "prog-456",
         weekNumber: 1,
-        dayNumber: 1
+        dayNumber: 1,
       };
 
       const { result } = renderHook(() =>
         useMoodTracking({
           ...defaultProps,
-          programContext
-        })
+          programContext,
+        }),
       );
 
       act(() => {
@@ -267,47 +266,44 @@ describe('useMoodTracking', () => {
         result.current.handlePostMoodSkip();
       });
 
-      expect(mockNavigate).toHaveBeenCalledWith(
-        expect.any(String),
-        {
-          state: { programContext }
-        }
-      );
+      expect(mockNavigate).toHaveBeenCalledWith(expect.any(String), {
+        state: { programContext },
+      });
     });
   });
 
-  describe('Practice time calculation', () => {
-    test('should use getFinalPracticeTime for duration in navigation', () => {
+  describe("Practice time calculation", () => {
+    test("should use getFinalPracticeTime for duration in navigation", () => {
       const customGetTime = vi.fn(() => 1234); // 20.56 minutes
       const { result } = renderHook(() =>
         useMoodTracking({
           ...defaultProps,
-          getFinalPracticeTime: customGetTime
-        })
+          getFinalPracticeTime: customGetTime,
+        }),
       );
 
       act(() => {
         result.current.showPostMood();
         result.current.handlePostMoodComplete({
-          mood: { value: 4, label: 'Happy' },
-          energy: { value: 3, label: 'Moderate' }
+          mood: { value: 4, label: "Happy" },
+          energy: { value: 3, label: "Moderate" },
         });
       });
 
       expect(customGetTime).toHaveBeenCalled();
       expect(mockNavigate).toHaveBeenCalledWith(
-        '/complete?session=test-session&duration=21', // Rounded
-        expect.any(Object)
+        "/complete?session=test-session&duration=21", // Rounded
+        expect.any(Object),
       );
     });
 
-    test('should round practice time to nearest minute', () => {
+    test("should round practice time to nearest minute", () => {
       const testCases = [
-        { seconds: 599, expected: 10 },  // 9.98 minutes → 10
-        { seconds: 600, expected: 10 },  // 10.00 minutes → 10
-        { seconds: 630, expected: 11 },  // 10.5 minutes → 11
-        { seconds: 659, expected: 11 },  // 10.98 minutes → 11
-        { seconds: 60, expected: 1 }     // 1.00 minutes → 1
+        { seconds: 599, expected: 10 }, // 9.98 minutes → 10
+        { seconds: 600, expected: 10 }, // 10.00 minutes → 10
+        { seconds: 630, expected: 11 }, // 10.5 minutes → 11
+        { seconds: 659, expected: 11 }, // 10.98 minutes → 11
+        { seconds: 60, expected: 1 }, // 1.00 minutes → 1
       ];
 
       testCases.forEach(({ seconds, expected }) => {
@@ -317,8 +313,8 @@ describe('useMoodTracking', () => {
         const { result } = renderHook(() =>
           useMoodTracking({
             ...defaultProps,
-            getFinalPracticeTime: getFinalTime
-          })
+            getFinalPracticeTime: getFinalTime,
+          }),
         );
 
         act(() => {
@@ -328,20 +324,20 @@ describe('useMoodTracking', () => {
 
         expect(mockNavigate).toHaveBeenCalledWith(
           `/complete?session=test-session&duration=${expected}`,
-          expect.any(Object)
+          expect.any(Object),
         );
       });
     });
   });
 
-  describe('Edge cases', () => {
-    test('should handle missing getFinalPracticeTime gracefully', () => {
+  describe("Edge cases", () => {
+    test("should handle missing getFinalPracticeTime gracefully", () => {
       const { result } = renderHook(() =>
         useMoodTracking({
-          sessionId: 'test',
+          sessionId: "test",
           getFinalPracticeTime: undefined,
-          programContext: null
-        })
+          programContext: null,
+        }),
       );
 
       // Should not throw when calling methods
@@ -352,12 +348,12 @@ describe('useMoodTracking', () => {
       }).not.toThrow();
     });
 
-    test('should handle null mood data values', () => {
+    test("should handle null mood data values", () => {
       const { result } = renderHook(() => useMoodTracking(defaultProps));
 
       const nullMoodData = {
         mood: null,
-        energy: null
+        energy: null,
       };
 
       act(() => {
@@ -374,19 +370,19 @@ describe('useMoodTracking', () => {
               preMood: undefined,
               preEnergy: undefined,
               postMood: undefined,
-              postEnergy: undefined
-            }
-          })
-        })
+              postEnergy: undefined,
+            },
+          }),
+        }),
       );
     });
 
-    test('should handle completing post-mood without pre-mood data', () => {
+    test("should handle completing post-mood without pre-mood data", () => {
       const { result } = renderHook(() => useMoodTracking(defaultProps));
 
       const postMoodData = {
-        mood: { value: 4, label: 'Happy' },
-        energy: { value: 3, label: 'Moderate' }
+        mood: { value: 4, label: "Happy" },
+        energy: { value: 3, label: "Moderate" },
       };
 
       act(() => {
@@ -404,10 +400,10 @@ describe('useMoodTracking', () => {
               preMood: undefined,
               preEnergy: undefined,
               postMood: 4,
-              postEnergy: 3
-            }
-          })
-        })
+              postEnergy: 3,
+            },
+          }),
+        }),
       );
     });
   });

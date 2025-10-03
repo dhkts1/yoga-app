@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from "react";
 
 /**
  * Generic hook for managing any data in localStorage with automatic JSON serialization
@@ -36,7 +36,7 @@ const useLocalStorage = (key, initialValue) => {
   // State to store our value
   const [storedValue, setStoredValue] = useState(() => {
     // SSR-safe: Check if window is available
-    if (typeof window === 'undefined') {
+    if (typeof window === "undefined") {
       return initialValue;
     }
 
@@ -60,27 +60,37 @@ const useLocalStorage = (key, initialValue) => {
    * setValue wrapper that saves to localStorage
    * Supports both direct values and functional updates like useState
    */
-  const setValue = useCallback((value) => {
-    try {
+  const setValue = useCallback(
+    (value) => {
       // Use functional update to get current value without needing it in deps
-      setStoredValue(prevValue => {
-        const valueToStore = value instanceof Function ? value(prevValue) : value;
+      setStoredValue((prevValue) => {
+        const valueToStore =
+          value instanceof Function ? value(prevValue) : value;
 
-        // Save to localStorage
-        if (typeof window !== 'undefined') {
-          window.localStorage.setItem(key, JSON.stringify(valueToStore));
+        // Save to localStorage with error handling
+        try {
+          if (typeof window !== "undefined") {
+            const serialized = JSON.stringify(valueToStore);
+            window.localStorage.setItem(key, serialized);
+            // Return the parsed value to maintain consistency with what's in storage
+            // This ensures Date objects become strings, etc.
+            const parsedValue = JSON.parse(serialized);
+            // Clear error on successful save
+            setError(null);
+            return parsedValue;
+          }
+          // Clear error on successful save
+          setError(null);
+        } catch (err) {
+          console.error(`Error saving to localStorage key "${key}":`, err);
+          setError(err);
         }
 
         return valueToStore;
       });
-
-      // Clear error on successful save
-      setError(null);
-    } catch (error) {
-      console.error(`Error saving to localStorage key "${key}":`, error);
-      setError(error);
-    }
-  }, [key]);
+    },
+    [key],
+  );
 
   /**
    * Remove value from localStorage and reset to initialValue
@@ -88,7 +98,7 @@ const useLocalStorage = (key, initialValue) => {
   const removeValue = useCallback(() => {
     try {
       // Remove from localStorage
-      if (typeof window !== 'undefined') {
+      if (typeof window !== "undefined") {
         window.localStorage.removeItem(key);
       }
 
@@ -107,7 +117,7 @@ const useLocalStorage = (key, initialValue) => {
    */
   useEffect(() => {
     // SSR-safe: Only add listener if window is available
-    if (typeof window === 'undefined') {
+    if (typeof window === "undefined") {
       return;
     }
 
@@ -120,18 +130,21 @@ const useLocalStorage = (key, initialValue) => {
           setStoredValue(newValue);
           setError(null);
         } catch (error) {
-          console.warn(`Error syncing localStorage key "${key}" from other tab:`, error);
+          console.warn(
+            `Error syncing localStorage key "${key}" from other tab:`,
+            error,
+          );
           setError(error);
           setStoredValue(initialValue);
         }
       }
     };
 
-    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener("storage", handleStorageChange);
 
     // Cleanup event listener on unmount
     return () => {
-      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener("storage", handleStorageChange);
     };
   }, [key, initialValue]);
 

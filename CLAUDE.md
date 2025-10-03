@@ -209,12 +209,15 @@ Complete token-based system with:
 
 **Pre-commit Hook** (via Husky + lint-staged)
 - Automatically runs before every `git commit`
-- Lints staged files with ESLint (auto-fixes when possible)
-- Formats staged files with Prettier
-- Blocks commits if ESLint errors remain
+- **Step 1**: Lints staged files with ESLint (auto-fixes when possible)
+- **Step 2**: Formats staged files with Prettier
+- **Step 3**: Runs all tests (`npm test`)
+- **Step 4**: Updates documentation via Claude CLI (optional)
+- Blocks commits if ESLint errors or tests fail
 
 **Configuration:**
-- `.husky/pre-commit` - Hook script
+- `.husky/pre-commit` - Main hook script
+- `.husky/update-docs.sh` - Claude CLI documentation updater
 - `package.json` → `lint-staged` - File patterns and commands
 - Only processes staged files (fast & efficient)
 
@@ -223,15 +226,20 @@ Complete token-based system with:
 git commit -m "Your message"
 # → Runs ESLint --fix on *.{js,jsx}
 # → Runs Prettier --write on *.{js,jsx}
-# → Applies changes to staged files
-# → Commits if no errors
+# → Runs npm test (all unit/integration tests)
+# → Runs Claude CLI to update docs (if installed)
+# → Commits if all checks pass
 ```
 
 **Benefits:**
 - Zero ESLint errors in codebase at all times
+- All tests pass before any commit
+- Documentation stays current automatically (via Claude CLI)
 - Consistent code formatting automatically
 - Catch issues before code review
-- No manual `npm run lint` needed
+- No manual `npm run lint` or `npm test` needed
+
+**See:** `/docs/GIT_HOOKS.md` for complete documentation and troubleshooting
 
 ### Mobile-First Design
 
@@ -331,7 +339,7 @@ npm run test:a11y        # Accessibility tests
 - Breathing exercises with visual guide
 - PWA with offline support
 - Design system with 15+ reusable components
-- ESLint compliance (0 errors, 0 warnings) enforced via pre-commit hooks
+- Pre-commit hooks enforce: ESLint compliance, all tests passing, auto-documentation updates
 
 ---
 
@@ -344,7 +352,7 @@ npm run test:a11y        # Accessibility tests
 - **Voice coaching** - Toggleable, 3 personalities available
 - **Mood tracking** - Optional, users can skip
 - **Code Style**: Prettier with Tailwind plugin, ESLint with relaxed rules for rapid development (prop-types off, exhaustive-deps off)
-- **Git Hooks**: Pre-commit hook automatically runs ESLint + Prettier on staged files
+- **Git Hooks**: Pre-commit hook automatically runs ESLint + Prettier + Tests + Claude CLI doc updates
 
 ---
 
@@ -373,7 +381,7 @@ npm run test:a11y        # Accessibility tests
 - Centralized design tokens
 - Mobile-first patterns across all components
 - Consistent spacing and responsive behavior across 9 core screens
-- **Git Hooks (Husky + lint-staged)** - Automated code quality enforcement on every commit
+- **Git Hooks** - Pre-commit automation: ESLint + Prettier + Tests + Claude CLI doc updates
 
 ---
 

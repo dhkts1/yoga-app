@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback } from "react";
 
 /**
  * useCollapsibleSections Hook
@@ -90,16 +90,16 @@ import { useState, useCallback } from 'react';
  * }
  */
 function useCollapsibleSections(initialState = {}) {
-  const [openSections, setOpenSections] = useState(initialState);
+  const [openSections, setOpenSections] = useState(initialState || {});
 
   /**
    * Toggle a single section's open/closed state
    * @param {string} sectionId - Unique identifier for the section
    */
   const toggleSection = useCallback((sectionId) => {
-    setOpenSections(prev => ({
+    setOpenSections((prev) => ({
       ...prev,
-      [sectionId]: !prev[sectionId]
+      [sectionId]: !prev[sectionId],
     }));
   }, []);
 
@@ -107,9 +107,9 @@ function useCollapsibleSections(initialState = {}) {
    * Open all sections
    */
   const openAll = useCallback(() => {
-    setOpenSections(prev => {
+    setOpenSections((prev) => {
       const allOpen = {};
-      Object.keys(prev).forEach(key => {
+      Object.keys(prev).forEach((key) => {
         allOpen[key] = true;
       });
       return allOpen;
@@ -120,9 +120,9 @@ function useCollapsibleSections(initialState = {}) {
    * Close all sections
    */
   const closeAll = useCallback(() => {
-    setOpenSections(prev => {
+    setOpenSections((prev) => {
       const allClosed = {};
-      Object.keys(prev).forEach(key => {
+      Object.keys(prev).forEach((key) => {
         allClosed[key] = false;
       });
       return allClosed;
@@ -134,16 +134,19 @@ function useCollapsibleSections(initialState = {}) {
    * @param {string} sectionId - Unique identifier for the section
    * @returns {boolean} True if section is open, false otherwise
    */
-  const isOpen = useCallback((sectionId) => {
-    return openSections[sectionId] === true;
-  }, [openSections]);
+  const isOpen = useCallback(
+    (sectionId) => {
+      return openSections[sectionId] === true;
+    },
+    [openSections],
+  );
 
   return {
     openSections,
     toggleSection,
     openAll,
     closeAll,
-    isOpen
+    isOpen,
   };
 }
 
