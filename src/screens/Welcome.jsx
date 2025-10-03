@@ -13,9 +13,11 @@ import { getSessionById } from '../data/sessions';
 import { getBreathingExerciseById } from '../data/breathing';
 import { getSmartRecommendation, getRecommendationButtonText } from '../utils/recommendations';
 import { getProgramById } from '../data/programs';
+import useTranslation from '../hooks/useTranslation';
 
 function Welcome() {
   const navigate = useNavigate();
+  const { t, isRTL } = useTranslation();
 
   // Refs for tooltip targeting
   const quickStartRef = useRef(null);
@@ -99,9 +101,9 @@ function Welcome() {
   // Time-based greeting per PRD requirements
   const getGreeting = () => {
     const hour = new Date().getHours();
-    if (hour < 12) return { text: "Good Morning", icon: Sunrise };
-    if (hour < 17) return { text: "Good Afternoon", icon: Sun };
-    return { text: "Good Evening", icon: Moon };
+    if (hour < 12) return { text: t('screens.welcome.goodMorning'), icon: Sunrise };
+    if (hour < 17) return { text: t('screens.welcome.goodAfternoon'), icon: Sun };
+    return { text: t('screens.welcome.goodEvening'), icon: Moon };
   };
 
   const greeting = getGreeting();
@@ -167,7 +169,7 @@ function Welcome() {
           >
             <Flame className="h-4 w-4 text-accent" />
             <Text variant="caption" className="font-medium text-accent">
-              {streakStatus.streak} day streak
+              {streakStatus.streak} {t('screens.welcome.dayStreak')}
             </Text>
             <div className="flex space-x-0.5">
               {Array.from({ length: Math.min(streakStatus.streak, 3) }).map((_, i) => (
@@ -214,7 +216,7 @@ function Welcome() {
               className="mb-3 px-4 py-2 bg-gold/20 rounded-lg"
             >
               <Text variant="body" className="text-center font-medium text-accent">
-                🎉 {celebratedMilestone} Day Streak!
+                🎉 {celebratedMilestone} {t('screens.welcome.milestoneCelebration')}
               </Text>
             </motion.div>
           )}
@@ -257,8 +259,8 @@ function Welcome() {
           onClick={() => navigate('/sessions')}
           className="mb-6 text-muted-foreground hover:text-muted-foreground font-medium text-sm flex items-center gap-1 transition-colors"
         >
-          Browse All Sessions
-          <ChevronRight className="h-4 w-4" />
+          {t('screens.welcome.browseAll')}
+          {isRTL ? <ChevronRight className="h-4 w-4 rtl-flip" /> : <ChevronRight className="h-4 w-4" />}
         </button>
 
         {/* Program Discovery Section */}
@@ -266,7 +268,7 @@ function Welcome() {
           // Active Program Card
           <div className="w-full mb-6">
             <Text variant="body" className="text-secondary font-medium mb-4 block">
-              Your Program
+              {t('screens.welcome.yourProgram')}
             </Text>
             <button
               onClick={() => {
@@ -288,16 +290,16 @@ function Welcome() {
                   </div>
                   <div className="flex items-center gap-2 text-sm text-secondary">
                     <Calendar className="h-4 w-4 flex-shrink-0" />
-                    <span>Week {getCurrentWeek(activeProgram.programId)} of {getProgramById(activeProgram.programId)?.totalWeeks}</span>
+                    <span>{t('common.week')} {getCurrentWeek(activeProgram.programId)} {t('common.of')} {getProgramById(activeProgram.programId)?.totalWeeks}</span>
                   </div>
                 </div>
               </div>
 
               <div className="flex items-center justify-between mt-3">
                 <Text variant="caption" className="text-muted-foreground">
-                  Continue your journey
+                  {t('screens.welcome.continueJourney')}
                 </Text>
-                <ChevronRight className="h-5 w-5 text-muted-foreground" />
+                {isRTL ? <ChevronRight className="h-5 w-5 text-muted-foreground rtl-flip" /> : <ChevronRight className="h-5 w-5 text-muted-foreground" />}
               </div>
             </button>
           </div>
@@ -313,14 +315,14 @@ function Welcome() {
                   <div className="flex items-center gap-2 mb-2">
                     <BookOpen className="h-5 w-5 text-accent flex-shrink-0" />
                     <Text variant="body" className="font-medium text-primary">
-                      Discover Multi-Week Programs
+                      {t('screens.welcome.discoverPrograms')}
                     </Text>
                   </div>
                   <Text variant="caption" className="text-muted-foreground leading-relaxed">
-                    Build a deeper practice with structured 8-13 week yoga journeys
+                    {t('screens.welcome.programsDescription')}
                   </Text>
                 </div>
-                <ChevronRight className="h-5 w-5 text-accent flex-shrink-0 mt-1" />
+                {isRTL ? <ChevronRight className="h-5 w-5 text-accent flex-shrink-0 mt-1 rtl-flip" /> : <ChevronRight className="h-5 w-5 text-accent flex-shrink-0 mt-1" />}
               </div>
             </button>
           </div>
@@ -330,7 +332,7 @@ function Welcome() {
         {recentSessions.length > 0 && (
           <div className="w-full">
             <Text variant="body" className="text-secondary font-medium mb-3 block">
-              Recently Practiced
+              {t('screens.welcome.recentlyPracticed')}
             </Text>
             <div className="space-y-2">
               {recentSessions.map((session, index) => {
@@ -362,7 +364,7 @@ function Welcome() {
                         )}
                       </div>
                       <Text variant="body" className="text-secondary flex-shrink-0">
-                        {duration} min
+                        {duration} {t('common.min')}
                       </Text>
                     </div>
                   </button>

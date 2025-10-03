@@ -29,6 +29,7 @@ const usePreferencesStore = create(
 
       // Display Preferences
       theme: 'light', // 'light' | 'dark' (future)
+      language: 'en', // 'en' | 'he'
 
       // Onboarding state
       hasSeenOnboarding: false,  // Whether user has completed initial onboarding
@@ -200,6 +201,21 @@ const usePreferencesStore = create(
         }
         set({ theme });
         return theme;
+      },
+
+      // Actions - Language
+      setLanguage: (lang) => {
+        if (!['en', 'he'].includes(lang)) {
+          console.warn(`Invalid language: ${lang}. Using 'en' as default.`);
+          lang = 'en';
+        }
+        set({ language: lang });
+
+        // Update document direction
+        document.documentElement.dir = lang === 'he' ? 'rtl' : 'ltr';
+        document.documentElement.lang = lang;
+
+        return lang;
       },
 
       // Actions - Onboarding
@@ -394,7 +410,8 @@ const usePreferencesStore = create(
               streakAlerts: state.streakAlerts
             },
             display: {
-              theme: state.theme
+              theme: state.theme,
+              language: state.language
             },
             onboarding: {
               hasSeenOnboarding: state.hasSeenOnboarding,
@@ -451,7 +468,8 @@ const usePreferencesStore = create(
           // Import display settings
           if (prefs.display) {
             set({
-              theme: prefs.display.theme ?? 'light'
+              theme: prefs.display.theme ?? 'light',
+              language: prefs.display.language ?? 'en'
             });
           }
 
@@ -523,6 +541,7 @@ const usePreferencesStore = create(
 
           // Display
           theme: 'light',
+          language: 'en',
 
           // Onboarding
           hasSeenOnboarding: false,
@@ -578,6 +597,7 @@ const usePreferencesStore = create(
             streakAlerts: persistedState.streakAlerts ?? true,
             // Add display
             theme: persistedState.theme ?? 'light',
+            language: persistedState.language ?? 'en',
             // Add tooltips
             tooltipsDismissed: persistedState.tooltipsDismissed ?? [],
             tooltipsShownCount: persistedState.tooltipsShownCount ?? {}

@@ -11,9 +11,11 @@ import { FullscreenLayout } from '../components/layouts';
 import { ContentBody } from '../components/design-system';
 import { calculateMoodImprovement } from '../utils/moodCalculator.jsx';
 import { useReducedMotion } from '../hooks/useReducedMotion';
+import useTranslation from '../hooks/useTranslation';
 
 function Complete() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const location = useLocation();
   const sessionId = searchParams.get('session') || 'morning-energizer';
@@ -184,14 +186,14 @@ function Complete() {
             </motion.div>
           )}
           <h1 className="mb-2 text-2xl font-medium text-primary">
-            {isBreathingSession ? 'Breathing Complete!' : 'Practice Complete!'}
+            {t('screens.complete.title')}
           </h1>
           <p className="text-secondary">
-            You completed {isBreathingSession ? breathingExerciseName : `the ${session?.name || 'session'}`}
+            {isBreathingSession ? breathingExerciseName : `${session?.name || 'session'}`}
           </p>
           {isBreathingSession && breathingDuration && (
             <p className="text-sm text-secondary mt-1">
-              {breathingDuration} minute session
+              {breathingDuration} {t('common.minute')}
             </p>
           )}
         </motion.div>
@@ -204,7 +206,7 @@ function Complete() {
           transition={{ duration: 0.5, delay: 0.4 }}
         >
           <p className="text-lg text-primary">
-            Beautiful work!
+            {t('screens.complete.wellDone')}
           </p>
           {streakStatus && (
             <motion.div
@@ -240,7 +242,7 @@ function Complete() {
             </motion.div>
           )}
           <p className="mt-2 text-sm text-secondary">
-            You've taken an important step in your mindfulness journey
+            {t('screens.complete.journeyStep')}
           </p>
         </motion.div>
 
@@ -278,17 +280,17 @@ function Complete() {
               <Trophy className="h-6 w-6 text-accent flex-shrink-0 mt-0.5" />
               <div className="flex-1">
                 <p className="font-semibold text-base text-accent mb-1">
-                  {weekCompletionInfo.isMilestone ? '🎉 Milestone Achievement!' : 'Week Complete!'}
+                  {weekCompletionInfo.isMilestone ? t('screens.complete.milestoneAchievement') : t('screens.complete.weekComplete')}
                 </p>
                 <p className="font-medium text-sm text-primary mb-1">
                   {weekCompletionInfo.weekName}
                 </p>
                 <p className="text-xs text-secondary">
-                  You completed all recommended sessions for this week ({weekCompletionInfo.sessionsCompleted} sessions total)
+                  {t('screens.complete.completedSessions', { count: weekCompletionInfo.sessionsCompleted })}
                 </p>
                 {weekCompletionInfo.isMilestone && (
                   <p className="text-xs text-secondary mt-2 italic">
-                    This is a significant milestone in your journey!
+                    {t('screens.complete.significantMilestone')}
                   </p>
                 )}
               </div>
@@ -303,7 +305,7 @@ function Complete() {
             className="flex w-full items-center justify-center space-x-2 rounded-lg bg-primary px-6 py-3 text-white shadow-sm transition-all duration-300 hover:bg-primary/90 active:scale-95"
           >
             <Home className="h-5 w-5" />
-            <span>Back to Home</span>
+            <span>{t('screens.complete.backToHome')}</span>
           </button>
 
           <button
@@ -311,7 +313,7 @@ function Complete() {
             className="flex w-full items-center justify-center space-x-2 rounded-lg border border-primary px-6 py-3 text-primary transition-all duration-300 hover:bg-primary/5 active:scale-95"
           >
             <RotateCcw className="h-5 w-5" />
-            <span>Practice Again</span>
+            <span>{t('screens.complete.practiceAgain')}</span>
           </button>
         </div>
       </ContentBody>

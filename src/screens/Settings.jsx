@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Bell, Download, Trash2, Info, RefreshCw, Clock, Palette } from 'lucide-react';
+import { Bell, Download, Trash2, Info, RefreshCw, Clock, Palette, Globe } from 'lucide-react';
 import { DefaultLayout } from '../components/layouts';
 import { PageHeader } from '../components/headers';
 import { Text } from '../components/design-system/Typography';
@@ -8,9 +8,11 @@ import { Switch } from '../components/ui/switch';
 import SettingsSection from '../components/SettingsSection';
 import { ConfirmDialog } from '../components/dialogs';
 import { ThemeToggleWithLabel } from '../components/ThemeToggle';
+import LanguageSelector from '../components/LanguageSelector';
 import usePreferencesStore from '../stores/preferences';
 import useProgressStore from '../stores/progress';
 import useCollapsibleSections from '../hooks/useCollapsibleSections';
+import useTranslation from '../hooks/useTranslation';
 
 /**
  * Settings Screen
@@ -20,8 +22,12 @@ function Settings() {
   const [showClearDialog, setShowClearDialog] = useState(false);
   const [showCustomRest, setShowCustomRest] = useState(false);
 
+  // Translation hook
+  const { t } = useTranslation();
+
   // Collapsible sections state - all closed by default
   const { openSections, toggleSection } = useCollapsibleSections({
+    language: false,
     appearance: false,
     practice: false,
     popups: false,
@@ -95,11 +101,24 @@ function Settings() {
       header={<PageHeader title="Settings" showBack={false} />}
     >
       <ContentBody size="lg" spacing="md">
+        {/* Language Section */}
+        <SettingsSection
+          id="language"
+          title={t('screens.settings.language')}
+          subtitle={t('screens.settings.languageSubtitle')}
+          icon={Globe}
+          iconBgColor="bg-muted"
+          isOpen={openSections.language}
+          onToggle={() => toggleSection('language')}
+        >
+          <LanguageSelector />
+        </SettingsSection>
+
         {/* Appearance Section */}
         <SettingsSection
           id="appearance"
-          title="Appearance"
-          subtitle="Choose your preferred theme"
+          title={t('screens.settings.appearance')}
+          subtitle={t('screens.settings.appearanceSubtitle')}
           icon={Palette}
           iconBgColor="bg-muted"
           isOpen={openSections.appearance}

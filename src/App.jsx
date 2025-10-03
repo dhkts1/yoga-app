@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import { lazy, Suspense, useEffect } from 'react';
+import usePreferencesStore from './stores/preferences';
 
 // Eager-loaded screens (instant initial render for core UX)
 import Welcome from './screens/Welcome';
@@ -74,6 +75,13 @@ function AnimatedRoutes() {
 }
 
 function App() {
+  // Initialize language direction on app load
+  useEffect(() => {
+    const language = usePreferencesStore.getState().language;
+    document.documentElement.dir = language === 'he' ? 'rtl' : 'ltr';
+    document.documentElement.lang = language;
+  }, []);
+
   return (
     <ThemeProvider>
       <Router>
