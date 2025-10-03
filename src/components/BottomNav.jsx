@@ -1,5 +1,5 @@
 import { useNavigate, useLocation } from "react-router-dom";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useMemo, useCallback, memo } from "react";
 import { Sun, Compass, Wind, Calendar, TrendingUp, User } from "lucide-react";
 import { cn } from "../lib/utils";
 import useProgressStore from "../stores/progress";
@@ -18,9 +18,12 @@ import FeatureTooltip from "./FeatureTooltip";
  * - Mobile-optimized with smooth transitions
  * - Feature discovery tooltip for Progress tab
  */
-function BottomNav({ className }) {
+const BottomNav = memo(function BottomNav({ className }) {
   const navigate = useNavigate();
   const location = useLocation();
+
+  // Extract only pathname to minimize rerenders
+  const pathname = location.pathname;
 
   // Refs for tooltip targeting
   const progressTabRef = useRef(null);
@@ -42,9 +45,9 @@ function BottomNav({ className }) {
     // Tooltip 3: Bottom Nav - Progress
     // Show when: After 1 session completed, hasn't opened Progress, on home screen
     const progressDismissed = isTooltipDismissed("tooltip-bottom-nav-progress");
-    const isOnHomeScreen = location.pathname === "/";
+    const isOnHomeScreen = pathname === "/";
     const hasNotVisitedProgress =
-      location.pathname !== "/insights" && location.pathname !== "/progress";
+      pathname !== "/insights" && pathname !== "/progress";
 
     if (
       !progressDismissed &&
@@ -59,75 +62,82 @@ function BottomNav({ className }) {
 
       return () => clearTimeout(timer);
     }
-  }, [totalSessions, location.pathname, isTooltipDismissed, dismissTooltip]);
+  }, [totalSessions, pathname, isTooltipDismissed]);
 
-  // Handle Progress tooltip dismiss
-  const handleProgressTooltipDismiss = () => {
+  // Handle Progress tooltip dismiss - memoized
+  const handleProgressTooltipDismiss = useCallback(() => {
     setShowProgressTooltip(false);
     dismissTooltip("tooltip-bottom-nav-progress");
-  };
+  }, [dismissTooltip]);
 
-  const tabs = [
-    {
-      id: "today",
-      label: "Today",
-      icon: Sun,
-      path: "/",
-      // Match exact home path
-      isActive: location.pathname === "/",
-    },
-    {
-      id: "discover",
-      label: "Discover",
-      icon: Compass,
-      path: "/sessions",
-      // Match /sessions and /sessions/builder only (not breathing)
-      isActive: location.pathname.startsWith("/sessions"),
-    },
-    {
-      id: "breathe",
-      label: "Breathe",
-      icon: Wind,
-      path: "/breathing",
-      // Match /breathing and /breathing/practice
-      isActive: location.pathname.startsWith("/breathing"),
-    },
-    {
-      id: "programs",
-      label: "Programs",
-      icon: Calendar,
-      path: "/programs",
-      // Match /programs and program detail pages
-      isActive: location.pathname.startsWith("/programs"),
-    },
-    {
-      id: "progress",
-      label: "Progress",
-      icon: TrendingUp,
-      path: "/insights",
-      // Match /insights and /progress
-      isActive:
-        location.pathname === "/insights" || location.pathname === "/progress",
-    },
-    {
-      id: "profile",
-      label: "Profile",
-      icon: User,
-      path: "/settings",
-      // Match /settings
-      isActive: location.pathname === "/settings",
-    },
-  ];
+  // Memoize tabs array - only recompute when pathname changes
+  const tabs = useMemo(
+    () => [
+      {
+        id: "today",
+        label: "Today",
+        icon: Sun,
+        path: "/",
+        // Match exact home path
+        isActive: pathname === "/",
+      },
+      {
+        id: "discover",
+        label: "Discover",
+        icon: Compass,
+        path: "/sessions",
+        // Match /sessions and /sessions/builder only (not breathing)
+        isActive: pathname.startsWith("/sessions"),
+      },
+      {
+        id: "breathe",
+        label: "Breathe",
+        icon: Wind,
+        path: "/breathing",
+        // Match /breathing and /breathing/practice
+        isActive: pathname.startsWith("/breathing"),
+      },
+      {
+        id: "programs",
+        label: "Programs",
+        icon: Calendar,
+        path: "/programs",
+        // Match /programs and program detail pages
+        isActive: pathname.startsWith("/programs"),
+      },
+      {
+        id: "progress",
+        label: "Progress",
+        icon: TrendingUp,
+        path: "/insights",
+        // Match /insights and /progress
+        isActive: pathname === "/insights" || pathname === "/progress",
+      },
+      {
+        id: "profile",
+        label: "Profile",
+        icon: User,
+        path: "/settings",
+        // Match /settings
+        isActive: pathname === "/settings",
+      },
+    ],
+    [pathname],
+  );
 
-  const handleTabClick = (tab) => {
-    // Dismiss tooltip if clicking Progress
-    if (tab.id === "progress" && showProgressTooltip) {
-      dismissTooltip("tooltip-bottom-nav-progress");
-      setShowProgressTooltip(false);
-    }
+  // Memoize tab click handler
+  const handleTabClick = useCallback(
+    (tab) => {
+      // Dismiss tooltip if clicking Progress
+      if (tab.id === "progress" && showProgressTooltip) {
+        dismissTooltip("tooltip-bottom-nav-progress");
+        setShowProgressTooltip(false);
+      }
 
-    navigate(tab.path);
-  };
+      navigate(tab.path);
+    },
+    [showProgressTooltip, dismissTooltip, navigate],
+  );
 
   return (
     <nav
@@ -210,6 +220,8 @@ function BottomNav({ className }) {
       />
     </nav>
   );
-}
+});
+
+BottomNav.displayName = "BottomNav";
 
 export default BottomNav;
