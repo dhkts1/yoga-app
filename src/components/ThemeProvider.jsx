@@ -52,7 +52,7 @@ function hexToHSL(hex) {
  * @param {string} hexColor - Base hex color
  * @returns {object} - CSS variables for the theme
  */
-function generateCustomTheme(hexColor) {
+function generateCustomDarkTheme(hexColor) {
   const { h, s, l } = hexToHSL(hexColor);
 
   // Generate lighter variations for cards, borders, etc.
@@ -66,6 +66,29 @@ function generateCustomTheme(hexColor) {
     "--primary-foreground": `${h} ${Math.max(s - 2, 0)}% ${l}%`,
     "--secondary-foreground": `${h} ${Math.max(s - 2, 0)}% ${l}%`,
     "--accent-foreground": `${h} ${Math.max(s - 2, 0)}% ${l}%`,
+  };
+}
+
+/**
+ * Generate light mode theme variables from a base color
+ * @param {string} hexColor - Base hex color
+ * @returns {object} - CSS variables for the theme
+ */
+function generateCustomLightTheme(hexColor) {
+  const { h, s, l } = hexToHSL(hexColor);
+
+  // Generate darker variations for text, lighter for backgrounds
+  return {
+    "--background": `${h} ${Math.max(s - 10, 0)}% ${Math.min(l + 30, 96)}%`,
+    "--card": `${h} ${Math.max(s - 5, 0)}% ${Math.min(l + 35, 100)}%`,
+    "--popover": `${h} ${Math.max(s - 5, 0)}% ${Math.min(l + 35, 100)}%`,
+    "--muted": `${h} ${Math.max(s - 15, 0)}% ${Math.min(l + 25, 96)}%`,
+    "--border": `${h} ${Math.max(s - 18, 0)}% ${Math.min(l + 20, 91)}%`,
+    "--input": `${h} ${Math.max(s - 18, 0)}% ${Math.min(l + 20, 91)}%`,
+    "--primary": `${h} ${Math.min(s + 5, 35)}% ${Math.max(l - 15, 32)}%`,
+    "--primary-foreground": `0 0% 100%`,
+    "--secondary": `${h} ${Math.min(s + 5, 35)}% ${Math.max(l - 20, 30)}%`,
+    "--secondary-foreground": `0 0% 100%`,
   };
 }
 
@@ -147,19 +170,105 @@ const DARK_MODE_THEMES = {
 };
 
 /**
+ * Light Mode Theme Definitions
+ * Each theme includes all CSS variables for complete light mode customization
+ */
+const LIGHT_MODE_THEMES = {
+  cream: {
+    name: "Warm Cream",
+    description: "Soft cream with sage accents (default)",
+    preview: "#F5F3F0",
+    variables: {
+      "--background": "30 25% 94%",
+      "--card": "30 15% 98%",
+      "--popover": "30 15% 98%",
+      "--muted": "30 20% 90%",
+      "--border": "30 18% 85%",
+      "--input": "30 18% 85%",
+      "--primary": "150 35% 32%",
+      "--primary-foreground": "0 0% 100%",
+      "--secondary": "142 35% 30%",
+      "--secondary-foreground": "0 0% 100%",
+    },
+  },
+  white: {
+    name: "Pure White",
+    description: "Clean white with subtle sage",
+    preview: "#FFFFFF",
+    variables: {
+      "--background": "0 0% 100%",
+      "--card": "0 0% 99%",
+      "--popover": "0 0% 99%",
+      "--muted": "0 0% 96%",
+      "--border": "0 0% 90%",
+      "--input": "0 0% 90%",
+      "--primary": "150 35% 32%",
+      "--primary-foreground": "0 0% 100%",
+      "--secondary": "142 35% 30%",
+      "--secondary-foreground": "0 0% 100%",
+    },
+  },
+  sage: {
+    name: "Sage Tint",
+    description: "Light sage green background",
+    preview: "#E8F5E8",
+    variables: {
+      "--background": "150 35% 92%",
+      "--card": "150 25% 97%",
+      "--popover": "150 25% 97%",
+      "--muted": "150 30% 88%",
+      "--border": "150 25% 82%",
+      "--input": "150 25% 82%",
+      "--primary": "150 45% 28%",
+      "--primary-foreground": "0 0% 100%",
+      "--secondary": "142 40% 26%",
+      "--secondary-foreground": "0 0% 100%",
+    },
+  },
+  sand: {
+    name: "Desert Sand",
+    description: "Warm sandy beige tones",
+    preview: "#F5E6D3",
+    variables: {
+      "--background": "35 40% 90%",
+      "--card": "35 30% 96%",
+      "--popover": "35 30% 96%",
+      "--muted": "35 35% 86%",
+      "--border": "35 30% 80%",
+      "--input": "35 30% 80%",
+      "--primary": "150 35% 32%",
+      "--primary-foreground": "0 0% 100%",
+      "--secondary": "142 35% 30%",
+      "--secondary-foreground": "0 0% 100%",
+    },
+  },
+  custom: {
+    name: "Custom",
+    description: "Choose your own color",
+    preview: null, // Will be set dynamically
+    variables: {}, // Will be generated dynamically
+  },
+};
+
+/**
  * ThemeProvider Component
  *
- * Manages dark mode by:
+ * Manages light/dark modes by:
  * - Reading theme preference from store
  * - Applying/removing 'dark' class on <html> element
- * - Applying selected dark mode color theme
+ * - Applying selected light/dark mode color theme
  * - Updating PWA meta theme-color
  * - Listening for theme changes
+ * - Resetting theme variables when switching modes
  */
 export function ThemeProvider({ children }) {
   const theme = usePreferencesStore((state) => state.theme);
   const darkModeTheme = usePreferencesStore((state) => state.darkModeTheme);
   const customDarkColor = usePreferencesStore((state) => state.customDarkColor);
+  const lightModeTheme = usePreferencesStore((state) => state.lightModeTheme);
+  const customLightColor = usePreferencesStore(
+    (state) => state.customLightColor,
+  );
 
   useEffect(() => {
     const root = window.document.documentElement;
@@ -167,6 +276,9 @@ export function ThemeProvider({ children }) {
 
     // Remove both classes first
     root.classList.remove("light", "dark");
+
+    // Reset all theme variables to ensure clean switch
+    resetThemeVariables(root);
 
     // Handle system preference if theme is 'system' (future enhancement)
     if (theme === "system") {
@@ -176,9 +288,11 @@ export function ThemeProvider({ children }) {
         : "light";
       root.classList.add(systemTheme);
 
-      // Apply dark mode theme variables if in dark mode
+      // Apply theme variables based on system preference
       if (systemTheme === "dark") {
         applyDarkModeTheme(root, darkModeTheme, customDarkColor);
+      } else {
+        applyLightModeTheme(root, lightModeTheme, customLightColor);
       }
 
       // Update PWA theme color
@@ -188,16 +302,20 @@ export function ThemeProvider({ children }) {
             ? darkModeTheme === "custom"
               ? customDarkColor
               : DARK_MODE_THEMES[darkModeTheme]?.preview || "#282B2E"
-            : "#8FA68E";
+            : lightModeTheme === "custom"
+              ? customLightColor
+              : LIGHT_MODE_THEMES[lightModeTheme]?.preview || "#F5F3F0";
         metaThemeColor.setAttribute("content", themeColor);
       }
     } else {
       // Apply the selected theme
       root.classList.add(theme);
 
-      // Apply dark mode theme variables if in dark mode
+      // Apply theme variables based on selected mode
       if (theme === "dark") {
         applyDarkModeTheme(root, darkModeTheme, customDarkColor);
+      } else if (theme === "light") {
+        applyLightModeTheme(root, lightModeTheme, customLightColor);
       }
 
       // Update PWA theme color
@@ -207,13 +325,38 @@ export function ThemeProvider({ children }) {
             ? darkModeTheme === "custom"
               ? customDarkColor
               : DARK_MODE_THEMES[darkModeTheme]?.preview || "#282B2E"
-            : "#8FA68E";
+            : lightModeTheme === "custom"
+              ? customLightColor
+              : LIGHT_MODE_THEMES[lightModeTheme]?.preview || "#F5F3F0";
         metaThemeColor.setAttribute("content", themeColor);
       }
     }
-  }, [theme, darkModeTheme, customDarkColor]);
+  }, [theme, darkModeTheme, customDarkColor, lightModeTheme, customLightColor]);
 
   return <>{children}</>;
+}
+
+/**
+ * Reset all theme variables to clear previous theme
+ */
+function resetThemeVariables(root) {
+  const allThemeVariables = [
+    "--background",
+    "--card",
+    "--popover",
+    "--muted",
+    "--border",
+    "--input",
+    "--primary",
+    "--primary-foreground",
+    "--secondary",
+    "--secondary-foreground",
+    "--accent-foreground",
+  ];
+
+  allThemeVariables.forEach((property) => {
+    root.style.removeProperty(property);
+  });
 }
 
 /**
@@ -230,7 +373,30 @@ function applyDarkModeTheme(root, themeKey, customColor) {
   // For custom theme, generate variables dynamically
   let variables = theme.variables;
   if (themeKey === "custom" && customColor) {
-    variables = generateCustomTheme(customColor);
+    variables = generateCustomDarkTheme(customColor);
+  }
+
+  // Apply all CSS variables for the selected theme
+  Object.entries(variables).forEach(([property, value]) => {
+    root.style.setProperty(property, value);
+  });
+}
+
+/**
+ * Apply light mode theme CSS variables
+ */
+function applyLightModeTheme(root, themeKey, customColor) {
+  let theme = LIGHT_MODE_THEMES[themeKey];
+
+  if (!theme) {
+    console.warn(`Unknown light mode theme: ${themeKey}`);
+    return;
+  }
+
+  // For custom theme, generate variables dynamically
+  let variables = theme.variables;
+  if (themeKey === "custom" && customColor) {
+    variables = generateCustomLightTheme(customColor);
   }
 
   // Apply all CSS variables for the selected theme
@@ -256,4 +422,4 @@ export function useTheme() {
 }
 
 export default ThemeProvider;
-export { DARK_MODE_THEMES };
+export { DARK_MODE_THEMES, LIGHT_MODE_THEMES };

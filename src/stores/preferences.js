@@ -29,6 +29,8 @@ const usePreferencesStore = create(
 
       // Display Preferences
       theme: "light", // 'light' | 'dark' (future)
+      lightModeTheme: "cream", // 'cream' | 'white' | 'sage' | 'sand' | 'custom'
+      customLightColor: "#F5F3F0", // Custom light mode color (hex)
       darkModeTheme: "slate", // 'slate' | 'taupe' | 'gray' | 'sage' | 'custom'
       customDarkColor: "#282B2E", // Custom dark mode color (hex)
       language: "en", // 'en' | 'he'
@@ -218,6 +220,30 @@ const usePreferencesStore = create(
         }
         set({ theme });
         return theme;
+      },
+
+      setLightModeTheme: (lightTheme) => {
+        if (
+          !["cream", "white", "sage", "sand", "custom"].includes(lightTheme)
+        ) {
+          console.warn(
+            `Invalid light mode theme: ${lightTheme}. Using 'cream' as default.`,
+          );
+          lightTheme = "cream";
+        }
+        set({ lightModeTheme: lightTheme });
+        return lightTheme;
+      },
+
+      setCustomLightColor: (color) => {
+        // Validate hex color format
+        const hexRegex = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/;
+        if (!hexRegex.test(color)) {
+          console.warn(`Invalid hex color: ${color}. Using default.`);
+          return get().customLightColor;
+        }
+        set({ customLightColor: color });
+        return color;
       },
 
       setDarkModeTheme: (darkTheme) => {
@@ -469,6 +495,8 @@ const usePreferencesStore = create(
             },
             display: {
               theme: state.theme,
+              lightModeTheme: state.lightModeTheme,
+              customLightColor: state.customLightColor,
               darkModeTheme: state.darkModeTheme,
               customDarkColor: state.customDarkColor,
               language: state.language,
@@ -529,6 +557,8 @@ const usePreferencesStore = create(
           if (prefs.display) {
             set({
               theme: prefs.display.theme ?? "light",
+              lightModeTheme: prefs.display.lightModeTheme ?? "cream",
+              customLightColor: prefs.display.customLightColor ?? "#F5F3F0",
               darkModeTheme: prefs.display.darkModeTheme ?? "slate",
               customDarkColor: prefs.display.customDarkColor ?? "#282B2E",
               language: prefs.display.language ?? "en",
@@ -603,6 +633,8 @@ const usePreferencesStore = create(
 
           // Display
           theme: "light",
+          lightModeTheme: "cream",
+          customLightColor: "#F5F3F0",
           darkModeTheme: "slate",
           customDarkColor: "#282B2E",
           language: "en",

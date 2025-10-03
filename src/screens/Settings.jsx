@@ -20,7 +20,10 @@ import { Switch } from "../components/ui/switch";
 import SettingsSection from "../components/SettingsSection";
 import { ConfirmDialog } from "../components/dialogs";
 import { ThemeToggleWithLabel } from "../components/ThemeToggle";
-import { DARK_MODE_THEMES } from "../components/ThemeProvider";
+import {
+  DARK_MODE_THEMES,
+  LIGHT_MODE_THEMES,
+} from "../components/ThemeProvider";
 import LanguageSelector from "../components/LanguageSelector";
 import usePreferencesStore from "../stores/preferences";
 import useProgressStore from "../stores/progress";
@@ -66,6 +69,8 @@ function Settings() {
     theme,
     darkModeTheme,
     customDarkColor,
+    lightModeTheme,
+    customLightColor,
     restDuration,
     practiceReminders,
     streakAlerts,
@@ -74,6 +79,8 @@ function Settings() {
     breathing,
     setDarkModeTheme,
     setCustomDarkColor,
+    setLightModeTheme,
+    setCustomLightColor,
     setRestDuration,
     setPracticeReminders,
     setStreakAlerts,
@@ -174,6 +181,131 @@ function Settings() {
           <div className="py-2">
             <ThemeToggleWithLabel />
           </div>
+
+          {/* Light Mode Theme Selector - only show when light mode is active */}
+          {theme === "light" && (
+            <div className="mt-4 border-t border-border py-4">
+              <div className="mb-4">
+                <Text className="font-medium text-foreground">
+                  Light Mode Color
+                </Text>
+                <Text variant="caption" className="text-muted-foreground">
+                  Choose your preferred light mode palette
+                </Text>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                {Object.entries(LIGHT_MODE_THEMES).map(([key, themeData]) => {
+                  // Skip custom theme in main loop, we'll add it separately
+                  if (key === "custom") return null;
+
+                  return (
+                    <button
+                      key={key}
+                      onClick={() => setLightModeTheme(key)}
+                      className={`relative rounded-xl border-2 p-4 text-left transition-all duration-300 ${
+                        lightModeTheme === key
+                          ? "scale-105 border-primary bg-primary/10 shadow-sage"
+                          : "border-border bg-card hover:scale-105 hover:border-primary/50"
+                      }`}
+                    >
+                      {/* Color preview circle */}
+                      <div className="mb-2 flex items-center gap-3">
+                        <div
+                          className="h-10 w-10 flex-shrink-0 rounded-full border-2 border-border shadow-sm"
+                          style={{ backgroundColor: themeData.preview }}
+                        />
+                        <div className="min-w-0 flex-1">
+                          <div className="truncate text-sm font-medium text-foreground">
+                            {themeData.name}
+                          </div>
+                        </div>
+                        {lightModeTheme === key && (
+                          <div className="flex-shrink-0 text-primary">
+                            <svg
+                              className="h-5 w-5"
+                              fill="currentColor"
+                              viewBox="0 0 20 20"
+                            >
+                              <path
+                                fillRule="evenodd"
+                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                clipRule="evenodd"
+                              />
+                            </svg>
+                          </div>
+                        )}
+                      </div>
+                      <Text
+                        variant="caption"
+                        className="line-clamp-2 text-xs text-muted-foreground"
+                      >
+                        {themeData.description}
+                      </Text>
+                    </button>
+                  );
+                })}
+
+                {/* Custom Color Picker Card */}
+                <button
+                  onClick={() => setLightModeTheme("custom")}
+                  className={`relative rounded-xl border-2 p-4 text-left transition-all duration-300 ${
+                    lightModeTheme === "custom"
+                      ? "scale-105 border-primary bg-primary/10 shadow-sage"
+                      : "border-border bg-card hover:scale-105 hover:border-primary/50"
+                  }`}
+                >
+                  {/* Color preview circle with picker overlay */}
+                  <div className="mb-2 flex items-center gap-3">
+                    <div className="relative h-10 w-10 flex-shrink-0">
+                      <div
+                        className="h-10 w-10 rounded-full border-2 border-border shadow-sm"
+                        style={{ backgroundColor: customLightColor }}
+                      />
+                      {/* Color picker input (invisible, overlays the circle) */}
+                      <input
+                        type="color"
+                        value={customLightColor}
+                        onChange={(e) => {
+                          setCustomLightColor(e.target.value);
+                          setLightModeTheme("custom");
+                        }}
+                        onClick={(e) => e.stopPropagation()}
+                        className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+                        title="Pick a custom color"
+                      />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="truncate text-sm font-medium text-foreground">
+                        {LIGHT_MODE_THEMES.custom.name}
+                      </div>
+                    </div>
+                    {lightModeTheme === "custom" && (
+                      <div className="flex-shrink-0 text-primary">
+                        <svg
+                          className="h-5 w-5"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      </div>
+                    )}
+                  </div>
+                  <Text
+                    variant="caption"
+                    className="line-clamp-2 text-xs text-muted-foreground"
+                  >
+                    {LIGHT_MODE_THEMES.custom.description}
+                  </Text>
+                </button>
+              </div>
+            </div>
+          )}
 
           {/* Dark Mode Theme Selector - only show when dark mode is active */}
           {theme === "dark" && (
