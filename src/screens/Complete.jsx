@@ -1,5 +1,5 @@
 import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { CheckCircle, Home, RotateCcw, Star, Wind, Trophy } from 'lucide-react';
 import { motion } from 'framer-motion';
 import confetti from 'canvas-confetti';
@@ -12,6 +12,7 @@ import { ContentBody } from '../components/design-system';
 import { calculateMoodImprovement } from '../utils/moodCalculator.jsx';
 import { useReducedMotion } from '../hooks/useReducedMotion';
 import useTranslation from '../hooks/useTranslation';
+import { haptics } from '../utils/haptics';
 
 function Complete() {
   const navigate = useNavigate();
@@ -42,8 +43,11 @@ function Complete() {
   const [weekCompletionInfo, setWeekCompletionInfo] = useState(null);
   const shouldReduceMotion = useReducedMotion();
 
-  // Confetti celebration when component mounts
+  // Confetti celebration and haptic feedback when component mounts
   useEffect(() => {
+    // Success haptic feedback on completion
+    haptics.success();
+
     if (!shouldReduceMotion) {
       const timer = setTimeout(() => {
         confetti({
@@ -155,8 +159,11 @@ function Complete() {
     }
   };
 
-  // Calculate mood improvement using utility
-  const moodImprovementInfo = calculateMoodImprovement(preMoodData, postMoodData);
+  // Memoize mood improvement calculation to prevent unnecessary recalculation
+  const moodImprovementInfo = useMemo(() =>
+    calculateMoodImprovement(preMoodData, postMoodData),
+    [preMoodData, postMoodData]
+  );
 
   return (
     <FullscreenLayout

@@ -1,10 +1,12 @@
+import { memo } from 'react';
 import { Card, Text } from '../design-system';
 
 /**
  * SimpleBarChart - Pure CSS/SVG bar chart component
  * Used for displaying pose frequency, session types, etc.
+ * Memoized for performance optimization
  */
-function SimpleBarChart({
+const SimpleBarChart = memo(function SimpleBarChart({
   title,
   data = [],
   maxItems = 5,
@@ -79,6 +81,6 @@ function SimpleBarChart({
       )}
     </Card>
   );
-}
+});
 
 export default SimpleBarChart;

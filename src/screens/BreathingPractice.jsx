@@ -9,6 +9,7 @@ import { getBreathingExerciseById, calculateBreathingCycles } from '../data/brea
 import useProgressStore from '../stores/progress';
 import usePreferencesStore from '../stores/preferences';
 import MoodTracker from '../components/MoodTracker';
+import useTranslation from '../hooks/useTranslation';
 
 /**
  * BreathingPractice Screen
@@ -25,6 +26,7 @@ function BreathingPractice() {
   const [searchParams] = useSearchParams();
   const { completeBreathingSession } = useProgressStore();
   const { breathing: breathingPrefs, toggleBreathingMoodCheck } = usePreferencesStore();
+  const { t } = useTranslation();
 
   // URL parameters
   const exerciseId = searchParams.get('exercise') || 'box-breathing';
@@ -259,7 +261,7 @@ function BreathingPractice() {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background p-4">
         <MoodTracker
-          title="How are you feeling before practice?"
+          title={t('screens.practice.howFeelingBefore')}
           onComplete={handlePreMoodComplete}
           onSkip={handlePreMoodSkip}
           onDontShowAgain={toggleBreathingMoodCheck}
@@ -273,7 +275,7 @@ function BreathingPractice() {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background p-4">
         <MoodTracker
-          title="How do you feel after your practice?"
+          title={t('screens.practice.howFeelingAfter')}
           onComplete={handlePostMoodComplete}
           onSkip={handlePostMoodSkip}
           onDontShowAgain={toggleBreathingMoodCheck}
@@ -357,7 +359,7 @@ function BreathingPractice() {
         {/* Cycle count */}
         {sessionStarted && (
           <p className="text-xs text-muted-foreground mb-2">
-            Cycle {currentCycle} of {totalCycles}
+            {t('screens.breathingPractice.rounds')} {currentCycle} {t('common.of')} {totalCycles}
           </p>
         )}
 
@@ -366,7 +368,7 @@ function BreathingPractice() {
           <div className="text-2xl sm:text-3xl font-light text-primary">
             {formatTime(timeRemaining)}
           </div>
-          <p className="text-xs sm:text-sm text-secondary">remaining</p>
+          <p className="text-xs sm:text-sm text-secondary">{t('screens.practice.remaining')}</p>
         </div>
       </div>
 

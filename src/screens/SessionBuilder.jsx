@@ -15,12 +15,14 @@ import { Button, Card, ContentBody, EmptyState } from '../components/design-syst
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
 import { DefaultLayout } from '../components/layouts';
 import PageHeader from '../components/headers/PageHeader';
+import useTranslation from '../hooks/useTranslation';
 
 function SessionBuilder() {
   const navigate = useNavigate();
   const [validationErrors, setValidationErrors] = useState([]);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
   const [activeTab, setActiveTab] = useState('sequence');
+  const { t } = useTranslation();
 
   // Duration edit dialog state
   const [durationDialog, setDurationDialog] = useState({
@@ -261,13 +263,13 @@ function SessionBuilder() {
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-muted-foreground mb-2">
-                Session Name
+                {t('screens.sessionBuilder.sessionName')}
               </label>
               <input
                 type="text"
                 value={sessionName}
                 onChange={(e) => setSessionName(e.target.value)}
-                placeholder="My Custom Session"
+                placeholder={t('screens.sessionBuilder.sessionNamePlaceholder')}
                 className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent"
                 maxLength={50}
               />
@@ -320,13 +322,13 @@ function SessionBuilder() {
               value="sequence"
               className="data-[state=active]:bg-card data-[state=active]:text-card-foreground"
             >
-              Your Sequence ({sequencePoses.length})
+              {t('screens.sessionBuilder.selectedPoses', { count: sequencePoses.length })}
             </TabsTrigger>
             <TabsTrigger
               value="library"
               className="data-[state=active]:bg-card data-[state=active]:text-card-foreground"
             >
-              Add Poses
+              {t('screens.sessionBuilder.selectPoses')}
             </TabsTrigger>
           </TabsList>
 
@@ -403,7 +405,7 @@ function SessionBuilder() {
               onClick={handleSaveSession}
               className="w-full py-4 rounded-2xl shadow-lg text-base font-medium"
             >
-              Save & Preview Session
+              {t('screens.sessionBuilder.savePractice')}
             </Button>
           </div>
         )}

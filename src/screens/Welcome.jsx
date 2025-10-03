@@ -1,7 +1,8 @@
 import { useNavigate } from 'react-router-dom';
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, useMemo } from 'react';
 import { Sun, Moon, Sunrise, Flame, Star, ChevronRight, Sparkles, BookOpen, Calendar } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import PullToRefresh from 'react-simple-pull-to-refresh';
 import { Button, Heading, Text, ContentBody } from '../components/design-system';
 import { DefaultLayout } from '../components/layouts';
 import { PageHeader } from '../components/headers';
@@ -14,6 +15,7 @@ import { getBreathingExerciseById } from '../data/breathing';
 import { getSmartRecommendation, getRecommendationButtonText } from '../utils/recommendations';
 import { getProgramById } from '../data/programs';
 import useTranslation from '../hooks/useTranslation';
+import { haptics } from '../utils/haptics';
 
 function Welcome() {
   const navigate = useNavigate();
@@ -22,29 +24,41 @@ function Welcome() {
   // Refs for tooltip targeting
   const quickStartRef = useRef(null);
 
-  // Progress store
-  const { getStreakStatus, totalSessions, practiceHistory, breathingHistory, getRecentAllSessions } = useProgressStore();
-  const streakStatus = getStreakStatus();
+  // Optimize Zustand selectors for progress store
+  const getStreakStatus = useProgressStore(state => state.getStreakStatus);
+  const totalSessions = useProgressStore(state => state.totalSessions);
+  const practiceHistory = useProgressStore(state => state.practiceHistory);
+  const breathingHistory = useProgressStore(state => state.breathingHistory);
+  const getRecentAllSessions = useProgressStore(state => state.getRecentAllSessions);
+  const streakStatus = useMemo(() => getStreakStatus(), [getStreakStatus]);
 
-  // Program progress store
-  const { activeProgram, getCurrentWeek } = useProgramProgressStore();
+  // Optimize Zustand selectors for program progress store
+  const activeProgram = useProgramProgressStore(state => state.activeProgram);
+  const getCurrentWeek = useProgramProgressStore(state => state.getCurrentWeek);
 
-  // Preferences store for tooltips and milestones
-  const {
-    isTooltipDismissed,
-    dismissTooltip,
-    getTooltipShownCount,
-    incrementTooltipShown,
-    isMilestoneCelebrated,
-    markMilestoneCelebrated
-  } = usePreferencesStore();
+  // Optimize Zustand selectors for preferences store
+  const isTooltipDismissed = usePreferencesStore(state => state.isTooltipDismissed);
+  const dismissTooltip = usePreferencesStore(state => state.dismissTooltip);
+  const getTooltipShownCount = usePreferencesStore(state => state.getTooltipShownCount);
+  const incrementTooltipShown = usePreferencesStore(state => state.incrementTooltipShown);
+  const isMilestoneCelebrated = usePreferencesStore(state => state.isMilestoneCelebrated);
+  const markMilestoneCelebrated = usePreferencesStore(state => state.markMilestoneCelebrated);
 
-  // Get smart recommendation based on user history
-  const allHistory = [...(practiceHistory || []), ...(breathingHistory || [])];
-  const primaryRecommendation = getSmartRecommendation(new Date(), allHistory);
+  // Memoize smart recommendation based on user history
+  const allHistory = useMemo(() =>
+    [...(practiceHistory || []), ...(breathingHistory || [])],
+    [practiceHistory, breathingHistory]
+  );
+  const primaryRecommendation = useMemo(() =>
+    getSmartRecommendation(new Date(), allHistory),
+    [allHistory]
+  );
 
-  // Get recently practiced sessions for "Recently Practiced" section
-  const recentSessions = getRecentAllSessions(3);
+  // Memoize recently practiced sessions
+  const recentSessions = useMemo(() =>
+    getRecentAllSessions(3),
+    [getRecentAllSessions]
+  );
 
   // Tooltip visibility state
   const [showQuickStartTooltip, setShowQuickStartTooltip] = useState(false);
@@ -143,11 +157,20 @@ function Welcome() {
     }
   };
 
+  // Handle pull-to-refresh
+  const handleRefresh = async () => {
+    haptics.light();
+    // Simulate refresh delay (data already reactive via Zustand)
+    await new Promise(resolve => setTimeout(resolve, 800));
+    return;
+  };
+
   return (
     <DefaultLayout
       header={<PageHeader title="" subtitle="" showBack={false} />}
     >
-      <ContentBody size="sm" spacing="none">
+      <PullToRefresh onRefresh={handleRefresh} pullingContent="">
+        <ContentBody size="sm" spacing="none">
         {/* Time-based greeting */}
         <div className="min-h-[20vh] flex flex-col items-center justify-center mb-0 text-center">
           <GreetingIcon className="mx-auto mb-3 h-12 w-12 text-muted-foreground" />
@@ -373,7 +396,8 @@ function Welcome() {
             </div>
           </div>
         )}
-      </ContentBody>
+        </ContentBody>
+      </PullToRefresh>
     </DefaultLayout>
   );
 }

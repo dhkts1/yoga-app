@@ -19,12 +19,14 @@ import useProgressStore from '../stores/progress';
 import { getProgramById, getWeekByNumber } from '../data/programs';
 import { getSessionById } from '../data/sessions';
 import { LIST_ANIMATION_SUBTLE } from '../utils/animations';
+import useTranslation from '../hooks/useTranslation';
 
 function WeekDetail() {
   const navigate = useNavigate();
   const { programId, weekNumber } = useParams();
   const [note, setNote] = useState('');
   const [showCompleteConfirm, setShowCompleteConfirm] = useState(false);
+  const { t } = useTranslation();
 
   const {
     isWeekCompleted,
@@ -133,7 +135,7 @@ function WeekDetail() {
             {completed && (
               <Badge className="bg-state-success text-white border-0">
                 <CheckCircle2 className="h-3 w-3 mr-1" />
-                Completed
+                {t('screens.weekDetail.completed')}
               </Badge>
             )}
             {week.isMilestone && (
@@ -216,7 +218,7 @@ function WeekDetail() {
       {/* Recommended Sessions */}
       <div className="mb-6">
         <h2 className="text-lg font-medium text-card-foreground mb-4 px-1">
-          Recommended Sessions
+          {t('screens.weekDetail.sessionsThisWeek')}
         </h2>
 
         <motion.div
@@ -250,7 +252,7 @@ function WeekDetail() {
                       {isCompleted && (
                         <Badge className="bg-state-success text-white border-0 text-xs py-0 px-2 h-5">
                           <CheckCircle2 className="h-3 w-3 mr-1" />
-                          Completed
+                          {t('screens.weekDetail.completed')}
                         </Badge>
                       )}
                     </div>
@@ -264,12 +266,12 @@ function WeekDetail() {
                     <div className="flex items-center gap-3 text-sm text-muted-foreground flex-wrap">
                       <div className="flex items-center gap-1">
                         <Clock className="h-4 w-4 flex-shrink-0" />
-                        <span>{session.duration} min</span>
+                        <span>{t('screens.weekDetail.sessionDuration', { duration: session.duration })}</span>
                       </div>
                       <span>•</span>
                       <div className="flex items-center gap-1">
                         <BookOpen className="h-4 w-4 flex-shrink-0" />
-                        <span>{session.poses?.length || 0} poses</span>
+                        <span>{t('screens.weekDetail.posesCount', { count: session.poses?.length || 0 })}</span>
                       </div>
                       <span>•</span>
                       <span className="capitalize text-muted-foreground">{session.difficulty}</span>

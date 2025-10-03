@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import PropTypes from 'prop-types';
 import { cn } from '../lib/utils';
 
@@ -13,6 +14,7 @@ import { cn } from '../lib/utils';
  * - Shape variants: circular, rounded, square
  * - Dark mode support
  * - Fallback icon when pose image unavailable
+ * - Memoized for performance optimization
  *
  * @example
  * <PoseImage poseId="mountain-pose" size="md" shape="circular" />
@@ -68,14 +70,14 @@ const POSE_IMAGES = {
   'supine-twist': supineTwist,
 };
 
-const PoseImage = ({
+const PoseImage = memo(function PoseImage({
   poseId,
   size = 'md',
   shape = 'circular',
   className = '',
   showBorder = false,
   ...props
-}) => {
+}) {
   // Get pose image URL
   const imageUrl = POSE_IMAGES[poseId];
 
@@ -147,7 +149,7 @@ const PoseImage = ({
       />
     </div>
   );
-};
+});
 
 PoseImage.propTypes = {
   poseId: PropTypes.string.isRequired,

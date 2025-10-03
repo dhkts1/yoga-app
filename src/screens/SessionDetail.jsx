@@ -11,12 +11,14 @@ import FavoriteButton from '../components/FavoriteButton';
 import PoseImage from '../components/PoseImage';
 import useProgressStore from '../stores/progress';
 import useCustomSessions from '../hooks/useCustomSessions';
+import useTranslation from '../hooks/useTranslation';
 
 function SessionDetail() {
   const { sessionId } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
   const [searchParams] = useSearchParams();
+  const { t } = useTranslation();
 
   // Get program context if this session is part of a program
   const programContext = location.state?.programContext || null;
@@ -428,7 +430,7 @@ function SessionDetail() {
             className="w-full rounded-xl py-3 h-auto flex items-center justify-center gap-2"
           >
             <Play className="h-5 w-5" />
-            <span className="font-medium">Start Practice</span>
+            <span className="font-medium">{t('screens.sessionDetail.startPractice')}</span>
           </Button>
         </div>
       </div>

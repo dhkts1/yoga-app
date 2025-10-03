@@ -10,6 +10,7 @@ import usePreferencesStore from '../stores/preferences';
 import useFavorites from '../hooks/useFavorites';
 import { ExerciseCard } from '../components/cards';
 import { LIST_ANIMATION } from '../utils/animations';
+import useTranslation from '../hooks/useTranslation';
 
 /**
  * Breathing Screen
@@ -22,6 +23,7 @@ function Breathing() {
   const navigate = useNavigate();
   const { breathing: breathingPrefs } = usePreferencesStore();
   const [selectedDuration, setSelectedDuration] = useState(breathingPrefs.defaultDuration || 3);
+  const { t } = useTranslation();
 
   // Use favorites hook to separate exercises
   const { favorites: favoriteExercises, nonFavorites: nonFavoriteExercises } = useFavorites(breathingExercises, 'breathing');
@@ -34,8 +36,8 @@ function Breathing() {
     <DefaultLayout
       header={
         <PageHeader
-          title="Breathwork & Pranayama"
-          subtitle="Find calm in just a few breaths"
+          title={t('screens.breathing.title')}
+          subtitle={t('screens.breathing.subtitle')}
           showBack={false}
         />
       }

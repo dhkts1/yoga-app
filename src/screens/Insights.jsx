@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import {
   Target,
   Clock,
@@ -18,47 +18,50 @@ import SimpleBarChart from '../components/charts/SimpleBarChart';
 import HeatmapCalendar from '../components/charts/HeatmapCalendar';
 import SessionHistoryModal from '../components/SessionHistoryModal';
 import { ProgramProgressCard } from '../components/cards';
+import useTranslation from '../hooks/useTranslation';
 
 function Insights() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   // Modal state
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedDaySessions, setSelectedDaySessions] = useState([]);
 
-  // Get analytics data from store
-  const {
-    totalSessions,
-    practiceHistory,
-    breathingHistory,
-    getPracticeHeatmap,
-    getMostPracticedPoses,
-    getFavoriteSessions,
-    getTimeOfDayDistribution,
-    getBodyPartFocus,
-    getMoodAnalytics,
-    getAnalyticsSummary
-  } = useProgressStore();
+  // Get analytics data from store - using selectors for better performance
+  const totalSessions = useProgressStore(state => state.totalSessions);
+  const practiceHistory = useProgressStore(state => state.practiceHistory);
+  const breathingHistory = useProgressStore(state => state.breathingHistory);
+  const getPracticeHeatmap = useProgressStore(state => state.getPracticeHeatmap);
+  const getMostPracticedPoses = useProgressStore(state => state.getMostPracticedPoses);
+  const getFavoriteSessions = useProgressStore(state => state.getFavoriteSessions);
+  const getTimeOfDayDistribution = useProgressStore(state => state.getTimeOfDayDistribution);
+  const getBodyPartFocus = useProgressStore(state => state.getBodyPartFocus);
+  const getMoodAnalytics = useProgressStore(state => state.getMoodAnalytics);
+  const getAnalyticsSummary = useProgressStore(state => state.getAnalyticsSummary);
 
-  // Fetch all analytics data
-  const heatmapData = getPracticeHeatmap(30);
-  const mostPracticedPoses = getMostPracticedPoses(5);
-  const favoriteSessions = getFavoriteSessions(5);
-  const timeDistribution = getTimeOfDayDistribution();
-  const bodyPartFocus = getBodyPartFocus();
-  const moodAnalytics = getMoodAnalytics(30);
-  const summary = getAnalyticsSummary();
+  // Memoize expensive analytics calculations
+  const heatmapData = useMemo(() => getPracticeHeatmap(30), [getPracticeHeatmap]);
+  const mostPracticedPoses = useMemo(() => getMostPracticedPoses(5), [getMostPracticedPoses]);
+  const favoriteSessions = useMemo(() => getFavoriteSessions(5), [getFavoriteSessions]);
+  const timeDistribution = useMemo(() => getTimeOfDayDistribution(), [getTimeOfDayDistribution]);
+  const bodyPartFocus = useMemo(() => getBodyPartFocus(), [getBodyPartFocus]);
+  const moodAnalytics = useMemo(() => getMoodAnalytics(30), [getMoodAnalytics]);
+  const summary = useMemo(() => getAnalyticsSummary(), [getAnalyticsSummary]);
 
-  // Calculate some insights
-  const averageSessionLength = summary.overall.avgSessionLength;
-  const practiceConsistency = summary.thisMonth.avgPerDay;
-  const weeklyTrend = summary.thisWeek.sessions > 0 ? 'up' : 'neutral';
+  // Memoize calculated insights
+  const averageSessionLength = useMemo(() => summary.overall.avgSessionLength, [summary]);
+  const practiceConsistency = useMemo(() => summary.thisMonth.avgPerDay, [summary]);
+  const weeklyTrend = useMemo(() => summary.thisWeek.sessions > 0 ? 'up' : 'neutral', [summary]);
 
-  // Determine favorite time of day
-  const favoriteTime = timeDistribution.reduce((max, current) =>
-    current.value > max.value ? current : max,
-    { label: 'Not enough data', value: 0 }
+  // Memoize favorite time of day calculation
+  const favoriteTime = useMemo(() =>
+    timeDistribution.reduce((max, current) =>
+      current.value > max.value ? current : max,
+      { label: 'Not enough data', value: 0 }
+    ),
+    [timeDistribution]
   );
 
   // Get mood trend text
@@ -104,19 +107,18 @@ function Insights() {
 
   if (totalSessions < 5) {
     return (
-      <DefaultLayout header={<PageHeader title="Progress" showBack={false} />}>
+      <DefaultLayout header={<PageHeader title={t('screens.insights.title')} showBack={false} />}>
         <div className="px-4 py-8 text-center flex-1 flex items-center justify-center">
           <div className="max-w-sm mx-auto">
             <Activity className="h-16 w-16 text-sage-300 mx-auto mb-4" />
             <Heading level={2} className="mb-2">
-              More Practice Needed
+              {t('screens.insights.morePracticeNeeded')}
             </Heading>
             <Text variant="secondary" className="mb-6">
-              Complete at least 5 sessions to unlock your insights dashboard.
-              You're {5 - totalSessions} session{5 - totalSessions !== 1 ? 's' : ''} away!
+              {t('screens.insights.unlockInsights', { count: 5 - totalSessions, plural: 5 - totalSessions !== 1 ? 's' : '' })}
             </Text>
             <Button onClick={() => navigate('/sessions')} variant="primary">
-              Start Practicing
+              {t('screens.insights.startPracticing')}
             </Button>
           </div>
         </div>
@@ -128,14 +130,14 @@ function Insights() {
       <DefaultLayout
         header={
           <PageHeader
-            title="Practice Insights"
-            subtitle="Your mindful journey analytics"
+            title={t('screens.insights.title')}
+            subtitle={t('screens.insights.subtitle')}
             showBack={false}
             actions={
               <button
                 onClick={handleExportPDF}
                 className="print:hidden text-muted-foreground hover:text-muted-foreground p-2 rounded-lg hover:bg-muted transition-colors"
-                aria-label="Export PDF"
+                aria-label={t('screens.insights.exportPDF')}
               >
                 <Download className="h-5 w-5" />
               </button>
@@ -145,35 +147,35 @@ function Insights() {
         className="print:p-0"
       >
         <ContentBody size="lg" spacing="lg" className="print:p-4">
-          {/* Key Metrics Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8 w-full min-w-0">
+          {/* Key Metrics Grid - 2x2 Compact Tiles */}
+          <div className="grid grid-cols-2 gap-2 sm:gap-3 mb-6 w-full min-w-0">
             <Stat
-              label="Total Sessions"
+              label={t('screens.insights.totalSessions')}
               value={summary.overall.totalSessions}
               icon={<Target className="h-5 w-5" />}
-              description={`${summary.thisWeek.sessions} this week`}
+              description={`${summary.thisWeek.sessions} ${t('screens.insights.thisWeek')}`}
               trend={weeklyTrend}
               variant="compact"
             />
             <Stat
-              label="Total Minutes"
-              value={`${summary.overall.totalMinutes} min`}
+              label={t('screens.insights.totalMinutes')}
+              value={`${summary.overall.totalMinutes} ${t('common.min')}`}
               icon={<Clock className="h-5 w-5" />}
-              description={`${summary.thisMonth.minutes} this month`}
+              description={`${summary.thisMonth.minutes} ${t('screens.insights.thisMonth')}`}
               variant="compact"
             />
             <Stat
-              label="Average Length"
-              value={`${averageSessionLength} min`}
+              label={t('screens.insights.averageLength')}
+              value={`${averageSessionLength} ${t('common.min')}`}
               icon={<Activity className="h-5 w-5" />}
-              description="Per session"
+              description={t('screens.insights.perSession')}
               variant="compact"
             />
             <Stat
-              label="Current Streak"
-              value={`${summary.overall.currentStreak} days`}
+              label={t('screens.insights.currentStreak')}
+              value={`${summary.overall.currentStreak} ${t('common.days')}`}
               icon={<Activity className="h-5 w-5" />}
-              description={`Best: ${summary.overall.longestStreak} days`}
+              description={t('screens.insights.best', { count: summary.overall.longestStreak })}
               variant="compact"
             />
           </div>
@@ -186,7 +188,7 @@ function Insights() {
           {/* Practice Calendar */}
           <div className="mb-8 w-full">
             <HeatmapCalendar
-              title="Practice Frequency (Last 30 Days)"
+              title={t('screens.insights.practiceFrequency')}
               practiceData={heatmapData}
               days={30}
               onDayClick={handleDayClick}
@@ -199,7 +201,7 @@ function Insights() {
             {/* Most Practiced Poses */}
             <div className="w-full overflow-hidden">
               <SimpleBarChart
-                title="Most Practiced Poses"
+                title={t('screens.insights.mostPracticedPoses')}
                 data={mostPracticedPoses}
                 maxItems={5}
               />
@@ -208,7 +210,7 @@ function Insights() {
             {/* Favorite Sessions */}
             <div className="w-full overflow-hidden">
               <SimpleBarChart
-                title="Favorite Sessions"
+                title={t('screens.insights.favoriteSessions')}
                 data={favoriteSessions}
                 maxItems={5}
               />
@@ -217,7 +219,7 @@ function Insights() {
             {/* Time of Day */}
             <div className="w-full overflow-hidden">
               <SimpleBarChart
-                title="Practice Time Distribution"
+                title={t('screens.insights.practiceTimeDistribution')}
                 data={timeDistribution}
                 maxItems={4}
               />
@@ -226,7 +228,7 @@ function Insights() {
             {/* Body Part Focus */}
             <div className="w-full overflow-hidden">
               <SimpleBarChart
-                title="Body Part Focus"
+                title={t('screens.insights.bodyPartFocus')}
                 data={bodyPartFocus.slice(0, 5)}
                 maxItems={5}
               />
@@ -237,7 +239,7 @@ function Insights() {
           {moodAnalytics.sessionsWithMoodData > 0 && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8 w-full min-w-0">
               <Stat
-                label="Mood Improvement"
+                label={t('screens.insights.moodImprovement')}
                 value={`+${moodAnalytics.averageMoodImprovement}`}
                 icon={<Smile className="h-5 w-5" />}
                 description={getMoodTrendText()}
@@ -245,17 +247,17 @@ function Insights() {
                 variant="compact"
               />
               <Stat
-                label="Energy Boost"
+                label={t('screens.insights.energyBoost')}
                 value={`+${moodAnalytics.averageEnergyImprovement}`}
                 icon={<Zap className="h-5 w-5" />}
-                description={`${moodAnalytics.improvementRate}% sessions improved mood`}
+                description={t('screens.insights.sessionsImproved', { percent: moodAnalytics.improvementRate })}
                 variant="compact"
               />
               <Stat
-                label="Wellbeing Sessions"
-                value={`${moodAnalytics.sessionsWithMoodData} of ${moodAnalytics.totalSessions}`}
+                label={t('screens.insights.wellbeingSessions')}
+                value={`${moodAnalytics.sessionsWithMoodData} ${t('common.of')} ${moodAnalytics.totalSessions}`}
                 icon={<Heart className="h-5 w-5" />}
-                description="Sessions with mood tracking"
+                description={t('screens.insights.sessionsWithTracking')}
                 variant="compact"
               />
             </div>
@@ -267,34 +269,32 @@ function Insights() {
               <BarChart3 className="h-6 w-6 text-muted-foreground mt-1 flex-shrink-0" />
               <div className="min-w-0 flex-1">{/* Prevent text overflow */}
                 <Heading level={3} className="mb-2">
-                  Your Practice Insights
+                  {t('screens.insights.yourInsights')}
                 </Heading>
                 <div className="space-y-2 text-sm">
                   {practiceConsistency > 0.5 && (
                     <Text variant="body">
-                      🌟 You're practicing {practiceConsistency} times per day on average this month - great consistency!
+                      {t('screens.insights.consistencyMessage', { avg: practiceConsistency })}
                     </Text>
                   )}
                   {favoriteTime.value > 0 && (
                     <Text variant="body">
-                      ⏰ You're most energetic during {favoriteTime.label.toLowerCase()} -
-                      {favoriteTime.value} of your sessions happen then.
+                      {t('screens.insights.favoriteTimeMessage', { time: favoriteTime.label.toLowerCase(), count: favoriteTime.value })}
                     </Text>
                   )}
                   {mostPracticedPoses.length > 0 && (
                     <Text variant="body">
-                      🧘 Your go-to pose is {mostPracticedPoses[0].label} -
-                      you've practiced it {mostPracticedPoses[0].value} times.
+                      {t('screens.insights.topPoseMessage', { pose: mostPracticedPoses[0].label, count: mostPracticedPoses[0].value })}
                     </Text>
                   )}
                   {summary.overall.longestStreak >= 7 && (
                     <Text variant="body">
-                      🔥 Your longest streak of {summary.overall.longestStreak} days shows real dedication to your practice.
+                      {t('screens.insights.longestStreakMessage', { count: summary.overall.longestStreak })}
                     </Text>
                   )}
                   {moodAnalytics.averageMoodImprovement > 0 && (
                     <Text variant="body">
-                      💙 Practice consistently improves your mood by {moodAnalytics.averageMoodImprovement} points on average.
+                      {t('screens.insights.moodImprovementMessage', { improvement: moodAnalytics.averageMoodImprovement })}
                     </Text>
                   )}
                 </div>

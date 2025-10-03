@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { BookOpen, Clock, Calendar } from 'lucide-react';
 import { DefaultLayout } from '../components/layouts';
@@ -8,10 +9,26 @@ import useProgramProgressStore from '../stores/programProgress';
 import { programs } from '../data/programs';
 import { StatusBadge, ContentBody } from '../components/design-system';
 import { LIST_ANIMATION } from '../utils/animations';
+import useTranslation from '../hooks/useTranslation';
 
 function Programs() {
   const navigate = useNavigate();
-  const { getProgramStatus, getProgramProgress, getCurrentWeek } = useProgramProgressStore();
+  const { t } = useTranslation();
+
+  // Optimize Zustand selectors - get individual functions
+  const getProgramStatus = useProgramProgressStore(state => state.getProgramStatus);
+  const getProgramProgress = useProgramProgressStore(state => state.getProgramProgress);
+  const getCurrentWeek = useProgramProgressStore(state => state.getCurrentWeek);
+
+  // Memoize programs with computed status/progress to prevent recalculation on every render
+  const programsWithStatus = useMemo(() => {
+    return programs.map(program => ({
+      ...program,
+      status: getProgramStatus(program.id, program.totalWeeks),
+      progress: getProgramProgress(program.id, program.totalWeeks),
+      currentWeek: getCurrentWeek(program.id),
+    }));
+  }, [getProgramStatus, getProgramProgress, getCurrentWeek]);
 
   const handleProgramClick = (programId) => {
     navigate(`/programs/${programId}`);
@@ -21,8 +38,8 @@ function Programs() {
     <DefaultLayout
       header={
         <PageHeader
-          title="Multi-Week Programs"
-          subtitle="Structured yoga journeys"
+          title={t('screens.programs.title')}
+          subtitle={t('screens.programs.subtitle')}
           showBack={false}
         />
       }
@@ -34,11 +51,10 @@ function Programs() {
           <BookOpen className="h-6 w-6 text-muted-foreground flex-shrink-0 mt-1" />
           <div>
             <h2 className="text-lg font-medium text-card-foreground mb-2">
-              Begin Your Journey
+              {t('screens.programs.beginJourney')}
             </h2>
             <p className="text-sm text-muted-foreground leading-relaxed">
-              Choose a multi-week program to deepen your practice with carefully sequenced sessions.
-              Each week builds on the previous, guiding you through progressive learning.
+              {t('screens.programs.chooseProgramDescription')}
             </p>
           </div>
         </div>
@@ -51,10 +67,8 @@ function Programs() {
         initial="hidden"
         animate="visible"
       >
-        {programs.map((program) => {
-          const status = getProgramStatus(program.id, program.totalWeeks);
-          const progress = getProgramProgress(program.id, program.totalWeeks);
-          const currentWeek = getCurrentWeek(program.id);
+        {programsWithStatus.map((program) => {
+          const { status, progress, currentWeek } = program;
           const isStarted = status !== 'not-started';
 
           return (
@@ -87,8 +101,8 @@ function Programs() {
               {isStarted && progress > 0 && (
                 <div className="mb-4">
                   <div className="flex items-center justify-between text-xs text-muted-foreground mb-2">
-                    <span>Week {currentWeek} of {program.totalWeeks}</span>
-                    <span className="font-medium">{progress}% Complete</span>
+                    <span>{t('screens.programs.weekOf', { current: currentWeek, total: program.totalWeeks })}</span>
+                    <span className="font-medium">{progress}% {t('common.complete')}</span>
                   </div>
                   <ProgressBar
                     value={progress}
@@ -102,17 +116,17 @@ function Programs() {
               <div className="flex items-center gap-4 text-sm text-muted-foreground flex-wrap">
                 <div className="flex items-center gap-1.5">
                   <Calendar className="h-4 w-4 flex-shrink-0" />
-                  <span>{program.totalWeeks} weeks</span>
+                  <span>{program.totalWeeks} {t('common.weeks')}</span>
                 </div>
                 <span>•</span>
                 <div className="flex items-center gap-1.5">
                   <Clock className="h-4 w-4 flex-shrink-0" />
-                  <span>Progressive learning</span>
+                  <span>{t('screens.programs.progressiveLearning')}</span>
                 </div>
                 {program.author && (
                   <>
                     <span>•</span>
-                    <span className="text-muted-foreground text-xs">by {program.author}</span>
+                    <span className="text-muted-foreground text-xs">{t('screens.programs.by')} {program.author}</span>
                   </>
                 )}
               </div>

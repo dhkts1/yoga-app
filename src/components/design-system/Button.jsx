@@ -9,6 +9,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 import { cn } from '../../lib/utils';
+import { haptics } from '../../utils/haptics';
 
 const Button = React.forwardRef(({
   className,
@@ -241,6 +242,23 @@ const Button = React.forwardRef(({
         transition: springConfig,
       };
 
+  // Handle click with haptic feedback
+  const handleClick = (e) => {
+    // Add haptic feedback for primary, secondary, and destructive buttons
+    if (!disabled && !loading) {
+      if (variant === 'primary' || variant === 'secondary') {
+        haptics.light();
+      } else if (variant === 'destructive') {
+        haptics.medium();
+      }
+    }
+
+    // Call the original onClick if provided
+    if (props.onClick) {
+      props.onClick(e);
+    }
+  };
+
   return (
     <motion.button
       className={buttonStyles}
@@ -248,6 +266,7 @@ const Button = React.forwardRef(({
       disabled={disabled || loading}
       {...motionProps}
       {...props}
+      onClick={handleClick}
     >
       {renderContent()}
     </motion.button>

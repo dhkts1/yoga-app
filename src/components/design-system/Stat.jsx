@@ -95,14 +95,61 @@ const Stat = React.forwardRef(({
       }
     : {};
 
+  // Compact variant uses minimal vertical layout for 2x2 grids
+  if (variant === 'compact') {
+    return (
+      <Component {...motionProps} ref={ref}>
+        <Card
+          className={cn('flex flex-col p-2.5', className)}
+          {...props}
+        >
+          {/* Value row: icon + number + trend */}
+          <div className="flex items-center justify-between mb-1">
+            <div className="flex items-center gap-2">
+              {icon && (
+                <div className="flex-shrink-0 w-7 h-7 rounded bg-muted flex items-center justify-center text-muted-foreground">
+                  <div className="scale-75">
+                    {icon}
+                  </div>
+                </div>
+              )}
+              <motion.div
+                variants={animate ? valueVariants : undefined}
+                className="font-bold text-xl leading-none"
+              >
+                {value}
+              </motion.div>
+            </div>
+            {trend && (
+              <div className={cn('flex-shrink-0', trendColors[trend])}>
+                <div className="scale-75">
+                  {trendIcons[trend]}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Label and description */}
+          <div className="flex flex-col">
+            <Text variant="muted" className="text-xs leading-tight text-secondary">
+              {label}
+            </Text>
+            {description && (
+              <Text variant="muted" className="text-xs leading-tight text-text-muted mt-1">
+                {description}
+              </Text>
+            )}
+          </div>
+        </Card>
+      </Component>
+    );
+  }
+
+  // Default and highlight variants use vertical card layout
   return (
     <Component {...motionProps} ref={ref}>
       <Card
-        className={cn(
-          'flex flex-col',
-          variant === 'compact' ? 'p-3 sm:p-4' : 'p-4 sm:p-6',
-          className
-        )}
+        className={cn('flex flex-col p-4 sm:p-6', className)}
         {...props}
       >
         {/* Header with icon and trend */}
@@ -127,29 +174,18 @@ const Stat = React.forwardRef(({
           variants={animate ? valueVariants : undefined}
           className="flex flex-col"
         >
-          <Heading
-            level={variant === 'compact' ? 3 : 2}
-            className={cn('mb-1', variantConfig.valueColor)}
-          >
+          <Heading level={2} className={cn('mb-1', variantConfig.valueColor)}>
             {value}
           </Heading>
 
           {/* Label */}
-          <Text
-            variant="muted"
-            size={variant === 'compact' ? 'sm' : 'base'}
-            className={variantConfig.labelColor}
-          >
+          <Text variant="muted" size="base" className={variantConfig.labelColor}>
             {label}
           </Text>
 
           {/* Optional description */}
           {description && (
-            <Text
-              variant="muted"
-              size="sm"
-              className="mt-2 text-text-muted"
-            >
+            <Text variant="muted" size="sm" className="mt-2 text-text-muted">
               {description}
             </Text>
           )}

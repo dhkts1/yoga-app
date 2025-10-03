@@ -22,7 +22,9 @@ const ProgramDetail = lazy(() => import('./screens/ProgramDetail'));
 const WeekDetail = lazy(() => import('./screens/WeekDetail'));
 
 import OfflineIndicator from './components/design-system/OfflineIndicator';
+import StorageWarning from './components/StorageWarning';
 import Onboarding from './components/Onboarding';
+// import InstallPrompt from './components/InstallPrompt'; // Not currently used
 import AnimatedRoute from './components/AnimatedRoute';
 import ThemeProvider from './components/ThemeProvider';
 import RouteLoadingFallback from './components/RouteLoadingFallback';
@@ -88,6 +90,7 @@ function App() {
         <SkipLink />
         <div id="main-content" className="min-h-screen bg-background text-foreground overflow-x-hidden">
           <OfflineIndicator />
+          <StorageWarning />
           <Onboarding />
           <AnimatedRoutes />
         </div>

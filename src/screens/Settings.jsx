@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Bell, Download, Trash2, Info, RefreshCw, Clock, Palette, Globe } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Bell, Download, Upload, Trash2, Info, RefreshCw, Clock, Palette, Globe, Database, AlertTriangle } from 'lucide-react';
 import { DefaultLayout } from '../components/layouts';
 import { PageHeader } from '../components/headers';
 import { Text } from '../components/design-system/Typography';
@@ -13,6 +13,8 @@ import usePreferencesStore from '../stores/preferences';
 import useProgressStore from '../stores/progress';
 import useCollapsibleSections from '../hooks/useCollapsibleSections';
 import useTranslation from '../hooks/useTranslation';
+import { exportData, importData, getDataSize, getStorageQuota, getBackupInfo } from '../utils/dataExport';
+import { dismissBackupReminder } from '../utils/dataExport';
 
 /**
  * Settings Screen
@@ -20,7 +22,11 @@ import useTranslation from '../hooks/useTranslation';
  */
 function Settings() {
   const [showClearDialog, setShowClearDialog] = useState(false);
+  const [showImportDialog, setShowImportDialog] = useState(false);
   const [showCustomRest, setShowCustomRest] = useState(false);
+  const [importing, setImporting] = useState(false);
+  const [storageQuota, setStorageQuota] = useState(null);
+  const [backupInfo, setBackupInfo] = useState(null);
 
   // Translation hook
   const { t } = useTranslation();
@@ -54,30 +60,48 @@ function Settings() {
   } = usePreferencesStore();
 
   // Progress store
-  const { resetProgress, exportData } = useProgressStore();
+  const { resetProgress } = useProgressStore();
 
-  // Calculate storage used
-  const getStorageSize = () => {
-    let total = 0;
-    for (let key in localStorage) {
-      if (Object.prototype.hasOwnProperty.call(localStorage, key)) {
-        total += localStorage[key].length + key.length;
-      }
-    }
-    return (total / 1024).toFixed(2); // Convert to KB
-  };
+  // Load storage info on mount
+  useEffect(() => {
+    const loadStorageInfo = async () => {
+      const quota = await getStorageQuota();
+      setStorageQuota(quota);
+
+      const backup = getBackupInfo();
+      setBackupInfo(backup);
+    };
+
+    loadStorageInfo();
+  }, []);
 
   const handleExportData = () => {
-    const data = exportData();
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `yoga-app-data-${new Date().toISOString().split('T')[0]}.json`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    exportData();
+    // Reload backup info
+    const backup = getBackupInfo();
+    setBackupInfo(backup);
+    dismissBackupReminder();
+  };
+
+  const handleImportClick = () => {
+    setShowImportDialog(true);
+  };
+
+  const handleImportConfirm = async (file) => {
+    if (!file) return;
+
+    setImporting(true);
+    try {
+      await importData(file);
+      setShowImportDialog(false);
+      // Reload page to reflect imported data
+      window.location.reload();
+    } catch (error) {
+      console.error('Import failed:', error);
+      alert(`Import failed: ${error.message}`);
+    } finally {
+      setImporting(false);
+    }
   };
 
   const handleClearData = () => {
@@ -316,25 +340,94 @@ function Settings() {
           isOpen={openSections.data}
           onToggle={() => toggleSection('data')}
         >
+          {/* Storage Quota Info */}
+          {storageQuota && (
+            <div className="mb-3 p-4 bg-muted rounded-lg border border-border">
+              <div className="flex items-center gap-2 mb-2">
+                <Database className="h-4 w-4 text-muted-foreground" />
+                <Text className="text-foreground font-medium">Storage Used</Text>
+              </div>
+              <div className="text-2xl font-bold mb-1 text-foreground">
+                {storageQuota.usage} MB
+              </div>
+              <Text variant="caption" className="text-muted-foreground mb-2">
+                of {storageQuota.quota} MB ({storageQuota.percent}%)
+              </Text>
+              <div className="h-2 bg-background rounded-full overflow-hidden">
+                <div
+                  className={`h-full transition-all duration-300 ${
+                    parseFloat(storageQuota.percent) > 80
+                      ? 'bg-state-error'
+                      : parseFloat(storageQuota.percent) > 60
+                      ? 'bg-amber-500'
+                      : 'bg-primary'
+                  }`}
+                  style={{ width: `${storageQuota.percent}%` }}
+                />
+              </div>
+              {parseFloat(storageQuota.percent) > 80 && (
+                <div className="mt-2 flex items-start gap-2 text-state-error">
+                  <AlertTriangle className="h-4 w-4 mt-0.5 flex-shrink-0" />
+                  <Text variant="caption" className="text-state-error">
+                    Storage is running low. Export your data to create a backup.
+                  </Text>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Backup Info */}
+          {backupInfo && (
+            <div className="mb-3 p-3 bg-muted rounded-lg border border-border">
+              <Text className="text-foreground font-medium mb-1">Last Backup</Text>
+              {backupInfo.hasNeverBackedUp ? (
+                <Text variant="caption" className="text-amber-600 dark:text-amber-400">
+                  Never backed up - Export your data to create a backup
+                </Text>
+              ) : (
+                <Text variant="caption" className="text-muted-foreground">
+                  {backupInfo.daysSinceBackup === 0
+                    ? 'Today'
+                    : backupInfo.daysSinceBackup === 1
+                    ? 'Yesterday'
+                    : `${backupInfo.daysSinceBackup} days ago`}
+                </Text>
+              )}
+            </div>
+          )}
+
           {/* Export Data */}
           <button
             onClick={handleExportData}
             className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-muted transition-all duration-300 group border border-border"
           >
-            <div className="p-2 rounded-lg bg-muted text-muted-foreground group-hover:bg-muted transition-colors">
+            <div className="p-2 rounded-lg bg-muted text-muted-foreground group-hover:bg-primary/10 transition-colors">
               <Download className="h-4 w-4" />
             </div>
             <div className="text-left flex-1">
-              <Text className="text-foreground font-medium">Export Practice Data</Text>
-              <Text variant="caption" className="text-muted-foreground">Download your history as JSON</Text>
+              <Text className="text-foreground font-medium">Export Your Data</Text>
+              <Text variant="caption" className="text-muted-foreground">
+                Download backup file ({getDataSize()} KB)
+              </Text>
             </div>
           </button>
 
-          {/* Storage Info */}
-          <div className="p-3 bg-muted rounded-lg border border-border">
-            <Text className="text-foreground font-medium">Storage Used</Text>
-            <Text variant="caption" className="text-muted-foreground">{getStorageSize()} KB of local storage</Text>
-          </div>
+          {/* Import Data */}
+          <button
+            onClick={handleImportClick}
+            disabled={importing}
+            className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-muted transition-all duration-300 group border border-border disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <div className="p-2 rounded-lg bg-muted text-muted-foreground group-hover:bg-primary/10 transition-colors">
+              <Upload className="h-4 w-4" />
+            </div>
+            <div className="text-left flex-1">
+              <Text className="text-foreground font-medium">Import Data</Text>
+              <Text variant="caption" className="text-muted-foreground">
+                {importing ? 'Importing...' : 'Restore from backup file'}
+              </Text>
+            </div>
+          </button>
 
           {/* Clear Data */}
           <button
@@ -413,6 +506,57 @@ function Settings() {
         confirmVariant="danger"
         icon="error"
       />
+
+      {/* Import Data Dialog */}
+      {showImportDialog && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50 animate-in fade-in duration-200">
+          <div className="bg-card rounded-lg max-w-md w-full p-6 shadow-xl border border-border animate-in zoom-in-95 duration-200">
+            <div className="flex items-start gap-3 mb-4">
+              <div className="p-2 rounded-lg bg-amber-500/20 text-amber-500">
+                <AlertTriangle className="h-5 w-5" />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-lg font-semibold text-foreground mb-1">
+                  Import Data?
+                </h3>
+                <p className="text-sm text-muted-foreground">
+                  This will replace all current data with the backup file. Your current data will be backed up automatically.
+                </p>
+              </div>
+            </div>
+
+            <div className="mb-4 p-3 bg-muted rounded-lg border border-border">
+              <label className="block cursor-pointer">
+                <div className="text-sm font-medium text-foreground mb-2">
+                  Select Backup File
+                </div>
+                <input
+                  type="file"
+                  accept=".json"
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                      handleImportConfirm(file);
+                    }
+                  }}
+                  className="w-full text-sm text-muted-foreground file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-primary file:text-primary-foreground hover:file:bg-primary/90 file:cursor-pointer"
+                  disabled={importing}
+                />
+              </label>
+            </div>
+
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowImportDialog(false)}
+                disabled={importing}
+                className="flex-1 px-4 py-2 rounded-lg border border-border text-foreground hover:bg-muted transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </DefaultLayout>
   );
 }

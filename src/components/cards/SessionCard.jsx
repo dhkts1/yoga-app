@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import PropTypes from 'prop-types';
 import { Clock, Star } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -5,6 +6,7 @@ import { motion } from 'framer-motion';
 /**
  * Unified SessionCard component that handles all session card variants
  * Eliminates 300+ lines of duplication across Welcome.jsx and Sessions.jsx
+ * Memoized for performance optimization
  *
  * @param {Object} session - Session data object
  * @param {string} variant - Card style variant: 'default' | 'favorite' | 'recommended' | 'recent' | 'custom'
@@ -22,7 +24,7 @@ import { motion } from 'framer-motion';
  * @param {string} className - Additional CSS classes
  * @param {Object} motionVariants - Framer motion animation variants
  */
-const SessionCard = ({
+const SessionCard = memo(function SessionCard({
   session,
   variant = 'default',
   type = 'yoga',
@@ -38,7 +40,7 @@ const SessionCard = ({
   recommendation,
   className = '',
   motionVariants,
-}) => {
+}) {
   // Determine display values
   const sessionName = type === 'breathing' ? session.nameEnglish : session.name;
   const duration = session.duration || session.defaultDuration || (session.totalDurationSeconds ? Math.ceil(session.totalDurationSeconds / 60) : 0);
@@ -224,7 +226,7 @@ const SessionCard = ({
       )}
     </div>
   );
-};
+});
 
 SessionCard.propTypes = {
   session: PropTypes.shape({

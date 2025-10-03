@@ -33,19 +33,14 @@ class ErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error, errorInfo) {
-    // Log error details to console (and optionally to error tracking service)
-    console.error('Error caught by ErrorBoundary:', error);
-    console.error('Error info:', errorInfo);
-    console.error('Component stack:', errorInfo.componentStack);
-
-    // Store error info in state for display
+    // Store error info in state
     this.setState(prevState => ({
       errorInfo,
       errorCount: prevState.errorCount + 1
     }));
 
-    // Log to error tracking utility
-    if (window.logError) {
+    // Log to error tracking utility (only in production)
+    if (process.env.NODE_ENV === 'production' && window.logError) {
       window.logError(error, errorInfo, {
         route: window.location.pathname,
         errorCount: this.state.errorCount + 1
@@ -123,25 +118,6 @@ class ErrorBoundary extends React.Component {
                   Go Home
                 </Button>
               </div>
-
-              {/* Technical details (collapsed by default, visible in dev mode) */}
-              {process.env.NODE_ENV === 'development' && this.state.error && (
-                <details className="mt-8 text-left">
-                  <summary className="cursor-pointer text-sm font-medium text-muted-foreground hover:text-primary mb-2">
-                    Technical Details (Dev Only)
-                  </summary>
-                  <div className="bg-muted rounded-lg p-4 space-y-2 overflow-auto max-h-64">
-                    <Text variant="caption" as="div">
-                      <strong>Error:</strong> {this.state.error.toString()}
-                    </Text>
-                    {this.state.errorInfo && (
-                      <Text variant="caption" as="pre" className="whitespace-pre-wrap text-xs">
-                        {this.state.errorInfo.componentStack}
-                      </Text>
-                    )}
-                  </div>
-                </details>
-              )}
 
               {/* Helpful guidance */}
               <div className="pt-6 border-t border-border">

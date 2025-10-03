@@ -1,5 +1,6 @@
 import { Play, Pause, SkipBack, SkipForward } from 'lucide-react';
 import { getPoseById } from '../../data/poses';
+import { haptics } from '../../utils/haptics';
 
 /**
  * Practice footer controls component.
@@ -29,11 +30,33 @@ export function PracticeControls({
   const isLastPose = currentPoseIndex === session.poses.length - 1;
   const isFirstPose = currentPoseIndex === 0;
 
+  // Handle play/pause with haptic feedback
+  const handlePlayPause = () => {
+    haptics.light();
+    onPlayPause();
+  };
+
+  // Handle previous pose with haptic feedback
+  const handlePreviousPose = () => {
+    if (!isFirstPose) {
+      haptics.medium();
+      onPreviousPose();
+    }
+  };
+
+  // Handle next pose with haptic feedback
+  const handleNextPose = () => {
+    if (!isLastPose) {
+      haptics.medium();
+    }
+    onNextPose();
+  };
+
   return (
     <div className="p-4">
       <div className="flex items-center justify-center gap-6 max-w-sm mx-auto">
         <button
-          onClick={onPreviousPose}
+          onClick={handlePreviousPose}
           disabled={isFirstPose}
           className="flex h-12 w-12 items-center justify-center rounded-full bg-muted text-muted-foreground hover:bg-muted disabled:opacity-30 disabled:hover:bg-muted transition-colors"
           aria-label="Previous pose"
@@ -42,7 +65,7 @@ export function PracticeControls({
         </button>
 
         <button
-          onClick={onPlayPause}
+          onClick={handlePlayPause}
           className="flex h-16 w-16 items-center justify-center rounded-full bg-primary text-white shadow-lg hover:bg-primary/90 active:scale-95"
           aria-label={isPlaying ? 'Pause' : 'Play'}
         >
@@ -54,7 +77,7 @@ export function PracticeControls({
         </button>
 
         <button
-          onClick={onNextPose}
+          onClick={handleNextPose}
           disabled={isLastPose}
           className="flex h-12 w-12 items-center justify-center rounded-full bg-muted text-muted-foreground hover:bg-muted disabled:opacity-30 disabled:hover:bg-muted transition-colors"
           aria-label="Skip to next pose"
@@ -78,7 +101,7 @@ export function PracticeControls({
       ) : (
         <div className="mt-3 flex justify-center">
           <button
-            onClick={onNextPose}
+            onClick={handleNextPose}
             className="px-6 py-2.5 rounded-full bg-secondary hover:bg-primary text-white text-sm font-medium transition-colors"
           >
             End Session

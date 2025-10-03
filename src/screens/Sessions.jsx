@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Clock, Zap, Moon, Sun, Plus, Palette, Edit2, Trash2, Star, Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -23,20 +23,32 @@ import {
   getCategoryCounts
 } from '../utils/sessionCategories';
 import { LIST_ANIMATION } from '../utils/animations';
+import useTranslation from '../hooks/useTranslation';
 
 function Sessions() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [sessionToDelete, setSessionToDelete] = useState(null);
-  const { practiceHistory, breathingHistory, totalSessions } = useProgressStore();
+
+  // Optimize Zustand selectors
+  const practiceHistory = useProgressStore(state => state.practiceHistory);
+  const breathingHistory = useProgressStore(state => state.breathingHistory);
+  const totalSessions = useProgressStore(state => state.totalSessions);
 
   // Use custom sessions hook instead of direct localStorage
   const { sessions: customSessions, remove: removeCustomSession } = useCustomSessions();
 
-  // Get smart recommendations
-  const allHistory = [...(practiceHistory || []), ...(breathingHistory || [])];
-  const recommendations = getTopRecommendations(allHistory, 2);
+  // Memoize smart recommendations
+  const allHistory = useMemo(() =>
+    [...(practiceHistory || []), ...(breathingHistory || [])],
+    [practiceHistory, breathingHistory]
+  );
+  const recommendations = useMemo(() =>
+    getTopRecommendations(allHistory, 2),
+    [allHistory]
+  );
 
   const sessionIcons = {
     'morning-energizer': Sun,
@@ -78,12 +90,21 @@ function Sessions() {
     setSessionToDelete(null);
   };
 
-  // Filter by selected category
-  const filteredSessions = filterSessionsByCategory(selectedCategory);
-  const filteredCustomSessions = filterCustomSessionsByCategory(customSessions, selectedCategory);
+  // Memoize filtered sessions
+  const filteredSessions = useMemo(() =>
+    filterSessionsByCategory(selectedCategory),
+    [selectedCategory]
+  );
+  const filteredCustomSessions = useMemo(() =>
+    filterCustomSessionsByCategory(customSessions, selectedCategory),
+    [customSessions, selectedCategory]
+  );
 
-  // Get category counts
-  const categoryCounts = getCategoryCounts(customSessions);
+  // Memoize category counts
+  const categoryCounts = useMemo(() =>
+    getCategoryCounts(customSessions),
+    [customSessions]
+  );
 
   // Use favorites hook to separate sessions
   const { favorites: favoriteSessionsList, nonFavorites: nonFavoriteSessionsList } = useFavorites(filteredSessions, 'session');
@@ -127,7 +148,7 @@ function Sessions() {
 
   return (
     <DefaultLayout
-      header={<PageHeader title="Choose Your Practice" subtitle="Yoga sessions for every moment" showBack={false} />}
+      header={<PageHeader title={t('screens.sessions.title')} subtitle={t('screens.sessions.subtitle')} showBack={false} />}
     >
       <ContentBody size="md" spacing="lg">
         {/* Category Tabs & Create Button */}
@@ -144,7 +165,7 @@ function Sessions() {
           <button
             onClick={handleCreateSession}
             className="ml-3 flex items-center justify-center w-10 h-10 rounded-full bg-primary hover:bg-primary/90 text-white transition-colors flex-shrink-0"
-            aria-label="Create custom session"
+            aria-label={t('screens.sessions.createCustom')}
           >
             <Plus className="h-5 w-5" />
           </button>
@@ -157,7 +178,7 @@ function Sessions() {
           <div className="flex items-center justify-center gap-2 mb-4">
             <Sparkles className="h-5 w-5 text-accent" />
             <h2 className="text-lg font-medium text-card-foreground">
-              Recommended for You
+              {t('screens.sessions.recommendedForYou')}
             </h2>
           </div>
           <motion.div
@@ -232,7 +253,7 @@ function Sessions() {
                         {!isBreathing && (
                           <>
                             <span>•</span>
-                            <span>{sessionData.poses.length} poses</span>
+                            <span>{sessionData.poses.length} {t('screens.sessions.poses')}</span>
                           </>
                         )}
                         <span>•</span>
@@ -261,7 +282,7 @@ function Sessions() {
           ) : null,
           gradient: 'bg-card'
         }))}
-        title="Favorite Custom Sessions"
+        title={t('screens.sessions.favoriteCustomSessions')}
         type="custom"
         onSessionClick={(session) => handleSessionSelect(session.id, true)}
         getIcon={() => Palette}
@@ -277,7 +298,7 @@ function Sessions() {
           ) : null,
           gradient: 'bg-card'
         }))}
-        title="Your Custom Sessions"
+        title={t('screens.sessions.yourCustomSessions')}
         variant="custom"
         type="custom"
         onSessionClick={(session) => handleSessionSelect(session.id, true)}
@@ -294,7 +315,7 @@ function Sessions() {
           ) : null,
           gradient: 'bg-card'
         }))}
-        title="Favorite Sessions"
+        title={t('screens.sessions.favoriteSessions')}
         type="yoga"
         onSessionClick={(session) => handleSessionSelect(session.id)}
         getIcon={(session) => sessionIcons[session.id] || Clock}
@@ -312,7 +333,7 @@ function Sessions() {
           gradient: 'bg-card'
         }))}
         title={(customSessions.length > 0 || favoriteSessionsList.length > 0) && nonFavoriteSessionsList.length > 0
-          ? (favoriteSessionsList.length > 0 ? 'More Sessions' : 'Pre-built Sessions')
+          ? (favoriteSessionsList.length > 0 ? t('screens.sessions.moreSessions') : t('screens.sessions.prebuiltSessions'))
           : ''}
         variant="default"
         type="yoga"
@@ -327,9 +348,9 @@ function Sessions() {
         isOpen={showDeleteConfirm}
         onClose={cancelDelete}
         onConfirm={confirmDelete}
-        title="Delete Custom Session?"
-        message="This action cannot be undone. Your custom session will be permanently deleted."
-        confirmText="Delete"
+        title={t('screens.sessions.deleteSessionTitle')}
+        message={t('screens.sessions.deleteSessionMessage')}
+        confirmText={t('common.delete')}
         confirmVariant="danger"
         icon="warning"
       />

@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Award, RotateCcw, ChevronRight, BookOpen, Clock, Calendar, Play, Pause, Lock } from 'lucide-react';
 import { DefaultLayout } from '../components/layouts';
@@ -9,25 +9,48 @@ import { ProgressBar } from '../components/design-system/Progress';
 import { getProgramById } from '../data/programs';
 import useProgramProgressStore from '../stores/programProgress';
 import { LIST_ANIMATION_SUBTLE } from '../utils/animations';
+import useTranslation from '../hooks/useTranslation';
 
 function ProgramDetail() {
   const navigate = useNavigate();
   const { programId } = useParams();
   const [showResetConfirm, setShowResetConfirm] = useState(false);
+  const { t } = useTranslation();
 
-  const {
-    getProgramStatus,
-    getProgramProgress,
-    getCurrentWeek,
-    isWeekCompleted,
-    startProgram,
-    pauseProgram,
-    resumeProgram,
-    resetProgram,
-    activeProgram
-  } = useProgramProgressStore();
+  // Optimize Zustand selectors - get individual functions and values
+  const getProgramStatus = useProgramProgressStore(state => state.getProgramStatus);
+  const getProgramProgress = useProgramProgressStore(state => state.getProgramProgress);
+  const getCurrentWeek = useProgramProgressStore(state => state.getCurrentWeek);
+  const isWeekCompleted = useProgramProgressStore(state => state.isWeekCompleted);
+  const startProgram = useProgramProgressStore(state => state.startProgram);
+  const pauseProgram = useProgramProgressStore(state => state.pauseProgram);
+  const resumeProgram = useProgramProgressStore(state => state.resumeProgram);
+  const resetProgram = useProgramProgressStore(state => state.resetProgram);
+  const activeProgram = useProgramProgressStore(state => state.activeProgram);
 
   const program = getProgramById(programId);
+
+  // Memoize program status and progress to prevent recalculation
+  const { status, progress, currentWeek, isActive } = useMemo(() => {
+    if (!program) return { status: null, progress: 0, currentWeek: 1, isActive: false };
+    return {
+      status: getProgramStatus(program.id, program.totalWeeks),
+      progress: getProgramProgress(program.id, program.totalWeeks),
+      currentWeek: getCurrentWeek(program.id),
+      isActive: activeProgram?.programId === program.id,
+    };
+  }, [program, getProgramStatus, getProgramProgress, getCurrentWeek, activeProgram]);
+
+  // Memoize weeks with their completion status
+  const weeksWithStatus = useMemo(() => {
+    if (!program) return [];
+    return program.weeks.map(week => ({
+      ...week,
+      completed: isWeekCompleted(program.id, week.weekNumber),
+      unlocked: week.weekNumber === 1 || isWeekCompleted(program.id, week.weekNumber - 1),
+      isCurrent: week.weekNumber === currentWeek,
+    }));
+  }, [program, isWeekCompleted, currentWeek]);
 
   if (!program) {
     return (
@@ -41,11 +64,6 @@ function ProgramDetail() {
       </DefaultLayout>
     );
   }
-
-  const status = getProgramStatus(program.id, program.totalWeeks);
-  const progress = getProgramProgress(program.id, program.totalWeeks);
-  const currentWeek = getCurrentWeek(program.id);
-  const isActive = activeProgram?.programId === program.id;
 
   const handleStartProgram = () => {
     startProgram(program.id);
@@ -68,17 +86,10 @@ function ProgramDetail() {
     }
   };
 
-  const handleWeekClick = (weekNumber) => {
-    // Check if week is unlocked (previous week must be completed or this is week 1)
-    const isUnlocked = weekNumber === 1 || isWeekCompleted(program.id, weekNumber - 1);
-
-    if (isUnlocked) {
+  const handleWeekClick = (weekNumber, unlocked) => {
+    if (unlocked) {
       navigate(`/programs/${program.id}/week/${weekNumber}`);
     }
-  };
-
-  const isWeekUnlocked = (weekNumber) => {
-    return weekNumber === 1 || isWeekCompleted(program.id, weekNumber - 1);
   };
 
   const getWeekBadge = (week) => {
@@ -86,10 +97,10 @@ function ProgramDetail() {
       <StatusBadge
         type="weekStatus"
         value={{
-          isCompleted: isWeekCompleted(program.id, week.weekNumber),
-          isCurrent: week.weekNumber === currentWeek,
+          isCompleted: week.completed,
+          isCurrent: week.isCurrent,
           isActive,
-          isUnlocked: isWeekUnlocked(week.weekNumber),
+          isUnlocked: week.unlocked,
         }}
       />
     );
@@ -112,8 +123,8 @@ function ProgramDetail() {
         {status !== 'not-started' && (
           <div className="mb-5">
             <div className="flex items-center justify-between text-sm text-muted-foreground mb-2">
-              <span className="font-medium">Week {currentWeek} of {program.totalWeeks}</span>
-              <span className="font-medium">{progress}% Complete</span>
+              <span className="font-medium">{t('screens.programs.weekOf', { current: currentWeek, total: program.totalWeeks })}</span>
+              <span className="font-medium">{progress}% {t('screens.programDetail.completed')}</span>
             </div>
             <ProgressBar value={progress} max={100} size="default" />
           </div>
@@ -128,7 +139,7 @@ function ProgramDetail() {
         <div className="flex items-center gap-4 text-sm text-muted-foreground mb-5 flex-wrap">
           <div className="flex items-center gap-1.5">
             <Calendar className="h-4 w-4 flex-shrink-0" />
-            <span>{program.totalWeeks} weeks</span>
+            <span>{t('screens.programDetail.weeks', { count: program.totalWeeks })}</span>
           </div>
           <span>•</span>
           <div className="flex items-center gap-1.5">
@@ -152,7 +163,7 @@ function ProgramDetail() {
               className="flex-1"
             >
               <Play className="h-4 w-4 mr-2" />
-              Start Program
+              {t('screens.programDetail.startProgram')}
             </Button>
           )}
 
@@ -163,7 +174,7 @@ function ProgramDetail() {
               className="flex-1"
             >
               <Pause className="h-4 w-4 mr-2" />
-              Pause Program
+              {t('screens.programDetail.pauseProgram')}
             </Button>
           )}
 
@@ -174,7 +185,7 @@ function ProgramDetail() {
               className="flex-1"
             >
               <Play className="h-4 w-4 mr-2" />
-              Resume Program
+              {t('screens.programDetail.resumeProgram')}
             </Button>
           )}
 
@@ -200,7 +211,7 @@ function ProgramDetail() {
       {/* Weeks List */}
       <div className="mb-6">
         <h2 className="text-lg font-medium text-card-foreground mb-4 px-1">
-          Program Schedule
+          {t('screens.programDetail.weeklyBreakdown')}
         </h2>
 
         <motion.div
@@ -209,16 +220,14 @@ function ProgramDetail() {
           initial="hidden"
           animate="visible"
         >
-          {program.weeks.map((week) => {
-            const completed = isWeekCompleted(program.id, week.weekNumber);
-            const unlocked = isWeekUnlocked(week.weekNumber);
-            const isCurrent = week.weekNumber === currentWeek;
+          {weeksWithStatus.map((week) => {
+            const { completed, unlocked, isCurrent } = week;
 
             return (
               <motion.button
                 key={week.weekNumber}
                 variants={LIST_ANIMATION_SUBTLE.item}
-                onClick={() => handleWeekClick(week.weekNumber)}
+                onClick={() => handleWeekClick(week.weekNumber, unlocked)}
                 disabled={!unlocked}
                 className={`w-full text-left bg-card rounded-xl p-4 shadow-sm border transition-all duration-300 ${
                   unlocked

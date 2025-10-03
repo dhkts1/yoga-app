@@ -16,6 +16,9 @@ import { PracticeControls } from '../components/practice/PracticeControls';
 import { PracticeTipsOverlay } from '../components/practice/PracticeTipsOverlay';
 import { usePracticeTimer } from '../hooks/usePracticeTimer';
 import { useMoodTracking } from '../hooks/useMoodTracking';
+import useTranslation from '../hooks/useTranslation';
+import { useSwipeable } from 'react-swipeable';
+import { haptics } from '../utils/haptics';
 
 function Practice() {
   const navigate = useNavigate();
@@ -23,6 +26,7 @@ function Practice() {
   const [searchParams] = useSearchParams();
   const sessionId = searchParams.get('session');
   const customSessionId = searchParams.get('customSession');
+  const { t } = useTranslation();
 
   // Get program context from navigation state (if practicing as part of a program)
   const programContext = location.state?.programContext || null;
@@ -219,18 +223,43 @@ function Practice() {
     handleExit
   ]);
 
+  // Swipe gestures for pose navigation (mobile)
+  const swipeHandlers = useSwipeable({
+    onSwipedLeft: () => {
+      // Swipe left = next pose
+      if (!isResting && !showPreMoodTracker && !showPostMoodTracker && sessionStarted) {
+        if (currentPoseIndex < session.poses.length - 1) {
+          haptics.medium();
+          handleNextPose();
+        }
+      }
+    },
+    onSwipedRight: () => {
+      // Swipe right = previous pose
+      if (!isResting && !showPreMoodTracker && !showPostMoodTracker && sessionStarted) {
+        if (currentPoseIndex > 0) {
+          haptics.medium();
+          handlePreviousPose();
+        }
+      }
+    },
+    preventScrollOnSwipe: true,
+    trackMouse: false, // Only touch, not mouse
+    trackTouch: true
+  });
+
   const progressPercent = getProgressPercent();
 
   if (!session) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
         <div className="text-center">
-          <p className="text-lg text-primary mb-2">Session not found</p>
+          <p className="text-lg text-primary mb-2">{t('screens.practice.sessionNotFound')}</p>
           <button
             onClick={() => navigate('/sessions')}
             className="text-muted-foreground hover:text-muted-foreground"
           >
-            ← Back to Sessions
+            {t('screens.practice.backToSessions')}
           </button>
         </div>
       </div>
@@ -241,7 +270,7 @@ function Practice() {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
         <div className="text-center">
-          <p className="text-lg text-primary">Loading pose...</p>
+          <p className="text-lg text-primary">{t('screens.practice.loadingPose')}</p>
         </div>
       </div>
     );
@@ -252,7 +281,7 @@ function Practice() {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background p-4">
         <MoodTracker
-          title="How are you feeling before practice?"
+          title={t('screens.practice.howFeelingBefore')}
           onComplete={handlePreMoodComplete}
           onSkip={handlePreMoodSkip}
           onDontShowAgain={handleDontShowMoodAgain}
@@ -266,7 +295,7 @@ function Practice() {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background p-4">
         <MoodTracker
-          title="How do you feel after your practice?"
+          title={t('screens.practice.howFeelingAfter')}
           onComplete={handlePostMoodComplete}
           onSkip={handlePostMoodSkip}
           onDontShowAgain={handleDontShowMoodAgain}
@@ -295,7 +324,7 @@ function Practice() {
               setShowTips(!showTips);
             }}
             className="flex h-10 w-10 items-center justify-center rounded-full bg-muted text-muted-foreground hover:bg-muted transition-colors"
-            aria-label={showTips ? 'Close tips' : 'Show tips'}
+            aria-label={t(showTips ? 'screens.practice.closeTips' : 'screens.practice.showTips')}
           >
             <HelpCircle className="h-5 w-5" />
           </button>
@@ -303,7 +332,7 @@ function Practice() {
           {/* Tooltip: Tips Icon */}
           <FeatureTooltip
             id="tooltip-tips-icon"
-            content="Get form tips and alignment cues"
+            content={t('screens.practice.getTips')}
             position="bottom"
             target={tipsButtonRef}
             show={showTipsTooltip}
@@ -346,7 +375,7 @@ function Practice() {
         header={renderHeader()}
         footer={renderFooter()}
       >
-        <ContentBody size="sm" centered padding="md">
+        <ContentBody size="sm" centered padding="md" {...swipeHandlers}>
           {programContext && (
             <div className="flex items-center justify-center mb-4">
               <div className="flex items-center gap-1.5 bg-muted border border-border rounded-full px-3 py-1.5 max-w-full">
@@ -364,10 +393,10 @@ function Practice() {
             {/* Rest Message */}
             <div>
               <h2 className="text-2xl sm:text-3xl font-light text-muted-foreground mb-2">
-                Rest & Transition
+                {t('screens.practice.restTransition')}
               </h2>
               <p className="text-sm sm:text-base text-muted-foreground">
-                Take a moment to prepare for the next pose
+                {t('screens.practice.prepareNext')}
               </p>
             </div>
 
@@ -380,18 +409,18 @@ function Practice() {
               >
                 {restTimeRemaining}
               </div>
-              <p className="text-sm sm:text-base text-secondary">seconds remaining</p>
+              <p className="text-sm sm:text-base text-secondary">{t('screens.practice.secondsRemaining')}</p>
             </div>
 
             {/* Next Pose Preview */}
             {nextPose && (
               <div className="bg-muted rounded-xl p-4 border border-border">
-                <p className="text-xs sm:text-sm text-muted-foreground mb-1">Next Pose:</p>
+                <p className="text-xs sm:text-sm text-muted-foreground mb-1">{t('screens.practice.nextPoseLabel')}</p>
                 <p className="text-lg sm:text-xl font-medium text-foreground">
                   {nextPose.nameEnglish}
                   {nextPoseData?.side && (
                     <span className="ml-2 text-base font-normal text-muted-foreground">
-                      ({nextPoseData.side === 'right' ? 'Right Side' : 'Left Side'})
+                      ({nextPoseData.side === 'right' ? t('screens.practice.rightSide') : t('screens.practice.leftSide')})
                     </span>
                   )}
                 </p>
@@ -406,7 +435,7 @@ function Practice() {
               onClick={handleNextPose}
               className="mt-6 px-8 py-3 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium transition-all duration-300 shadow-lg hover:shadow-xl active:scale-95"
             >
-              Skip Rest
+              {t('screens.practice.skipRest')}
             </button>
           </div>
           </div>
@@ -420,7 +449,7 @@ function Practice() {
       header={renderHeader()}
       footer={renderFooter()}
     >
-      <ContentBody size="sm" centered padding="md">
+      <ContentBody size="sm" centered padding="md" {...swipeHandlers}>
         {/* Program context badge - moved from header */}
         {programContext && (
           <div className="flex items-center justify-center mb-4">
@@ -448,7 +477,7 @@ function Practice() {
             {pose.nameEnglish}
             {currentPoseData?.side && (
               <span className="ml-2 text-base font-normal text-muted-foreground">
-                ({currentPoseData.side === 'right' ? 'Right Side' : 'Left Side'})
+                ({currentPoseData.side === 'right' ? t('screens.practice.rightSide') : t('screens.practice.leftSide')})
               </span>
             )}
           </h2>
@@ -457,7 +486,7 @@ function Practice() {
           </p>
           {/* Pose count - moved from header */}
           <p className="text-xs text-muted-foreground mb-1">
-            Pose {currentPoseIndex + 1} of {session?.poses?.length || 0}
+            {t('screens.practice.poseOf', { current: currentPoseIndex + 1, total: session?.poses?.length || 0 })}
           </p>
 
           {/* Timer with ARIA live region */}
@@ -469,7 +498,7 @@ function Practice() {
             >
               {formatTime(timeRemaining)}
             </div>
-            <p className="text-xs sm:text-sm text-secondary">remaining</p>
+            <p className="text-xs sm:text-sm text-secondary">{t('screens.practice.remaining')}</p>
           </div>
 
           {/* Pose description - hidden on very small screens */}

@@ -6,6 +6,7 @@ import { Button } from '../components/design-system';
 import { DefaultLayout } from '../components/layouts';
 import { PageHeader } from '../components/headers';
 import PoseImage from '../components/PoseImage';
+import useTranslation from '../hooks/useTranslation';
 
 function PoseLibrary() {
   // const navigate = useNavigate(); // Currently unused, keeping for future navigation features
@@ -13,6 +14,7 @@ function PoseLibrary() {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedDifficulty, setSelectedDifficulty] = useState('all');
   const [showFilters, setShowFilters] = useState(false);
+  const { t } = useTranslation();
 
   // Get unique categories and difficulties
   const categories = useMemo(() => getCategories(), []);
@@ -72,8 +74,8 @@ function PoseLibrary() {
     <DefaultLayout
       header={
         <PageHeader
-          title="Pose Library"
-          subtitle={`Explore ${poses.length} yoga poses`}
+          title={t('screens.poseLibrary.title')}
+          subtitle={t('screens.poseLibrary.subtitle')}
           showBack={false}
         />
       }
@@ -85,7 +87,7 @@ function PoseLibrary() {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
           <input
             type="text"
-            placeholder="Search poses..."
+            placeholder={t('screens.poseLibrary.searchPlaceholder')}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full pl-10 pr-10 py-3 rounded-2xl bg-card border-2 border-border focus:border-primary focus:outline-none text-card-foreground placeholder-sage-500"
@@ -124,7 +126,7 @@ function PoseLibrary() {
           {/* Category Filter */}
           <div>
             <label className="block text-sm font-medium text-card-foreground mb-2">
-              Category
+              {t('screens.poseLibrary.filterByCategory')}
             </label>
             <div className="flex flex-wrap gap-2">
               <button
@@ -156,7 +158,7 @@ function PoseLibrary() {
           {/* Difficulty Filter */}
           <div>
             <label className="block text-sm font-medium text-card-foreground mb-2">
-              Difficulty
+              {t('screens.poseLibrary.filterByDifficulty')}
             </label>
             <div className="flex flex-wrap gap-2">
               <button

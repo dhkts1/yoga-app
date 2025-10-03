@@ -3,12 +3,13 @@
  *
  * Flexible card component for yoga poses, sessions, and content.
  * Designed with calming aesthetics and smooth interactions.
+ * Memoized for performance optimization
  */
 
-import React from 'react';
+import React, { memo } from 'react';
 import { cn } from '../../lib/utils';
 
-const Card = React.forwardRef(({
+const Card = memo(React.forwardRef(({
   className,
   variant = 'default',
   padding = 'default',
@@ -117,7 +118,7 @@ const Card = React.forwardRef(({
       {children}
     </div>
   );
-});
+}));
 
 Card.displayName = 'Card';
 

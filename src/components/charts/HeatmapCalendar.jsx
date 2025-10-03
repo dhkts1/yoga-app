@@ -1,11 +1,13 @@
+import { memo } from 'react';
 import { Card, Text } from '../design-system';
 
 /**
  * HeatmapCalendar - GitHub-style practice frequency calendar
  * Shows last 30 days of practice with intensity-based coloring
  * Interactive: click days to view session details
+ * Memoized for performance optimization
  */
-function HeatmapCalendar({
+const HeatmapCalendar = memo(function HeatmapCalendar({
   title = 'Practice Calendar',
   practiceData = {},
   days = 30,
@@ -209,7 +211,7 @@ function HeatmapCalendar({
       </div>
     </Card>
   );
-}
+});
 
 // Helper function to calculate current streak from recent days
 function calculateCurrentStreak(daysList) {

@@ -60,36 +60,36 @@ function ProgramProgressCard() {
   return (
     <Card
       variant="sage"
-      padding="default"
+      padding="sm"
       className="w-full"
     >
-      <div className="flex items-start justify-between mb-4">
-        <div className="flex items-start space-x-3 flex-1 min-w-0">
+      <div className="flex items-start justify-between mb-2">
+        <div className="flex items-start space-x-2 flex-1 min-w-0">
           {/* Icon */}
-          <div className="flex-shrink-0 mt-1">
-            <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center">
-              <BookOpen className="h-5 w-5 text-muted-foreground" />
+          <div className="flex-shrink-0">
+            <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
+              <BookOpen className="h-4 w-4 text-muted-foreground" />
             </div>
           </div>
 
           {/* Program Info */}
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 mb-1 flex-wrap">
-              <Text variant="heading" className="text-lg font-semibold text-primary">
+            <div className="flex items-center gap-1.5 mb-0.5 flex-wrap">
+              <Text variant="heading" className="text-base font-semibold text-primary">
                 {program.name}
               </Text>
-              <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium ${getStyleColor(program.style)}`}>
+              <span className={`inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium ${getStyleColor(program.style)}`}>
                 {program.style}
               </span>
             </div>
 
-            <div className="flex items-center gap-2 text-sm text-secondary">
-              <Calendar className="h-4 w-4" />
+            <div className="flex items-center gap-1.5 text-xs text-secondary">
+              <Calendar className="h-3.5 w-3.5" />
               <span>
                 Week {currentWeek} of {totalWeeks}
               </span>
               {currentWeekData?.isMilestone && (
-                <span className="text-accent font-medium">Milestone Week</span>
+                <span className="text-accent font-medium">Milestone</span>
               )}
             </div>
           </div>
@@ -98,30 +98,30 @@ function ProgramProgressCard() {
 
       {/* Current Week Name */}
       {currentWeekData && (
-        <div className="mb-4">
-          <Text variant="body" className="text-card-foreground font-medium">
+        <div className="mb-2">
+          <Text variant="body" className="text-card-foreground font-medium text-sm">
             {currentWeekData.name}
           </Text>
-          <Text variant="caption" className="text-secondary mt-1">
+          <Text variant="caption" className="text-secondary mt-0.5 text-xs">
             {currentWeekData.focus}
           </Text>
         </div>
       )}
 
       {/* Progress Bar */}
-      <div className="mb-4">
+      <div className="mb-3">
         <ProgressBar
           value={progressPercentage}
           max={100}
           variant="default"
-          size="default"
+          size="sm"
         />
-        <div className="flex justify-between mt-2 text-sm">
+        <div className="flex justify-between mt-1 text-xs">
           <Text variant="caption" className="text-secondary">
             {progressPercentage}% Complete
           </Text>
           <Text variant="caption" className="text-muted-foreground font-medium">
-            {currentWeek - 1} / {totalWeeks} weeks completed
+            {currentWeek - 1} / {totalWeeks} weeks
           </Text>
         </div>
       </div>
@@ -130,10 +130,11 @@ function ProgramProgressCard() {
       <Button
         onClick={handleContinue}
         variant="primary"
+        size="sm"
         className="w-full sm:w-auto"
       >
         <span>Continue Week {currentWeek}</span>
-        <ArrowRight className="h-4 w-4 ml-2" />
+        <ArrowRight className="h-3.5 w-3.5 ml-1.5" />
       </Button>
     </Card>
   );
