@@ -1,7 +1,8 @@
-import { ChevronUp, ChevronDown, Trash2 } from 'lucide-react';
-import { Card, Button } from '../design-system';
-import { getPoseById } from '../../data/poses';
-import { getDurationOptions, formatDuration } from '../../data/customSessions';
+import { ChevronUp, ChevronDown, Trash2 } from "lucide-react";
+import { Card, Button } from "../design-system";
+import { getPoseById } from "../../data/poses";
+import { getDurationOptions, formatDuration } from "../../data/customSessions";
+import PoseImage from "../PoseImage";
 
 /**
  * SelectablePoseCard - Mobile-friendly pose card for session building
@@ -13,7 +14,7 @@ import { getDurationOptions, formatDuration } from '../../data/customSessions';
 const SelectablePoseCard = ({
   poseId,
   duration = 30,
-  mode = 'library', // 'library' or 'sequence'
+  mode = "library", // 'library' or 'sequence'
   index,
   onRemove,
   onDurationChange,
@@ -24,7 +25,7 @@ const SelectablePoseCard = ({
   canMoveDown = false,
   // Multi-select props
   isSelected = false,
-  onSelect
+  onSelect,
 }) => {
   const pose = getPoseById(poseId);
 
@@ -65,32 +66,39 @@ const SelectablePoseCard = ({
     }
   };
 
-  if (mode === 'library') {
+  if (mode === "library") {
     // Library mode: Compact card with color indicator for selection
     return (
       <Card
-        className={`p-2 cursor-pointer transition-all ${
+        className={`cursor-pointer p-2 transition-all ${
           isSelected
-            ? 'bg-muted border-primary border-2 shadow-sm'
-            : 'hover:bg-gray-50 border border-gray-200'
+            ? "border-2 border-primary bg-muted shadow-sm"
+            : "border border-gray-200 hover:bg-gray-50"
         } ${className}`}
         onClick={() => onSelect?.(poseId)}
       >
         <div className="flex items-center gap-2">
           {/* Small selection indicator */}
-          <div className={`w-1 h-8 rounded-full flex-shrink-0 ${
-            isSelected ? 'bg-secondary' : 'bg-transparent'
-          }`} />
-          <div className="text-lg flex-shrink-0">
-            {pose.emoji}
-          </div>
-          <div className="flex-1 min-w-0">
-            <h3 className={`text-sm font-medium truncate ${
-              isSelected ? 'text-card-foreground' : 'text-gray-900'
-            }`}>
+          <div
+            className={`h-8 w-1 flex-shrink-0 rounded-full ${
+              isSelected ? "bg-secondary" : "bg-transparent"
+            }`}
+          />
+          <PoseImage
+            poseId={poseId}
+            size="sm"
+            shape="circular"
+            className="flex-shrink-0"
+          />
+          <div className="min-w-0 flex-1">
+            <h3
+              className={`truncate text-sm font-medium ${
+                isSelected ? "text-card-foreground" : "text-gray-900"
+              }`}
+            >
               {pose.nameEnglish}
             </h3>
-            <p className="text-xs text-gray-500 italic truncate">
+            <p className="truncate text-xs italic text-gray-500">
               {pose.nameSanskrit}
             </p>
           </div>
@@ -105,22 +113,25 @@ const SelectablePoseCard = ({
       <div className="space-y-4">
         {/* Pose Info Row */}
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-3 flex-1 min-w-0">
-            <div className="text-2xl flex-shrink-0">
-              {pose.emoji}
-            </div>
-            <div className="flex-1 min-w-0">
-              <h3 className="font-medium text-gray-900 truncate">
+          <div className="flex min-w-0 flex-1 items-center space-x-3">
+            <PoseImage
+              poseId={poseId}
+              size="sm"
+              shape="circular"
+              className="flex-shrink-0"
+            />
+            <div className="min-w-0 flex-1">
+              <h3 className="truncate font-medium text-gray-900">
                 {pose.nameEnglish}
               </h3>
-              <p className="text-sm text-gray-500 truncate">
+              <p className="truncate text-sm text-gray-500">
                 {pose.nameSanskrit}
               </p>
             </div>
           </div>
 
           {/* Action Buttons */}
-          <div className="flex items-center space-x-2 flex-shrink-0">
+          <div className="flex flex-shrink-0 items-center space-x-2">
             {/* Move Up Button */}
             <Button
               variant="ghost"
@@ -150,7 +161,7 @@ const SelectablePoseCard = ({
               variant="ghost"
               size="sm"
               onClick={handleRemovePose}
-              className="min-h-[44px] min-w-[44px] p-2 text-red-500 hover:text-red-600 hover:bg-red-50"
+              className="min-h-[44px] min-w-[44px] p-2 text-red-500 hover:bg-red-50 hover:text-red-600"
               aria-label="Remove pose"
             >
               <Trash2 className="h-4 w-4" />
@@ -170,7 +181,7 @@ const SelectablePoseCard = ({
                 variant={duration === option.value ? "primary" : "outline"}
                 size="sm"
                 onClick={() => handleDurationSelect(option.value)}
-                className="text-xs px-3 py-2 min-h-[44px]"
+                className="min-h-[44px] px-3 py-2 text-xs"
               >
                 {option.label}
               </Button>

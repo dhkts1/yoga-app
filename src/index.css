@@ -75,25 +75,25 @@
     .dark {
         color-scheme: dark;
 
-        /* Dark mode - yoga-themed dark palette with improved contrast */
-        --background: 142 25% 12%;        /* Deep sage */
+        /* Dark mode - soft slate palette with sage accents */
+        --background: 220 8% 18%;         /* Soft slate - cool charcoal */
         --foreground: 30 15% 92%;         /* Warm cream text - main text */
-        --card: 142 20% 22%;              /* Lighter charcoal sage card */
+        --card: 220 6% 24%;               /* Lighter slate cards */
         --card-foreground: 30 15% 92%;    /* Card text matches main text */
-        --popover: 142 20% 22%;
+        --popover: 220 6% 24%;
         --popover-foreground: 30 15% 92%;
         --primary: 142 20% 65%;           /* Brighter sage for headings */
-        --primary-foreground: 142 25% 12%;
+        --primary-foreground: 220 8% 18%;
         --secondary: 30 15% 85%;          /* Light cream for body text */
-        --secondary-foreground: 142 25% 12%;
-        --muted: 142 15% 28%;             /* Muted backgrounds */
+        --secondary-foreground: 220 8% 18%;
+        --muted: 220 5% 28%;              /* Muted slate backgrounds */
         --muted-foreground: 30 10% 80%;   /* Lighter muted text for better contrast */
         --accent: 45 65% 60%;             /* Brighter gold for dark mode */
-        --accent-foreground: 142 25% 12%;
+        --accent-foreground: 220 8% 18%;
         --destructive: 0 60% 50%;
         --destructive-foreground: 210 40% 98%;
-        --border: 142 15% 35%;            /* Visible borders */
-        --input: 142 15% 35%;
+        --border: 220 5% 30%;             /* Subtle slate borders */
+        --input: 220 5% 30%;
         --ring: 142 20% 65%;
         --chart-1: 142 50% 55%;
         --chart-2: 45 70% 50%;
