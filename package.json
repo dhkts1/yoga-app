@@ -48,7 +48,9 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.6",
     "happy-dom": "^19.0.2",
+    "husky": "^9.1.7",
     "jsdom": "^27.0.0",
+    "lint-staged": "^16.2.3",
     "postcss": "^8.4.38",
     "prettier": "^3.3.1",
     "prettier-plugin-tailwindcss": "^0.6.1",
@@ -72,8 +74,15 @@
     "test:e2e:debug": "playwright test --debug",
     "test:e2e:report": "playwright show-report",
     "test:a11y": "playwright test tests/a11y/",
-    "test:a11y:report": "playwright test tests/a11y/ --reporter=html"
+    "test:a11y:report": "playwright test tests/a11y/ --reporter=html",
+    "prepare": "husky"
   },
   "type": "module",
-  "version": "0.0.0"
+  "version": "0.0.0",
+  "lint-staged": {
+    "*.{js,jsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  }
 }

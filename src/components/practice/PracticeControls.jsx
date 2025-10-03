@@ -1,6 +1,5 @@
-import { Play, Pause, SkipBack, SkipForward } from 'lucide-react';
-import { getPoseById } from '../../data/poses';
-import { haptics } from '../../utils/haptics';
+import { Play, Pause, SkipBack, SkipForward } from "lucide-react";
+import { haptics } from "../../utils/haptics";
 
 /**
  * Practice footer controls component.
@@ -23,7 +22,7 @@ export function PracticeControls({
   session,
   onPlayPause,
   onPreviousPose,
-  onNextPose
+  onNextPose,
 }) {
   if (!session) return null;
 
@@ -54,11 +53,11 @@ export function PracticeControls({
 
   return (
     <div className="p-4">
-      <div className="flex items-center justify-center gap-6 max-w-sm mx-auto">
+      <div className="mx-auto flex max-w-sm items-center justify-center gap-6">
         <button
           onClick={handlePreviousPose}
           disabled={isFirstPose}
-          className="flex h-12 w-12 items-center justify-center rounded-full bg-muted text-muted-foreground hover:bg-muted disabled:opacity-30 disabled:hover:bg-muted transition-colors"
+          className="flex h-12 w-12 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors hover:bg-muted disabled:opacity-30 disabled:hover:bg-muted"
           aria-label="Previous pose"
         >
           <SkipBack className="h-5 w-5" />
@@ -67,19 +66,19 @@ export function PracticeControls({
         <button
           onClick={handlePlayPause}
           className="flex h-16 w-16 items-center justify-center rounded-full bg-primary text-white shadow-lg hover:bg-primary/90 active:scale-95"
-          aria-label={isPlaying ? 'Pause' : 'Play'}
+          aria-label={isPlaying ? "Pause" : "Play"}
         >
           {isPlaying ? (
             <Pause className="h-7 w-7" />
           ) : (
-            <Play className="h-7 w-7 ml-1" />
+            <Play className="ml-1 h-7 w-7" />
           )}
         </button>
 
         <button
           onClick={handleNextPose}
           disabled={isLastPose}
-          className="flex h-12 w-12 items-center justify-center rounded-full bg-muted text-muted-foreground hover:bg-muted disabled:opacity-30 disabled:hover:bg-muted transition-colors"
+          className="flex h-12 w-12 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors hover:bg-muted disabled:opacity-30 disabled:hover:bg-muted"
           aria-label="Skip to next pose"
         >
           <SkipForward className="h-5 w-5" />
