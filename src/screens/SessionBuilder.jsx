@@ -270,10 +270,10 @@ function SessionBuilder() {
         />
       }
     >
-      <ContentBody size="lg" spacing="md">
+      <ContentBody size="lg" spacing="sm">
         {/* Session Details */}
-        <Card className="p-4">
-          <div className="space-y-4">
+        <Card padding="sm">
+          <div className="space-y-3">
             <div>
               <label className="mb-2 block text-sm font-medium text-muted-foreground">
                 {t("screens.sessionBuilder.sessionName")}
@@ -315,7 +315,10 @@ function SessionBuilder() {
 
         {/* Validation Errors */}
         {validationErrors.length > 0 && (
-          <Card className="border-state-error/30 bg-state-error/10 p-4">
+          <Card
+            padding="sm"
+            className="border-state-error/30 bg-state-error/10"
+          >
             <div className="flex items-start gap-2">
               <AlertCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-state-error" />
               <div>
@@ -352,8 +355,8 @@ function SessionBuilder() {
           </TabsList>
 
           {/* Sequence Tab */}
-          <TabsContent value="sequence" className="mt-4">
-            <Card className="p-4">
+          <TabsContent value="sequence" className="mt-3">
+            <Card padding="sm">
               {sequencePoses.length === 0 ? (
                 <EmptyState
                   icon="🧘"
@@ -361,7 +364,7 @@ function SessionBuilder() {
                   description="Switch to 'Select Poses' to build your sequence"
                 />
               ) : (
-                <div className="max-h-[calc(100vh-400px)] space-y-2 overflow-y-auto pr-1">
+                <div className="max-h-[calc(100vh-450px)] space-y-2 overflow-y-auto pr-1">
                   {sequencePoses.map((pose, index) => (
                     <SequenceItem
                       key={pose.id}
@@ -384,14 +387,14 @@ function SessionBuilder() {
           </TabsContent>
 
           {/* Library Tab */}
-          <TabsContent value="library" className="mt-4 space-y-3">
+          <TabsContent value="library" className="mt-3 space-y-2">
             {/* Add Selected Button */}
             {selectedPoseIds.length > 0 && (
-              <div className="sticky top-0 z-10 bg-cream pb-2">
+              <div className="sticky top-0 z-10 bg-background pb-2">
                 <Button
                   variant="primary"
                   onClick={handleOpenAddDialog}
-                  className="w-full"
+                  fullWidth
                 >
                   Add {selectedPoseIds.length} Selected Pose
                   {selectedPoseIds.length !== 1 ? "s" : ""}
@@ -399,7 +402,7 @@ function SessionBuilder() {
               </div>
             )}
 
-            <Card className="p-4">
+            <Card padding="sm">
               <div className="max-h-[calc(100vh-450px)] overflow-y-auto overflow-x-hidden pr-1">
                 <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                   {poses.map((pose) => (
@@ -419,11 +422,12 @@ function SessionBuilder() {
 
         {/* Save Button - Fixed at bottom */}
         {sequencePoses.length > 0 && (
-          <div className="sticky bottom-0 left-0 right-0 bg-gradient-to-t from-cream via-cream to-transparent pb-2 pt-4">
+          <div className="sticky bottom-0 left-0 right-0 bg-gradient-to-t from-background via-background to-transparent pb-2 pt-3">
             <Button
               variant="primary"
+              size="lg"
               onClick={handleSaveSession}
-              className="w-full rounded-2xl py-4 text-base font-medium shadow-lg"
+              fullWidth
             >
               {t("screens.sessionBuilder.savePractice")}
             </Button>

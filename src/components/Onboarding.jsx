@@ -22,12 +22,23 @@ import {
 import { Button } from "./design-system/Button";
 import { Heading, Text } from "./design-system/Typography";
 import usePreferencesStore from "../stores/preferences";
-import { useTheme } from "./ThemeProvider";
+import { useTheme, DARK_MODE_THEMES, LIGHT_MODE_THEMES } from "./ThemeProvider";
 
 const Onboarding = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
-  const { hasSeenOnboarding, completeOnboarding } = usePreferencesStore();
+  const {
+    hasSeenOnboarding,
+    completeOnboarding,
+    darkModeTheme,
+    customDarkColor,
+    lightModeTheme,
+    customLightColor,
+    setDarkModeTheme,
+    setCustomDarkColor,
+    setLightModeTheme,
+    setCustomLightColor,
+  } = usePreferencesStore();
   const { theme, setTheme } = useTheme();
 
   const handleComplete = () => {
@@ -103,7 +114,7 @@ const Onboarding = () => {
     {
       title: "Choose Your Theme",
       description:
-        "Personalize your experience. Select light or dark mode to match your comfort and environment.",
+        "Personalize your experience. Select light or dark mode, then choose your preferred color palette to create the perfect ambiance.",
       illustration: <ThemeIllustration />,
       icon: Palette,
       interactive: true,
@@ -170,8 +181,12 @@ const Onboarding = () => {
         {/* Content Container */}
         <div className="p-8 pb-6">
           {/* Illustration */}
-          <div className="mb-6 flex justify-center">
-            <div className="flex h-48 w-48 items-center justify-center">
+          <div
+            className={`mb-4 flex justify-center ${currentStepData.interactive ? "mb-3" : "mb-6"}`}
+          >
+            <div
+              className={`flex items-center justify-center ${currentStepData.interactive ? "h-32 w-32" : "h-48 w-48"}`}
+            >
               {currentStepData.illustration}
             </div>
           </div>
@@ -191,33 +206,170 @@ const Onboarding = () => {
 
           {/* Interactive Theme Selector (only for theme step) */}
           {currentStepData.interactive && (
-            <div className="mb-4 flex items-center justify-center gap-3">
-              <button
-                onClick={() => setTheme("light")}
-                className={`flex h-24 w-24 flex-col items-center justify-center rounded-2xl transition-all ${
-                  theme === "light"
-                    ? "scale-105 bg-primary text-white shadow-sage"
-                    : "bg-muted text-muted-foreground hover:scale-105 hover:bg-muted/80"
-                }`}
-                aria-label="Light mode"
-                aria-pressed={theme === "light"}
-              >
-                <Sun className="mb-2 h-8 w-8" />
-                <span className="text-xs font-medium">Light</span>
-              </button>
-              <button
-                onClick={() => setTheme("dark")}
-                className={`flex h-24 w-24 flex-col items-center justify-center rounded-2xl transition-all ${
-                  theme === "dark"
-                    ? "scale-105 bg-primary text-white shadow-sage"
-                    : "bg-muted text-muted-foreground hover:scale-105 hover:bg-muted/80"
-                }`}
-                aria-label="Dark mode"
-                aria-pressed={theme === "dark"}
-              >
-                <Moon className="mb-2 h-8 w-8" />
-                <span className="text-xs font-medium">Dark</span>
-              </button>
+            <div className="mb-3 space-y-2">
+              {/* Light/Dark Toggle */}
+              <div className="flex items-center justify-center gap-2">
+                <button
+                  onClick={() => setTheme("light")}
+                  className={`flex h-16 w-16 flex-col items-center justify-center rounded-lg transition-all ${
+                    theme === "light"
+                      ? "scale-105 bg-primary text-white shadow-sage"
+                      : "bg-muted text-muted-foreground hover:scale-105 hover:bg-muted/80"
+                  }`}
+                  aria-label="Light mode"
+                  aria-pressed={theme === "light"}
+                >
+                  <Sun className="mb-1 h-5 w-5" />
+                  <span className="text-[10px] font-medium">Light</span>
+                </button>
+                <button
+                  onClick={() => setTheme("dark")}
+                  className={`flex h-16 w-16 flex-col items-center justify-center rounded-lg transition-all ${
+                    theme === "dark"
+                      ? "scale-105 bg-primary text-white shadow-sage"
+                      : "bg-muted text-muted-foreground hover:scale-105 hover:bg-muted/80"
+                  }`}
+                  aria-label="Dark mode"
+                  aria-pressed={theme === "dark"}
+                >
+                  <Moon className="mb-1 h-5 w-5" />
+                  <span className="text-[10px] font-medium">Dark</span>
+                </button>
+              </div>
+
+              {/* Light Mode Color Selector */}
+              {theme === "light" && (
+                <div className="rounded-lg border border-border bg-muted p-2">
+                  <Text
+                    variant="caption"
+                    className="mb-1.5 text-center text-[11px] text-muted-foreground"
+                  >
+                    Pick your color
+                  </Text>
+                  <div className="grid grid-cols-3 gap-1.5">
+                    {Object.entries(LIGHT_MODE_THEMES).map(
+                      ([key, themeData]) => {
+                        if (key === "custom") return null;
+                        return (
+                          <button
+                            key={key}
+                            onClick={() => setLightModeTheme(key)}
+                            className={`flex flex-col items-center gap-0.5 rounded-md border p-1.5 transition-all ${
+                              lightModeTheme === key
+                                ? "border-primary bg-primary/10 shadow-sm"
+                                : "border-border hover:border-primary/50"
+                            }`}
+                          >
+                            <div
+                              className="h-6 w-6 rounded-full border-2 border-border"
+                              style={{ backgroundColor: themeData.preview }}
+                            />
+                            <span className="text-[9px] font-medium text-foreground">
+                              {themeData.name.split(" ")[0]}
+                            </span>
+                          </button>
+                        );
+                      },
+                    )}
+                    {/* Custom Color */}
+                    <button
+                      onClick={() => setLightModeTheme("custom")}
+                      className={`relative flex flex-col items-center gap-0.5 rounded-md border p-1.5 transition-all ${
+                        lightModeTheme === "custom"
+                          ? "border-primary bg-primary/10 shadow-sm"
+                          : "border-border hover:border-primary/50"
+                      }`}
+                    >
+                      <div className="relative h-6 w-6">
+                        <div
+                          className="h-6 w-6 rounded-full border-2 border-border"
+                          style={{ backgroundColor: customLightColor }}
+                        />
+                        <input
+                          type="color"
+                          value={customLightColor}
+                          onChange={(e) => {
+                            setCustomLightColor(e.target.value);
+                            setLightModeTheme("custom");
+                          }}
+                          onClick={(e) => e.stopPropagation()}
+                          className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+                        />
+                      </div>
+                      <span className="text-[9px] font-medium text-foreground">
+                        Custom
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Dark Mode Color Selector */}
+              {theme === "dark" && (
+                <div className="rounded-lg border border-border bg-muted p-2">
+                  <Text
+                    variant="caption"
+                    className="mb-1.5 text-center text-[11px] text-muted-foreground"
+                  >
+                    Pick your color
+                  </Text>
+                  <div className="grid grid-cols-3 gap-1.5">
+                    {Object.entries(DARK_MODE_THEMES).map(
+                      ([key, themeData]) => {
+                        if (key === "custom") return null;
+                        return (
+                          <button
+                            key={key}
+                            onClick={() => setDarkModeTheme(key)}
+                            className={`flex flex-col items-center gap-0.5 rounded-md border p-1.5 transition-all ${
+                              darkModeTheme === key
+                                ? "border-primary bg-primary/10 shadow-sm"
+                                : "border-border hover:border-primary/50"
+                            }`}
+                          >
+                            <div
+                              className="h-6 w-6 rounded-full border-2 border-border"
+                              style={{ backgroundColor: themeData.preview }}
+                            />
+                            <span className="text-[9px] font-medium text-foreground">
+                              {themeData.name.split(" ")[0]}
+                            </span>
+                          </button>
+                        );
+                      },
+                    )}
+                    {/* Custom Color */}
+                    <button
+                      onClick={() => setDarkModeTheme("custom")}
+                      className={`relative flex flex-col items-center gap-0.5 rounded-md border p-1.5 transition-all ${
+                        darkModeTheme === "custom"
+                          ? "border-primary bg-primary/10 shadow-sm"
+                          : "border-border hover:border-primary/50"
+                      }`}
+                    >
+                      <div className="relative h-6 w-6">
+                        <div
+                          className="h-6 w-6 rounded-full border-2 border-border"
+                          style={{ backgroundColor: customDarkColor }}
+                        />
+                        <input
+                          type="color"
+                          value={customDarkColor}
+                          onChange={(e) => {
+                            setCustomDarkColor(e.target.value);
+                            setDarkModeTheme("custom");
+                          }}
+                          onClick={(e) => e.stopPropagation()}
+                          className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+                        />
+                      </div>
+                      <span className="text-[9px] font-medium text-foreground">
+                        Custom
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 

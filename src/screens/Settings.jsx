@@ -15,7 +15,7 @@ import {
 import { DefaultLayout } from "../components/layouts";
 import { PageHeader } from "../components/headers";
 import { Text } from "../components/design-system/Typography";
-import { ContentBody } from "../components/design-system";
+import { ContentBody, Card } from "../components/design-system";
 import { Switch } from "../components/ui/switch";
 import SettingsSection from "../components/SettingsSection";
 import { ConfirmDialog } from "../components/dialogs";
@@ -154,7 +154,7 @@ function Settings() {
 
   return (
     <DefaultLayout header={<PageHeader title="Settings" showBack={false} />}>
-      <ContentBody size="lg" spacing="md">
+      <ContentBody size="lg" spacing="sm">
         {/* Language Section */}
         <SettingsSection
           id="language"
@@ -194,33 +194,64 @@ function Settings() {
                 </Text>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1.5">
                 {Object.entries(LIGHT_MODE_THEMES).map(([key, themeData]) => {
-                  // Skip custom theme in main loop, we'll add it separately
-                  if (key === "custom") return null;
+                  const isSelected = lightModeTheme === key;
+                  const isCustom = key === "custom";
 
                   return (
-                    <button
+                    <Card
                       key={key}
+                      variant={isSelected ? "outlined" : "default"}
+                      padding="xs"
+                      interactive
                       onClick={() => setLightModeTheme(key)}
-                      className={`relative rounded-xl border-2 p-4 text-left transition-all duration-300 ${
-                        lightModeTheme === key
-                          ? "scale-105 border-primary bg-primary/10 shadow-sage"
-                          : "border-border bg-card hover:scale-105 hover:border-primary/50"
-                      }`}
+                      className={
+                        isSelected ? "border-primary bg-primary/5" : ""
+                      }
                     >
-                      {/* Color preview circle */}
-                      <div className="mb-2 flex items-center gap-3">
-                        <div
-                          className="h-10 w-10 flex-shrink-0 rounded-full border-2 border-border shadow-sm"
-                          style={{ backgroundColor: themeData.preview }}
-                        />
-                        <div className="min-w-0 flex-1">
-                          <div className="truncate text-sm font-medium text-foreground">
-                            {themeData.name}
-                          </div>
+                      <div className="flex items-center gap-2.5">
+                        {/* Color preview circle */}
+                        <div className="relative flex-shrink-0">
+                          <div
+                            className="h-8 w-8 rounded-full border-2 border-border"
+                            style={{
+                              backgroundColor: isCustom
+                                ? customLightColor
+                                : themeData.preview,
+                            }}
+                          />
+                          {/* Color picker for custom theme */}
+                          {isCustom && (
+                            <input
+                              type="color"
+                              value={customLightColor}
+                              onChange={(e) => {
+                                setCustomLightColor(e.target.value);
+                                setLightModeTheme("custom");
+                              }}
+                              onClick={(e) => e.stopPropagation()}
+                              className="absolute inset-0 h-full w-full cursor-pointer rounded-full opacity-0"
+                              title="Pick a custom color"
+                            />
+                          )}
                         </div>
-                        {lightModeTheme === key && (
+
+                        {/* Theme info */}
+                        <div className="min-w-0 flex-1">
+                          <Text className="font-medium leading-tight text-foreground">
+                            {themeData.name}
+                          </Text>
+                          <Text
+                            variant="caption"
+                            className="leading-tight text-muted-foreground"
+                          >
+                            {themeData.description}
+                          </Text>
+                        </div>
+
+                        {/* Selected indicator */}
+                        {isSelected && (
                           <div className="flex-shrink-0 text-primary">
                             <svg
                               className="h-5 w-5"
@@ -236,73 +267,9 @@ function Settings() {
                           </div>
                         )}
                       </div>
-                      <Text
-                        variant="caption"
-                        className="line-clamp-2 text-xs text-muted-foreground"
-                      >
-                        {themeData.description}
-                      </Text>
-                    </button>
+                    </Card>
                   );
                 })}
-
-                {/* Custom Color Picker Card */}
-                <button
-                  onClick={() => setLightModeTheme("custom")}
-                  className={`relative rounded-xl border-2 p-4 text-left transition-all duration-300 ${
-                    lightModeTheme === "custom"
-                      ? "scale-105 border-primary bg-primary/10 shadow-sage"
-                      : "border-border bg-card hover:scale-105 hover:border-primary/50"
-                  }`}
-                >
-                  {/* Color preview circle with picker overlay */}
-                  <div className="mb-2 flex items-center gap-3">
-                    <div className="relative h-10 w-10 flex-shrink-0">
-                      <div
-                        className="h-10 w-10 rounded-full border-2 border-border shadow-sm"
-                        style={{ backgroundColor: customLightColor }}
-                      />
-                      {/* Color picker input (invisible, overlays the circle) */}
-                      <input
-                        type="color"
-                        value={customLightColor}
-                        onChange={(e) => {
-                          setCustomLightColor(e.target.value);
-                          setLightModeTheme("custom");
-                        }}
-                        onClick={(e) => e.stopPropagation()}
-                        className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
-                        title="Pick a custom color"
-                      />
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <div className="truncate text-sm font-medium text-foreground">
-                        {LIGHT_MODE_THEMES.custom.name}
-                      </div>
-                    </div>
-                    {lightModeTheme === "custom" && (
-                      <div className="flex-shrink-0 text-primary">
-                        <svg
-                          className="h-5 w-5"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                      </div>
-                    )}
-                  </div>
-                  <Text
-                    variant="caption"
-                    className="line-clamp-2 text-xs text-muted-foreground"
-                  >
-                    {LIGHT_MODE_THEMES.custom.description}
-                  </Text>
-                </button>
               </div>
             </div>
           )}
@@ -319,33 +286,64 @@ function Settings() {
                 </Text>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1.5">
                 {Object.entries(DARK_MODE_THEMES).map(([key, themeData]) => {
-                  // Skip custom theme in main loop, we'll add it separately
-                  if (key === "custom") return null;
+                  const isSelected = darkModeTheme === key;
+                  const isCustom = key === "custom";
 
                   return (
-                    <button
+                    <Card
                       key={key}
+                      variant={isSelected ? "outlined" : "default"}
+                      padding="xs"
+                      interactive
                       onClick={() => setDarkModeTheme(key)}
-                      className={`relative rounded-xl border-2 p-4 text-left transition-all duration-300 ${
-                        darkModeTheme === key
-                          ? "scale-105 border-primary bg-primary/10 shadow-sage"
-                          : "border-border bg-card hover:scale-105 hover:border-primary/50"
-                      }`}
+                      className={
+                        isSelected ? "border-primary bg-primary/5" : ""
+                      }
                     >
-                      {/* Color preview circle */}
-                      <div className="mb-2 flex items-center gap-3">
-                        <div
-                          className="h-10 w-10 flex-shrink-0 rounded-full border-2 border-border shadow-sm"
-                          style={{ backgroundColor: themeData.preview }}
-                        />
-                        <div className="min-w-0 flex-1">
-                          <div className="truncate text-sm font-medium text-foreground">
-                            {themeData.name}
-                          </div>
+                      <div className="flex items-center gap-2.5">
+                        {/* Color preview circle */}
+                        <div className="relative flex-shrink-0">
+                          <div
+                            className="h-8 w-8 rounded-full border-2 border-border"
+                            style={{
+                              backgroundColor: isCustom
+                                ? customDarkColor
+                                : themeData.preview,
+                            }}
+                          />
+                          {/* Color picker for custom theme */}
+                          {isCustom && (
+                            <input
+                              type="color"
+                              value={customDarkColor}
+                              onChange={(e) => {
+                                setCustomDarkColor(e.target.value);
+                                setDarkModeTheme("custom");
+                              }}
+                              onClick={(e) => e.stopPropagation()}
+                              className="absolute inset-0 h-full w-full cursor-pointer rounded-full opacity-0"
+                              title="Pick a custom color"
+                            />
+                          )}
                         </div>
-                        {darkModeTheme === key && (
+
+                        {/* Theme info */}
+                        <div className="min-w-0 flex-1">
+                          <Text className="font-medium leading-tight text-foreground">
+                            {themeData.name}
+                          </Text>
+                          <Text
+                            variant="caption"
+                            className="leading-tight text-muted-foreground"
+                          >
+                            {themeData.description}
+                          </Text>
+                        </div>
+
+                        {/* Selected indicator */}
+                        {isSelected && (
                           <div className="flex-shrink-0 text-primary">
                             <svg
                               className="h-5 w-5"
@@ -361,73 +359,9 @@ function Settings() {
                           </div>
                         )}
                       </div>
-                      <Text
-                        variant="caption"
-                        className="line-clamp-2 text-xs text-muted-foreground"
-                      >
-                        {themeData.description}
-                      </Text>
-                    </button>
+                    </Card>
                   );
                 })}
-
-                {/* Custom Color Picker Card */}
-                <button
-                  onClick={() => setDarkModeTheme("custom")}
-                  className={`relative rounded-xl border-2 p-4 text-left transition-all duration-300 ${
-                    darkModeTheme === "custom"
-                      ? "scale-105 border-primary bg-primary/10 shadow-sage"
-                      : "border-border bg-card hover:scale-105 hover:border-primary/50"
-                  }`}
-                >
-                  {/* Color preview circle with picker overlay */}
-                  <div className="mb-2 flex items-center gap-3">
-                    <div className="relative h-10 w-10 flex-shrink-0">
-                      <div
-                        className="h-10 w-10 rounded-full border-2 border-border shadow-sm"
-                        style={{ backgroundColor: customDarkColor }}
-                      />
-                      {/* Color picker input (invisible, overlays the circle) */}
-                      <input
-                        type="color"
-                        value={customDarkColor}
-                        onChange={(e) => {
-                          setCustomDarkColor(e.target.value);
-                          setDarkModeTheme("custom");
-                        }}
-                        onClick={(e) => e.stopPropagation()}
-                        className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
-                        title="Pick a custom color"
-                      />
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <div className="truncate text-sm font-medium text-foreground">
-                        {DARK_MODE_THEMES.custom.name}
-                      </div>
-                    </div>
-                    {darkModeTheme === "custom" && (
-                      <div className="flex-shrink-0 text-primary">
-                        <svg
-                          className="h-5 w-5"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                      </div>
-                    )}
-                  </div>
-                  <Text
-                    variant="caption"
-                    className="line-clamp-2 text-xs text-muted-foreground"
-                  >
-                    {DARK_MODE_THEMES.custom.description}
-                  </Text>
-                </button>
               </div>
             </div>
           )}

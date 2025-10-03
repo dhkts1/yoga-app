@@ -1,8 +1,8 @@
-import PropTypes from 'prop-types';
-import { motion } from 'framer-motion';
-import { Star, Sparkles } from 'lucide-react';
-import SessionCard from './cards/SessionCard';
-import { LIST_ANIMATION } from '../utils/animations';
+import PropTypes from "prop-types";
+import { motion } from "framer-motion";
+import { Star, Sparkles } from "lucide-react";
+import SessionCard from "./cards/SessionCard";
+import { LIST_ANIMATION } from "../utils/animations";
 
 /**
  * SessionList component for displaying grouped session cards with optional animations
@@ -20,8 +20,8 @@ const SessionList = ({
   sessions,
   title,
   icon: TitleIcon,
-  variant = 'default',
-  type = 'yoga',
+  variant = "default",
+  type = "yoga",
   onSessionClick,
   getIcon,
   getDescription,
@@ -29,7 +29,7 @@ const SessionList = ({
   getActions,
   showHeader = true,
   showPoseCount = true,
-  className = '',
+  className = "",
   animate = true,
   containerVariants = LIST_ANIMATION.container,
   itemVariants = LIST_ANIMATION.item,
@@ -38,23 +38,26 @@ const SessionList = ({
   if (!sessions || sessions.length === 0) return null;
 
   const headerContent = showHeader && title && (
-    <h2 className="text-lg font-medium text-foreground mb-4 text-center flex items-center justify-center gap-2">
-      {TitleIcon && <TitleIcon className="h-5 w-5 text-accent fill-accent" />}
+    <h2 className="mb-2 flex items-center justify-center gap-1.5 text-center text-sm font-medium text-foreground">
+      {TitleIcon && <TitleIcon className="h-4 w-4 fill-accent text-accent" />}
       {title}
     </h2>
   );
 
   const listContent = (
     <motion.div
-      className="space-y-3"
+      className="space-y-1.5"
       variants={animate ? containerVariants : undefined}
       initial={animate ? "hidden" : undefined}
       animate={animate ? "visible" : undefined}
     >
       {sessions.map((session) => {
-        const cardVariant = variant === 'auto'
-          ? (recommendation ? 'recommended' : 'default')
-          : variant;
+        const cardVariant =
+          variant === "auto"
+            ? recommendation
+              ? "recommended"
+              : "default"
+            : variant;
 
         return (
           <SessionCard
@@ -66,11 +69,19 @@ const SessionList = ({
             icon={getIcon ? getIcon(session) : undefined}
             poseImage={session.poseImage}
             gradient={session.gradient}
-            description={getDescription ? getDescription(session) : session.description}
-            difficulty={getDifficulty ? getDifficulty(session) : session.difficulty || session.category}
+            description={
+              getDescription ? getDescription(session) : session.description
+            }
+            difficulty={
+              getDifficulty
+                ? getDifficulty(session)
+                : session.difficulty || session.category
+            }
             showPoseCount={showPoseCount}
             actions={getActions ? getActions(session) : undefined}
-            recommendation={recommendation ? recommendation(session) : undefined}
+            recommendation={
+              recommendation ? recommendation(session) : undefined
+            }
             motionVariants={animate ? itemVariants : undefined}
           />
         );
@@ -90,8 +101,15 @@ SessionList.propTypes = {
   sessions: PropTypes.array.isRequired,
   title: PropTypes.string,
   icon: PropTypes.elementType,
-  variant: PropTypes.oneOf(['default', 'favorite', 'recommended', 'recent', 'custom', 'auto']),
-  type: PropTypes.oneOf(['yoga', 'breathing', 'custom']),
+  variant: PropTypes.oneOf([
+    "default",
+    "favorite",
+    "recommended",
+    "recent",
+    "custom",
+    "auto",
+  ]),
+  type: PropTypes.oneOf(["yoga", "breathing", "custom"]),
   onSessionClick: PropTypes.func.isRequired,
   getIcon: PropTypes.func,
   getDescription: PropTypes.func,
@@ -146,7 +164,7 @@ RecommendedSessionList.propTypes = {
 export const FavoriteSessionList = ({
   sessions,
   title = "Favorite Sessions",
-  type = 'yoga',
+  type = "yoga",
   onSessionClick,
   getIcon,
   getDescription,
@@ -174,7 +192,7 @@ export const FavoriteSessionList = ({
 FavoriteSessionList.propTypes = {
   sessions: PropTypes.array.isRequired,
   title: PropTypes.string,
-  type: PropTypes.oneOf(['yoga', 'breathing', 'custom']),
+  type: PropTypes.oneOf(["yoga", "breathing", "custom"]),
   onSessionClick: PropTypes.func.isRequired,
   getIcon: PropTypes.func,
   getDescription: PropTypes.func,

@@ -1,6 +1,6 @@
-import { ChevronDown } from 'lucide-react';
-import { Heading, Text } from './design-system/Typography';
-import { Card } from './design-system/Card';
+import { ChevronDown } from "lucide-react";
+import { Heading, Text } from "./design-system/Typography";
+import { Card } from "./design-system/Card";
 
 /**
  * SettingsSection Component
@@ -20,25 +20,27 @@ function SettingsSection({
   title,
   subtitle,
   icon: Icon,
-  iconBgColor = 'bg-muted',
+  iconBgColor = "bg-muted",
   children,
   isOpen = false,
-  onToggle
+  onToggle,
 }) {
   return (
     <Card variant="default" padding="none" className="overflow-hidden">
       <button
         onClick={onToggle}
-        className="w-full flex items-center justify-between gap-3 p-4 sm:p-5 hover:bg-muted transition-colors group"
+        className="group flex w-full items-center justify-between gap-3 p-4 transition-colors hover:bg-muted sm:p-5"
         aria-expanded={isOpen}
         aria-controls={`settings-section-${id}`}
       >
         <div className="flex items-center gap-3">
-          <div className={`p-2 rounded-lg ${iconBgColor} text-muted-foreground`}>
+          <div
+            className={`rounded-lg p-2 ${iconBgColor} text-muted-foreground`}
+          >
             <Icon className="h-5 w-5" />
           </div>
           <div className="text-left">
-            <Heading level={3} className="text-foreground text-base sm:text-lg">
+            <Heading level={3} className="text-base text-foreground sm:text-lg">
               {title}
             </Heading>
             <Text variant="caption" className="text-muted-foreground">
@@ -48,7 +50,7 @@ function SettingsSection({
         </div>
         <ChevronDown
           className={`h-5 w-5 text-muted-foreground transition-transform duration-300 ${
-            isOpen ? 'rotate-180' : ''
+            isOpen ? "rotate-180" : ""
           }`}
         />
       </button>
@@ -56,7 +58,7 @@ function SettingsSection({
       {isOpen && (
         <div
           id={`settings-section-${id}`}
-          className="space-y-4 p-4 sm:p-5 pt-0 border-t border-border animate-in fade-in slide-in-from-top-2 duration-300"
+          className="space-y-2 border-t border-border px-4 pb-3 pt-0 duration-300 animate-in fade-in slide-in-from-top-2"
         >
           {children}
         </div>
