@@ -3,6 +3,7 @@ import { AlertTriangle, Info, AlertCircle, X } from 'lucide-react';
 import { useEffect } from 'react';
 import { Heading, Text } from '../design-system/Typography';
 import { Button } from '../design-system/Button';
+import { useFocusTrap } from '../../hooks/useFocusTrap';
 
 /**
  * ConfirmDialog Component
@@ -40,15 +41,15 @@ function ConfirmDialog({
   confirmVariant = 'danger',
   icon = 'warning',
 }) {
-  // Keyboard event handlers
+  // Focus trap for accessibility
+  const dialogRef = useFocusTrap(isOpen, onClose);
+
+  // Additional keyboard event handler for Enter key
   useEffect(() => {
     if (!isOpen) return;
 
     const handleKeyDown = (e) => {
-      if (e.key === 'Escape') {
-        e.preventDefault();
-        onClose();
-      } else if (e.key === 'Enter') {
+      if (e.key === 'Enter') {
         e.preventDefault();
         onConfirm();
       }
@@ -56,7 +57,7 @@ function ConfirmDialog({
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, onClose, onConfirm]);
+  }, [isOpen, onConfirm]);
 
   // Prevent body scroll when dialog is open
   useEffect(() => {
@@ -111,6 +112,7 @@ function ConfirmDialog({
       aria-describedby="confirm-dialog-description"
     >
       <div
+        ref={dialogRef}
         className="bg-card rounded-2xl p-6 max-w-sm w-full shadow-2xl animate-in zoom-in-95 duration-300"
         onClick={(e) => e.stopPropagation()}
       >

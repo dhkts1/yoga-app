@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { CheckCircle } from 'lucide-react';
+import { useFocusTrap } from '../hooks/useFocusTrap';
 
 /**
  * MoodTracker Component
@@ -35,12 +36,16 @@ function MoodTracker({
   onSkip,
   isPostPractice = false,
   onDontShowAgain,
-  className = ""
+  className = "",
+  isOpen = true
 }) {
   const [selectedMood, setSelectedMood] = useState(null);
   const [selectedEnergy, setSelectedEnergy] = useState(null);
   const [showEnergyStep, setShowEnergyStep] = useState(false);
   const [dontShowAgain, setDontShowAgain] = useState(false);
+
+  // Focus trap for accessibility
+  const modalRef = useFocusTrap(isOpen, onSkip);
 
   const handleMoodSelect = (mood) => {
     setSelectedMood(mood);
@@ -69,10 +74,16 @@ function MoodTracker({
   };
 
   return (
-    <div className={`bg-card rounded-2xl p-4 sm:p-6 shadow-lg max-w-sm mx-4 sm:mx-auto ${className}`}>
+    <div
+      ref={modalRef}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="mood-tracker-title"
+      className={`bg-card rounded-2xl p-4 sm:p-6 shadow-lg max-w-sm mx-4 sm:mx-auto ${className}`}
+    >
       {/* Header */}
       <div className="text-center mb-6">
-        <h3 className="text-lg font-medium text-primary mb-2">
+        <h3 id="mood-tracker-title" className="text-lg font-medium text-primary mb-2">
           {title}
         </h3>
         <p className="text-sm text-secondary">

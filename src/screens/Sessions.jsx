@@ -101,6 +101,7 @@ function Sessions() {
           handleEditSession(session.id);
         }}
         className="p-2 hover:bg-muted"
+        aria-label={`Edit ${session.name}`}
       >
         <Edit2 className="h-4 w-4 text-muted-foreground" />
       </Button>
@@ -112,6 +113,7 @@ function Sessions() {
           handleDeleteSession(session.id);
         }}
         className="p-2 hover:bg-state-error/10"
+        aria-label={`Delete ${session.name}`}
       >
         <Trash2 className="h-4 w-4 text-state-error" />
       </Button>

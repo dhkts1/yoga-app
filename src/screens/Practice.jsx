@@ -165,6 +165,60 @@ function Practice() {
     }
   };
 
+  // Keyboard shortcuts for practice screen (WCAG 2.1 AA compliance)
+  useEffect(() => {
+    // Only enable keyboard shortcuts when practice is active (not during mood trackers)
+    if (showPreMoodTracker || showPostMoodTracker || !sessionStarted) {
+      return;
+    }
+
+    const handleKeyDown = (e) => {
+      // Prevent default for our keyboard shortcuts
+      if (['Space', 'ArrowLeft', 'ArrowRight', 'Escape'].includes(e.code)) {
+        e.preventDefault();
+      }
+
+      switch (e.code) {
+        case 'Space':
+          // Play/Pause
+          handlePlayPause();
+          break;
+        case 'ArrowRight':
+          // Next pose (skip forward)
+          if (!isResting && currentPoseIndex < session.poses.length - 1) {
+            handleNextPose();
+          }
+          break;
+        case 'ArrowLeft':
+          // Previous pose (skip back)
+          if (!isResting && currentPoseIndex > 0) {
+            handlePreviousPose();
+          }
+          break;
+        case 'Escape':
+          // Exit practice
+          handleExit();
+          break;
+        default:
+          break;
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [
+    showPreMoodTracker,
+    showPostMoodTracker,
+    sessionStarted,
+    isResting,
+    currentPoseIndex,
+    session,
+    handlePlayPause,
+    handleNextPose,
+    handlePreviousPose,
+    handleExit
+  ]);
+
   const progressPercent = getProgressPercent();
 
   if (!session) {
@@ -317,9 +371,13 @@ function Practice() {
               </p>
             </div>
 
-            {/* Countdown Timer */}
+            {/* Countdown Timer with ARIA live region */}
             <div className="my-8">
-              <div className="text-6xl sm:text-7xl font-light text-primary mb-2">
+              <div
+                className="text-6xl sm:text-7xl font-light text-primary mb-2"
+                aria-live="assertive"
+                aria-atomic="true"
+              >
                 {restTimeRemaining}
               </div>
               <p className="text-sm sm:text-base text-secondary">seconds remaining</p>
@@ -402,9 +460,13 @@ function Practice() {
             Pose {currentPoseIndex + 1} of {session?.poses?.length || 0}
           </p>
 
-          {/* Timer */}
+          {/* Timer with ARIA live region */}
           <div className="mb-2">
-            <div className="text-2xl sm:text-3xl font-light text-primary">
+            <div
+              className="text-2xl sm:text-3xl font-light text-primary"
+              aria-live="polite"
+              aria-atomic="true"
+            >
               {formatTime(timeRemaining)}
             </div>
             <p className="text-xs sm:text-sm text-secondary">remaining</p>

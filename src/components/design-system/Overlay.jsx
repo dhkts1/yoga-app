@@ -3,13 +3,15 @@
  *
  * Modal, dialog, and overlay components for tips, pause screens, and confirmations.
  * Designed with breath-like animations and gentle interactions.
+ * Enhanced with focus management for WCAG 2.1 AA compliance.
  */
 
 import React, { useEffect } from 'react';
 import { cn } from '../../lib/utils';
+import { useFocusTrap } from '../../hooks/useFocusTrap';
 
-// Base overlay/modal component
-const Overlay = React.forwardRef(({
+// Base overlay/modal component - not using forwardRef since we manage focus internally
+const Overlay = ({
   className,
   children,
   open = false,
@@ -19,20 +21,9 @@ const Overlay = React.forwardRef(({
   backdrop = 'blur',
   animation = 'scale',
   ...props
-}, ref) => {
-  // Handle escape key
-  useEffect(() => {
-    if (!closeOnEscape || !open) return;
-
-    const handleEscape = (e) => {
-      if (e.key === 'Escape') {
-        onClose?.();
-      }
-    };
-
-    document.addEventListener('keydown', handleEscape);
-    return () => document.removeEventListener('keydown', handleEscape);
-  }, [closeOnEscape, open, onClose]);
+}) => {
+  // Focus trap for accessibility (handles Escape key automatically)
+  const overlayRef = useFocusTrap(open, closeOnEscape ? onClose : null);
 
   // Prevent body scroll when modal is open
   useEffect(() => {
@@ -81,7 +72,9 @@ const Overlay = React.forwardRef(({
         className
       )}
       onClick={handleBackdropClick}
-      ref={ref}
+      ref={overlayRef}
+      role="dialog"
+      aria-modal="true"
       {...props}
     >
       <div className={cn(
@@ -95,9 +88,7 @@ const Overlay = React.forwardRef(({
       </div>
     </div>
   );
-});
-
-Overlay.displayName = 'Overlay';
+};
 
 // Modal component for general dialogs
 const Modal = React.forwardRef(({
@@ -109,6 +100,7 @@ const Modal = React.forwardRef(({
   description,
   showCloseButton = true,
   size = 'default',
+  ariaLabel,
   ...props
 }, ref) => {
   const sizes = {
@@ -125,6 +117,7 @@ const Modal = React.forwardRef(({
       open={open}
       onClose={onClose}
       className="p-4"
+      aria-label={ariaLabel || title}
       {...props}
     >
       <div
@@ -137,18 +130,19 @@ const Modal = React.forwardRef(({
           className
         )}
         ref={ref}
+        role="document"
       >
         {/* Header */}
         {(title || showCloseButton) && (
           <div className="flex items-center justify-between p-6 pb-4">
             <div>
               {title && (
-                <h2 className="text-xl font-semibold text-foreground">
+                <h2 id="modal-title" className="text-xl font-semibold text-foreground">
                   {title}
                 </h2>
               )}
               {description && (
-                <p className="text-base text-muted-foreground mt-1">
+                <p id="modal-description" className="text-base text-muted-foreground mt-1">
                   {description}
                 </p>
               )}
@@ -156,6 +150,7 @@ const Modal = React.forwardRef(({
             {showCloseButton && (
               <button
                 onClick={onClose}
+                aria-label="Close modal"
                 className={cn(
                   'p-2 rounded-lg text-muted-foreground hover:text-foreground',
                   'hover:bg-muted transition-colors duration-200',

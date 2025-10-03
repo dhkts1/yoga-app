@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 
 // Eager-loaded screens (instant initial render for core UX)
 import Welcome from './screens/Welcome';
@@ -26,11 +26,27 @@ import AnimatedRoute from './components/AnimatedRoute';
 import ThemeProvider from './components/ThemeProvider';
 import RouteLoadingFallback from './components/RouteLoadingFallback';
 import ErrorBoundary from './components/ErrorBoundary';
+import SkipLink from './components/SkipLink';
+import { focusMainHeading } from './utils/focusManagement';
 import './utils/errorLogging'; // Initialize error logging
 
 // Animated routes wrapper component
 function AnimatedRoutes() {
   const location = useLocation();
+
+  // Focus management for route changes (WCAG 2.1 AA)
+  useEffect(() => {
+    // Scroll to top on route change
+    window.scrollTo(0, 0);
+
+    // Focus the main heading after route transition
+    // This announces the new page to screen readers
+    const timer = setTimeout(() => {
+      focusMainHeading();
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, [location.pathname]);
 
   return (
     <AnimatePresence mode="wait">
@@ -61,7 +77,8 @@ function App() {
   return (
     <ThemeProvider>
       <Router>
-        <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
+        <SkipLink />
+        <div id="main-content" className="min-h-screen bg-background text-foreground overflow-x-hidden">
           <OfflineIndicator />
           <Onboarding />
           <AnimatedRoutes />
