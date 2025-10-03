@@ -1,10 +1,10 @@
-import { useNavigate, useLocation } from 'react-router-dom';
-import { useRef, useState, useEffect } from 'react';
-import { Sun, Compass, Wind, Calendar, TrendingUp, User } from 'lucide-react';
-import { cn } from '../lib/utils';
-import useProgressStore from '../stores/progress';
-import usePreferencesStore from '../stores/preferences';
-import FeatureTooltip from './FeatureTooltip';
+import { useNavigate, useLocation } from "react-router-dom";
+import { useRef, useState, useEffect } from "react";
+import { Sun, Compass, Wind, Calendar, TrendingUp, User } from "lucide-react";
+import { cn } from "../lib/utils";
+import useProgressStore from "../stores/progress";
+import usePreferencesStore from "../stores/preferences";
+import FeatureTooltip from "./FeatureTooltip";
 
 /**
  * BottomNav - Persistent bottom tab navigation
@@ -25,14 +25,14 @@ function BottomNav({ className }) {
   // Refs for tooltip targeting
   const progressTabRef = useRef(null);
 
-  // Progress store
-  const { totalSessions } = useProgressStore();
+  // Progress store - only subscribe to totalSessions for tooltip logic
+  const totalSessions = useProgressStore((state) => state.totalSessions);
 
-  // Preferences store for tooltips
-  const {
-    isTooltipDismissed,
-    dismissTooltip,
-  } = usePreferencesStore();
+  // Preferences store for tooltips - only subscribe to tooltip methods
+  const isTooltipDismissed = usePreferencesStore(
+    (state) => state.isTooltipDismissed,
+  );
+  const dismissTooltip = usePreferencesStore((state) => state.dismissTooltip);
 
   // Tooltip visibility state
   const [showProgressTooltip, setShowProgressTooltip] = useState(false);
@@ -41,11 +41,17 @@ function BottomNav({ className }) {
   useEffect(() => {
     // Tooltip 3: Bottom Nav - Progress
     // Show when: After 1 session completed, hasn't opened Progress, on home screen
-    const progressDismissed = isTooltipDismissed('tooltip-bottom-nav-progress');
-    const isOnHomeScreen = location.pathname === '/';
-    const hasNotVisitedProgress = location.pathname !== '/insights' && location.pathname !== '/progress';
+    const progressDismissed = isTooltipDismissed("tooltip-bottom-nav-progress");
+    const isOnHomeScreen = location.pathname === "/";
+    const hasNotVisitedProgress =
+      location.pathname !== "/insights" && location.pathname !== "/progress";
 
-    if (!progressDismissed && totalSessions >= 1 && isOnHomeScreen && hasNotVisitedProgress) {
+    if (
+      !progressDismissed &&
+      totalSessions >= 1 &&
+      isOnHomeScreen &&
+      hasNotVisitedProgress
+    ) {
       // Show tooltip after a delay
       const timer = setTimeout(() => {
         setShowProgressTooltip(true);
@@ -58,64 +64,65 @@ function BottomNav({ className }) {
   // Handle Progress tooltip dismiss
   const handleProgressTooltipDismiss = () => {
     setShowProgressTooltip(false);
-    dismissTooltip('tooltip-bottom-nav-progress');
+    dismissTooltip("tooltip-bottom-nav-progress");
   };
 
   const tabs = [
     {
-      id: 'today',
-      label: 'Today',
+      id: "today",
+      label: "Today",
       icon: Sun,
-      path: '/',
+      path: "/",
       // Match exact home path
-      isActive: location.pathname === '/'
+      isActive: location.pathname === "/",
     },
     {
-      id: 'discover',
-      label: 'Discover',
+      id: "discover",
+      label: "Discover",
       icon: Compass,
-      path: '/sessions',
+      path: "/sessions",
       // Match /sessions and /sessions/builder only (not breathing)
-      isActive: location.pathname.startsWith('/sessions')
+      isActive: location.pathname.startsWith("/sessions"),
     },
     {
-      id: 'breathe',
-      label: 'Breathe',
+      id: "breathe",
+      label: "Breathe",
       icon: Wind,
-      path: '/breathing',
+      path: "/breathing",
       // Match /breathing and /breathing/practice
-      isActive: location.pathname.startsWith('/breathing')
+      isActive: location.pathname.startsWith("/breathing"),
     },
     {
-      id: 'programs',
-      label: 'Programs',
+      id: "programs",
+      label: "Programs",
       icon: Calendar,
-      path: '/programs',
+      path: "/programs",
       // Match /programs and program detail pages
-      isActive: location.pathname.startsWith('/programs')
+      isActive: location.pathname.startsWith("/programs"),
     },
     {
-      id: 'progress',
-      label: 'Progress',
+      id: "progress",
+      label: "Progress",
       icon: TrendingUp,
-      path: '/insights',
+      path: "/insights",
       // Match /insights and /progress
-      isActive: location.pathname === '/insights' || location.pathname === '/progress'
+      isActive:
+        location.pathname === "/insights" || location.pathname === "/progress",
     },
     {
-      id: 'profile',
-      label: 'Profile',
+      id: "profile",
+      label: "Profile",
       icon: User,
-      path: '/settings',
+      path: "/settings",
       // Match /settings
-      isActive: location.pathname === '/settings'
-    }
+      isActive: location.pathname === "/settings",
+    },
   ];
 
   const handleTabClick = (tab) => {
     // Dismiss tooltip if clicking Progress
-    if (tab.id === 'progress' && showProgressTooltip) {
-      dismissTooltip('tooltip-bottom-nav-progress');
+    if (tab.id === "progress" && showProgressTooltip) {
+      dismissTooltip("tooltip-bottom-nav-progress");
       setShowProgressTooltip(false);
     }
 
@@ -126,18 +133,18 @@ function BottomNav({ className }) {
     <nav
       className={cn(
         // Layout
-        'fixed bottom-0 left-0 right-0 z-40',
+        "fixed inset-x-0 bottom-0 z-40",
         // Styling - solid background (no transparency)
-        'bg-background',
-        'border-t border-border',
+        "bg-background",
+        "border-t border-border",
         // Safe area handling for iOS
-        'pb-safe-bottom',
+        "pb-safe-bottom",
         // Shadow
-        'shadow-lg',
-        className
+        "shadow-lg",
+        className,
       )}
     >
-      <div className="flex items-stretch justify-around h-[48px]">
+      <div className="flex h-[48px] items-stretch justify-around">
         {tabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = tab.isActive;
@@ -145,43 +152,43 @@ function BottomNav({ className }) {
           return (
             <button
               key={tab.id}
-              ref={tab.id === 'progress' ? progressTabRef : null}
+              ref={tab.id === "progress" ? progressTabRef : null}
               onClick={() => handleTabClick(tab)}
               className={cn(
                 // Layout - equal width tabs
-                'flex-1 flex flex-col items-center justify-center',
+                "flex flex-1 flex-col items-center justify-center",
                 // Minimum touch target
-                'min-h-[44px]',
+                "min-h-touch",
                 // Spacing
-                'px-2 py-2',
+                "p-2",
                 // Transitions
-                'transition-all duration-300',
+                "transition-all duration-300",
                 // Hover state (subtle on mobile)
-                'hover:bg-muted',
+                "hover:bg-muted",
                 // Active state
-                'relative',
+                "relative",
                 // Focus state for accessibility
-                'focus:outline-none focus:ring-2 focus:ring-ring focus:ring-inset'
+                "focus:outline-none focus:ring-2 focus:ring-inset focus:ring-ring",
               )}
               aria-label={tab.label}
-              aria-current={isActive ? 'page' : undefined}
+              aria-current={isActive ? "page" : undefined}
             >
               {/* Active indicator line at top */}
               {isActive && (
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-12 h-1 bg-secondary rounded-b-full" />
+                <div className="absolute left-1/2 top-0 h-1 w-12 -translate-x-1/2 rounded-b-full bg-secondary" />
               )}
 
               {/* Icon */}
               <Icon
                 className={cn(
                   // Size - compact for smaller nav
-                  'h-6 w-6',
+                  "size-6",
                   // Color based on active state
-                  isActive ? 'text-muted-foreground' : 'text-muted-foreground',
+                  isActive ? "text-muted-foreground" : "text-muted-foreground",
                   // Stroke width for active state (bolder when active)
-                  isActive ? 'stroke-[2.5]' : 'stroke-[2]',
+                  isActive ? "stroke-[2.5]" : "stroke-[2]",
                   // Smooth transition
-                  'transition-all duration-300'
+                  "transition-all duration-300",
                 )}
                 strokeLinecap="round"
                 strokeLinejoin="round"
