@@ -1,12 +1,55 @@
-import { memo } from "react";
+import { memo, useMemo } from "react";
 import PropTypes from "prop-types";
 import { Clock, Star } from "lucide-react";
 import { motion } from "framer-motion";
 
 /**
+ * Helper function: Get card styles based on variant, size, gradient, and state
+ * Extracted to module level for better React Compiler optimization
+ */
+const getCardStyles = (variant, size, gradient, recommendation, actions) => {
+  // Base styles with gradient support - use bg-card for theme awareness
+  const bgStyles = gradient || "bg-card";
+  const baseStyles = `w-full rounded-lg text-left shadow-sm transition-all duration-300 ${bgStyles} border border-border`;
+
+  // Size-specific padding and height - now more compact
+  const sizeStyles = size === "hero" ? "p-4" : "p-3";
+
+  switch (variant) {
+    case "favorite":
+      return `${baseStyles} ${sizeStyles} hover:shadow-md hover:scale-[1.02] active:scale-[0.98] border-l-4 border-gold`;
+
+    case "recommended":
+      return `${baseStyles} ${sizeStyles} hover:shadow-md hover:scale-[1.02] active:scale-[0.98] border-2 ${
+        recommendation?.isPrimary ? "border-accent" : "border-transparent"
+      }`;
+
+    case "recent":
+      return `${baseStyles} ${sizeStyles} hover:shadow-md border border-border hover:border-border`;
+
+    case "custom":
+      return `${baseStyles} ${sizeStyles} shadow-sm ${
+        actions ? "border-l-4 border-primary" : ""
+      }`;
+
+    default:
+      return `${baseStyles} ${sizeStyles} hover:shadow-md hover:scale-[1.02] active:scale-[0.98]`;
+  }
+};
+
+/**
+ * Helper function: Get icon color based on variant
+ * Extracted to module level for better React Compiler optimization
+ */
+const getIconColor = (variant) => {
+  return variant === "recommended" ? "text-accent" : "text-muted-foreground";
+};
+
+/**
  * Unified SessionCard component that handles all session card variants
  * Eliminates 300+ lines of duplication across Welcome.jsx and Sessions.jsx
  * Memoized for performance optimization
+ * Optimized for React Compiler with module-level helper functions
  *
  * @param {Object} session - Session data object
  * @param {string} variant - Card style variant: 'default' | 'favorite' | 'recommended' | 'recent' | 'custom'
@@ -41,57 +84,38 @@ const SessionCard = memo(function SessionCard({
   className = "",
   motionVariants,
 }) {
-  // Determine display values
-  const sessionName = type === "breathing" ? session.nameEnglish : session.name;
-  const duration =
-    session.duration ||
-    session.defaultDuration ||
-    (session.totalDurationSeconds
-      ? Math.ceil(session.totalDurationSeconds / 60)
-      : 0);
+  // Memoize computed values to prevent recalculation on every render
+  // React Compiler should handle this, but explicit memoization ensures stability
+  const sessionName = useMemo(
+    () => (type === "breathing" ? session.nameEnglish : session.name),
+    [type, session.nameEnglish, session.name],
+  );
+
+  const duration = useMemo(
+    () =>
+      session.duration ||
+      session.defaultDuration ||
+      (session.totalDurationSeconds
+        ? Math.ceil(session.totalDurationSeconds / 60)
+        : 0),
+    [session.duration, session.defaultDuration, session.totalDurationSeconds],
+  );
+
   const Icon = CustomIcon || Clock;
 
-  // Determine styling based on variant, size, and gradient
-  const getCardStyles = () => {
-    // Base styles with gradient support - use bg-card for theme awareness
-    const bgStyles = gradient || "bg-card";
-    const baseStyles = `w-full rounded-lg text-left shadow-sm transition-all duration-300 ${bgStyles} border border-border`;
+  // Memoize card styles to prevent recalculation
+  const cardStyles = useMemo(
+    () => getCardStyles(variant, size, gradient, recommendation, actions),
+    [variant, size, gradient, recommendation, actions],
+  );
 
-    // Size-specific padding and height - now more compact
-    const sizeStyles = size === "hero" ? "p-4" : "p-3";
-
-    switch (variant) {
-      case "favorite":
-        return `${baseStyles} ${sizeStyles} hover:shadow-md hover:scale-[1.02] active:scale-[0.98] border-l-4 border-gold`;
-
-      case "recommended":
-        return `${baseStyles} ${sizeStyles} hover:shadow-md hover:scale-[1.02] active:scale-[0.98] border-2 ${
-          recommendation?.isPrimary ? "border-accent" : "border-transparent"
-        }`;
-
-      case "recent":
-        return `${baseStyles} ${sizeStyles} hover:shadow-md border border-border hover:border-border`;
-
-      case "custom":
-        return `${baseStyles} ${sizeStyles} shadow-sm ${
-          actions ? "border-l-4 border-primary" : ""
-        }`;
-
-      default:
-        return `${baseStyles} ${sizeStyles} hover:shadow-md hover:scale-[1.02] active:scale-[0.98]`;
-    }
-  };
-
-  // Get text color based on variant
-  const getIconColor = () => {
-    if (variant === "recommended") return "text-accent";
-    return "text-muted-foreground";
-  };
+  // Memoize icon color
+  const iconColor = useMemo(() => getIconColor(variant), [variant]);
 
   const cardContent = (
     <button
       onClick={onClick}
-      className={getCardStyles()}
+      className={cardStyles}
       aria-label={`Start ${sessionName} session, ${duration} minutes`}
     >
       <div className="flex items-start justify-between gap-3">
@@ -103,9 +127,7 @@ const SessionCard = memo(function SessionCard({
         >
           {/* Title Row */}
           <div className="mb-1 flex items-center gap-2">
-            {!poseImage && (
-              <Icon className={`size-5 ${getIconColor()} shrink-0`} />
-            )}
+            {!poseImage && <Icon className={`size-5 ${iconColor} shrink-0`} />}
             <h3
               className={`${size === "hero" ? "text-lg" : "text-base"} truncate font-medium text-foreground`}
             >

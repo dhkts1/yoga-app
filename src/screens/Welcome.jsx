@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import {
   Sun,
   Moon,
@@ -46,7 +46,7 @@ function Welcome() {
   const getRecentAllSessions = useProgressStore(
     (state) => state.getRecentAllSessions,
   );
-  const streakStatus = useMemo(() => getStreakStatus(), [getStreakStatus]);
+  const streakStatus = getStreakStatus();
 
   // Optimize Zustand selectors for program progress store
   const activeProgram = useProgramProgressStore((state) => state.activeProgram);
@@ -62,7 +62,7 @@ function Welcome() {
     (state) => state.markMilestoneCelebrated,
   );
 
-  // React Compiler handles memoization automatically
+  // React Compiler handles optimization automatically
   const allHistory = [...(practiceHistory || []), ...(breathingHistory || [])];
   const primaryRecommendation = getSmartRecommendation(new Date(), allHistory);
   const recentSessions = getRecentAllSessions(3);
