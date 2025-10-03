@@ -169,7 +169,7 @@ function Welcome() {
     <DefaultLayout
       header={<PageHeader title="" subtitle="" showBack={false} />}
     >
-      <PullToRefresh onRefresh={handleRefresh} pullingContent="">
+      <PullToRefresh onRefresh={handleRefresh} pullingContent="" className="h-full">
         <ContentBody size="sm" spacing="none">
         {/* Time-based greeting */}
         <div className="min-h-[20vh] flex flex-col items-center justify-center mb-0 text-center">
