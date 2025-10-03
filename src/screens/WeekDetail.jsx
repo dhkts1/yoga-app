@@ -1,6 +1,6 @@
-import { useNavigate, useParams } from 'react-router-dom';
-import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { useNavigate, useParams } from "react-router-dom";
+import { useState } from "react";
+import { motion } from "framer-motion";
 import {
   CheckCircle2,
   Clock,
@@ -8,32 +8,28 @@ import {
   Award,
   MessageSquare,
   ChevronRight,
-  Lightbulb
-} from 'lucide-react';
-import { DefaultLayout } from '../components/layouts';
-import { PageHeader } from '../components/headers';
-import { Button } from '../components/design-system';
-import { Badge } from '../components/ui/badge';
-import useProgramProgressStore from '../stores/programProgress';
-import useProgressStore from '../stores/progress';
-import { getProgramById, getWeekByNumber } from '../data/programs';
-import { getSessionById } from '../data/sessions';
-import { LIST_ANIMATION_SUBTLE } from '../utils/animations';
-import useTranslation from '../hooks/useTranslation';
+  Lightbulb,
+} from "lucide-react";
+import { DefaultLayout } from "../components/layouts";
+import { PageHeader } from "../components/headers";
+import { Button } from "../components/design-system";
+import { Badge } from "../components/ui/badge";
+import useProgramProgressStore from "../stores/programProgress";
+import useProgressStore from "../stores/progress";
+import { getProgramById, getWeekByNumber } from "../data/programs";
+import { getSessionById } from "../data/sessions";
+import { LIST_ANIMATION_SUBTLE } from "../utils/animations";
+import useTranslation from "../hooks/useTranslation";
 
 function WeekDetail() {
   const navigate = useNavigate();
   const { programId, weekNumber } = useParams();
-  const [note, setNote] = useState('');
+  const [note, setNote] = useState("");
   const [showCompleteConfirm, setShowCompleteConfirm] = useState(false);
   const { t } = useTranslation();
 
-  const {
-    isWeekCompleted,
-    completeWeek,
-    addWeekNote,
-    getWeekNote
-  } = useProgramProgressStore();
+  const { isWeekCompleted, completeWeek, addWeekNote, getWeekNote } =
+    useProgramProgressStore();
 
   const { isProgramDayCompleted } = useProgressStore();
 
@@ -49,10 +45,21 @@ function WeekDetail() {
 
   if (!program || !week) {
     return (
-      <DefaultLayout header={<PageHeader title="Week Not Found" backPath={`/programs/${programId}`} />}>
+      <DefaultLayout
+        header={
+          <PageHeader
+            title="Week Not Found"
+            backPath={`/programs/${programId}`}
+          />
+        }
+      >
         <div className="px-4 py-8 text-center">
           <p className="text-muted-foreground">This week could not be found.</p>
-          <Button onClick={() => navigate(`/programs/${programId}`)} variant="primary" className="mt-4">
+          <Button
+            onClick={() => navigate(`/programs/${programId}`)}
+            variant="primary"
+            className="mt-4"
+          >
             Back to Program
           </Button>
         </div>
@@ -63,11 +70,17 @@ function WeekDetail() {
   const completed = isWeekCompleted(programId, weekNum);
 
   // Calculate week progress
-  const completedSessionsCount = week?.recommendedSessions.reduce((count, sessionId, index) => {
-    return isProgramDayCompleted(programId, weekNum, index + 1) ? count + 1 : count;
-  }, 0) || 0;
+  const completedSessionsCount =
+    week?.recommendedSessions.reduce((count, sessionId, index) => {
+      return isProgramDayCompleted(programId, weekNum, index + 1)
+        ? count + 1
+        : count;
+    }, 0) || 0;
   const totalSessions = week?.recommendedSessions.length || 0;
-  const progressPercentage = totalSessions > 0 ? Math.round((completedSessionsCount / totalSessions) * 100) : 0;
+  const progressPercentage =
+    totalSessions > 0
+      ? Math.round((completedSessionsCount / totalSessions) * 100)
+      : 0;
 
   const handleSaveNote = () => {
     if (note.trim()) {
@@ -102,16 +115,16 @@ function WeekDetail() {
           programId,
           programName: program.name,
           weekNumber: weekNum,
-          dayNumber: dayNumber + 1 // Day numbers are 1-indexed
-        }
-      }
+          dayNumber: dayNumber + 1, // Day numbers are 1-indexed
+        },
+      },
     });
   };
 
   const getSessionDetails = (sessionId) => {
     const session = getSessionById(sessionId);
     if (!session) {
-      return { name: 'Session not found', duration: 0, poses: [] };
+      return { name: "Session not found", duration: 0, poses: [] };
     }
     return session;
   };
@@ -128,19 +141,19 @@ function WeekDetail() {
       contentClassName="px-4 py-6"
     >
       {/* Week Info Card */}
-      <div className="bg-card rounded-xl p-5 mb-6 shadow-sm border border-border">
+      <div className="mb-6 rounded-xl border border-border bg-card p-5 shadow-sm">
         {/* Status Badge */}
-        <div className="flex items-center justify-between mb-4">
+        <div className="mb-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
             {completed && (
-              <Badge className="bg-state-success text-white border-0">
-                <CheckCircle2 className="h-3 w-3 mr-1" />
-                {t('screens.weekDetail.completed')}
+              <Badge className="border-0 bg-state-success text-white">
+                <CheckCircle2 className="mr-1 h-3 w-3" />
+                {t("screens.weekDetail.completed")}
               </Badge>
             )}
             {week.isMilestone && (
-              <Badge className="bg-amber-500 text-white border-0">
-                <Award className="h-3 w-3 mr-1" />
+              <Badge className="border-0 bg-amber-500 text-white">
+                <Award className="mr-1 h-3 w-3" />
                 Milestone Week
               </Badge>
             )}
@@ -149,33 +162,33 @@ function WeekDetail() {
 
         {/* Focus */}
         <div className="mb-4">
-          <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wide mb-2">
+          <h3 className="mb-2 text-sm font-medium uppercase tracking-wide text-muted-foreground">
             Focus
           </h3>
-          <p className="text-base text-card-foreground font-medium">
+          <p className="text-base font-medium text-card-foreground">
             {week.focus}
           </p>
         </div>
 
         {/* Description */}
         <div className="mb-4">
-          <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wide mb-2">
+          <h3 className="mb-2 text-sm font-medium uppercase tracking-wide text-muted-foreground">
             Description
           </h3>
-          <p className="text-sm text-muted-foreground leading-relaxed">
+          <p className="text-sm leading-relaxed text-muted-foreground">
             {week.description}
           </p>
         </div>
 
         {/* Practice Frequency */}
-        <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
+        <div className="mb-4 flex items-center gap-2 text-sm text-muted-foreground">
           <Clock className="h-4 w-4 flex-shrink-0" />
           <span>{week.practiceFrequency}</span>
         </div>
 
         {/* Week Progress */}
-        <div className="pt-4 border-t border-border">
-          <div className="flex items-center justify-between mb-2">
+        <div className="border-t border-border pt-4">
+          <div className="mb-2 flex items-center justify-between">
             <span className="text-sm font-medium text-muted-foreground">
               Week Progress
             </span>
@@ -183,14 +196,14 @@ function WeekDetail() {
               {completedSessionsCount}/{totalSessions} sessions
             </span>
           </div>
-          <div className="w-full bg-muted rounded-full h-2 overflow-hidden">
+          <div className="h-2 w-full overflow-hidden rounded-full bg-sage-100">
             <div
-              className="bg-state-success h-full rounded-full transition-all duration-500 ease-out"
+              className="h-full rounded-full bg-state-success transition-all duration-500 ease-out"
               style={{ width: `${progressPercentage}%` }}
             />
           </div>
           {progressPercentage === 100 && !completed && (
-            <p className="text-xs text-state-success mt-2 flex items-center gap-1">
+            <p className="mt-2 flex items-center gap-1 text-xs text-state-success">
               <CheckCircle2 className="h-3 w-3" />
               All sessions complete! Mark week as complete below.
             </p>
@@ -200,14 +213,14 @@ function WeekDetail() {
 
       {/* Guidance Notes (if present) */}
       {week.notes && (
-        <div className="bg-muted rounded-xl p-5 mb-6 border border-border">
+        <div className="mb-6 rounded-xl border border-border bg-muted p-5">
           <div className="flex items-start gap-3">
-            <Lightbulb className="h-5 w-5 text-muted-foreground flex-shrink-0 mt-0.5" />
+            <Lightbulb className="mt-0.5 h-5 w-5 flex-shrink-0 text-muted-foreground" />
             <div>
-              <h3 className="text-sm font-medium text-card-foreground mb-2">
+              <h3 className="mb-2 text-sm font-medium text-card-foreground">
                 Guidance for This Week
               </h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+              <p className="text-sm leading-relaxed text-muted-foreground">
                 {week.notes}
               </p>
             </div>
@@ -217,8 +230,8 @@ function WeekDetail() {
 
       {/* Recommended Sessions */}
       <div className="mb-6">
-        <h2 className="text-lg font-medium text-card-foreground mb-4 px-1">
-          {t('screens.weekDetail.sessionsThisWeek')}
+        <h2 className="mb-4 px-1 text-lg font-medium text-card-foreground">
+          {t("screens.weekDetail.sessionsThisWeek")}
         </h2>
 
         <motion.div
@@ -229,57 +242,71 @@ function WeekDetail() {
         >
           {week.recommendedSessions.map((sessionId, index) => {
             const session = getSessionDetails(sessionId);
-            const isCompleted = isProgramDayCompleted(programId, weekNum, index + 1);
+            const isCompleted = isProgramDayCompleted(
+              programId,
+              weekNum,
+              index + 1,
+            );
 
             return (
               <motion.button
                 key={sessionId}
                 variants={LIST_ANIMATION_SUBTLE.item}
                 onClick={() => handleSessionClick(sessionId, index)}
-                className={`w-full text-left rounded-xl p-4 shadow-sm border transition-all duration-300 hover:shadow-md hover:scale-[1.01] active:scale-[0.99] ${
+                className={`w-full rounded-xl border p-4 text-left shadow-sm transition-all duration-300 hover:scale-[1.01] hover:shadow-md active:scale-[0.99] ${
                   isCompleted
-                    ? 'bg-state-success/10 border-state-success/30'
-                    : 'bg-card border-border'
+                    ? "border-state-success/30 bg-state-success/10"
+                    : "border-border bg-card"
                 }`}
               >
                 <div className="flex items-start justify-between gap-3">
-                  <div className="flex-1 min-w-0">
+                  <div className="min-w-0 flex-1">
                     {/* Session number and completion badge */}
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                    <div className="mb-2 flex items-center gap-2">
+                      <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
                         Session {index + 1}
                       </span>
                       {isCompleted && (
-                        <Badge className="bg-state-success text-white border-0 text-xs py-0 px-2 h-5">
-                          <CheckCircle2 className="h-3 w-3 mr-1" />
-                          {t('screens.weekDetail.completed')}
+                        <Badge className="h-5 border-0 bg-state-success px-2 py-0 text-xs text-white">
+                          <CheckCircle2 className="mr-1 h-3 w-3" />
+                          {t("screens.weekDetail.completed")}
                         </Badge>
                       )}
                     </div>
 
                     {/* Session name */}
-                    <h3 className="text-base font-medium text-card-foreground mb-2 line-clamp-1">
+                    <h3 className="mb-2 line-clamp-1 text-base font-medium text-card-foreground">
                       {session.name}
                     </h3>
 
                     {/* Metadata */}
-                    <div className="flex items-center gap-3 text-sm text-muted-foreground flex-wrap">
+                    <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
                       <div className="flex items-center gap-1">
                         <Clock className="h-4 w-4 flex-shrink-0" />
-                        <span>{t('screens.weekDetail.sessionDuration', { duration: session.duration })}</span>
+                        <span>
+                          {t("screens.weekDetail.sessionDuration", {
+                            duration: session.duration,
+                          })}
+                        </span>
                       </div>
                       <span>•</span>
                       <div className="flex items-center gap-1">
                         <BookOpen className="h-4 w-4 flex-shrink-0" />
-                        <span>{t('screens.weekDetail.posesCount', { count: session.poses?.length || 0 })}</span>
+                        <span>
+                          {t("screens.weekDetail.posesCount", {
+                            count: session.poses?.length || 0,
+                          })}
+                        </span>
                       </div>
                       <span>•</span>
-                      <span className="capitalize text-muted-foreground">{session.difficulty}</span>
+                      <span className="capitalize text-muted-foreground">
+                        {session.difficulty}
+                      </span>
                     </div>
                   </div>
 
                   {/* Arrow or checkmark */}
-                  <div className="flex-shrink-0 flex items-center">
+                  <div className="flex flex-shrink-0 items-center">
                     {isCompleted ? (
                       <CheckCircle2 className="h-6 w-6 text-state-success" />
                     ) : (
@@ -294,16 +321,17 @@ function WeekDetail() {
       </div>
 
       {/* Personal Notes Section */}
-      <div className="bg-card rounded-xl p-5 mb-36 shadow-sm border border-border">
-        <div className="flex items-center gap-2 mb-3">
+      <div className="mb-36 rounded-xl border border-border bg-card p-5 shadow-sm">
+        <div className="mb-3 flex items-center gap-2">
           <MessageSquare className="h-5 w-5 text-muted-foreground" />
           <h3 className="text-base font-medium text-card-foreground">
             Your Notes
           </h3>
         </div>
 
-        <p className="text-sm text-muted-foreground mb-3">
-          Reflect on your practice this week. What did you learn? How do you feel?
+        <p className="mb-3 text-sm text-muted-foreground">
+          Reflect on your practice this week. What did you learn? How do you
+          feel?
         </p>
 
         <textarea
@@ -311,12 +339,12 @@ function WeekDetail() {
           onChange={(e) => setNote(e.target.value)}
           onBlur={handleSaveNote}
           placeholder="Write your thoughts here..."
-          className="w-full min-h-[120px] px-4 py-3 rounded-lg border border-border focus:border-primary focus:ring-2 focus:ring-sage-400/20 outline-none text-sm text-card-foreground placeholder-sage-400 resize-none"
+          className="min-h-[120px] w-full resize-none rounded-lg border border-border px-4 py-3 text-sm text-card-foreground placeholder-sage-400 outline-none focus:border-primary focus:ring-2 focus:ring-sage-400/20"
           disabled={completed}
         />
 
         {note && !completed && (
-          <p className="text-xs text-muted-foreground mt-2">
+          <p className="mt-2 text-xs text-muted-foreground">
             Note saved automatically
           </p>
         )}
@@ -324,19 +352,21 @@ function WeekDetail() {
 
       {/* Complete Week Button (Fixed at bottom) */}
       {!completed && (
-        <div className="fixed bottom-[calc(48px+env(safe-area-inset-bottom))] left-0 right-0 bg-card border-t border-border p-4 shadow-lg">
-          <div className="max-w-md mx-auto">
+        <div className="fixed bottom-[calc(48px+env(safe-area-inset-bottom))] left-0 right-0 border-t border-border bg-card p-4 shadow-lg">
+          <div className="mx-auto max-w-md">
             <Button
               onClick={handleCompleteWeek}
-              variant={showCompleteConfirm ? 'primary' : 'secondary'}
+              variant={showCompleteConfirm ? "primary" : "secondary"}
               className="w-full"
             >
-              <CheckCircle2 className="h-4 w-4 mr-2" />
-              {showCompleteConfirm ? 'Confirm - Mark Week Complete' : 'Mark Week as Complete'}
+              <CheckCircle2 className="mr-2 h-4 w-4" />
+              {showCompleteConfirm
+                ? "Confirm - Mark Week Complete"
+                : "Mark Week as Complete"}
             </Button>
 
             {showCompleteConfirm && (
-              <p className="text-xs text-muted-foreground mt-2 text-center">
+              <p className="mt-2 text-center text-xs text-muted-foreground">
                 Click again to confirm completion and unlock next week
               </p>
             )}

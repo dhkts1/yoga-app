@@ -21,9 +21,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 npm install          # Install dependencies
 npm run dev          # Start dev server (http://localhost:5173)
 npm run build        # Production build
+npm run preview      # Preview production build
 npm run lint         # ESLint check
-npm run format       # Prettier formatting
-npm run test:e2e     # Run E2E tests with Playwright
+npm run format       # Prettier formatting (with Tailwind plugin)
+
+# Testing
+npm run test:e2e           # Run E2E tests with Playwright
+npm run test:e2e:ui        # Interactive test UI
+npm run test:e2e:debug     # Debug tests step-by-step
+npm run test:e2e:report    # View HTML test report
+npm run test:a11y          # Run accessibility tests
 ```
 
 ### Core Application Flow
@@ -56,17 +63,19 @@ npm run test:e2e     # Run E2E tests with Playwright
 - Session history, streaks, mood analytics
 - Program session tracking (optional programId/weekNumber/dayNumber fields)
 - Key methods: `completeSession()`, `getStreakStatus()`, `getProgramWeekStats()`
-- Auto-persists to localStorage with version migration
+- Auto-persists to localStorage with version migration (`yoga-progress` key)
 - 100% backward compatible
+- Includes localStorage quota exceeded handling
 
 **programProgress.js** - Multi-week program enrollment
 - Active program management, week progression
 - Queries `progress.js` for completion data (no duplication)
 - Key methods: `startProgram()`, `completeWeek()`, `pauseProgram()`
+- Persists to localStorage (`yoga-program-progress` key)
 
 **preferences.js** - User settings
 - Voice coaching preferences, app settings
-- Persisted with Zustand middleware
+- Persisted with Zustand middleware (`yoga-preferences` key)
 
 ### Data Layer (`/src/data/`)
 
@@ -196,6 +205,34 @@ Complete token-based system with:
 - **Queries**: Use `getProgramWeekStats()` for week progress
 - **See**: `/docs/features/PROGRAMS_GUIDE.md` for complete guide
 
+### Git Hooks (Code Quality)
+
+**Pre-commit Hook** (via Husky + lint-staged)
+- Automatically runs before every `git commit`
+- Lints staged files with ESLint (auto-fixes when possible)
+- Formats staged files with Prettier
+- Blocks commits if ESLint errors remain
+
+**Configuration:**
+- `.husky/pre-commit` - Hook script
+- `package.json` → `lint-staged` - File patterns and commands
+- Only processes staged files (fast & efficient)
+
+**What happens on commit:**
+```bash
+git commit -m "Your message"
+# → Runs ESLint --fix on *.{js,jsx}
+# → Runs Prettier --write on *.{js,jsx}
+# → Applies changes to staged files
+# → Commits if no errors
+```
+
+**Benefits:**
+- Zero ESLint errors in codebase at all times
+- Consistent code formatting automatically
+- Catch issues before code review
+- No manual `npm run lint` needed
+
 ### Mobile-First Design
 
 - **Baseline**: 375px viewport (iPhone SE)
@@ -259,13 +296,15 @@ npm run test:e2e         # All tests
 npm run test:e2e:ui      # Interactive mode
 npm run test:e2e:debug   # Debug mode
 npm run test:e2e:report  # View report
+npm run test:a11y        # Accessibility tests
 ```
 
 **Configuration**:
-- Location: `/tests/e2e/`
+- Location: `/tests/e2e/` (E2E), `/tests/a11y/` (Accessibility)
 - Viewport: 375px (iPhone 13)
 - Server: Auto-starts on `http://localhost:5173`
 - Parallelization: Enabled for speed
+- Config: `playwright.config.js` (mobile-first, 20s timeout)
 
 **Test Coverage**:
 - Mobile responsiveness at 375px
@@ -273,6 +312,7 @@ npm run test:e2e:report  # View report
 - Program flow (unlock, pause, resume)
 - Session completion tracking
 - Data persistence
+- WCAG AA compliance (via @axe-core/playwright)
 
 ---
 
@@ -291,7 +331,7 @@ npm run test:e2e:report  # View report
 - Breathing exercises with visual guide
 - PWA with offline support
 - Design system with 15+ reusable components
-- ESLint compliance (0 errors, 0 warnings)
+- ESLint compliance (0 errors, 0 warnings) enforced via pre-commit hooks
 
 ---
 
@@ -300,9 +340,11 @@ npm run test:e2e:report  # View report
 - **No user accounts** - All data stored locally via localStorage
 - **JavaScript** - Using .jsx (not TypeScript) for rapid prototyping
 - **Mobile-first** - All features optimized for 375px baseline
-- **PWA enabled** - Full offline functionality via service worker
+- **PWA enabled** - Full offline functionality via service worker (vite-plugin-pwa with Workbox)
 - **Voice coaching** - Toggleable, 3 personalities available
 - **Mood tracking** - Optional, users can skip
+- **Code Style**: Prettier with Tailwind plugin, ESLint with relaxed rules for rapid development (prop-types off, exhaustive-deps off)
+- **Git Hooks**: Pre-commit hook automatically runs ESLint + Prettier on staged files
 
 ---
 
@@ -312,6 +354,7 @@ npm run test:e2e:report  # View report
 - **`/docs/NEW_APIS.md`** - Quick reference for components, hooks, utilities
 - **`/docs/features/PROGRAMS_GUIDE.md`** - Multi-week programs complete guide
 - **`/docs/deployment/ANDROID_BUILD.md`** - Android APK build instructions
+- **`/docs/GIT_HOOKS.md`** - Pre-commit hooks setup and troubleshooting
 - **`/REFACTORING_SUMMARY.md`** - Recent refactoring overview
 
 ### Additional Resources
@@ -330,6 +373,7 @@ npm run test:e2e:report  # View report
 - Centralized design tokens
 - Mobile-first patterns across all components
 - Consistent spacing and responsive behavior across 9 core screens
+- **Git Hooks (Husky + lint-staged)** - Automated code quality enforcement on every commit
 
 ---
 
