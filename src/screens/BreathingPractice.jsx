@@ -40,7 +40,6 @@ function BreathingPractice() {
   const [timeRemaining, setTimeRemaining] = useState(duration * 60); // convert to seconds
   const [sessionStarted, setSessionStarted] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
-  const [voiceEnabled, setVoiceEnabled] = useState(false);
 
   // Mood tracking state
   const [showPreMoodTracker, setShowPreMoodTracker] = useState(breathingPrefs.showMoodCheck);
@@ -377,8 +376,6 @@ function BreathingPractice() {
           exercise={exercise}
           isActive={isActive}
           onCycleComplete={handleCycleComplete}
-          currentCycle={currentCycle}
-          totalCycles={totalCycles}
         />
       </div>
       </ContentBody>

@@ -28,7 +28,6 @@ module.exports = {
       colors: {
         // Use CSS variables for theme-aware colors
         background: 'hsl(var(--background))',
-        foreground: 'hsl(var(--foreground))',
 
         // Primary sage palette - CSS variables
         sage: {

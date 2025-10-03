@@ -19,9 +19,8 @@ function BreathingGuide({
   exercise,
   isActive = false,
   onCycleComplete,
-  currentCycle = 0,
-  totalCycles = 0,
   className = ''
+  // Note: currentCycle and totalCycles props are passed by parent but not used in this component
 }) {
   const [currentPhase, setCurrentPhase] = useState('inhale');
   const [timeInPhase, setTimeInPhase] = useState(0);
@@ -181,9 +180,6 @@ function BreathingGuide({
   const getInstructionText = () => {
     return getBreathingInstruction(exercise, currentPhase);
   };
-
-  // Calculate overall progress
-  const overallProgress = totalCycles > 0 ? (currentCycle / totalCycles) * 100 : 0;
 
   // Calculate circle scale and phase progress for breathing animation
   // const circleScale = getCircleScale(); // Currently unused, keeping function for potential future use

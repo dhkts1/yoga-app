@@ -15,7 +15,6 @@ const SelectablePoseCard = ({
   duration = 30,
   mode = 'library', // 'library' or 'sequence'
   index,
-  onAdd,
   onRemove,
   onDurationChange,
   onMoveUp,

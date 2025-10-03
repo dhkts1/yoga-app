@@ -23,7 +23,6 @@ import {
   getCategoryCounts
 } from '../utils/sessionCategories';
 import { LIST_ANIMATION } from '../utils/animations';
-import { getSessionGradient } from '../utils/sessionGradients';
 
 function Sessions() {
   const navigate = useNavigate();

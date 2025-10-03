@@ -159,7 +159,7 @@ function SessionBuilder() {
     });
   };
 
-  const handleDrop = (e, index) => {
+  const handleDrop = (e) => {
     e.preventDefault();
   };
 
