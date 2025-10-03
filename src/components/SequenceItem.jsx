@@ -41,8 +41,10 @@ const SequenceItem = ({
         isDragging ? "scale-95 opacity-50" : ""
       } ${className}`}
     >
-      {/* Drag Handle */}
-      <GripVertical className="size-4 shrink-0 text-muted-foreground" />
+      {/* Drag Handle - Larger touch target for mobile */}
+      <div className="flex min-h-touch min-w-[28px] shrink-0 touch-manipulation items-center justify-center">
+        <GripVertical className="size-5 text-muted-foreground" />
+      </div>
 
       {/* Pose Info */}
       <span className="shrink-0 text-xl" aria-label={pose.nameEnglish}>
