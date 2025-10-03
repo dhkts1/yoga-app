@@ -419,22 +419,38 @@
     /* Skip to content link - hidden until focused */
     .skip-link {
         position: absolute;
-        top: -40px;
-        left: 0;
-        z-index: 100;
-        padding: 0.75rem 1.5rem;
-        background-color: hsl(var(--primary));
-        color: hsl(var(--primary-foreground));
-        font-size: 1rem;
-        font-weight: 600;
-        text-decoration: none;
-        border-radius: 0 0 0.5rem 0;
-        box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-        transition: top 0.3s;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border-width: 0;
     }
 
-    .skip-link:focus {
-        top: 0;
+    .skip-link:focus,
+    .skip-link:focus-visible {
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: auto !important;
+        height: auto !important;
+        padding: 0.75rem 1.5rem !important;
+        margin: 0 !important;
+        overflow: visible !important;
+        clip: auto !important;
+        white-space: normal !important;
+        z-index: 100 !important;
+        background-color: hsl(var(--primary)) !important;
+        color: hsl(var(--primary-foreground)) !important;
+        font-size: 1rem !important;
+        font-weight: 600 !important;
+        text-decoration: none !important;
+        border-radius: 0 0 0.5rem 0 !important;
+        box-shadow: 0 0 0 4px hsl(var(--accent) / 0.1), 0 4px 6px -1px rgb(0 0 0 / 0.1) !important;
+        outline: 3px solid hsl(var(--accent)) !important;
+        outline-offset: 2px !important;
     }
 
     /* Focus indicators for WCAG 2.1 AA compliance */
