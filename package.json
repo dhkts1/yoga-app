@@ -31,6 +31,7 @@
     "zustand": "^5.0.8"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.10.2",
     "@playwright/test": "^1.55.1",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
@@ -57,7 +58,9 @@
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:debug": "playwright test --debug",
-    "test:e2e:report": "playwright show-report"
+    "test:e2e:report": "playwright show-report",
+    "test:a11y": "playwright test tests/a11y/",
+    "test:a11y:report": "playwright test tests/a11y/ --reporter=html"
   },
   "type": "module",
   "version": "0.0.0"
