@@ -80,6 +80,11 @@ describe("usePracticeTimer", () => {
 
       expect(result.current.isPlaying).toBe(true);
       expect(result.current.sessionStarted).toBe(true);
+
+      // Pause to stop timers and prevent act() warnings
+      act(() => {
+        result.current.handlePlayPause();
+      });
     });
 
     test("should pause timer when handlePlayPause is called while playing", () => {
@@ -93,6 +98,7 @@ describe("usePracticeTimer", () => {
 
       act(() => {
         result.current.handlePlayPause(); // Start
+        vi.advanceTimersByTime(0); // Flush any immediate timer updates
       });
 
       act(() => {
@@ -112,17 +118,25 @@ describe("usePracticeTimer", () => {
         }),
       );
 
-      act(() => {
+      const initialTime = 30; // First pose duration
+
+      // First: Start timer and flush useEffect
+      await act(async () => {
         result.current.handlePlayPause();
+        await vi.runOnlyPendingTimersAsync(); // Flush the useEffect that creates setInterval
       });
 
-      const initialTime = result.current.timeRemaining;
-
+      // Second: Advance time now that interval exists
       await act(async () => {
-        vi.advanceTimersByTime(1000); // Advance 1 second
+        await vi.advanceTimersByTimeAsync(1000); // Advance 1 second
       });
 
       expect(result.current.timeRemaining).toBe(initialTime - 1);
+
+      // Pause to stop timers
+      await act(async () => {
+        result.current.handlePlayPause();
+      });
     });
 
     test("should not countdown when paused", async () => {
@@ -136,6 +150,7 @@ describe("usePracticeTimer", () => {
 
       act(() => {
         result.current.handlePlayPause(); // Start
+        vi.advanceTimersByTime(0); // Flush initial updates
       });
 
       act(() => {
@@ -252,17 +267,24 @@ describe("usePracticeTimer", () => {
         }),
       );
 
-      act(() => {
+      // First: Start timer and flush useEffect
+      await act(async () => {
         result.current.handlePlayPause(); // Start
+        await vi.runOnlyPendingTimersAsync(); // Flush the useEffect that creates setInterval
       });
 
-      // Fast-forward through entire first pose
+      // Second: Fast-forward through entire first pose
       await act(async () => {
-        vi.advanceTimersByTime(30000);
+        await vi.advanceTimersByTimeAsync(30000);
       });
 
       expect(result.current.isResting).toBe(true);
       expect(result.current.restTimeRemaining).toBe(10);
+
+      // Pause to stop timers
+      await act(async () => {
+        result.current.handlePlayPause();
+      });
     });
 
     test("should skip to next pose immediately with restDuration = 0", async () => {
@@ -274,19 +296,26 @@ describe("usePracticeTimer", () => {
         }),
       );
 
-      act(() => {
+      const initialPoseIndex = 0; // Starting at first pose
+
+      // First: Start timer and flush useEffect
+      await act(async () => {
         result.current.handlePlayPause();
+        await vi.runOnlyPendingTimersAsync(); // Flush the useEffect that creates setInterval
       });
 
-      const initialPoseIndex = result.current.currentPoseIndex;
-
-      // Fast-forward through first pose
+      // Second: Fast-forward through first pose
       await act(async () => {
-        vi.advanceTimersByTime(30000);
+        await vi.advanceTimersByTimeAsync(30000);
       });
 
       expect(result.current.currentPoseIndex).toBe(initialPoseIndex + 1);
       expect(result.current.isResting).toBe(false);
+
+      // Pause to stop timers
+      await act(async () => {
+        result.current.handlePlayPause();
+      });
     });
 
     test("should advance to next pose after rest period completes", async () => {
@@ -298,25 +327,32 @@ describe("usePracticeTimer", () => {
         }),
       );
 
-      act(() => {
+      // First: Start timer and flush useEffect
+      await act(async () => {
         result.current.handlePlayPause();
+        await vi.runOnlyPendingTimersAsync(); // Flush the useEffect that creates setInterval
       });
 
-      // Complete first pose
+      // Second: Complete first pose
       await act(async () => {
-        vi.advanceTimersByTime(30000);
+        await vi.advanceTimersByTimeAsync(30000);
       });
 
       expect(result.current.isResting).toBe(true);
 
-      // Complete rest period
+      // Third: Complete rest period
       await act(async () => {
-        vi.advanceTimersByTime(5000);
+        await vi.advanceTimersByTimeAsync(5000);
       });
 
       expect(result.current.currentPoseIndex).toBe(1);
       expect(result.current.isResting).toBe(false);
       expect(result.current.timeRemaining).toBe(45); // Second pose
+
+      // Pause to stop timers
+      await act(async () => {
+        result.current.handlePlayPause();
+      });
     });
 
     test("should skip rest period when handleNextPose is called during rest", async () => {
@@ -328,26 +364,33 @@ describe("usePracticeTimer", () => {
         }),
       );
 
-      act(() => {
+      // First: Start timer and flush useEffect
+      await act(async () => {
         result.current.handlePlayPause();
+        await vi.runOnlyPendingTimersAsync(); // Flush the useEffect that creates setInterval
       });
 
-      // Complete first pose
+      // Second: Complete first pose
       await act(async () => {
-        vi.advanceTimersByTime(30000);
+        await vi.advanceTimersByTimeAsync(30000);
       });
 
       // Should be in rest period
       expect(result.current.isResting).toBe(true);
 
       // Skip rest
-      act(() => {
+      await act(async () => {
         result.current.handleNextPose();
       });
 
       expect(result.current.isResting).toBe(false);
       expect(result.current.currentPoseIndex).toBe(1);
       expect(result.current.restTimeRemaining).toBe(0);
+
+      // Pause to stop timers
+      await act(async () => {
+        result.current.handlePlayPause();
+      });
     });
 
     test("should cancel rest when handlePreviousPose is called during rest", async () => {
@@ -377,7 +420,7 @@ describe("usePracticeTimer", () => {
       // After completing pose 1 (index 1), we stay at index 1 during rest
       expect(result.current.currentPoseIndex).toBe(1);
 
-      // Go back during rest
+      // Go back during rest - this also pauses the timer
       act(() => {
         result.current.handlePreviousPose();
       });
@@ -385,6 +428,11 @@ describe("usePracticeTimer", () => {
       expect(result.current.isResting).toBe(false);
       // Going back from rest at pose 1 should go to pose 0
       expect(result.current.currentPoseIndex).toBe(0);
+
+      // Pause to stop timers
+      act(() => {
+        result.current.handlePlayPause();
+      });
     });
   });
 
@@ -467,6 +515,11 @@ describe("usePracticeTimer", () => {
       const finalTime = result.current.getFinalPracticeTime();
       expect(finalTime).toBeGreaterThan(4); // Account for timing precision
       expect(finalTime).toBeLessThan(6);
+
+      // Pause to stop timers
+      act(() => {
+        result.current.handlePlayPause();
+      });
     });
 
     test("should handle pause/resume for practice time tracking", async () => {
@@ -505,6 +558,11 @@ describe("usePracticeTimer", () => {
       const finalTime = result.current.getFinalPracticeTime();
       expect(finalTime).toBeGreaterThan(4); // ~5 seconds total
       expect(finalTime).toBeLessThan(7);
+
+      // Pause to stop timers
+      act(() => {
+        result.current.handlePlayPause();
+      });
     });
 
     test("startPractice should auto-start the timer", () => {
@@ -522,6 +580,11 @@ describe("usePracticeTimer", () => {
 
       expect(result.current.isPlaying).toBe(true);
       expect(result.current.sessionStarted).toBe(true);
+
+      // Pause to stop timers
+      act(() => {
+        result.current.handlePlayPause();
+      });
     });
   });
 
@@ -555,16 +618,24 @@ describe("usePracticeTimer", () => {
       // First pose is 30 seconds
       expect(result.current.getProgressPercent()).toBe(0);
 
-      act(() => {
+      // First: Start timer and flush useEffect
+      await act(async () => {
         result.current.handlePlayPause();
+        await vi.runOnlyPendingTimersAsync(); // Flush the useEffect that creates setInterval
       });
 
+      // Second: Advance time
       await act(async () => {
-        vi.advanceTimersByTime(15000); // 15 seconds elapsed
+        await vi.advanceTimersByTimeAsync(15000); // 15 seconds elapsed
       });
 
       // 15 seconds elapsed out of 30 = 50%
       expect(result.current.getProgressPercent()).toBeCloseTo(50, 0);
+
+      // Pause to stop timers
+      await act(async () => {
+        result.current.handlePlayPause();
+      });
     });
 
     test("getProgressPercent should return 0 for invalid pose data", () => {
