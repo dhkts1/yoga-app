@@ -360,7 +360,10 @@ function SessionBuilder() {
           </TabsList>
 
           {/* Sequence Tab */}
-          <TabsContent value="sequence" className="mt-3">
+          <TabsContent
+            value="sequence"
+            className="mt-3 data-[state=active]:flex data-[state=active]:min-h-0 data-[state=active]:flex-1 data-[state=active]:flex-col"
+          >
             <ScrollableTabContent
               emptyState={
                 sequencePoses.length === 0 ? (
@@ -394,7 +397,10 @@ function SessionBuilder() {
           </TabsContent>
 
           {/* Library Tab */}
-          <TabsContent value="library" className="mt-3">
+          <TabsContent
+            value="library"
+            className="mt-3 data-[state=active]:flex data-[state=active]:min-h-0 data-[state=active]:flex-1 data-[state=active]:flex-col"
+          >
             <ScrollableTabContent
               actionButton={
                 selectedPoseIds.length > 0 ? (

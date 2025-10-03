@@ -55,7 +55,10 @@ const ScrollableTabContent = ({
   const showEmpty = emptyState && !hasContent;
 
   return (
-    <div className={cn("space-y-3", className)} {...props}>
+    <div
+      className={cn("flex min-h-0 flex-1 flex-col space-y-3", className)}
+      {...props}
+    >
       {/* Optional action button */}
       {actionButton && actionButton}
 
@@ -63,16 +66,23 @@ const ScrollableTabContent = ({
       <Card
         padding="none"
         className={cn(
-          "max-h-[60vh] overflow-y-auto",
-          showEmpty && "flex min-h-[300px] items-center justify-center",
+          "min-h-0 flex-1 overflow-hidden",
+          showEmpty && "flex items-center justify-center",
         )}
       >
         {showEmpty ? (
           // Empty state - centered
           <div className="p-4">{emptyState}</div>
         ) : (
-          // Content with padding and bottom spacing for mobile nav
-          <div className={cn(paddingVariants[padding], "pb-6")}>{children}</div>
+          // Content with padding and proper overflow
+          <div
+            className={cn(
+              paddingVariants[padding],
+              "h-full overflow-y-auto pb-6",
+            )}
+          >
+            {children}
+          </div>
         )}
       </Card>
     </div>
