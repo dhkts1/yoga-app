@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import { useMemo } from "react";
 import { motion } from "framer-motion";
 import { BookOpen, Clock, Calendar } from "lucide-react";
 import { DefaultLayout } from "../components/layouts";
@@ -31,15 +30,13 @@ function Programs() {
     (state) => state.getCurrentWeek,
   );
 
-  // Memoize programs with computed status/progress to prevent recalculation on every render
-  const programsWithStatus = useMemo(() => {
-    return programs.map((program) => ({
-      ...program,
-      status: getProgramStatus(program.id, program.totalWeeks),
-      progress: getProgramProgress(program.id, program.totalWeeks),
-      currentWeek: getCurrentWeek(program.id),
-    }));
-  }, [getProgramStatus, getProgramProgress, getCurrentWeek]);
+  // Get programs with computed status/progress
+  const programsWithStatus = programs.map((program) => ({
+    ...program,
+    status: getProgramStatus(program.id, program.totalWeeks),
+    progress: getProgramProgress(program.id, program.totalWeeks),
+    currentWeek: getCurrentWeek(program.id),
+  }));
 
   const handleProgramClick = (programId) => {
     navigate(`/programs/${programId}`);

@@ -1,29 +1,32 @@
-import { useReducer, useEffect, useRef } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Play, Pause, RotateCcw } from 'lucide-react';
-import { Button, Text, ContentBody } from '../components/design-system';
-import { PracticeLayout } from '../components/layouts';
-import BreathingGuide from '../components/BreathingGuide';
-import { PracticeHeader } from '../components/headers';
-import { getBreathingExerciseById, calculateBreathingCycles } from '../data/breathing';
-import useProgressStore from '../stores/progress';
-import usePreferencesStore from '../stores/preferences';
-import MoodTracker from '../components/MoodTracker';
-import useTranslation from '../hooks/useTranslation';
+import { useReducer, useEffect, useRef } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { Play, Pause, RotateCcw } from "lucide-react";
+import { Button, Text, ContentBody } from "../components/design-system";
+import { PracticeLayout } from "../components/layouts";
+import BreathingGuide from "../components/BreathingGuide";
+import { PracticeHeader } from "../components/headers";
+import {
+  getBreathingExerciseById,
+  calculateBreathingCycles,
+} from "../data/breathing";
+import useProgressStore from "../stores/progress";
+import usePreferencesStore from "../stores/preferences";
+import MoodTracker from "../components/MoodTracker";
+import useTranslation from "../hooks/useTranslation";
 
 // Action types
 const ACTIONS = {
-  START_PRACTICE: 'START_PRACTICE',
-  PAUSE_PRACTICE: 'PAUSE_PRACTICE',
-  RESUME_PRACTICE: 'RESUME_PRACTICE',
-  COMPLETE_CYCLE: 'COMPLETE_CYCLE',
-  COMPLETE_SESSION: 'COMPLETE_SESSION',
-  RESET_PRACTICE: 'RESET_PRACTICE',
-  DECREMENT_TIMER: 'DECREMENT_TIMER',
-  SHOW_POST_MOOD_TRACKER: 'SHOW_POST_MOOD_TRACKER',
-  HIDE_PRE_MOOD_TRACKER: 'HIDE_PRE_MOOD_TRACKER',
-  HIDE_POST_MOOD_TRACKER: 'HIDE_POST_MOOD_TRACKER',
-  SET_PRE_MOOD_DATA: 'SET_PRE_MOOD_DATA',
+  START_PRACTICE: "START_PRACTICE",
+  PAUSE_PRACTICE: "PAUSE_PRACTICE",
+  RESUME_PRACTICE: "RESUME_PRACTICE",
+  COMPLETE_CYCLE: "COMPLETE_CYCLE",
+  COMPLETE_SESSION: "COMPLETE_SESSION",
+  RESET_PRACTICE: "RESET_PRACTICE",
+  DECREMENT_TIMER: "DECREMENT_TIMER",
+  SHOW_POST_MOOD_TRACKER: "SHOW_POST_MOOD_TRACKER",
+  HIDE_PRE_MOOD_TRACKER: "HIDE_PRE_MOOD_TRACKER",
+  HIDE_POST_MOOD_TRACKER: "HIDE_POST_MOOD_TRACKER",
+  SET_PRE_MOOD_DATA: "SET_PRE_MOOD_DATA",
 };
 
 // Initial state factory (for React Compiler compatibility with params)
@@ -138,40 +141,106 @@ function BreathingPractice() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { completeBreathingSession } = useProgressStore();
-  const { breathing: breathingPrefs, toggleBreathingMoodCheck } = usePreferencesStore();
+  const { breathing: breathingPrefs, toggleBreathingMoodCheck } =
+    usePreferencesStore();
   const { t } = useTranslation();
 
   // URL parameters
-  const exerciseId = searchParams.get('exercise') || 'box-breathing';
-  const duration = parseInt(searchParams.get('duration')) || 3;
+  const exerciseId = searchParams.get("exercise") || "box-breathing";
+  const duration = parseInt(searchParams.get("duration")) || 3;
 
   // Get exercise data
   const exercise = getBreathingExerciseById(exerciseId);
 
-  // Redirect if exercise not found
-  useEffect(() => {
-    if (!exercise) {
-      navigate('/breathing');
-    }
-  }, [exercise, navigate]);
+  // Calculate total cycles (needed for reducer initialization)
+  const totalCycles = exercise
+    ? calculateBreathingCycles(exercise, duration)
+    : 0;
 
-  // Early return if exercise not found
-  if (!exercise) {
-    return null;
-  }
-
-  const totalCycles = calculateBreathingCycles(exercise, duration);
-
-  // Initialize reducer with lazy initialization
+  // Initialize reducer with lazy initialization - MUST be called before any early returns
   const [state, dispatch] = useReducer(
     breathingPracticeReducer,
     { duration, showMoodCheck: breathingPrefs.showMoodCheck },
-    ({ duration, showMoodCheck }) => createInitialState(duration, showMoodCheck)
+    ({ duration, showMoodCheck }) =>
+      createInitialState(duration, showMoodCheck),
   );
 
-  // Refs for tracking
+  // Refs for tracking - MUST be called before any early returns
   const sessionStartTimeRef = useRef(null);
   const timerIntervalRef = useRef(null);
+
+  // Redirect if exercise not found
+  useEffect(() => {
+    if (!exercise) {
+      navigate("/breathing");
+    }
+  }, [exercise, navigate]);
+
+  // Watch for timer reaching zero
+  useEffect(() => {
+    if (state.timeRemaining <= 0 && state.sessionStarted) {
+      if (timerIntervalRef.current) {
+        clearInterval(timerIntervalRef.current);
+        timerIntervalRef.current = null;
+      }
+
+      // Show post-practice mood tracker if enabled, otherwise complete immediately
+      if (breathingPrefs.showMoodCheck) {
+        dispatch({ type: ACTIONS.SHOW_POST_MOOD_TRACKER });
+      } else {
+        // Complete session without mood tracking
+        const actualDuration = sessionStartTimeRef.current
+          ? Math.round((Date.now() - sessionStartTimeRef.current) / 1000 / 60)
+          : duration;
+
+        const sessionData = {
+          exerciseId: exercise?.id,
+          exerciseName: exercise?.nameEnglish,
+          duration: actualDuration,
+          targetCycles: totalCycles,
+          completedCycles: state.currentCycle,
+          category: exercise?.category,
+        };
+
+        completeBreathingSession(sessionData);
+
+        navigate("/complete", {
+          state: {
+            sessionType: "breathing",
+            exerciseName: exercise?.nameEnglish,
+            duration: actualDuration,
+            completedCycles: state.currentCycle,
+            targetCycles: totalCycles,
+          },
+        });
+      }
+    }
+  }, [
+    state.timeRemaining,
+    state.sessionStarted,
+    breathingPrefs.showMoodCheck,
+    dispatch,
+    exercise,
+    totalCycles,
+    state.currentCycle,
+    duration,
+    completeBreathingSession,
+    navigate,
+  ]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (timerIntervalRef.current) {
+        clearInterval(timerIntervalRef.current);
+      }
+    };
+  }, []);
+
+  // Early return if exercise not found - AFTER all hooks
+  if (!exercise) {
+    return null;
+  }
 
   // Helper function to complete session and navigate
   const completeAndNavigate = (preMoodData = null, postMoodData = null) => {
@@ -187,7 +256,7 @@ function BreathingPractice() {
       duration: actualDuration,
       targetCycles: totalCycles,
       completedCycles: state.currentCycle,
-      category: exercise.category
+      category: exercise.category,
     };
 
     // Add mood data if provided
@@ -202,16 +271,16 @@ function BreathingPractice() {
     completeBreathingSession(sessionData);
 
     // Navigate to completion screen
-    navigate('/complete', {
+    navigate("/complete", {
       state: {
-        sessionType: 'breathing',
+        sessionType: "breathing",
         exerciseName: exercise.nameEnglish,
         duration: actualDuration,
         completedCycles: state.currentCycle,
         targetCycles: totalCycles,
         ...(preMoodData && { preMoodData }),
-        ...(postMoodData && { postMoodData })
-      }
+        ...(postMoodData && { postMoodData }),
+      },
     });
   };
 
@@ -291,7 +360,7 @@ function BreathingPractice() {
     if (timerIntervalRef.current) {
       clearInterval(timerIntervalRef.current);
     }
-    navigate('/breathing');
+    navigate("/breathing");
   };
 
   // Handle pre-practice mood tracking completion
@@ -319,27 +388,11 @@ function BreathingPractice() {
     completeAndNavigate();
   };
 
-  // Watch for timer reaching zero
-  useEffect(() => {
-    if (state.timeRemaining <= 0 && state.sessionStarted) {
-      handleSessionComplete();
-    }
-  }, [state.timeRemaining, state.sessionStarted]);
-
-  // Cleanup on unmount
-  useEffect(() => {
-    return () => {
-      if (timerIntervalRef.current) {
-        clearInterval(timerIntervalRef.current);
-      }
-    };
-  }, []);
-
   // Format time display
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
   if (!exercise) {
@@ -348,7 +401,7 @@ function BreathingPractice() {
         <div className="flex min-h-full items-center justify-center p-4">
           <div className="text-center">
             <Text variant="body">Exercise not found</Text>
-            <Button onClick={() => navigate('/breathing')} className="mt-4">
+            <Button onClick={() => navigate("/breathing")} className="mt-4">
               Back to Breathing Exercises
             </Button>
           </div>
@@ -362,7 +415,7 @@ function BreathingPractice() {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background p-4">
         <MoodTracker
-          title={t('screens.practice.howFeelingBefore')}
+          title={t("screens.practice.howFeelingBefore")}
           onComplete={handlePreMoodComplete}
           onSkip={handlePreMoodSkip}
           onDontShowAgain={toggleBreathingMoodCheck}
@@ -376,7 +429,7 @@ function BreathingPractice() {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background p-4">
         <MoodTracker
-          title={t('screens.practice.howFeelingAfter')}
+          title={t("screens.practice.howFeelingAfter")}
           onComplete={handlePostMoodComplete}
           onSkip={handlePostMoodSkip}
           onDontShowAgain={toggleBreathingMoodCheck}
@@ -387,7 +440,8 @@ function BreathingPractice() {
   }
 
   // Calculate progress percentage
-  const progressPercent = totalCycles > 0 ? (state.currentCycle / totalCycles) * 100 : 0;
+  const progressPercent =
+    totalCycles > 0 ? (state.currentCycle / totalCycles) * 100 : 0;
 
   // Render header
   const renderHeader = () => (
@@ -422,9 +476,21 @@ function BreathingPractice() {
 
         {/* Play/Pause button */}
         <button
-          onClick={!state.sessionStarted ? handleStart : (state.isPaused ? handleResume : handlePause)}
+          onClick={
+            !state.sessionStarted
+              ? handleStart
+              : state.isPaused
+                ? handleResume
+                : handlePause
+          }
           className="flex size-16 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg transition-transform hover:bg-primary/90 active:scale-95"
-          aria-label={!state.sessionStarted ? 'Start practice' : (state.isPaused ? 'Resume' : 'Pause')}
+          aria-label={
+            !state.sessionStarted
+              ? "Start practice"
+              : state.isPaused
+                ? "Resume"
+                : "Pause"
+          }
         >
           {!state.sessionStarted || state.isPaused ? (
             <Play className="ml-1 size-7" />
@@ -440,35 +506,35 @@ function BreathingPractice() {
   );
 
   return (
-    <PracticeLayout
-      header={renderHeader()}
-      footer={renderFooter()}
-    >
+    <PracticeLayout header={renderHeader()} footer={renderFooter()}>
       <ContentBody size="sm" centered padding="md">
         {/* Timer and cycle info - above breathing circle */}
-      <div className="my-4 text-center">
-        {/* Cycle count - always visible */}
-        <p className="mb-2 text-xs text-muted-foreground">
-          {t('screens.breathingPractice.rounds')} {state.currentCycle} {t('common.of')} {totalCycles}
-        </p>
+        <div className="my-4 text-center">
+          {/* Cycle count - always visible */}
+          <p className="mb-2 text-xs text-muted-foreground">
+            {t("screens.breathingPractice.rounds")} {state.currentCycle}{" "}
+            {t("common.of")} {totalCycles}
+          </p>
 
-        {/* Timer - always visible */}
-        <div className="mb-2">
-          <div className="text-2xl font-light text-foreground sm:text-3xl">
-            {formatTime(state.timeRemaining)}
+          {/* Timer - always visible */}
+          <div className="mb-2">
+            <div className="text-2xl font-light text-foreground sm:text-3xl">
+              {formatTime(state.timeRemaining)}
+            </div>
+            <p className="text-xs text-muted-foreground sm:text-sm">
+              {t("screens.practice.remaining")}
+            </p>
           </div>
-          <p className="text-xs text-muted-foreground sm:text-sm">{t('screens.practice.remaining')}</p>
         </div>
-      </div>
 
-      {/* Breathing guide - replaces PoseImage in yoga practice */}
-      <div className="mx-auto flex items-center justify-center">
-        <BreathingGuide
-          exercise={exercise}
-          isActive={state.isActive}
-          onCycleComplete={handleCycleComplete}
-        />
-      </div>
+        {/* Breathing guide - replaces PoseImage in yoga practice */}
+        <div className="mx-auto flex items-center justify-center">
+          <BreathingGuide
+            exercise={exercise}
+            isActive={state.isActive}
+            onCycleComplete={handleCycleComplete}
+          />
+        </div>
       </ContentBody>
     </PracticeLayout>
   );

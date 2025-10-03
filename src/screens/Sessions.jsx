@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Clock,
@@ -48,11 +48,7 @@ const SESSION_ICONS = {
 const enrichSessionWithImage = (session) => ({
   ...session,
   poseImage: session.poses?.[0]?.poseId ? (
-    <PoseImage
-      poseId={session.poses[0].poseId}
-      size="sm"
-      shape="circular"
-    />
+    <PoseImage poseId={session.poses[0].poseId} size="sm" shape="circular" />
   ) : null,
   gradient: "bg-card",
 });
@@ -74,15 +70,9 @@ function Sessions() {
   const { sessions: customSessions, remove: removeCustomSession } =
     useCustomSessions();
 
-  // Memoize smart recommendations
-  const allHistory = useMemo(
-    () => [...(practiceHistory || []), ...(breathingHistory || [])],
-    [practiceHistory, breathingHistory],
-  );
-  const recommendations = useMemo(
-    () => getTopRecommendations(allHistory, 2),
-    [allHistory],
-  );
+  // Smart recommendations (React Compiler handles optimization)
+  const allHistory = [...(practiceHistory || []), ...(breathingHistory || [])];
+  const recommendations = getTopRecommendations(allHistory, 2);
 
   const handleSessionSelect = (sessionId, isCustom = false) => {
     if (isCustom) {
@@ -118,24 +108,18 @@ function Sessions() {
     setSessionToDelete(null);
   };
 
-  // Memoize filtered sessions
-  const filteredSessions = useMemo(
-    () => filterSessionsByCategory(selectedCategory),
-    [selectedCategory],
-  );
-  const filteredCustomSessions = useMemo(
-    () => filterCustomSessionsByCategory(customSessions, selectedCategory),
-    [customSessions, selectedCategory],
+  // Filtered sessions (React Compiler handles optimization)
+  const filteredSessions = filterSessionsByCategory(selectedCategory);
+  const filteredCustomSessions = filterCustomSessionsByCategory(
+    customSessions,
+    selectedCategory,
   );
 
-  // Memoize category counts
-  const categoryCounts = useMemo(
-    () => getCategoryCounts(customSessions),
-    [customSessions],
-  );
+  // Category counts (React Compiler handles optimization)
+  const categoryCounts = getCategoryCounts(customSessions);
 
-  // Sorting function - wrapped in useCallback for React Compiler
-  const sortSessions = useCallback((sessions) => {
+  // Sorting function (React Compiler handles optimization)
+  const sortSessions = (sessions) => {
     const sorted = [...sessions];
     switch (selectedSort) {
       case "duration-asc":
@@ -166,17 +150,11 @@ function Sessions() {
       default:
         return sorted; // Keep original order (most recent first for custom)
     }
-  }, [selectedSort]);
+  };
 
-  // Apply sorting to filtered sessions
-  const sortedFilteredSessions = useMemo(
-    () => sortSessions(filteredSessions),
-    [sortSessions, filteredSessions],
-  );
-  const sortedFilteredCustomSessions = useMemo(
-    () => sortSessions(filteredCustomSessions),
-    [sortSessions, filteredCustomSessions],
-  );
+  // Apply sorting to filtered sessions (React Compiler handles optimization)
+  const sortedFilteredSessions = sortSessions(filteredSessions);
+  const sortedFilteredCustomSessions = sortSessions(filteredCustomSessions);
 
   // Use favorites hook to separate sessions
   const {

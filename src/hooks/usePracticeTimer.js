@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
-import { useTestMode } from './useTestMode';
+import { useState, useEffect, useRef, useCallback } from "react";
+import { useTestMode } from "./useTestMode";
 
 /**
  * Custom hook for managing practice timer state and logic.
@@ -18,11 +18,7 @@ import { useTestMode } from './useTestMode';
  *
  * @returns {Object} Timer state and controls
  */
-export function usePracticeTimer({
-  session,
-  restDuration,
-  onSessionComplete
-}) {
+export function usePracticeTimer({ session, restDuration, onSessionComplete }) {
   const { getEffectiveDuration } = useTestMode();
 
   // Pose navigation state
@@ -31,7 +27,8 @@ export function usePracticeTimer({
   // Derive current pose data from session and internal index
   const currentPoseData = session?.poses?.[currentPoseIndexInternal];
 
-  // Timer state - initialize to 0, useEffect will set correct value when session loads
+  // Track which pose index we're currently timing for
+  const [timedPoseIndex, setTimedPoseIndex] = useState(-1);
   const [timeRemaining, setTimeRemaining] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [sessionStarted, setSessionStarted] = useState(false);
@@ -45,34 +42,32 @@ export function usePracticeTimer({
   const [totalPracticeTime, setTotalPracticeTime] = useState(0); // in seconds
   const lastResumeTimeRef = useRef(null);
 
-  // Initialize timer when pose INDEX changes (not on every render)
-  // Use a ref to track the last initialized pose index
-  const lastInitializedPoseIndex = useRef(-1);
-
-  useEffect(() => {
-    // Only initialize if this is a new pose (index changed)
-    if (currentPoseIndexInternal !== lastInitializedPoseIndex.current && currentPoseData?.duration) {
-      lastInitializedPoseIndex.current = currentPoseIndexInternal;
-      const newTime = getEffectiveDuration(currentPoseData.duration);
-      setTimeRemaining(newTime);
-    }
-  }, [currentPoseIndexInternal, currentPoseData?.duration, getEffectiveDuration]);
+  // Reset timer when pose changes during render - React Compiler friendly
+  if (
+    currentPoseIndexInternal !== timedPoseIndex &&
+    currentPoseData?.duration
+  ) {
+    setTimedPoseIndex(currentPoseIndexInternal);
+    setTimeRemaining(getEffectiveDuration(currentPoseData.duration));
+  }
 
   // Timer countdown logic
   useEffect(() => {
     let interval;
     if (isPlaying && timeRemaining > 0 && !isResting) {
       // Get timer speed from test mode (default 1000ms = 1 second)
-      const timerSpeed = (typeof window !== 'undefined' && window.__TIMER_SPEED__)
-        ? 1000 / window.__TIMER_SPEED__ // e.g., 100x speed = 10ms intervals
-        : 1000;
+      const timerSpeed =
+        typeof window !== "undefined" && window.__TIMER_SPEED__
+          ? 1000 / window.__TIMER_SPEED__ // e.g., 100x speed = 10ms intervals
+          : 1000;
 
       interval = setInterval(() => {
         setTimeRemaining((prev) => {
           const newTime = prev - 1;
 
           if (newTime <= 0) {
-            const isLastPose = session && currentPoseIndexInternal === session.poses.length - 1;
+            const isLastPose =
+              session && currentPoseIndexInternal === session.poses.length - 1;
 
             if (isLastPose) {
               // Session complete - trigger callback
@@ -88,7 +83,7 @@ export function usePracticeTimer({
               // Keep playing during rest
             } else {
               // No rest period - advance immediately
-              setCurrentPoseIndexInternal(prevIndex => prevIndex + 1);
+              setCurrentPoseIndexInternal((prevIndex) => prevIndex + 1);
               // Keep playing - don't stop between poses
             }
             return 0;
@@ -98,16 +93,26 @@ export function usePracticeTimer({
       }, timerSpeed);
     }
     return () => clearInterval(interval);
-  }, [isPlaying, timeRemaining, currentPoseIndexInternal, session, isResting, restDuration, getEffectiveDuration, onSessionComplete]);
+  }, [
+    isPlaying,
+    timeRemaining,
+    currentPoseIndexInternal,
+    session,
+    isResting,
+    restDuration,
+    getEffectiveDuration,
+    onSessionComplete,
+  ]);
 
   // Rest timer countdown logic
   useEffect(() => {
     let interval;
     if (isPlaying && isResting && restTimeRemaining > 0) {
       // Get timer speed from test mode
-      const timerSpeed = (typeof window !== 'undefined' && window.__TIMER_SPEED__)
-        ? 1000 / window.__TIMER_SPEED__
-        : 1000;
+      const timerSpeed =
+        typeof window !== "undefined" && window.__TIMER_SPEED__
+          ? 1000 / window.__TIMER_SPEED__
+          : 1000;
 
       interval = setInterval(() => {
         setRestTimeRemaining((prev) => {
@@ -116,7 +121,7 @@ export function usePracticeTimer({
           if (newTime <= 0) {
             // Rest complete - advance to next pose
             setIsResting(false);
-            setCurrentPoseIndexInternal(prevIndex => prevIndex + 1);
+            setCurrentPoseIndexInternal((prevIndex) => prevIndex + 1);
             return 0;
           }
           return newTime;
@@ -144,7 +149,7 @@ export function usePracticeTimer({
       // Pausing - add elapsed time since last resume
       if (lastResumeTimeRef.current) {
         const elapsedSinceResume = (now - lastResumeTimeRef.current) / 1000;
-        setTotalPracticeTime(prev => prev + elapsedSinceResume);
+        setTotalPracticeTime((prev) => prev + elapsedSinceResume);
       }
     }
 
@@ -159,12 +164,12 @@ export function usePracticeTimer({
       // Skip rest period and advance to next pose immediately
       setIsResting(false);
       setRestTimeRemaining(0);
-      setCurrentPoseIndexInternal(prev => prev + 1);
+      setCurrentPoseIndexInternal((prev) => prev + 1);
       return;
     }
 
     if (session && currentPoseIndexInternal < session.poses.length - 1) {
-      setCurrentPoseIndexInternal(prev => prev + 1);
+      setCurrentPoseIndexInternal((prev) => prev + 1);
       // Keep playing - don't pause
     } else {
       // Session complete
@@ -185,7 +190,7 @@ export function usePracticeTimer({
     }
 
     if (currentPoseIndexInternal > 0) {
-      setCurrentPoseIndexInternal(prev => prev - 1);
+      setCurrentPoseIndexInternal((prev) => prev - 1);
       // Keep playing - don't pause
     }
   };
@@ -225,7 +230,7 @@ export function usePracticeTimer({
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
   /**
@@ -234,7 +239,10 @@ export function usePracticeTimer({
    */
   const getProgressPercent = () => {
     if (!currentPoseData) return 0;
-    return ((currentPoseData.duration - timeRemaining) / currentPoseData.duration) * 100;
+    return (
+      ((currentPoseData.duration - timeRemaining) / currentPoseData.duration) *
+      100
+    );
   };
 
   return {
@@ -256,6 +264,6 @@ export function usePracticeTimer({
     // Utility functions
     getFinalPracticeTime,
     formatTime,
-    getProgressPercent
+    getProgressPercent,
   };
 }

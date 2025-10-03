@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState } from "react";
 // import { useNavigate } from 'react-router-dom';
 import { Search, X, BookOpen, Filter } from "lucide-react";
 import { poses, getCategories } from "../data/poses";
@@ -23,40 +23,38 @@ function PoseLibrary() {
   const categories = getCategories();
 
   // Filter poses based on search and filters
-  const filteredPoses = useMemo(() => {
-    return poses.filter((pose) => {
-      const matchesSearch =
-        searchQuery === "" ||
-        pose.nameEnglish.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        pose.nameSanskrit.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        pose.description.toLowerCase().includes(searchQuery.toLowerCase());
+  const filteredPoses = poses.filter((pose) => {
+    const matchesSearch =
+      searchQuery === "" ||
+      pose.nameEnglish.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      pose.nameSanskrit.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      pose.description.toLowerCase().includes(searchQuery.toLowerCase());
 
-      const matchesCategory =
-        selectedCategory === "all" || pose.category === selectedCategory;
-      const matchesDifficulty =
-        selectedDifficulty === "all" || pose.difficulty === selectedDifficulty;
+    const matchesCategory =
+      selectedCategory === "all" || pose.category === selectedCategory;
+    const matchesDifficulty =
+      selectedDifficulty === "all" || pose.difficulty === selectedDifficulty;
 
-      return matchesSearch && matchesCategory && matchesDifficulty;
-    });
-  }, [searchQuery, selectedCategory, selectedDifficulty]);
+    return matchesSearch && matchesCategory && matchesDifficulty;
+  });
 
   // Count poses by category
-  const categoryCounts = useMemo(() => {
+  const categoryCounts = (() => {
     const counts = { all: poses.length };
     categories.forEach((cat) => {
       counts[cat] = poses.filter((p) => p.category === cat).length;
     });
     return counts;
-  }, [categories]);
+  })();
 
   // Count poses by difficulty
-  const difficultyCounts = useMemo(() => {
+  const difficultyCounts = (() => {
     const counts = { all: poses.length };
     DIFFICULTIES.forEach((diff) => {
       counts[diff] = poses.filter((p) => p.difficulty === diff).length;
     });
     return counts;
-  }, []);
+  })();
 
   // eslint-disable-next-line no-unused-vars
   const handlePoseSelect = (poseId) => {

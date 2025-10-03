@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import {
   Award,
@@ -48,8 +48,8 @@ function ProgramDetail() {
 
   const program = getProgramById(programId);
 
-  // Memoize program status and progress to prevent recalculation
-  const { status, progress, currentWeek, isActive } = useMemo(() => {
+  // Get program status and progress
+  const { status, progress, currentWeek, isActive } = (() => {
     if (!program)
       return { status: null, progress: 0, currentWeek: 1, isActive: false };
     return {
@@ -58,16 +58,10 @@ function ProgramDetail() {
       currentWeek: getCurrentWeek(program.id),
       isActive: activeProgram?.programId === program.id,
     };
-  }, [
-    program,
-    getProgramStatus,
-    getProgramProgress,
-    getCurrentWeek,
-    activeProgram,
-  ]);
+  })();
 
-  // Memoize weeks with their completion status
-  const weeksWithStatus = useMemo(() => {
+  // Get weeks with their completion status
+  const weeksWithStatus = (() => {
     if (!program) return [];
     return program.weeks.map((week) => ({
       ...week,
@@ -77,7 +71,7 @@ function ProgramDetail() {
         isWeekCompleted(program.id, week.weekNumber - 1),
       isCurrent: week.weekNumber === currentWeek,
     }));
-  }, [program, isWeekCompleted, currentWeek]);
+  })();
 
   if (!program) {
     return (

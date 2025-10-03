@@ -68,8 +68,6 @@ function Practice() {
       // Load pre-built session
       const prebuiltSession = getSessionById(sessionId || "morning-energizer");
       sessionLoadedRef.current = sessionKey;
-      // Synchronizing with external data source - legitimate setState in effect
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSession(prebuiltSession);
     }
   }, [

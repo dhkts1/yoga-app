@@ -92,7 +92,9 @@ function sessionBuilderReducer(state, action) {
     case ACTIONS.REMOVE_POSE:
       return {
         ...state,
-        sequencePoses: state.sequencePoses.filter((_, i) => i !== action.payload),
+        sequencePoses: state.sequencePoses.filter(
+          (_, i) => i !== action.payload,
+        ),
       };
 
     case ACTIONS.UPDATE_POSE_DURATION:
@@ -216,11 +218,15 @@ function SessionBuilder() {
   });
 
   // Initialize reducer with draft data
-  const [state, dispatch] = useReducer(sessionBuilderReducer, initialState, () => ({
-    ...initialState,
-    sessionName: draft.name || "",
-    sequencePoses: draft.poses || [],
-  }));
+  const [state, dispatch] = useReducer(
+    sessionBuilderReducer,
+    initialState,
+    () => ({
+      ...initialState,
+      sessionName: draft.name || "",
+      sequencePoses: draft.poses || [],
+    }),
+  );
 
   // Auto-save draft whenever sessionName or sequencePoses change
   useEffect(() => {
@@ -250,7 +256,7 @@ function SessionBuilder() {
       poseId,
       side,
       duration,
-      id: `${poseId}-${side || "default"}-${Date.now()}-${Math.random()}`, // Unique ID
+      id: crypto.randomUUID(), // Unique ID using Web Crypto API
     }));
 
     dispatch({ type: ACTIONS.ADD_POSES, payload: newPoses });
@@ -352,7 +358,7 @@ function SessionBuilder() {
 
     // Create session object
     const newSession = {
-      id: `custom-${Date.now()}`,
+      id: `custom-${crypto.randomUUID()}`,
       name: state.sessionName.trim(),
       isCustom: true,
       poses: state.sequencePoses.map((p, index) => ({
@@ -376,7 +382,10 @@ function SessionBuilder() {
       // Navigate to session preview
       navigate(`/sessions/${newSession.id}/preview?custom=true`);
     } catch (error) {
-      dispatch({ type: ACTIONS.SET_VALIDATION_ERRORS, payload: [error.message] });
+      dispatch({
+        type: ACTIONS.SET_VALIDATION_ERRORS,
+        payload: [error.message],
+      });
     }
   };
 
@@ -594,6 +603,7 @@ function SessionBuilder() {
 
       {/* Duration Edit Dialog */}
       <DurationEditDialog
+        key={`${state.durationDialog.poseId}-${state.durationDialog.isOpen}`}
         isOpen={state.durationDialog.isOpen}
         onClose={closeDurationDialog}
         poseId={state.durationDialog.poseId}

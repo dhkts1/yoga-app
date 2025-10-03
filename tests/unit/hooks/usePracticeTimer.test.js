@@ -319,7 +319,7 @@ describe("usePracticeTimer", () => {
       expect(result.current.timeRemaining).toBe(45); // Second pose
     });
 
-    test("should skip rest period when handleNextPose is called during rest", () => {
+    test("should skip rest period when handleNextPose is called during rest", async () => {
       const { result } = renderHook(() =>
         usePracticeTimer({
           session: mockSession,
@@ -333,7 +333,7 @@ describe("usePracticeTimer", () => {
       });
 
       // Complete first pose
-      act(() => {
+      await act(async () => {
         vi.advanceTimersByTime(30000);
       });
 
@@ -447,7 +447,7 @@ describe("usePracticeTimer", () => {
   });
 
   describe("Practice time tracking", () => {
-    test("should track total practice time when playing", () => {
+    test("should track total practice time when playing", async () => {
       const { result } = renderHook(() =>
         usePracticeTimer({
           session: mockSession,
@@ -460,7 +460,7 @@ describe("usePracticeTimer", () => {
         result.current.startPractice();
       });
 
-      act(() => {
+      await act(async () => {
         vi.advanceTimersByTime(5000); // 5 seconds
       });
 
@@ -469,7 +469,7 @@ describe("usePracticeTimer", () => {
       expect(finalTime).toBeLessThan(6);
     });
 
-    test("should handle pause/resume for practice time tracking", () => {
+    test("should handle pause/resume for practice time tracking", async () => {
       const { result } = renderHook(() =>
         usePracticeTimer({
           session: mockSession,
@@ -479,7 +479,7 @@ describe("usePracticeTimer", () => {
       );
 
       // Start
-      act(() => {
+      await act(async () => {
         result.current.handlePlayPause();
         vi.advanceTimersByTime(3000); // 3 seconds
       });
@@ -497,7 +497,7 @@ describe("usePracticeTimer", () => {
       });
 
       // Resume
-      act(() => {
+      await act(async () => {
         result.current.handlePlayPause();
         vi.advanceTimersByTime(2000); // 2 more seconds
       });

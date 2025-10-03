@@ -1,28 +1,28 @@
-import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
-import { useEffect, useState, useMemo } from 'react';
-import { CheckCircle, Home, RotateCcw, Star, Wind, Trophy } from 'lucide-react';
-import { motion } from 'framer-motion';
-import confetti from 'canvas-confetti';
-import { getSessionById } from '../data/sessions';
-import { getWeekByNumber } from '../data/programs';
-import useProgressStore from '../stores/progress';
-import useProgramProgressStore from '../stores/programProgress';
-import { FullscreenLayout } from '../components/layouts';
-import { ContentBody } from '../components/design-system';
-import { calculateMoodImprovement } from '../utils/moodCalculator.jsx';
-import { useReducedMotion } from '../hooks/useReducedMotion';
-import useTranslation from '../hooks/useTranslation';
-import { haptics } from '../utils/haptics';
+import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { CheckCircle, Home, RotateCcw, Star, Wind, Trophy } from "lucide-react";
+import { motion } from "framer-motion";
+import confetti from "canvas-confetti";
+import { getSessionById } from "../data/sessions";
+import { getWeekByNumber } from "../data/programs";
+import useProgressStore from "../stores/progress";
+import useProgramProgressStore from "../stores/programProgress";
+import { FullscreenLayout } from "../components/layouts";
+import { ContentBody } from "../components/design-system";
+import { calculateMoodImprovement } from "../utils/moodCalculator.jsx";
+import { useReducedMotion } from "../hooks/useReducedMotion";
+import useTranslation from "../hooks/useTranslation";
+import { haptics } from "../utils/haptics";
 
 function Complete() {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const location = useLocation();
-  const sessionId = searchParams.get('session') || 'morning-energizer';
+  const sessionId = searchParams.get("session") || "morning-energizer";
 
   // Check if this is a breathing session from location state
-  const isBreathingSession = location.state?.sessionType === 'breathing';
+  const isBreathingSession = location.state?.sessionType === "breathing";
   const breathingExerciseName = location.state?.exerciseName;
   const breathingDuration = location.state?.duration;
 
@@ -35,16 +35,25 @@ function Complete() {
   const programContext = location.state?.programContext; // { programId, weekNumber, dayNumber }
 
   const session = !isBreathingSession ? getSessionById(sessionId) : null;
-  const { completeSession, getStreakStatus, getProgramWeekSessions } = useProgressStore();
+  const { completeSession, getStreakStatus, getProgramWeekSessions } =
+    useProgressStore();
   const { completeWeek, isWeekCompleted } = useProgramProgressStore();
 
-  const [sessionRecord, setSessionRecord] = useState(null);
-  const [streakStatus, setStreakStatus] = useState(null);
   const shouldReduceMotion = useReducedMotion();
 
-  // Compute week completion info from session record and program context
-  const weekCompletionInfo = useMemo(() => {
-    if (!sessionRecord || !programContext?.programId || !programContext?.weekNumber) {
+  // State to track recording and streak status
+  const [recordingState, setRecordingState] = useState({
+    hasRecorded: false,
+    streakStatus: null,
+  });
+
+  // Compute week completion info after recording is complete
+  const weekCompletionInfo = (() => {
+    if (
+      !recordingState.hasRecorded ||
+      !programContext?.programId ||
+      !programContext?.weekNumber
+    ) {
       return null;
     }
 
@@ -55,12 +64,15 @@ function Complete() {
 
     // Get all sessions completed this week
     const weekSessions = getProgramWeekSessions(programId, weekNumber);
-    const completedSessionIds = [...new Set(weekSessions.map(s => s.sessionId))];
+    const completedSessionIds = [
+      ...new Set(weekSessions.map((s) => s.sessionId)),
+    ];
 
     // Check if all recommended sessions for this week are completed
     const recommendedSessionIds = weekDef.recommendedSessions || [];
-    const allRecommendedCompleted = recommendedSessionIds.length > 0 &&
-      recommendedSessionIds.every(id => completedSessionIds.includes(id));
+    const allRecommendedCompleted =
+      recommendedSessionIds.length > 0 &&
+      recommendedSessionIds.every((id) => completedSessionIds.includes(id));
 
     // Only return info if week was just completed
     if (allRecommendedCompleted && isWeekCompleted(programId, weekNumber)) {
@@ -69,12 +81,12 @@ function Complete() {
         weekName: weekDef.name,
         programId,
         sessionsCompleted: weekSessions.length,
-        isMilestone: weekDef.isMilestone
+        isMilestone: weekDef.isMilestone,
       };
     }
 
     return null;
-  }, [sessionRecord, programContext, getProgramWeekSessions, isWeekCompleted]);
+  })();
 
   // Confetti celebration and haptic feedback when component mounts
   useEffect(() => {
@@ -87,7 +99,7 @@ function Complete() {
           particleCount: 100,
           spread: 70,
           origin: { y: 0.6 },
-          colors: ['#8FA68E', '#D4AF37', '#B5C4B4', '#F5F3F0'],
+          colors: ["#8FA68E", "#D4AF37", "#B5C4B4", "#F5F3F0"],
           disableForReducedMotion: true,
         });
       }, 300); // Slight delay for better effect
@@ -98,25 +110,29 @@ function Complete() {
 
   // Record session completion when component mounts
   useEffect(() => {
-    // Track if we've already recorded to prevent cascading renders
-    const recordKey = session?.id || (isBreathingSession ? 'breathing' : '');
-    const hasRecorded = sessionRecord !== null;
+    // Prevent duplicate recordings
+    if (recordingState.hasRecorded) return;
 
-    if (!hasRecorded && recordKey && (session || isBreathingSession)) {
-      let record;
+    const recordKey = session?.id || (isBreathingSession ? "breathing" : "");
+    if (!recordKey || (!session && !isBreathingSession)) return;
 
+    // Use queueMicrotask to defer setState and prevent cascading renders
+    queueMicrotask(() => {
       if (isBreathingSession) {
         // Breathing session already recorded in BreathingPractice
         // Just get the streak status
-        record = { id: 'breathing_session' };
+        const status = getStreakStatus();
+        setRecordingState({ hasRecorded: true, streakStatus: status });
       } else {
         // Get actual duration from URL params or fallback to theoretical duration
-        const actualDuration = parseInt(searchParams.get('duration'));
-        const fallbackDuration = Math.round(session.poses.reduce((total, pose) => total + pose.duration, 0) / 60);
+        const actualDuration = parseInt(searchParams.get("duration"));
+        const fallbackDuration = Math.round(
+          session.poses.reduce((total, pose) => total + pose.duration, 0) / 60,
+        );
         const durationInMinutes = actualDuration || fallbackDuration;
 
         // Record the yoga session with mood data and program context
-        record = completeSession({
+        completeSession({
           sessionId: session.id,
           sessionName: session.name,
           duration: durationInMinutes,
@@ -126,8 +142,8 @@ function Complete() {
           ...(programContext?.programId && {
             programId: programContext.programId,
             weekNumber: programContext.weekNumber,
-            dayNumber: programContext.dayNumber
-          })
+            dayNumber: programContext.dayNumber,
+          }),
         });
 
         // Check if this session completes a program week
@@ -142,12 +158,17 @@ function Complete() {
             const weekSessions = getProgramWeekSessions(programId, weekNumber);
 
             // Extract unique session IDs completed this week
-            const completedSessionIds = [...new Set(weekSessions.map(s => s.sessionId))];
+            const completedSessionIds = [
+              ...new Set(weekSessions.map((s) => s.sessionId)),
+            ];
 
             // Check if all recommended sessions for this week are now completed
             const recommendedSessionIds = weekDef.recommendedSessions || [];
-            const allRecommendedCompleted = recommendedSessionIds.length > 0 &&
-              recommendedSessionIds.every(id => completedSessionIds.includes(id));
+            const allRecommendedCompleted =
+              recommendedSessionIds.length > 0 &&
+              recommendedSessionIds.every((id) =>
+                completedSessionIds.includes(id),
+              );
 
             // Check if week wasn't already marked as completed
             const weekAlreadyCompleted = isWeekCompleted(programId, weekNumber);
@@ -155,50 +176,56 @@ function Complete() {
             if (allRecommendedCompleted && !weekAlreadyCompleted) {
               // Week just completed! Mark it in program progress
               completeWeek(programId, weekNumber, weekSessions.length);
-              // Note: weekCompletionInfo will be computed via useMemo
             }
           }
         }
+
+        // Get updated streak status
+        const status = getStreakStatus();
+        setRecordingState({ hasRecorded: true, streakStatus: status });
       }
-
-      setSessionRecord(record);
-
-      // Get updated streak status
-      const status = getStreakStatus();
-      setStreakStatus(status);
-
-      // Check for any new achievements (they're included in the store already)
-      // For demo purposes, we could show them here if needed
-    }
-  }, [session, sessionRecord, completeSession, getStreakStatus, isBreathingSession, programContext, getProgramWeekSessions, completeWeek, isWeekCompleted, searchParams, sessionMoodData]);
+    });
+  }, [
+    recordingState.hasRecorded,
+    session,
+    completeSession,
+    getStreakStatus,
+    isBreathingSession,
+    programContext,
+    getProgramWeekSessions,
+    completeWeek,
+    isWeekCompleted,
+    searchParams,
+    sessionMoodData,
+  ]);
 
   const handleGoHome = () => {
     // If completed as part of a program, return to week detail page
     if (programContext?.programId && programContext?.weekNumber) {
-      navigate(`/programs/${programContext.programId}/week/${programContext.weekNumber}`);
+      navigate(
+        `/programs/${programContext.programId}/week/${programContext.weekNumber}`,
+      );
     } else {
-      navigate('/');
+      navigate("/");
     }
   };
 
   const handlePracticeAgain = () => {
     if (isBreathingSession) {
-      navigate('/breathing');
+      navigate("/breathing");
     } else {
       navigate(`/practice?session=${sessionId}`);
     }
   };
 
-  // Memoize mood improvement calculation to prevent unnecessary recalculation
-  const moodImprovementInfo = useMemo(() =>
-    calculateMoodImprovement(preMoodData, postMoodData),
-    [preMoodData, postMoodData]
+  // Calculate mood improvement
+  const moodImprovementInfo = calculateMoodImprovement(
+    preMoodData,
+    postMoodData,
   );
 
   return (
-    <FullscreenLayout
-      showBottomNav={false}
-    >
+    <FullscreenLayout showBottomNav={false}>
       <ContentBody size="sm" centered padding="lg" spacing="md">
         {/* Success Icon with fade-in animation */}
         <motion.div
@@ -223,14 +250,16 @@ function Complete() {
             </motion.div>
           )}
           <h1 className="mb-2 text-2xl font-medium text-foreground">
-            {t('screens.complete.title')}
+            {t("screens.complete.title")}
           </h1>
           <p className="text-muted-foreground">
-            {isBreathingSession ? breathingExerciseName : `${session?.name || 'session'}`}
+            {isBreathingSession
+              ? breathingExerciseName
+              : `${session?.name || "session"}`}
           </p>
           {isBreathingSession && breathingDuration && (
             <p className="mt-1 text-sm text-muted-foreground">
-              {breathingDuration} {t('common.minute')}
+              {breathingDuration} {t("common.minute")}
             </p>
           )}
         </motion.div>
@@ -243,9 +272,9 @@ function Complete() {
           transition={{ duration: 0.5, delay: 0.4 }}
         >
           <p className="text-lg text-foreground">
-            {t('screens.complete.wellDone')}
+            {t("screens.complete.wellDone")}
           </p>
-          {streakStatus && (
+          {recordingState.streakStatus && (
             <motion.div
               className="mt-3 rounded-lg bg-muted p-3"
               initial={{ opacity: 0, scale: 0.95 }}
@@ -253,25 +282,25 @@ function Complete() {
               transition={{ duration: 0.4, delay: 0.6 }}
             >
               <p className="text-sm font-medium text-foreground">
-                {streakStatus.message}
+                {recordingState.streakStatus.message}
               </p>
-              {streakStatus.streak > 0 && (
+              {recordingState.streakStatus.streak > 0 && (
                 <div className="mt-2 flex items-center justify-center space-x-1">
-                  {Array.from({ length: Math.min(streakStatus.streak, 7) }).map((_, i) => (
+                  {Array.from({
+                    length: Math.min(recordingState.streakStatus.streak, 7),
+                  }).map((_, i) => (
                     <motion.div
                       key={i}
                       initial={{ opacity: 0, scale: 0 }}
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ duration: 0.3, delay: 0.7 + i * 0.05 }}
                     >
-                      <Star
-                        className="size-4 fill-current text-accent"
-                      />
+                      <Star className="size-4 fill-current text-accent" />
                     </motion.div>
                   ))}
-                  {streakStatus.streak > 7 && (
+                  {recordingState.streakStatus.streak > 7 && (
                     <span className="ml-1 text-xs font-medium text-accent">
-                      +{streakStatus.streak - 7}
+                      +{recordingState.streakStatus.streak - 7}
                     </span>
                   )}
                 </div>
@@ -279,7 +308,7 @@ function Complete() {
             </motion.div>
           )}
           <p className="mt-2 text-sm text-muted-foreground">
-            {t('screens.complete.journeyStep')}
+            {t("screens.complete.journeyStep")}
           </p>
         </motion.div>
 
@@ -317,17 +346,21 @@ function Complete() {
               <Trophy className="mt-0.5 size-6 shrink-0 text-accent" />
               <div className="flex-1">
                 <p className="mb-1 text-base font-semibold text-accent">
-                  {weekCompletionInfo.isMilestone ? t('screens.complete.milestoneAchievement') : t('screens.complete.weekComplete')}
+                  {weekCompletionInfo.isMilestone
+                    ? t("screens.complete.milestoneAchievement")
+                    : t("screens.complete.weekComplete")}
                 </p>
                 <p className="mb-1 text-sm font-medium text-foreground">
                   {weekCompletionInfo.weekName}
                 </p>
                 <p className="text-xs text-muted-foreground">
-                  {t('screens.complete.completedSessions', { count: weekCompletionInfo.sessionsCompleted })}
+                  {t("screens.complete.completedSessions", {
+                    count: weekCompletionInfo.sessionsCompleted,
+                  })}
                 </p>
                 {weekCompletionInfo.isMilestone && (
                   <p className="mt-2 text-xs italic text-muted-foreground">
-                    {t('screens.complete.significantMilestone')}
+                    {t("screens.complete.significantMilestone")}
                   </p>
                 )}
               </div>
@@ -342,7 +375,7 @@ function Complete() {
             className="flex w-full items-center justify-center space-x-2 rounded-lg bg-primary px-6 py-3 text-primary-foreground shadow-sm transition-all duration-300 hover:bg-primary/90 active:scale-95"
           >
             <Home className="size-5" />
-            <span>{t('screens.complete.backToHome')}</span>
+            <span>{t("screens.complete.backToHome")}</span>
           </button>
 
           <button
@@ -350,7 +383,7 @@ function Complete() {
             className="flex w-full items-center justify-center space-x-2 rounded-lg border border-primary px-6 py-3 text-foreground transition-all duration-300 hover:bg-primary/5 active:scale-95"
           >
             <RotateCcw className="size-5" />
-            <span>{t('screens.complete.practiceAgain')}</span>
+            <span>{t("screens.complete.practiceAgain")}</span>
           </button>
         </div>
       </ContentBody>
@@ -358,8 +391,14 @@ function Complete() {
       {/* Subtle celebration animation */}
       <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
         <div className="absolute -right-20 -top-20 size-40 animate-breathe rounded-full bg-accent/10"></div>
-        <div className="absolute -bottom-20 -left-20 size-32 animate-breathe rounded-full bg-primary/10" style={{animationDelay: '2s'}}></div>
-        <div className="absolute left-1/4 top-1/3 size-6 animate-breathe rounded-full bg-accent/20" style={{animationDelay: '1s'}}></div>
+        <div
+          className="absolute -bottom-20 -left-20 size-32 animate-breathe rounded-full bg-primary/10"
+          style={{ animationDelay: "2s" }}
+        ></div>
+        <div
+          className="absolute left-1/4 top-1/3 size-6 animate-breathe rounded-full bg-accent/20"
+          style={{ animationDelay: "1s" }}
+        ></div>
       </div>
     </FullscreenLayout>
   );
