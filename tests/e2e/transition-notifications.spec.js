@@ -152,21 +152,29 @@ test.describe("Transition Notifications", () => {
     await practiceSection.click();
     await page.waitForTimeout(500);
 
-    // Find vibration toggle
-    const vibrationToggle = page
-      .locator('div:has-text("Transition Vibration") >> button[role="switch"]')
-      .first();
+    // Check if vibration is supported by looking for "not supported" text
+    const notSupportedText = page.locator("text=/not supported/i");
+    const isNotSupported = await notSupportedText.isVisible();
 
-    // Check if toggle is enabled (not disabled due to lack of support)
-    const isDisabled = await vibrationToggle
-      .getAttribute("disabled")
-      .catch(() => null);
+    if (!isNotSupported) {
+      // Vibration is supported - test toggle functionality
+      const vibrationToggle = page
+        .locator(
+          'div:has-text("Transition Vibration") >> button[role="switch"]',
+        )
+        .first();
 
-    if (!isDisabled) {
-      // Toggle vibration on
       await expect(vibrationToggle).toBeVisible();
+
+      // Check initial state
+      const initialChecked = await vibrationToggle.getAttribute("data-state");
+
       await vibrationToggle.click();
-      await page.waitForTimeout(200);
+      await page.waitForTimeout(300); // Give Zustand time to persist
+
+      // Verify state changed in the UI
+      const newChecked = await vibrationToggle.getAttribute("data-state");
+      expect(newChecked).not.toBe(initialChecked);
 
       // Verify it's enabled in localStorage
       const storage = await page.evaluate(() => {
@@ -176,8 +184,8 @@ test.describe("Transition Notifications", () => {
 
       expect(storage.state.transitionVibrationEnabled).toBe(true);
     } else {
-      // If disabled, verify it shows "not supported" message
-      await expect(page.locator("text=/not supported/i")).toBeVisible();
+      // Vibration not supported - verify message is visible and skip toggle test
+      await expect(notSupportedText).toBeVisible();
     }
   });
 
@@ -293,17 +301,18 @@ test.describe("Transition Notifications", () => {
 
     // Reload page
     await page.reload();
-    await page.waitForLoadState("networkidle");
+    await page.waitForLoadState("domcontentloaded");
+    await page.waitForTimeout(500); // Give Zustand time to hydrate from localStorage
 
-    // Navigate back to Settings
-    await page.getByRole("button", { name: /profile|settings/i }).click();
-    await page.waitForURL(/\/settings/);
+    // Navigate back to Settings - use more specific selector after reload
+    await page.getByRole("button", { name: /^profile$/i }).click();
+    await page.waitForURL(/\/settings/, { timeout: 10000 });
 
     const practiceSectionAfter = page.getByText("Practice Settings").first();
     await practiceSectionAfter.click();
     await page.waitForTimeout(500);
 
-    // Verify settings persisted
+    // Verify settings persisted in localStorage
     const storage = await page.evaluate(() => {
       const prefs = localStorage.getItem("mindful-yoga-preferences");
       return prefs ? JSON.parse(prefs) : null;
