@@ -338,10 +338,8 @@ test.describe("Performance", () => {
       await expect(allTab).toBeVisible();
     }
 
-    // Should render session cards
-    const sessionCards = page.locator(
-      "text=/Quick Start|Gentle Flow|Power Flow/i",
-    );
+    // Should render session cards (check for duration text like "5 min", "10 min")
+    const sessionCards = page.locator("text=/\\d+\\s*(min|minute)/i");
     const count = await sessionCards.count();
     expect(count).toBeGreaterThan(3);
 
@@ -673,6 +671,7 @@ test.describe("Performance", () => {
         action: async () => {
           await page
             .getByRole("button", { name: /discover/i, exact: true })
+            .first()
             .click();
         },
       },
@@ -768,7 +767,7 @@ test.describe("Performance", () => {
     }
 
     // Switch to sequence view
-    await page.getByRole("tab", { name: /sequence|your sequence/i }).click();
+    await page.getByRole("tab", { name: /selected poses/i }).click();
     await page.waitForTimeout(500);
 
     // Should display all added poses quickly
