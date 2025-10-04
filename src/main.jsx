@@ -4,7 +4,8 @@ import App from "./App.jsx";
 import "./index.css";
 
 // React Scan - visualize component re-renders in development
-if (import.meta.env.DEV) {
+// Disabled during E2E tests as it intercepts pointer events
+if (import.meta.env.DEV && !window.navigator.webdriver) {
   import("react-scan").then(({ scan }) => {
     scan({
       enabled: true,

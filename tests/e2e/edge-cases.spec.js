@@ -92,7 +92,9 @@ test.describe("Edge Cases", () => {
 
     // Should show at least some sessions (custom + default)
     // Verify page loaded with session content
-    await expect(page.getByText(/minute|session|practice/i).first()).toBeVisible();
+    await expect(
+      page.getByText(/minute|session|practice/i).first(),
+    ).toBeVisible();
   });
 
   test("should handle special characters in session names", async ({
@@ -116,6 +118,8 @@ test.describe("Edge Cases", () => {
       .locator(".cursor-pointer")
       .filter({ hasText: /mountain|warrior/i });
     await poseCards.nth(0).click();
+    await page.waitForTimeout(200);
+    await poseCards.nth(1).click();
     await page.waitForTimeout(200);
 
     const addSelectedButton = page.getByRole("button", {
@@ -164,6 +168,8 @@ test.describe("Edge Cases", () => {
       .locator(".cursor-pointer")
       .filter({ hasText: /mountain|warrior/i });
     await poseCards.nth(0).click();
+    await page.waitForTimeout(200);
+    await poseCards.nth(1).click();
     await page.waitForTimeout(200);
 
     const addSelectedButton = page.getByRole("button", {
@@ -259,7 +265,9 @@ test.describe("Edge Cases", () => {
     ).toBeVisible();
   });
 
-  test("should handle single pose in custom session", async ({ page }) => {
+  test("should show validation error for single pose session", async ({
+    page,
+  }) => {
     await navigateToSessionBuilder(page);
 
     const nameInput = page.locator('input[type="text"]').first();
@@ -294,16 +302,15 @@ test.describe("Edge Cases", () => {
     const sequenceTab = page.getByRole("tab", { name: /selected poses/i });
     await expect(sequenceTab).toHaveAttribute("data-state", "active");
 
-    // Save
+    // Try to save - should show validation error
     const saveButton = page.getByRole("button", { name: /save.*practice/i });
     await saveButton.waitFor({ state: "visible", timeout: 3000 });
     await saveButton.click();
-    await page.waitForURL(/\/sessions\/custom-.*\/preview\?custom=true/, {
-      timeout: 10000,
-    });
 
-    // Verify single pose is shown
-    await expect(page.getByText(/1.*pose/i)).toBeVisible();
+    // Should show validation error for minimum 2 poses
+    await expect(page.getByText(/add at least 2 poses/i)).toBeVisible({
+      timeout: 3000,
+    });
   });
 
   test("should handle browser back button after completing session", async ({
@@ -334,6 +341,8 @@ test.describe("Edge Cases", () => {
       .locator(".cursor-pointer")
       .filter({ hasText: /mountain|warrior/i });
     await poseCards.nth(0).click();
+    await page.waitForTimeout(200);
+    await poseCards.nth(1).click();
     await page.waitForTimeout(200);
 
     const addSelectedButton = page.getByRole("button", {
@@ -414,7 +423,9 @@ test.describe("Edge Cases", () => {
     await page.waitForLoadState("networkidle");
 
     // Verify page is functional - look for any visible text, not specific heading
-    await expect(page.getByText(/session|yoga|practice/i).first()).toBeVisible();
+    await expect(
+      page.getByText(/session|yoga|practice/i).first(),
+    ).toBeVisible();
   });
 
   test("should handle direct URL access to practice screen gracefully", async ({
@@ -478,7 +489,9 @@ test.describe("Edge Cases", () => {
     await page.waitForLoadState("networkidle");
 
     // Verify page has loaded with session content
-    await expect(page.getByText(/session|practice|minute/i).first()).toBeVisible();
+    await expect(
+      page.getByText(/session|practice|minute/i).first(),
+    ).toBeVisible();
   });
 
   test("should create multiple custom sessions (stress test)", async ({
@@ -504,6 +517,8 @@ test.describe("Edge Cases", () => {
         .locator(".cursor-pointer")
         .filter({ hasText: /mountain|warrior/i });
       await poseCards.nth(0).click();
+      await page.waitForTimeout(100);
+      await poseCards.nth(1).click();
       await page.waitForTimeout(100);
 
       const addSelectedButton = page.getByRole("button", {
@@ -557,8 +572,10 @@ test.describe("Edge Cases", () => {
 
       const poseCards = page
         .locator(".cursor-pointer")
-        .filter({ hasText: /mountain/i });
+        .filter({ hasText: /mountain|warrior/i });
       await poseCards.first().click();
+      await page.waitForTimeout(100);
+      await poseCards.nth(1).click();
       await page.waitForTimeout(100);
 
       const addSelectedButton = page.getByRole("button", {
@@ -607,7 +624,9 @@ test.describe("Edge Cases", () => {
     await expect(page.getByText(/to delete/i)).not.toBeVisible();
 
     // But default sessions should still exist
-    await expect(page.getByText(/5.*minute|10.*minute|15.*minute/i)).toBeVisible();
+    await expect(
+      page.getByText(/5.*minute|10.*minute|15.*minute/i),
+    ).toBeVisible();
   });
 
   test("should handle empty session name with whitespace only", async ({
