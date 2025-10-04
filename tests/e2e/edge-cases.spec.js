@@ -197,11 +197,11 @@ test.describe("Edge Cases", () => {
     });
 
     // Verify emoji is displayed
-    await expect(page.getByText(/morning.*flow.*power/i)).toBeVisible();
+    await expect(page.getByText(/morning.*flow.*power/i).first()).toBeVisible();
 
     // Navigate to sessions list
     await page.goto("/sessions");
-    await expect(page.getByText(/morning.*flow.*power/i)).toBeVisible();
+    await expect(page.getByText(/morning.*flow.*power/i).first()).toBeVisible();
   });
 
   test("should handle maximum number of poses in sequence (stress test)", async ({
