@@ -1,11 +1,11 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 import {
   clearAppData,
   fastForwardTimer,
   dismissOnboardingIfPresent,
   skipMoodTrackerIfPresent,
-  ensurePracticeStarted
-} from '../helpers/test-utils.js';
+  ensurePracticeStarted,
+} from "../helpers/test-utils.js";
 
 /**
  * Complete Session Flow Test
@@ -22,15 +22,17 @@ import {
  *
  * This test ensures users can complete sessions and see progress.
  */
-test.describe('Complete Session', () => {
+test.describe("Complete Session", () => {
   test.beforeEach(async ({ page }) => {
     await clearAppData(page);
     await dismissOnboardingIfPresent(page);
   });
 
-  test('should complete a session and show completion screen', async ({ page }) => {
+  test("should complete a session and show completion screen", async ({
+    page,
+  }) => {
     await fastForwardTimer(page);
-    await page.getByRole('button', { name: /start/i }).click();
+    await page.getByRole("button", { name: /start/i }).click();
     await page.waitForURL(/\/practice/);
     await skipMoodTrackerIfPresent(page);
 
@@ -38,13 +40,17 @@ test.describe('Complete Session', () => {
     await skipMoodTrackerIfPresent(page);
     await page.waitForURL(/\/complete/, { timeout: 15000 });
 
-    await expect(page.getByRole('heading', { name: /complete|done|great/i })).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: /complete|done|great/i }),
+    ).toBeVisible();
   });
 
-  test('should show completion message on complete screen', async ({ page }) => {
+  test("should show completion message on complete screen", async ({
+    page,
+  }) => {
     await dismissOnboardingIfPresent(page);
     await fastForwardTimer(page);
-    await page.getByRole('button', { name: /start/i }).click();
+    await page.getByRole("button", { name: /start/i }).click();
     await page.waitForURL(/\/practice/);
     await skipMoodTrackerIfPresent(page);
 
@@ -52,13 +58,17 @@ test.describe('Complete Session', () => {
     await skipMoodTrackerIfPresent(page);
     await page.waitForURL(/\/complete/, { timeout: 15000 });
 
-    const completionText = page.locator('text=/great|nice|well done|completed/i').first();
+    const completionText = page
+      .locator("text=/great|nice|well done|completed/i")
+      .first();
     await expect(completionText).toBeVisible();
   });
 
-  test('should increment totalSessions in localStorage after completion', async ({ page }) => {
+  test("should increment totalSessions in localStorage after completion", async ({
+    page,
+  }) => {
     let storage = await page.evaluate(() => {
-      const progressStore = localStorage.getItem('yoga-progress');
+      const progressStore = localStorage.getItem("yoga-progress");
       if (!progressStore) return { totalSessions: 0 };
       const data = JSON.parse(progressStore);
       return { totalSessions: data.state?.totalSessions || 0 };
@@ -66,7 +76,7 @@ test.describe('Complete Session', () => {
     const initialSessions = storage.totalSessions;
 
     await fastForwardTimer(page);
-    await page.getByRole('button', { name: /quick start/i }).click();
+    await page.getByRole("button", { name: /quick start/i }).click();
     await page.waitForURL(/\/practice/, { timeout: 10000 });
     await skipMoodTrackerIfPresent(page);
 
@@ -77,7 +87,7 @@ test.describe('Complete Session', () => {
     await page.waitForTimeout(1000);
 
     storage = await page.evaluate(() => {
-      const progressStore = localStorage.getItem('yoga-progress');
+      const progressStore = localStorage.getItem("yoga-progress");
       if (!progressStore) return { totalSessions: 0 };
       const data = JSON.parse(progressStore);
       return {
@@ -90,10 +100,12 @@ test.describe('Complete Session', () => {
     expect(storage.practiceHistory.length).toBeGreaterThan(0);
   });
 
-  test('should show streak badge after completing first session', async ({ page }) => {
+  test("should show streak badge after completing first session", async ({
+    page,
+  }) => {
     await dismissOnboardingIfPresent(page);
     await fastForwardTimer(page);
-    await page.getByRole('button', { name: /start/i }).click();
+    await page.getByRole("button", { name: /start/i }).click();
     await page.waitForURL(/\/practice/);
     await skipMoodTrackerIfPresent(page);
 
@@ -101,31 +113,31 @@ test.describe('Complete Session', () => {
     await skipMoodTrackerIfPresent(page);
     await page.waitForURL(/\/complete/, { timeout: 15000 });
 
-    const homeButton = page.getByRole('link', { name: /home/i }).or(
-      page.getByRole('button', { name: /home|done/i })
-    );
+    const homeButton = page
+      .getByRole("link", { name: /home/i })
+      .or(page.getByRole("button", { name: /home|done/i }));
     await homeButton.click();
-    await page.waitForURL('/');
+    await page.waitForURL("/");
 
-    const streakBadge = page.locator('text=/1.*day.*streak|streak.*1/i');
+    const streakBadge = page.locator("text=/1.*day.*streak|streak.*1/i");
     await expect(streakBadge).toBeVisible({ timeout: 5000 });
   });
 
-  test('should allow returning home after completion', async ({ page }) => {
-    await fastForwardTimer(page);
-    await page.getByRole('button', { name: /start/i }).click();
+  test("should allow returning home after completion", async ({ page }) => {
+    await page.getByRole("button", { name: /start/i }).click();
     await page.waitForURL(/\/practice/);
     await skipMoodTrackerIfPresent(page);
 
+    await fastForwardTimer(page);
     await ensurePracticeStarted(page);
     await skipMoodTrackerIfPresent(page);
     await page.waitForURL(/\/complete/, { timeout: 15000 });
 
-    const homeButton = page.getByRole('link', { name: /home/i }).or(
-      page.getByRole('button', { name: /home|done/i })
-    );
+    const homeButton = page
+      .getByRole("link", { name: /home/i })
+      .or(page.getByRole("button", { name: /home|done/i }));
     await homeButton.click();
 
-    await expect(page).toHaveURL('/');
+    await expect(page).toHaveURL("/");
   });
 });
