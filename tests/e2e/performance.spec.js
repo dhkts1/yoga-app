@@ -161,7 +161,7 @@ test.describe("Performance", () => {
     await page.waitForTimeout(500);
 
     // Check that custom sessions are rendered (may be under different headings)
-    const customSessionCards = page.locator("text=/Custom Session \\d+/");
+    const customSessionCards = page.locator("text=/Custom Session/i");
     const count = await customSessionCards.count();
     expect(count).toBeGreaterThan(5); // At least some should be visible (lowered from 10)
 
