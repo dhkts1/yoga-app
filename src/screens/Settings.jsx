@@ -38,6 +38,8 @@ import {
   getBackupInfo,
 } from "../utils/dataExport";
 import { dismissBackupReminder } from "../utils/dataExport";
+import notificationService from "../services/notification";
+import { haptics } from "../utils/haptics";
 
 /**
  * Settings Screen
@@ -73,6 +75,11 @@ function Settings() {
     lightModeTheme,
     customLightColor,
     restDuration,
+    transitionBeepEnabled,
+    transitionBeepVolume,
+    transitionBeepDelay,
+    transitionBeepFrequency,
+    transitionVibrationEnabled,
     practiceReminders,
     streakAlerts,
     reminderTime,
@@ -83,6 +90,11 @@ function Settings() {
     setLightModeTheme,
     setCustomLightColor,
     setRestDuration,
+    toggleTransitionBeep,
+    setTransitionBeepVolume,
+    setTransitionBeepDelay,
+    setTransitionBeepFrequency,
+    toggleTransitionVibration,
     setPracticeReminders,
     setStreakAlerts,
     setReminderTime,
@@ -133,6 +145,37 @@ function Settings() {
       alert(`Import failed: ${error.message}`);
     } finally {
       setImporting(false);
+    }
+  };
+
+  // Preview transition notifications
+  const handlePreviewTransition = () => {
+    // Initialize audio context (required for iOS)
+    notificationService.initAudioContext();
+
+    // Play beep if enabled
+    if (transitionBeepEnabled) {
+      notificationService.loadSettings({
+        enabled: true,
+        volume: transitionBeepVolume,
+        frequency: transitionBeepFrequency,
+      });
+      notificationService.playTransition();
+    }
+
+    // Trigger vibration if enabled
+    if (transitionVibrationEnabled) {
+      haptics.transition();
+    }
+
+    // If neither is enabled, play both as preview
+    if (!transitionBeepEnabled && !transitionVibrationEnabled) {
+      notificationService.loadSettings({
+        enabled: true,
+        volume: transitionBeepVolume,
+      });
+      notificationService.playTransition();
+      haptics.transition();
     }
   };
 
@@ -306,6 +349,168 @@ function Settings() {
                   "Longer rest periods - perfect for gentle, restorative sessions."}
                 {showCustomRest &&
                   `Custom rest period of ${restDuration} seconds between poses.`}
+              </Text>
+            </div>
+          </div>
+
+          {/* Divider */}
+          <div className="my-4 border-t border-border" />
+
+          {/* Transition Notifications Setting */}
+          <div className="py-2">
+            <div className="mb-3">
+              <Text className="font-medium text-foreground">
+                Pose Transition Notifications
+              </Text>
+              <Text variant="caption" className="text-muted-foreground">
+                Audio beep and vibration when poses complete
+              </Text>
+            </div>
+
+            {/* Beep Toggle */}
+            <div className="mb-4 flex items-center justify-between rounded-lg border border-border bg-muted p-3">
+              <div>
+                <Text className="font-medium text-foreground">
+                  Transition Beep
+                </Text>
+                <Text variant="caption" className="text-muted-foreground">
+                  Play sound when pose completes
+                </Text>
+              </div>
+              <Switch
+                checked={transitionBeepEnabled}
+                onCheckedChange={toggleTransitionBeep}
+              />
+            </div>
+
+            {/* Volume Slider - shown when beep is enabled */}
+            {transitionBeepEnabled && (
+              <div className="mb-4 rounded-lg border border-border bg-muted p-3 duration-300 animate-in fade-in slide-in-from-top-2">
+                <Text className="mb-2 text-sm font-medium text-foreground">
+                  Beep Volume
+                </Text>
+                <div className="flex items-center gap-3">
+                  <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value={transitionBeepVolume * 100}
+                    onChange={(e) =>
+                      setTransitionBeepVolume(Number(e.target.value) / 100)
+                    }
+                    className="h-2 flex-1 cursor-pointer appearance-none rounded-lg bg-background accent-primary"
+                  />
+                  <Text
+                    variant="caption"
+                    className="w-12 text-muted-foreground"
+                  >
+                    {Math.round(transitionBeepVolume * 100)}%
+                  </Text>
+                </div>
+              </div>
+            )}
+
+            {/* Frequency Slider - shown when beep is enabled */}
+            {transitionBeepEnabled && (
+              <div className="mb-4 rounded-lg border border-border bg-muted p-3 duration-300 animate-in fade-in slide-in-from-top-2">
+                <Text className="mb-2 text-sm font-medium text-foreground">
+                  Beep Frequency
+                </Text>
+                <Text variant="caption" className="mb-3 text-muted-foreground">
+                  Lower frequencies are calmer and more meditative
+                </Text>
+                <div className="flex items-center gap-3">
+                  <input
+                    type="range"
+                    min="200"
+                    max="1000"
+                    step="10"
+                    value={transitionBeepFrequency}
+                    onChange={(e) =>
+                      setTransitionBeepFrequency(Number(e.target.value))
+                    }
+                    className="h-2 flex-1 cursor-pointer appearance-none rounded-lg bg-background accent-primary"
+                  />
+                  <Text
+                    variant="caption"
+                    className="w-16 text-muted-foreground"
+                  >
+                    {transitionBeepFrequency} Hz
+                  </Text>
+                </div>
+                <div className="mt-2 flex justify-between text-xs text-muted-foreground">
+                  <span>Calm (200Hz)</span>
+                  <span>Bright (1000Hz)</span>
+                </div>
+              </div>
+            )}
+
+            {/* Transition Delay Setting */}
+            <div className="mb-4">
+              <Text className="mb-2 text-sm font-medium text-foreground">
+                Transition Delay
+              </Text>
+              <Text variant="caption" className="mb-3 text-muted-foreground">
+                Pause duration after beep/vibration before next pose
+              </Text>
+              <div className="grid grid-cols-4 gap-2">
+                {[
+                  { value: 0, label: "None" },
+                  { value: 1, label: "1s" },
+                  { value: 2, label: "2s" },
+                  { value: 3, label: "3s" },
+                ].map((option) => (
+                  <button
+                    key={option.value}
+                    onClick={() => setTransitionBeepDelay(option.value)}
+                    className={`rounded-lg p-3 text-sm font-medium transition-all duration-300 ${
+                      transitionBeepDelay === option.value
+                        ? "scale-105 bg-primary text-primary-foreground shadow-md"
+                        : "bg-muted text-muted-foreground hover:scale-105 hover:bg-muted"
+                    }`}
+                  >
+                    {option.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Vibration Toggle */}
+            <div className="mb-4 flex items-center justify-between rounded-lg border border-border bg-muted p-3">
+              <div>
+                <Text className="font-medium text-foreground">
+                  Transition Vibration
+                </Text>
+                <Text variant="caption" className="text-muted-foreground">
+                  Vibrate when pose completes
+                  {!haptics.isSupported() && " (not supported)"}
+                </Text>
+              </div>
+              <Switch
+                checked={transitionVibrationEnabled}
+                onCheckedChange={toggleTransitionVibration}
+                disabled={!haptics.isSupported()}
+              />
+            </div>
+
+            {/* Preview Button */}
+            <button
+              onClick={handlePreviewTransition}
+              className="w-full rounded-lg bg-primary p-3 font-medium text-primary-foreground shadow-lg transition-all duration-300 hover:bg-primary/90 hover:shadow-xl active:scale-95"
+            >
+              Preview Transition Notification
+            </button>
+
+            {/* Description */}
+            <div className="mt-3 rounded-lg border border-border bg-muted p-3">
+              <Text variant="caption" className="text-muted-foreground">
+                {!transitionBeepEnabled && !transitionVibrationEnabled
+                  ? "Notifications disabled - poses will transition silently."
+                  : transitionBeepEnabled && transitionVibrationEnabled
+                    ? `Beep (${Math.round(transitionBeepVolume * 100)}% volume) and vibration will play ${transitionBeepDelay > 0 ? `with ${transitionBeepDelay}s delay` : "immediately"} when each pose completes.`
+                    : transitionBeepEnabled
+                      ? `Beep at ${Math.round(transitionBeepVolume * 100)}% volume will play ${transitionBeepDelay > 0 ? `with ${transitionBeepDelay}s delay` : "immediately"} when each pose completes.`
+                      : `Vibration will trigger ${transitionBeepDelay > 0 ? `with ${transitionBeepDelay}s delay` : "immediately"} when each pose completes.`}
               </Text>
             </div>
           </div>

@@ -22,6 +22,13 @@ const usePreferencesStore = create(
       showTips: true, // Show tip overlays during practice
       restDuration: 5, // Rest time between poses in seconds (0, 5, 10, 15)
 
+      // Transition Notification Settings
+      transitionBeepEnabled: false, // Play beep when pose completes
+      transitionBeepVolume: 0.5, // Beep volume 0.0 - 1.0 (default 50%)
+      transitionBeepDelay: 1, // Delay before transition in seconds (0, 1, 2, 3)
+      transitionBeepFrequency: 432, // Beep frequency in Hz (200-1000, default 432Hz - "healing frequency")
+      transitionVibrationEnabled: false, // Vibrate when pose completes
+
       // Notification Settings (for future implementation)
       practiceReminders: false,
       reminderTime: "09:00", // HH:MM format
@@ -179,6 +186,75 @@ const usePreferencesStore = create(
           countdownSounds: state.countdownSounds,
           showTips: state.showTips,
           restDuration: state.restDuration,
+        };
+      },
+
+      // Actions - Transition Notifications
+      toggleTransitionBeep: () => {
+        const state = get();
+        const newEnabled = !state.transitionBeepEnabled;
+        set({ transitionBeepEnabled: newEnabled });
+        return newEnabled;
+      },
+
+      setTransitionBeepEnabled: (enabled) =>
+        set({ transitionBeepEnabled: enabled }),
+
+      setTransitionBeepVolume: (volume) => {
+        const clampedVolume = Math.max(0, Math.min(1, volume));
+        set({ transitionBeepVolume: clampedVolume });
+        return clampedVolume;
+      },
+
+      setTransitionBeepDelay: (delay) => {
+        // Validate that delay is 0, 1, 2, or 3 seconds
+        const validDelays = [0, 1, 2, 3];
+        const numDelay = Number(delay);
+        if (!validDelays.includes(numDelay)) {
+          console.warn(
+            `Invalid transition delay: ${delay}. Using 1 as default.`,
+          );
+          delay = 1;
+        } else {
+          delay = numDelay;
+        }
+        set({ transitionBeepDelay: delay });
+        return delay;
+      },
+
+      setTransitionBeepFrequency: (frequency) => {
+        // Validate frequency range (200-1000Hz for calm tones)
+        const numFrequency = Number(frequency);
+        if (isNaN(numFrequency) || numFrequency < 200 || numFrequency > 1000) {
+          console.warn(
+            `Invalid frequency: ${frequency}. Using 432Hz as default.`,
+          );
+          frequency = 432;
+        } else {
+          frequency = Math.round(numFrequency);
+        }
+        set({ transitionBeepFrequency: frequency });
+        return frequency;
+      },
+
+      toggleTransitionVibration: () => {
+        const state = get();
+        const newEnabled = !state.transitionVibrationEnabled;
+        set({ transitionVibrationEnabled: newEnabled });
+        return newEnabled;
+      },
+
+      setTransitionVibrationEnabled: (enabled) =>
+        set({ transitionVibrationEnabled: enabled }),
+
+      getTransitionSettings: () => {
+        const state = get();
+        return {
+          beepEnabled: state.transitionBeepEnabled,
+          beepVolume: state.transitionBeepVolume,
+          beepDelay: state.transitionBeepDelay,
+          frequency: state.transitionBeepFrequency,
+          vibrationEnabled: state.transitionVibrationEnabled,
         };
       },
 
@@ -626,6 +702,13 @@ const usePreferencesStore = create(
           showTips: true,
           restDuration: 5,
 
+          // Transition notification settings
+          transitionBeepEnabled: false,
+          transitionBeepVolume: 0.5,
+          transitionBeepDelay: 1,
+          transitionBeepFrequency: 432,
+          transitionVibrationEnabled: false,
+
           // Notifications
           practiceReminders: false,
           reminderTime: "09:00",
@@ -687,6 +770,15 @@ const usePreferencesStore = create(
             countdownSounds: persistedState.countdownSounds ?? false,
             showTips: persistedState.showTips ?? true,
             restDuration: persistedState.restDuration ?? 5,
+            // Add new transition notification settings
+            transitionBeepEnabled:
+              persistedState.transitionBeepEnabled ?? false,
+            transitionBeepVolume: persistedState.transitionBeepVolume ?? 0.5,
+            transitionBeepDelay: persistedState.transitionBeepDelay ?? 1,
+            transitionBeepFrequency:
+              persistedState.transitionBeepFrequency ?? 432,
+            transitionVibrationEnabled:
+              persistedState.transitionVibrationEnabled ?? false,
             // Add notifications
             practiceReminders: persistedState.practiceReminders ?? false,
             reminderTime: persistedState.reminderTime ?? "09:00",

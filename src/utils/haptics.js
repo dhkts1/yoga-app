@@ -11,7 +11,7 @@ export const haptics = {
    * Duration: 10ms
    */
   light: () => {
-    if ('vibrate' in navigator) {
+    if ("vibrate" in navigator) {
       navigator.vibrate(10);
     }
   },
@@ -21,7 +21,7 @@ export const haptics = {
    * Duration: 20ms
    */
   medium: () => {
-    if ('vibrate' in navigator) {
+    if ("vibrate" in navigator) {
       navigator.vibrate(20);
     }
   },
@@ -31,8 +31,18 @@ export const haptics = {
    * Duration: 40ms
    */
   strong: () => {
-    if ('vibrate' in navigator) {
+    if ("vibrate" in navigator) {
       navigator.vibrate(40);
+    }
+  },
+
+  /**
+   * Transition tap (pose completion, moving to next pose)
+   * Duration: 30ms - stronger than medium, lighter than strong
+   */
+  transition: () => {
+    if ("vibrate" in navigator) {
+      navigator.vibrate(30);
     }
   },
 
@@ -41,7 +51,7 @@ export const haptics = {
    * Pattern: [vibrate 10ms, pause 50ms, vibrate 10ms]
    */
   success: () => {
-    if ('vibrate' in navigator) {
+    if ("vibrate" in navigator) {
       navigator.vibrate([10, 50, 10]);
     }
   },
@@ -51,7 +61,7 @@ export const haptics = {
    * Pattern: [vibrate 50ms, pause 50ms, vibrate 50ms]
    */
   error: () => {
-    if ('vibrate' in navigator) {
+    if ("vibrate" in navigator) {
       navigator.vibrate([50, 50, 50]);
     }
   },
@@ -60,5 +70,5 @@ export const haptics = {
    * Check if Vibration API is supported
    * @returns {boolean}
    */
-  isSupported: () => 'vibrate' in navigator
+  isSupported: () => "vibrate" in navigator,
 };

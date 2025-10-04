@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
-import { HelpCircle } from "lucide-react";
+import { HelpCircle, Volume2, VolumeX } from "lucide-react";
 import { getSessionById } from "../data/sessions";
 import { getPoseById } from "../data/poses";
 import { getCustomSessionWithPoses } from "../data/customSessions";
@@ -81,6 +81,20 @@ function Practice() {
   // Preferences store for rest duration
   const restDuration = usePreferencesStore((state) => state.restDuration);
 
+  // Transition notification preferences
+  const transitionBeepEnabled = usePreferencesStore(
+    (state) => state.transitionBeepEnabled,
+  );
+  const transitionVibrationEnabled = usePreferencesStore(
+    (state) => state.transitionVibrationEnabled,
+  );
+  const toggleTransitionBeep = usePreferencesStore(
+    (state) => state.toggleTransitionBeep,
+  );
+  const toggleTransitionVibration = usePreferencesStore(
+    (state) => state.toggleTransitionVibration,
+  );
+
   const [showTips, setShowTips] = useState(false);
 
   // Practice timer hook - manages timer, rest periods, and pose progression
@@ -99,6 +113,7 @@ function Practice() {
     sessionStarted,
     isResting,
     restTimeRemaining,
+    isTransitioning,
     currentPoseIndex,
     handlePlayPause,
     handleNextPose,
@@ -313,17 +328,51 @@ function Practice() {
       onExit={handleExit}
       exitButtonStyle="circular"
       actions={
-        <button
-          onClick={() => setShowTips(!showTips)}
-          className="flex size-10 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors hover:bg-muted"
-          aria-label={t(
-            showTips
-              ? "screens.practice.closeTips"
-              : "screens.practice.showTips",
-          )}
-        >
-          <HelpCircle className="size-5" />
-        </button>
+        <div className="flex items-center gap-2">
+          {/* Transition Beep Toggle */}
+          <button
+            onClick={() => {
+              toggleTransitionBeep();
+              // Also toggle vibration to match
+              if (!transitionBeepEnabled && !transitionVibrationEnabled) {
+                toggleTransitionVibration();
+              } else if (transitionBeepEnabled && transitionVibrationEnabled) {
+                toggleTransitionVibration();
+              }
+              haptics.light();
+            }}
+            className={`flex flex-col items-center justify-center gap-0.5 rounded-lg px-2 py-1.5 transition-colors ${
+              transitionBeepEnabled || transitionVibrationEnabled
+                ? "bg-primary text-primary-foreground"
+                : "bg-muted text-muted-foreground hover:bg-muted"
+            }`}
+            aria-label={
+              transitionBeepEnabled || transitionVibrationEnabled
+                ? "Disable transition beep"
+                : "Enable transition beep"
+            }
+          >
+            {transitionBeepEnabled || transitionVibrationEnabled ? (
+              <Volume2 className="size-4" />
+            ) : (
+              <VolumeX className="size-4" />
+            )}
+            <span className="text-[10px] font-medium leading-none">Beep</span>
+          </button>
+
+          {/* Tips Toggle */}
+          <button
+            onClick={() => setShowTips(!showTips)}
+            className="flex size-10 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors hover:bg-muted"
+            aria-label={t(
+              showTips
+                ? "screens.practice.closeTips"
+                : "screens.practice.showTips",
+            )}
+          >
+            <HelpCircle className="size-5" />
+          </button>
+        </div>
       }
       progressBar={
         <div className="h-1.5 rounded-full bg-muted">
@@ -503,7 +552,9 @@ function Practice() {
                 {formatTime(timeRemaining)}
               </div>
               <p className="text-sm text-muted-foreground sm:text-base">
-                {t("screens.practice.remaining")}
+                {isTransitioning
+                  ? "Transitioning..."
+                  : t("screens.practice.remaining")}
               </p>
             </div>
 

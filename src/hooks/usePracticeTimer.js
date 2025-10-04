@@ -1,5 +1,8 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useTestMode } from "./useTestMode";
+import notificationService from "../services/notification";
+import { haptics } from "../utils/haptics";
+import usePreferencesStore from "../stores/preferences";
 
 /**
  * Custom hook for managing practice timer state and logic.
@@ -21,6 +24,24 @@ import { useTestMode } from "./useTestMode";
 export function usePracticeTimer({ session, restDuration, onSessionComplete }) {
   const { getEffectiveDuration } = useTestMode();
 
+  // Get transition notification settings from preferences
+  // Select individual fields to avoid new object creation on every render
+  const transitionBeepEnabled = usePreferencesStore(
+    (state) => state.transitionBeepEnabled,
+  );
+  const transitionBeepVolume = usePreferencesStore(
+    (state) => state.transitionBeepVolume,
+  );
+  const transitionBeepDelay = usePreferencesStore(
+    (state) => state.transitionBeepDelay,
+  );
+  const transitionBeepFrequency = usePreferencesStore(
+    (state) => state.transitionBeepFrequency,
+  );
+  const transitionVibrationEnabled = usePreferencesStore(
+    (state) => state.transitionVibrationEnabled,
+  );
+
   // Pose navigation state
   const [currentPoseIndexInternal, setCurrentPoseIndexInternal] = useState(0);
 
@@ -37,6 +58,11 @@ export function usePracticeTimer({ session, restDuration, onSessionComplete }) {
   const [isResting, setIsResting] = useState(false);
   const [restTimeRemaining, setRestTimeRemaining] = useState(0);
 
+  // Transition state (for beep + delay before advancing)
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const transitionTimerRef = useRef(null);
+  const beepPlayedRef = useRef(false); // Track if beep already played for current pose
+
   // Session timing for accurate progress tracking
   const sessionStartTimeRef = useRef(null);
   const [totalPracticeTime, setTotalPracticeTime] = useState(0); // in seconds
@@ -51,10 +77,15 @@ export function usePracticeTimer({ session, restDuration, onSessionComplete }) {
     setTimeRemaining(getEffectiveDuration(currentPoseData.duration));
   }
 
+  // Reset beep flag when pose changes - in effect to avoid ref mutation during render
+  useEffect(() => {
+    beepPlayedRef.current = false;
+  }, [currentPoseIndexInternal]);
+
   // Timer countdown logic
   useEffect(() => {
     let interval;
-    if (isPlaying && timeRemaining > 0 && !isResting) {
+    if (isPlaying && timeRemaining > 0 && !isResting && !isTransitioning) {
       // Get timer speed from test mode (default 1000ms = 1 second)
       const timerSpeed =
         typeof window !== "undefined" && window.__TIMER_SPEED__
@@ -65,26 +96,82 @@ export function usePracticeTimer({ session, restDuration, onSessionComplete }) {
         setTimeRemaining((prev) => {
           const newTime = prev - 1;
 
+          // Play beep at configured delay time remaining (advance warning)
+          if (
+            newTime === transitionBeepDelay &&
+            !beepPlayedRef.current &&
+            (transitionBeepEnabled || transitionVibrationEnabled)
+          ) {
+            beepPlayedRef.current = true;
+
+            if (transitionBeepEnabled) {
+              notificationService.loadSettings({
+                enabled: true,
+                volume: transitionBeepVolume,
+                frequency: transitionBeepFrequency,
+              });
+              notificationService.playTransition();
+            }
+
+            if (transitionVibrationEnabled) {
+              haptics.transition();
+            }
+          }
+
           if (newTime <= 0) {
             const isLastPose =
               session && currentPoseIndexInternal === session.poses.length - 1;
 
-            if (isLastPose) {
-              // Session complete - trigger callback
-              setIsPlaying(false);
-              if (onSessionComplete) {
-                onSessionComplete();
-              }
-            } else if (restDuration > 0) {
-              // Enter rest period
-              const effectiveRestDuration = getEffectiveDuration(restDuration);
-              setIsResting(true);
-              setRestTimeRemaining(effectiveRestDuration);
-              // Keep playing during rest
+            // Use transition delay if configured
+            if (transitionBeepDelay > 0) {
+              // Enter transitioning state with delay
+              setIsTransitioning(true);
+
+              // Wait for delay, then advance
+              const effectiveDelay = getEffectiveDuration(transitionBeepDelay);
+              const delayMs =
+                typeof window !== "undefined" && window.__TIMER_SPEED__
+                  ? (effectiveDelay * 1000) / window.__TIMER_SPEED__
+                  : effectiveDelay * 1000;
+
+              transitionTimerRef.current = setTimeout(() => {
+                setIsTransitioning(false);
+
+                if (isLastPose) {
+                  // Session complete - trigger callback
+                  setIsPlaying(false);
+                  if (onSessionComplete) {
+                    onSessionComplete();
+                  }
+                } else if (restDuration > 0) {
+                  // Enter rest period
+                  const effectiveRestDuration =
+                    getEffectiveDuration(restDuration);
+                  setIsResting(true);
+                  setRestTimeRemaining(effectiveRestDuration);
+                } else {
+                  // No rest period - advance immediately
+                  setCurrentPoseIndexInternal((prevIndex) => prevIndex + 1);
+                }
+              }, delayMs);
             } else {
-              // No rest period - advance immediately
-              setCurrentPoseIndexInternal((prevIndex) => prevIndex + 1);
-              // Keep playing - don't stop between poses
+              // No delay - advance immediately
+              if (isLastPose) {
+                // Session complete - trigger callback
+                setIsPlaying(false);
+                if (onSessionComplete) {
+                  onSessionComplete();
+                }
+              } else if (restDuration > 0) {
+                // Enter rest period
+                const effectiveRestDuration =
+                  getEffectiveDuration(restDuration);
+                setIsResting(true);
+                setRestTimeRemaining(effectiveRestDuration);
+              } else {
+                // No rest period - advance immediately
+                setCurrentPoseIndexInternal((prevIndex) => prevIndex + 1);
+              }
             }
             return 0;
           }
@@ -92,16 +179,27 @@ export function usePracticeTimer({ session, restDuration, onSessionComplete }) {
         });
       }, timerSpeed);
     }
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+      if (transitionTimerRef.current) {
+        clearTimeout(transitionTimerRef.current);
+      }
+    };
   }, [
     isPlaying,
     timeRemaining,
     currentPoseIndexInternal,
     session,
     isResting,
+    isTransitioning,
     restDuration,
     getEffectiveDuration,
     onSessionComplete,
+    transitionBeepEnabled,
+    transitionBeepVolume,
+    transitionBeepDelay,
+    transitionBeepFrequency,
+    transitionVibrationEnabled,
   ]);
 
   // Rest timer countdown logic
@@ -252,6 +350,7 @@ export function usePracticeTimer({ session, restDuration, onSessionComplete }) {
     sessionStarted,
     isResting,
     restTimeRemaining,
+    isTransitioning,
     currentPoseIndex: currentPoseIndexInternal,
     totalPracticeTime,
 

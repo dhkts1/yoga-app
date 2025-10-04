@@ -10,6 +10,20 @@ vi.mock("../../../src/hooks/useTestMode", () => ({
   }),
 }));
 
+// Mock preferences store to disable transition notifications for tests
+vi.mock("../../../src/stores/preferences", () => ({
+  default: (selector) => {
+    const mockState = {
+      transitionBeepEnabled: false,
+      transitionBeepVolume: 0.5,
+      transitionBeepDelay: 0, // No delay for tests
+      transitionBeepFrequency: 432,
+      transitionVibrationEnabled: false,
+    };
+    return selector ? selector(mockState) : mockState;
+  },
+}));
+
 describe("usePracticeTimer", () => {
   beforeEach(() => {
     vi.useFakeTimers();
