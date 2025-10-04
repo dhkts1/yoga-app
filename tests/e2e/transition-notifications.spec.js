@@ -31,11 +31,10 @@ test.describe("Transition Notifications", () => {
     await practiceSection.click();
     await page.waitForTimeout(500); // Wait for section expansion animation
 
-    // Find beep toggle switch
+    // Find beep toggle switch - use label to locate the switch
     const beepToggle = page
-      .locator("text=/Transition Beep/i")
-      .locator("..")
-      .locator('button[role="switch"]');
+      .locator('div:has-text("Transition Beep") >> button[role="switch"]')
+      .first();
 
     // Toggle beep on
     await beepToggle.click();
@@ -61,9 +60,8 @@ test.describe("Transition Notifications", () => {
 
     // Enable beep first
     const beepToggle = page
-      .locator("text=/Transition Beep/i")
-      .locator("..")
-      .locator('button[role="switch"]');
+      .locator('div:has-text("Transition Beep") >> button[role="switch"]')
+      .first();
     await beepToggle.click();
     await page.waitForTimeout(300); // Wait for volume slider to appear
 
@@ -95,9 +93,8 @@ test.describe("Transition Notifications", () => {
 
     // Enable beep first
     const beepToggle = page
-      .locator("text=/Transition Beep/i")
-      .locator("..")
-      .locator('button[role="switch"]');
+      .locator('div:has-text("Transition Beep") >> button[role="switch"]')
+      .first();
     await beepToggle.click();
     await page.waitForTimeout(300);
 
@@ -157,17 +154,19 @@ test.describe("Transition Notifications", () => {
 
     // Find vibration toggle
     const vibrationToggle = page
-      .locator("text=/Transition Vibration/i")
-      .locator("..")
-      .locator('button[role="switch"]');
+      .locator('div:has-text("Transition Vibration") >> button[role="switch"]')
+      .first();
 
     // Check if toggle is enabled (not disabled due to lack of support)
-    const isDisabled = await vibrationToggle.getAttribute("disabled");
+    const isDisabled = await vibrationToggle
+      .getAttribute("disabled")
+      .catch(() => null);
 
     if (!isDisabled) {
       // Toggle vibration on
+      await expect(vibrationToggle).toBeVisible();
       await vibrationToggle.click();
-      await page.waitForTimeout(100);
+      await page.waitForTimeout(200);
 
       // Verify it's enabled in localStorage
       const storage = await page.evaluate(() => {
@@ -280,9 +279,8 @@ test.describe("Transition Notifications", () => {
 
     // Enable beep
     const beepToggle = page
-      .locator("text=/Transition Beep/i")
-      .locator("..")
-      .locator('button[role="switch"]');
+      .locator('div:has-text("Transition Beep") >> button[role="switch"]')
+      .first();
     await beepToggle.click();
     await page.waitForTimeout(300);
 
@@ -301,9 +299,9 @@ test.describe("Transition Notifications", () => {
     await page.getByRole("button", { name: /profile|settings/i }).click();
     await page.waitForURL(/\/settings/);
 
-    const practiceSectionAfter = page.getByText("Practice").first();
+    const practiceSectionAfter = page.getByText("Practice Settings").first();
     await practiceSectionAfter.click();
-    await page.waitForTimeout(300);
+    await page.waitForTimeout(500);
 
     // Verify settings persisted
     const storage = await page.evaluate(() => {
