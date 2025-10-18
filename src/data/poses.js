@@ -10,7 +10,7 @@ export const poses = [
     category: 'standing',
     difficulty: 'beginner',
     duration: 30,
-    imageUrl: '/poses/mountain-pose.jpg',
+    imageUrl: '/poses/mountain_pose.png',
     description: 'The foundation of all standing poses, Mountain Pose teaches us how to ground ourselves and find our center. Though it appears simple, this pose is actively engaging every muscle.',
     instructions: [
       'Stand with feet hip-width apart, parallel to each other',
@@ -107,7 +107,7 @@ export const poses = [
     difficulty: 'beginner',
     duration: 30,
     requiresBothSides: true,
-    imageUrl: '/poses/warrior-one.jpg',
+    imageUrl: '/poses/warrior_1.png',
     description: 'A powerful standing pose that builds focus, power, and stability. Warrior I creates a strong foundation while opening the chest and hips.',
     instructions: [
       'From Mountain Pose, step left foot back 3-4 feet',
@@ -156,7 +156,7 @@ export const poses = [
     difficulty: 'beginner',
     duration: 30,
     requiresBothSides: true,
-    imageUrl: '/poses/warrior-two.jpg',
+    imageUrl: '/poses/warrior_2.png',
     description: 'A pose of strength and grace, Warrior II cultivates concentration while strengthening the legs and opening the hips. It teaches us to stay centered even in challenge.',
     instructions: [
       'From Mountain Pose, step feet 3-4 feet apart',
@@ -205,7 +205,7 @@ export const poses = [
     difficulty: 'beginner',
     duration: 30,
     requiresBothSides: true,
-    imageUrl: '/poses/tree-pose.jpg',
+    imageUrl: '/poses/tree_pose.png',
     description: 'Tree Pose teaches us to find balance and grace while remaining grounded. It strengthens the legs while opening the hips and improving focus.',
     instructions: [
       'Begin in Mountain Pose',
@@ -254,7 +254,7 @@ export const poses = [
     difficulty: 'beginner',
     duration: 30,
     requiresBothSides: true,
-    imageUrl: '/poses/triangle-pose.jpg',
+    imageUrl: '/poses/triangle_pose.png',
     description: 'Triangle Pose is a standing pose that stretches and strengthens the entire body. It improves digestion and relieves stress while building core strength.',
     instructions: [
       'Stand with feet 3-4 feet apart',
@@ -538,7 +538,7 @@ export const poses = [
     category: 'restorative',
     difficulty: 'beginner',
     duration: 180,
-    imageUrl: '/poses/corpse-pose.jpg',
+    imageUrl: '/poses/corpse_pose.png',
     description: 'The most important pose in yoga, Savasana allows the body to absorb the benefits of practice. Though it looks easy, true relaxation can be challenging.',
     instructions: [
       'Lie flat on back with legs extended',
@@ -684,7 +684,7 @@ export const poses = [
     difficulty: 'intermediate',
     duration: 30,
     requiresBothSides: true,
-    imageUrl: '/poses/pyramid-pose.jpg',
+    imageUrl: '/poses/pyramid_pose.png',
     description: 'An intense hamstring stretch that also improves balance and calms the mind. Pyramid pose teaches patience and alignment.',
     instructions: [
       'Stand with feet 3 feet apart',
