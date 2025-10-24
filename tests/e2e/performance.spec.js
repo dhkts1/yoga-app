@@ -142,10 +142,7 @@ test.describe("Performance", () => {
         isFavorite: i % 5 === 0,
       }));
 
-      localStorage.setItem(
-        "yoga-custom-sessions",
-        JSON.stringify(customSessions),
-      );
+      localStorage.setItem("customSessions", JSON.stringify(customSessions));
     });
 
     // Navigate to Sessions page (shows custom sessions)
@@ -501,10 +498,7 @@ test.describe("Performance", () => {
         isFavorite: i % 5 === 0,
       }));
 
-      localStorage.setItem(
-        "yoga-custom-sessions",
-        JSON.stringify(customSessions),
-      );
+      localStorage.setItem("customSessions", JSON.stringify(customSessions));
 
       // Program progress
       const programProgress = {
@@ -750,23 +744,34 @@ test.describe("Performance", () => {
     await page.getByRole("tab", { name: /select poses/i }).click();
     await page.waitForTimeout(500);
 
-    // Add multiple poses (simulate maximum)
-    const addButtons = page
-      .getByRole("button", { name: /add|plus|\+/i })
-      .first();
+    // Select multiple poses by clicking on pose cards (20 poses for maximum)
+    const poseImages = page.locator("img[alt*='pose']");
+    const poseCount = await poseImages.count();
+    const posesToSelect = Math.min(20, poseCount);
 
-    // Add 20 poses (reasonable maximum for a session)
-    for (let i = 0; i < 20; i++) {
-      const poseAddButton = page
-        .getByRole("button", { name: /add|plus|\+/i })
-        .first();
-      if (await poseAddButton.isVisible()) {
-        await poseAddButton.click();
-        await page.waitForTimeout(50); // Brief pause between adds
+    for (let i = 0; i < posesToSelect; i++) {
+      const poseImage = poseImages.nth(i);
+      if (await poseImage.isVisible({ timeout: 1000 }).catch(() => false)) {
+        await poseImage.click();
+        await page.waitForTimeout(50); // Brief pause between selections
       }
     }
 
-    // Switch to sequence view
+    // Click "Add X Selected Poses" button to add all selected poses to sequence
+    const addButton = page.getByRole("button", { name: /add.*selected/i });
+    if (await addButton.isVisible({ timeout: 2000 }).catch(() => false)) {
+      await addButton.click();
+
+      // Handle the "Add Poses" dialog that appears
+      const addToSequenceButton = page.getByRole("button", {
+        name: /add to sequence/i,
+      });
+      await addToSequenceButton.waitFor({ state: "visible", timeout: 3000 });
+      await addToSequenceButton.click();
+      await page.waitForTimeout(500); // Wait for poses to be added and dialog to close
+    }
+
+    // Switch to sequence view (will now have poses)
     await page.getByRole("tab", { name: /selected poses/i }).click();
     await page.waitForTimeout(500);
 
@@ -776,8 +781,8 @@ test.describe("Performance", () => {
       .or(page.locator("text=/pose.*\\d+|mountain|warrior/i"));
 
     // Should have added poses
-    const poseCount = await sequenceItems.count();
-    expect(poseCount).toBeGreaterThan(5);
+    const sequenceCount = await sequenceItems.count();
+    expect(sequenceCount).toBeGreaterThan(5);
 
     // Should be able to reorder (drag and drop) without lag
     // Note: Drag testing requires more setup, just verify UI responsiveness

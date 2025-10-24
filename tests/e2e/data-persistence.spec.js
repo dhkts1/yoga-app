@@ -34,6 +34,9 @@ test.describe("Data Persistence", () => {
 
     await fastForwardTimer(page);
     await ensurePracticeStarted(page);
+
+    // Wait for timer to complete, then skip post-mood tracker
+    await page.waitForTimeout(2000); // Wait for timer to finish (test mode is fast)
     await skipMoodTrackerIfPresent(page);
     await page.waitForURL(/\/complete/, { timeout: 15000 });
 
@@ -59,6 +62,9 @@ test.describe("Data Persistence", () => {
 
     await fastForwardTimer(page);
     await ensurePracticeStarted(page);
+
+    // Wait for timer to complete, then skip post-mood tracker
+    await page.waitForTimeout(2000); // Wait for timer to finish (test mode is fast)
     await skipMoodTrackerIfPresent(page);
     await page.waitForURL(/\/complete/, { timeout: 15000 });
 
@@ -98,6 +104,9 @@ test.describe("Data Persistence", () => {
 
     await fastForwardTimer(page);
     await ensurePracticeStarted(page);
+
+    // Wait for timer to complete, then skip post-mood tracker
+    await page.waitForTimeout(2000); // Wait for timer to finish (test mode is fast)
     await skipMoodTrackerIfPresent(page);
     await page.waitForURL(/\/complete/, { timeout: 15000 });
 
@@ -141,6 +150,9 @@ test.describe("Data Persistence", () => {
 
     await fastForwardTimer(page);
     await ensurePracticeStarted(page);
+
+    // Wait for timer to complete, then skip post-mood tracker
+    await page.waitForTimeout(2000); // Wait for timer to finish (test mode is fast)
     await skipMoodTrackerIfPresent(page);
     await page.waitForURL(/\/complete/, { timeout: 15000 });
 
@@ -194,6 +206,9 @@ test.describe("Data Persistence", () => {
 
     await fastForwardTimer(page);
     await ensurePracticeStarted(page);
+
+    // Wait for timer to complete, then skip post-mood tracker
+    await page.waitForTimeout(2000); // Wait for timer to finish (test mode is fast)
     await skipMoodTrackerIfPresent(page);
     await page.waitForURL(/\/complete/, { timeout: 15000 });
 

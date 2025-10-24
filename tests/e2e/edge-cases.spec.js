@@ -385,9 +385,14 @@ test.describe("Edge Cases", () => {
       await endButton.click();
     }
 
+    // Skip post-mood tracker if it appears
+    await skipMoodTrackerIfPresent(page);
+
     // Should be on complete screen
     await page.waitForURL(/\/complete/, { timeout: 30000 });
-    await expect(page.getByText(/session complete/i)).toBeVisible();
+    await expect(
+      page.getByText(/practice complete|session complete/i),
+    ).toBeVisible();
 
     // Use browser back button
     await page.goBack();

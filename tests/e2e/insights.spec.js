@@ -1,5 +1,10 @@
-import { test, expect } from '@playwright/test';
-import { clearAppData, fastForwardTimer, skipMoodTrackerIfPresent, ensurePracticeStarted } from '../helpers/test-utils.js';
+import { test, expect } from "@playwright/test";
+import {
+  clearAppData,
+  fastForwardTimer,
+  skipMoodTrackerIfPresent,
+  ensurePracticeStarted,
+} from "../helpers/test-utils.js";
 
 /**
  * Insights/Progress Screen Tests
@@ -10,36 +15,41 @@ import { clearAppData, fastForwardTimer, skipMoodTrackerIfPresent, ensurePractic
  * - View streak information
  * - Empty state for new users
  */
-test.describe('Insights', () => {
+test.describe("Insights", () => {
   test.beforeEach(async ({ page }) => {
     await clearAppData(page);
   });
 
-  test('should navigate to insights screen', async ({ page }) => {
+  test("should navigate to insights screen", async ({ page }) => {
     // Click insights/progress button in bottom nav
-    await page.getByRole('button', { name: /progress|insights/i }).click();
+    await page.getByRole("button", { name: /progress|insights/i }).click();
 
     // Verify on insights page
     await expect(page).toHaveURL(/\/insights|\/progress/);
   });
 
-  test('should show empty state for new users', async ({ page }) => {
-    await page.getByRole('button', { name: /progress|insights/i }).click();
+  test("should show empty state for new users", async ({ page }) => {
+    await page.getByRole("button", { name: /progress|insights/i }).click();
     await page.waitForURL(/\/insights|\/progress/);
 
     // Should show message about no practice yet
-    const emptyMessage = page.locator('text=/no.*practic|start.*practic|get started|more practice needed/i');
+    const emptyMessage = page.locator(
+      "text=/no.*practic|start.*practic|get started|more practice needed/i",
+    );
     await expect(emptyMessage.first()).toBeVisible({ timeout: 3000 });
   });
 
-  test('should show stats after completing a session', async ({ page }) => {
+  test("should show stats after completing a session", async ({ page }) => {
     // Complete a quick session first
     await fastForwardTimer(page);
-    await page.getByRole('button', { name: /quick start/i }).click();
+    await page.getByRole("button", { name: /quick start/i }).click();
     await page.waitForURL(/\/practice/, { timeout: 5000 });
     await skipMoodTrackerIfPresent(page);
 
     await ensurePracticeStarted(page);
+
+    // Wait for timer to complete, then skip post-mood tracker
+    await page.waitForTimeout(2000); // Wait for timer to finish (test mode is fast)
     await skipMoodTrackerIfPresent(page);
     await page.waitForURL(/\/complete/, { timeout: 15000 });
 
@@ -47,29 +57,34 @@ test.describe('Insights', () => {
     await page.waitForTimeout(500);
 
     // Navigate home first
-    const homeButton = page.getByRole('link', { name: /home/i }).or(
-      page.getByRole('button', { name: /home|done/i })
-    );
+    const homeButton = page
+      .getByRole("link", { name: /home/i })
+      .or(page.getByRole("button", { name: /home|done/i }));
     await homeButton.click();
-    await page.waitForURL('/');
+    await page.waitForURL("/");
 
     // Navigate to insights
-    await page.getByRole('button', { name: /progress|insights/i }).click();
+    await page.getByRole("button", { name: /progress|insights/i }).click();
     await page.waitForURL(/\/insights|\/progress/);
 
     // Should not show empty state anymore
-    const emptyMessage = page.locator('text=/no.*practice|start.*practice|get started/i');
+    const emptyMessage = page.locator(
+      "text=/no.*practice|start.*practice|get started/i",
+    );
     await expect(emptyMessage).not.toBeVisible({ timeout: 2000 });
   });
 
-  test('should display streak information', async ({ page }) => {
+  test("should display streak information", async ({ page }) => {
     // Complete a session
     await fastForwardTimer(page);
-    await page.getByRole('button', { name: /quick start/i }).click();
+    await page.getByRole("button", { name: /quick start/i }).click();
     await page.waitForURL(/\/practice/, { timeout: 5000 });
     await skipMoodTrackerIfPresent(page);
 
     await ensurePracticeStarted(page);
+
+    // Wait for timer to complete, then skip post-mood tracker
+    await page.waitForTimeout(2000); // Wait for timer to finish (test mode is fast)
     await skipMoodTrackerIfPresent(page);
     await page.waitForURL(/\/complete/, { timeout: 15000 });
 
@@ -77,28 +92,31 @@ test.describe('Insights', () => {
     await page.waitForTimeout(500);
 
     // Navigate home first
-    const homeButton = page.getByRole('link', { name: /home/i }).or(
-      page.getByRole('button', { name: /home|done/i })
-    );
+    const homeButton = page
+      .getByRole("link", { name: /home/i })
+      .or(page.getByRole("button", { name: /home|done/i }));
     await homeButton.click();
-    await page.waitForURL('/');
+    await page.waitForURL("/");
 
     // Go to insights
-    await page.getByRole('button', { name: /progress|insights/i }).click();
+    await page.getByRole("button", { name: /progress|insights/i }).click();
     await page.waitForURL(/\/insights|\/progress/);
 
     // Just verify we're on the page - streak might be on home screen instead
     expect(page.url()).toMatch(/\/insights|\/progress/);
   });
 
-  test('should show total practice time', async ({ page }) => {
+  test("should show total practice time", async ({ page }) => {
     // Complete a session
     await fastForwardTimer(page);
-    await page.getByRole('button', { name: /quick start/i }).click();
+    await page.getByRole("button", { name: /quick start/i }).click();
     await page.waitForURL(/\/practice/, { timeout: 5000 });
     await skipMoodTrackerIfPresent(page);
 
     await ensurePracticeStarted(page);
+
+    // Wait for timer to complete, then skip post-mood tracker
+    await page.waitForTimeout(2000); // Wait for timer to finish (test mode is fast)
     await skipMoodTrackerIfPresent(page);
     await page.waitForURL(/\/complete/, { timeout: 15000 });
 
@@ -106,14 +124,14 @@ test.describe('Insights', () => {
     await page.waitForTimeout(500);
 
     // Navigate home first
-    const homeButton = page.getByRole('link', { name: /home/i }).or(
-      page.getByRole('button', { name: /home|done/i })
-    );
+    const homeButton = page
+      .getByRole("link", { name: /home/i })
+      .or(page.getByRole("button", { name: /home|done/i }));
     await homeButton.click();
-    await page.waitForURL('/');
+    await page.waitForURL("/");
 
     // Go to insights
-    await page.getByRole('button', { name: /progress|insights/i }).click();
+    await page.getByRole("button", { name: /progress|insights/i }).click();
     await page.waitForURL(/\/insights|\/progress/);
 
     // Just verify insights page loaded

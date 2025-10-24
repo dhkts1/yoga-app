@@ -436,3 +436,4 @@ npm run test:a11y        # Accessibility tests
 **MVP Complete**: September 2024
 **Latest Update**: October 2025
 **Status**: Ready for beta testing
+- use  --last-failed when running playwright tests
