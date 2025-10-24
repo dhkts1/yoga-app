@@ -172,6 +172,9 @@ export async function fastForwardTimer(page) {
     };
     localStorage.setItem("mindful-yoga-preferences", JSON.stringify(prefs));
   });
+
+  // Small wait to ensure settings are applied before navigation
+  await page.waitForTimeout(100);
 }
 
 /**
