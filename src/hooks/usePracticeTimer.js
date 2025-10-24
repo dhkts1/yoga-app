@@ -68,6 +68,37 @@ export function usePracticeTimer({ session, restDuration, onSessionComplete }) {
   const [totalPracticeTime, setTotalPracticeTime] = useState(0); // in seconds
   const lastResumeTimeRef = useRef(null);
 
+  // Refs to capture latest values for transition callback (prevents stale closures)
+  const restDurationRef = useRef(restDuration);
+  const getEffectiveDurationRef = useRef(getEffectiveDuration);
+  const onSessionCompleteRef = useRef(onSessionComplete);
+  const sessionRef = useRef(session);
+  const transitionBeepDelayRef = useRef(transitionBeepDelay);
+
+  // Keep refs in sync with latest values
+  useEffect(() => {
+    restDurationRef.current = restDuration;
+    getEffectiveDurationRef.current = getEffectiveDuration;
+    onSessionCompleteRef.current = onSessionComplete;
+    sessionRef.current = session;
+    transitionBeepDelayRef.current = transitionBeepDelay;
+  }, [
+    restDuration,
+    getEffectiveDuration,
+    onSessionComplete,
+    session,
+    transitionBeepDelay,
+  ]);
+
+  // Cleanup transition timer on unmount
+  useEffect(() => {
+    return () => {
+      if (transitionTimerRef.current) {
+        clearTimeout(transitionTimerRef.current);
+      }
+    };
+  }, []);
+
   // Reset timer when pose changes during render - React Compiler friendly
   if (
     currentPoseIndexInternal !== timedPoseIndex &&
@@ -120,19 +151,29 @@ export function usePracticeTimer({ session, restDuration, onSessionComplete }) {
 
           if (newTime <= 0) {
             const isLastPose =
-              session && currentPoseIndexInternal === session.poses.length - 1;
+              sessionRef.current &&
+              currentPoseIndexInternal === sessionRef.current.poses.length - 1;
 
-            // Use transition delay if configured
-            if (transitionBeepDelay > 0) {
+            // Use transition delay if configured (read from ref to get latest value)
+            const currentTransitionDelay = transitionBeepDelayRef.current;
+
+            if (currentTransitionDelay > 0) {
               // Enter transitioning state with delay
               setIsTransitioning(true);
 
               // Wait for delay, then advance
-              const effectiveDelay = getEffectiveDuration(transitionBeepDelay);
+              const effectiveDelay = getEffectiveDurationRef.current(
+                currentTransitionDelay,
+              );
               const delayMs =
                 typeof window !== "undefined" && window.__TIMER_SPEED__
                   ? (effectiveDelay * 1000) / window.__TIMER_SPEED__
                   : effectiveDelay * 1000;
+
+              // Clear any existing transition timer before setting new one
+              if (transitionTimerRef.current) {
+                clearTimeout(transitionTimerRef.current);
+              }
 
               transitionTimerRef.current = setTimeout(() => {
                 setIsTransitioning(false);
@@ -140,13 +181,15 @@ export function usePracticeTimer({ session, restDuration, onSessionComplete }) {
                 if (isLastPose) {
                   // Session complete - trigger callback
                   setIsPlaying(false);
-                  if (onSessionComplete) {
-                    onSessionComplete();
+                  const callback = onSessionCompleteRef.current;
+                  if (callback) {
+                    callback();
                   }
-                } else if (restDuration > 0) {
+                } else if (restDurationRef.current > 0) {
                   // Enter rest period
-                  const effectiveRestDuration =
-                    getEffectiveDuration(restDuration);
+                  const effectiveRestDuration = getEffectiveDurationRef.current(
+                    restDurationRef.current,
+                  );
                   setIsResting(true);
                   setRestTimeRemaining(effectiveRestDuration);
                 } else {
@@ -159,13 +202,15 @@ export function usePracticeTimer({ session, restDuration, onSessionComplete }) {
               if (isLastPose) {
                 // Session complete - trigger callback
                 setIsPlaying(false);
-                if (onSessionComplete) {
-                  onSessionComplete();
+                const callback = onSessionCompleteRef.current;
+                if (callback) {
+                  callback();
                 }
-              } else if (restDuration > 0) {
+              } else if (restDurationRef.current > 0) {
                 // Enter rest period
-                const effectiveRestDuration =
-                  getEffectiveDuration(restDuration);
+                const effectiveRestDuration = getEffectiveDurationRef.current(
+                  restDurationRef.current,
+                );
                 setIsResting(true);
                 setRestTimeRemaining(effectiveRestDuration);
               } else {
@@ -181,20 +226,16 @@ export function usePracticeTimer({ session, restDuration, onSessionComplete }) {
     }
     return () => {
       clearInterval(interval);
-      if (transitionTimerRef.current) {
-        clearTimeout(transitionTimerRef.current);
-      }
+      // NOTE: Do NOT clear transitionTimerRef.current here!
+      // The transition timeout needs to complete even if the effect re-runs.
+      // It will be cleared when a new transition starts (line 154-156).
     };
   }, [
     isPlaying,
     timeRemaining,
     currentPoseIndexInternal,
-    session,
     isResting,
     isTransitioning,
-    restDuration,
-    getEffectiveDuration,
-    onSessionComplete,
     transitionBeepEnabled,
     transitionBeepVolume,
     transitionBeepDelay,

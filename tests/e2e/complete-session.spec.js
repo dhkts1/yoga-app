@@ -124,12 +124,17 @@ test.describe("Complete Session", () => {
   });
 
   test("should allow returning home after completion", async ({ page }) => {
+    // Set up fast timer before starting practice
+    await fastForwardTimer(page);
+
     await page.getByRole("button", { name: /start/i }).click();
     await page.waitForURL(/\/practice/);
     await skipMoodTrackerIfPresent(page);
 
-    await fastForwardTimer(page);
     await ensurePracticeStarted(page);
+
+    // Wait for timer to complete, then skip post-mood tracker
+    await page.waitForTimeout(2000); // Wait for timer to finish (test mode is fast)
     await skipMoodTrackerIfPresent(page);
     await page.waitForURL(/\/complete/, { timeout: 15000 });
 
