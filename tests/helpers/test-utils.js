@@ -19,7 +19,7 @@ export async function clearAppData(page) {
   await page.context().clearCookies();
 
   // Navigate to the app first to have proper context
-  await page.goto('/');
+  await page.goto("/");
 
   // Now clear storage and set onboarding as completed to skip it
   await page.evaluate(() => {
@@ -35,20 +35,23 @@ export async function clearAppData(page) {
           tooltipsShownCount: {},
           favoriteSessions: [],
           favoriteExercises: [],
-          theme: 'light' // Explicitly set default theme for tests
+          theme: "light", // Explicitly set default theme for tests
         },
-        version: 0
+        version: 0,
       };
-      localStorage.setItem('mindful-yoga-preferences', JSON.stringify(preferencesStore));
+      localStorage.setItem(
+        "mindful-yoga-preferences",
+        JSON.stringify(preferencesStore),
+      );
     } catch (e) {
       // Ignore errors if storage is not available
-      console.warn('Could not clear storage:', e.message);
+      console.warn("Could not clear storage:", e.message);
     }
   });
 
   // Reload to apply the new state
   await page.reload();
-  await page.waitForLoadState('networkidle');
+  await page.waitForLoadState("networkidle");
 
   // Dismiss onboarding if it still appears
   await dismissOnboardingIfPresent(page);
@@ -63,45 +66,47 @@ export async function clearAppData(page) {
 export async function dismissOnboardingIfPresent(page) {
   try {
     // Wait for network to be idle to ensure onboarding has time to render
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState("networkidle");
 
     // Look for onboarding dialog with timeout
-    const onboardingDialog = page.locator('[role="dialog"]').filter({ hasText: /welcome to mindful yoga|onboarding/i });
+    const onboardingDialog = page
+      .locator('[role="dialog"]')
+      .filter({ hasText: /welcome to mindful yoga|onboarding/i });
 
     // Wait for dialog to be visible (gives animation time to complete)
-    await onboardingDialog.waitFor({ state: 'visible', timeout: 1000 });
+    await onboardingDialog.waitFor({ state: "visible", timeout: 1000 });
 
     // Try to find Skip button first (fastest way)
-    const skipButton = page.getByRole('button', { name: /skip/i });
+    const skipButton = page.getByRole("button", { name: /skip/i });
 
-    await skipButton.waitFor({ state: 'visible', timeout: 500 });
+    await skipButton.waitFor({ state: "visible", timeout: 500 });
     await skipButton.click();
 
     // Wait for onboarding to disappear
-    await onboardingDialog.waitFor({ state: 'hidden', timeout: 1000 });
+    await onboardingDialog.waitFor({ state: "hidden", timeout: 1000 });
   } catch (error) {
     // Onboarding not present or already dismissed, that's fine
-    console.log('No onboarding to dismiss or already dismissed');
+    console.log("No onboarding to dismiss or already dismissed");
   }
 }
 
 /**
  * Dismiss mood tracker if it appears
- * The app shows mood tracking before practice
+ * The app shows mood tracking before and after practice
  *
  * @param {import('@playwright/test').Page} page - Playwright page object
  */
 export async function skipMoodTrackerIfPresent(page) {
   try {
     // Look for mood tracker with "Skip this step" button
-    const skipButton = page.getByRole('button', { name: /skip.*step/i });
+    const skipButton = page.getByRole("button", { name: /skip.*step/i });
 
     // Wait for the button to be visible with a longer timeout
-    await skipButton.waitFor({ state: 'visible', timeout: 5000 });
+    await skipButton.waitFor({ state: "visible", timeout: 5000 });
     await skipButton.click();
 
     // Wait for mood tracker to disappear completely
-    await skipButton.waitFor({ state: 'hidden', timeout: 3000 });
+    await skipButton.waitFor({ state: "hidden", timeout: 3000 });
   } catch {
     // Mood tracker not present or already dismissed, that's fine
   }
@@ -116,24 +121,26 @@ export async function skipMoodTrackerIfPresent(page) {
 export async function ensurePracticeStarted(page) {
   try {
     // Wait for either Play or Pause button to appear
-    const playButton = page.getByRole('button', { name: 'Play' });
-    const pauseButton = page.getByRole('button', { name: 'Pause' });
+    const playButton = page.getByRole("button", { name: "Play" });
+    const pauseButton = page.getByRole("button", { name: "Pause" });
 
     // Try to find Play button first (timer not started)
-    const isPlayVisible = await playButton.isVisible({ timeout: 2000 }).catch(() => false);
+    const isPlayVisible = await playButton
+      .isVisible({ timeout: 2000 })
+      .catch(() => false);
 
     if (isPlayVisible) {
       // Timer not started yet, click Play to start
       await playButton.click();
       // Wait for button to change to Pause (confirming it started)
-      await pauseButton.waitFor({ state: 'visible', timeout: 2000 });
+      await pauseButton.waitFor({ state: "visible", timeout: 2000 });
     } else {
       // Timer already playing (auto-started), just verify Pause button exists
-      await pauseButton.waitFor({ state: 'visible', timeout: 2000 });
+      await pauseButton.waitFor({ state: "visible", timeout: 2000 });
     }
   } catch (error) {
     // If neither button found, practice might have already completed or there's an error
-    console.warn('Could not find Play/Pause button:', error.message);
+    console.warn("Could not find Play/Pause button:", error.message);
   }
 }
 
@@ -141,6 +148,7 @@ export async function ensurePracticeStarted(page) {
  * Enable test mode to speed up timers
  * Sets window.__TEST_MODE__ flag that Practice component checks
  * Also stores in sessionStorage so it persists across navigation
+ * Sets preferences to disable rest periods and transition delays for fast testing
  *
  * @param {import('@playwright/test').Page} page - Playwright page object
  */
@@ -149,8 +157,20 @@ export async function fastForwardTimer(page) {
     window.__TEST_MODE__ = true;
     window.__TIMER_SPEED__ = 500; // 500x speed for faster tests
     // Store in sessionStorage so it persists across navigation
-    sessionStorage.setItem('__TEST_MODE__', 'true');
-    sessionStorage.setItem('__TIMER_SPEED__', '500');
+    sessionStorage.setItem("__TEST_MODE__", "true");
+    sessionStorage.setItem("__TIMER_SPEED__", "500");
+
+    // Set preferences to disable rest periods and transition delays
+    // Using same pattern as setupFastTimerWithRest from rest-periods.spec.js
+    const prefs = {
+      state: {
+        hasSeenOnboarding: true,
+        restDuration: 0, // No rest periods for fast testing
+        transitionBeepDelay: 0, // No transition delay
+      },
+      version: 0,
+    };
+    localStorage.setItem("mindful-yoga-preferences", JSON.stringify(prefs));
   });
 }
 
@@ -164,19 +184,19 @@ export async function fastForwardTimer(page) {
  */
 export async function completeQuickSession(page) {
   // Navigate to home
-  await page.goto('/');
+  await page.goto("/");
 
   // Enable test mode for fast timers
   await fastForwardTimer(page);
 
   // Click Quick Start button
-  await page.getByRole('button', { name: /start/i }).click();
+  await page.getByRole("button", { name: /start/i }).click();
 
   // Wait for practice screen
   await page.waitForURL(/\/practice/);
 
   // Click play button to start
-  await page.getByRole('button', { name: /play/i }).click();
+  await page.getByRole("button", { name: /play/i }).click();
 
   // Wait for completion screen
   await page.waitForURL(/\/complete/, { timeout: 30000 });
@@ -191,8 +211,10 @@ export async function completeQuickSession(page) {
  */
 export async function getStorageState(page) {
   return await page.evaluate(() => ({
-    progress: JSON.parse(localStorage.getItem('yoga-progress') || '{}'),
-    preferences: JSON.parse(localStorage.getItem('mindful-yoga-preferences') || '{}'),
+    progress: JSON.parse(localStorage.getItem("yoga-progress") || "{}"),
+    preferences: JSON.parse(
+      localStorage.getItem("mindful-yoga-preferences") || "{}",
+    ),
   }));
 }
 
@@ -206,7 +228,7 @@ export async function getStorageState(page) {
 export async function waitForNavigation(page, urlPattern) {
   await page.waitForURL(urlPattern);
   // Wait for any loading states to complete
-  await page.waitForLoadState('networkidle');
+  await page.waitForLoadState("networkidle");
 }
 
 /**
@@ -217,7 +239,10 @@ export async function waitForNavigation(page, urlPattern) {
  * @param {string} tabName - Tab name (Home, Discover, Insights, Settings)
  */
 export async function navigateToTab(page, tabName) {
-  await page.getByRole('navigation').getByRole('link', { name: tabName }).click();
+  await page
+    .getByRole("navigation")
+    .getByRole("link", { name: tabName })
+    .click();
 }
 
 /**
@@ -244,17 +269,19 @@ export async function hasStreakBadge(page, expectedCount) {
  */
 export async function navigateToSessionBuilder(page) {
   // Go to sessions page first
-  await page.goto('/sessions');
-  await page.waitForLoadState('networkidle');
+  await page.goto("/sessions");
+  await page.waitForLoadState("networkidle");
 
   // Click create custom session button
-  const createButton = page.getByRole('button', { name: /create custom session/i });
-  await createButton.waitFor({ state: 'visible', timeout: 5000 });
+  const createButton = page.getByRole("button", {
+    name: /create custom session/i,
+  });
+  await createButton.waitFor({ state: "visible", timeout: 5000 });
   await createButton.click();
 
   // Wait for navigation to builder
   await page.waitForURL(/\/sessions\/builder/);
-  await page.waitForLoadState('networkidle');
+  await page.waitForLoadState("networkidle");
 }
 
 /**
