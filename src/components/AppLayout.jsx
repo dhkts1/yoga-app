@@ -1,5 +1,5 @@
-import { cn } from '../lib/utils';
-import BottomNav from './BottomNav';
+import { cn } from "../lib/utils";
+import BottomNav from "./BottomNav";
 
 /**
  * AppLayout - Optimized layout with sticky header/footer and proper scrolling
@@ -29,18 +29,27 @@ function AppLayout({
   scrollable = true,
   // Safe area handling
   handleSafeArea = true,
+  // Aurora styling options
+  background = "default", // 'default' | 'aurora' | 'aurora-animated'
   ...props
 }) {
+  // Background class based on prop
+  const backgroundClasses = {
+    default: "bg-background",
+    aurora: "bg-aurora-mesh",
+    "aurora-animated": "bg-aurora-animated",
+  };
+
   return (
     <div
       className={cn(
         // Full viewport height, flex column layout
-        'flex h-screen flex-col',
-        // Background
-        'bg-background',
+        "flex h-screen flex-col",
+        // Background - aurora variants
+        backgroundClasses[background] || "bg-background",
         // Safe area padding (top only - bottom handled by individual elements)
-        handleSafeArea && 'pt-safe-top',
-        className
+        handleSafeArea && "pt-safe-top",
+        className,
       )}
       {...props}
     >
@@ -48,8 +57,12 @@ function AppLayout({
       {showHeader && header && (
         <div
           className={cn(
-            'z-50 shrink-0 bg-background',
-            fixedHeader && 'sticky top-0'
+            "z-50 shrink-0",
+            // Use glass effect for aurora backgrounds, solid for default
+            background !== "default"
+              ? "bg-background/80 backdrop-blur-md"
+              : "bg-background",
+            fixedHeader && "sticky top-0",
           )}
         >
           {header}
@@ -59,17 +72,17 @@ function AppLayout({
       {/* Main Content Area - Scrollable with flex-1 to fill available space */}
       <div
         className={cn(
-          'flex-1',
+          "flex-1",
           // Enable scrolling when scrollable=true
-          scrollable ? 'overflow-y-auto overflow-x-hidden' : 'overflow-hidden',
+          scrollable ? "overflow-y-auto overflow-x-hidden" : "overflow-hidden",
           // Add bottom padding for BottomNav (48px + safe area)
-          showBottomNav && 'pb-[calc(48px+env(safe-area-inset-bottom))]',
+          showBottomNav && "pb-[calc(48px+env(safe-area-inset-bottom))]",
           // Add bottom padding for fixed footer if present
-          showFooter && fixedFooter && !showBottomNav && 'pb-safe-bottom',
-          contentClassName
+          showFooter && fixedFooter && !showBottomNav && "pb-safe-bottom",
+          contentClassName,
         )}
         style={{
-          WebkitOverflowScrolling: 'touch'
+          WebkitOverflowScrolling: "touch",
         }}
       >
         {children}
@@ -79,10 +92,10 @@ function AppLayout({
       {showFooter && footer && (
         <div
           className={cn(
-            'z-40 shrink-0 border-t border-border bg-background',
-            fixedFooter && 'sticky bottom-0',
+            "z-40 shrink-0 border-t border-border bg-background",
+            fixedFooter && "sticky bottom-0",
             // Add safe area padding to footer
-            handleSafeArea && !showBottomNav && 'pb-safe-bottom'
+            handleSafeArea && !showBottomNav && "pb-safe-bottom",
           )}
         >
           {footer}

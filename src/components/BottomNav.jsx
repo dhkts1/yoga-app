@@ -1,6 +1,7 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { useMemo, memo, useCallback } from "react";
 import { Sun, Compass, Wind, Calendar, TrendingUp, User } from "lucide-react";
+import { motion } from "framer-motion";
 import { cn } from "../lib/utils";
 
 /**
@@ -88,14 +89,9 @@ const BottomNav = memo(function BottomNav({ className }) {
     <nav
       className={cn(
         // Layout
-        "fixed inset-x-0 bottom-0 z-40",
-        // Styling - solid background (no transparency)
-        "bg-background",
-        "border-t border-border",
+        "frosted-nav fixed inset-x-0 bottom-0 z-40 h-14",
         // Safe area handling for iOS
         "pb-safe-bottom",
-        // Shadow
-        "shadow-lg",
         className,
       )}
     >
@@ -127,18 +123,15 @@ const BottomNav = memo(function BottomNav({ className }) {
               aria-label={tab.label}
               aria-current={isActive ? "page" : undefined}
             >
-              {/* Active indicator line at top */}
-              {isActive && (
-                <div className="absolute left-1/2 top-0 h-1 w-12 -translate-x-1/2 rounded-b-full bg-secondary" />
-              )}
-
               {/* Icon */}
               <Icon
                 className={cn(
                   // Size - compact for smaller nav
                   "size-6",
                   // Color based on active state
-                  isActive ? "text-muted-foreground" : "text-muted-foreground",
+                  isActive
+                    ? "text-foreground drop-shadow-[0_0_6px_hsl(var(--aurora-violet)/0.4)]"
+                    : "text-muted-foreground",
                   // Stroke width for active state (bolder when active)
                   isActive ? "stroke-[2.5]" : "stroke-[2]",
                   // Smooth transition
@@ -147,6 +140,15 @@ const BottomNav = memo(function BottomNav({ className }) {
                 strokeLinecap="round"
                 strokeLinejoin="round"
               />
+
+              {/* Active indicator dot */}
+              {isActive && (
+                <motion.div
+                  layoutId="activeTab"
+                  className="absolute -bottom-1 size-1.5 rounded-full bg-gradient-to-r from-aurora-teal to-aurora-violet"
+                  transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                />
+              )}
             </button>
           );
         })}

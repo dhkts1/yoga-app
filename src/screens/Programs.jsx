@@ -51,6 +51,7 @@ function Programs() {
           showBack={false}
         />
       }
+      background="aurora"
     >
       <ContentBody size="md" spacing="sm">
         {/* Introduction */}

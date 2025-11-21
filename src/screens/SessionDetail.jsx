@@ -14,6 +14,7 @@ import {
   Heart,
   Share2,
   BookMarked,
+  Pencil,
 } from "lucide-react";
 import { getSessionById } from "../data/sessions";
 import { getBreathingExerciseById } from "../data/breathing";
@@ -24,8 +25,10 @@ import { PageHeader } from "../components/headers";
 import FavoriteButton from "../components/FavoriteButton";
 import PoseImage from "../components/PoseImage";
 import useProgressStore from "../stores/progress";
+import useSessionCustomizationsStore from "../stores/sessionCustomizations";
 import useCustomSessions from "../hooks/useCustomSessions";
 import useTranslation from "../hooks/useTranslation";
+import SessionDurationEditor from "../components/sessions/SessionDurationEditor";
 
 function SessionDetail() {
   const { sessionId } = useParams();
@@ -39,7 +42,13 @@ function SessionDetail() {
   const [sessionData, setSessionData] = useState(null);
   const [sessionType, setSessionType] = useState(null); // 'prebuilt', 'custom', 'breathing'
   const [isCustom, setIsCustom] = useState(false);
+  const [showDurationEditor, setShowDurationEditor] = useState(false);
   const { practiceHistory, breathingHistory } = useProgressStore();
+
+  // Subscribe to session customizations data for real-time updates
+  const durationOverrides = useSessionCustomizationsStore(
+    (state) => state.durationOverrides,
+  );
 
   // Use custom sessions hook
   const { getById: getCustomSessionById, isLoading: customSessionsLoading } =
@@ -193,6 +202,7 @@ function SessionDetail() {
     return (
       <DefaultLayout
         header={<PageHeader title="Loading..." backPath={backPath} />}
+        background="aurora"
       >
         <div className="flex min-h-[60vh] items-center justify-center">
           <div className="text-center">
@@ -221,6 +231,7 @@ function SessionDetail() {
           }
         />
       }
+      background="aurora"
     >
       {/* Hero Section */}
       <div className="bg-gradient-to-b from-cream-50 to-cream px-4 py-3">
@@ -308,10 +319,19 @@ function SessionDetail() {
             sessionData.poses &&
             sessionData.poses.length > 0 && (
               <div className="rounded-2xl bg-card p-5 shadow-sm">
-                <h2 className="mb-4 flex items-center gap-2 text-lg font-medium text-foreground">
-                  <Heart className="size-5 text-muted-foreground" />
-                  Poses in This Session ({sessionData.poses.length})
-                </h2>
+                <div className="mb-4 flex items-center justify-between">
+                  <h2 className="flex items-center gap-2 text-lg font-medium text-foreground">
+                    <Heart className="size-5 text-muted-foreground" />
+                    Poses in This Session ({sessionData.poses.length})
+                  </h2>
+                  <button
+                    onClick={() => setShowDurationEditor(true)}
+                    className="flex items-center gap-1.5 text-sm text-primary hover:underline"
+                  >
+                    <Pencil className="size-4" />
+                    <span>Edit</span>
+                  </button>
+                </div>
                 <div className="space-y-3">
                   {sessionData.poses.map((poseItem, index) => {
                     const pose = getPoseDetails(poseItem);
@@ -351,8 +371,18 @@ function SessionDetail() {
 
                         {/* Duration */}
                         <div className="shrink-0 text-right">
-                          <div className="text-sm font-medium text-muted-foreground">
-                            {poseItem.duration || pose.duration}s
+                          <div
+                            className={`text-sm font-medium ${
+                              !isCustom && durationOverrides[sessionId]?.[index]
+                                ? "text-primary"
+                                : "text-muted-foreground"
+                            }`}
+                          >
+                            {(!isCustom &&
+                              durationOverrides[sessionId]?.[index]) ||
+                              poseItem.duration ||
+                              pose.duration}
+                            s
                           </div>
                         </div>
                       </div>
@@ -481,6 +511,14 @@ function SessionDetail() {
           </button>
         </div>
       </div>
+
+      {/* Duration Editor Dialog */}
+      <SessionDurationEditor
+        isOpen={showDurationEditor}
+        onClose={() => setShowDurationEditor(false)}
+        session={sessionData}
+        isCustomSession={isCustom}
+      />
     </DefaultLayout>
   );
 }

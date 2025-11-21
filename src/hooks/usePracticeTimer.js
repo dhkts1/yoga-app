@@ -297,6 +297,7 @@ export function usePracticeTimer({ session, restDuration, onSessionComplete }) {
 
   /**
    * Advance to next pose or complete session.
+   * When skipping a pose, triggers rest period if configured (restDuration > 0).
    */
   const handleNextPose = () => {
     if (isResting) {
@@ -308,7 +309,21 @@ export function usePracticeTimer({ session, restDuration, onSessionComplete }) {
     }
 
     if (session && currentPoseIndexInternal < session.poses.length - 1) {
-      setCurrentPoseIndexInternal((prev) => prev + 1);
+      // Check if rest period should be triggered when skipping
+      // Guard against undefined/NaN restDuration values
+      const effectiveRestDuration = getEffectiveDuration(restDuration ?? 0);
+      if (
+        typeof effectiveRestDuration === "number" &&
+        !isNaN(effectiveRestDuration) &&
+        effectiveRestDuration > 0
+      ) {
+        // Enter rest period before advancing to next pose
+        setIsResting(true);
+        setRestTimeRemaining(effectiveRestDuration);
+      } else {
+        // No rest period - advance immediately
+        setCurrentPoseIndexInternal((prev) => prev + 1);
+      }
       // Keep playing - don't pause
     } else {
       // Session complete

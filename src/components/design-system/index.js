@@ -23,6 +23,8 @@ export * from "./Stat";
 export * from "./Tab";
 export * from "./EmptyState";
 export * from "./ScrollableTabContent";
+export * from "./ProgressRing";
+export * from "./GradientButton";
 export { default as StatusBadge } from "./StatusBadge";
 export { default as ConfirmDialog } from "../dialogs/ConfirmDialog";
 
@@ -64,3 +66,5 @@ export { Tab, TabPanel } from "./Tab";
 export { EmptyState } from "./EmptyState";
 export { ScrollableTabContent } from "./ScrollableTabContent";
 export { default as GlassIconButton } from "./GlassIconButton";
+export { ProgressRing } from "./ProgressRing";
+export { GradientButton } from "./GradientButton";

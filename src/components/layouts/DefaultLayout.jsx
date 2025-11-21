@@ -1,4 +1,4 @@
-import AppLayout from '../AppLayout';
+import AppLayout from "../AppLayout";
 
 /**
  * DefaultLayout - Standard layout for most app pages
@@ -18,6 +18,7 @@ function DefaultLayout({
   header,
   className,
   contentClassName,
+  background = "default", // 'default' | 'aurora' | 'aurora-animated'
   ...props
 }) {
   return (
@@ -29,6 +30,7 @@ function DefaultLayout({
       className={className}
       contentClassName={contentClassName}
       header={header}
+      background={background}
       {...props}
     >
       {children}

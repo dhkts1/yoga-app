@@ -46,6 +46,7 @@ function Breathing() {
           showBack={false}
         />
       }
+      background="aurora"
     >
       <ContentBody size="md" spacing="sm">
         {/* Duration Selector */}

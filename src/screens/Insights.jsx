@@ -173,6 +173,7 @@ function Insights() {
           }
         />
       }
+      background="aurora"
       className="print:p-0"
     >
       <ContentBody size="lg" spacing="lg" className="print:p-4">

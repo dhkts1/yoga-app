@@ -95,6 +95,20 @@ module.exports = {
         "state-error": "hsl(var(--state-error))",
         "state-info": "hsl(var(--state-info))",
 
+        // Earthy accent palette (classic yoga)
+        aurora: {
+          teal: "hsl(var(--aurora-teal))", // Sage green
+          violet: "hsl(var(--aurora-violet))", // Warm gold
+          coral: "hsl(var(--aurora-coral))", // Terracotta
+          cyan: "hsl(var(--aurora-cyan))", // Forest green
+          DEFAULT: "hsl(var(--aurora-teal))", // Default to sage
+        },
+
+        // Energy state colors
+        energy: "hsl(var(--energy))",
+        power: "hsl(var(--power))",
+        calm: "hsl(var(--calm))",
+
         // shadcn/ui compatibility
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -186,14 +200,8 @@ module.exports = {
 
       // Complete font family
       fontFamily: {
-        sans: [
-          "Inter",
-          "-apple-system",
-          "BlinkMacSystemFont",
-          "Segoe UI",
-          "Roboto",
-          "sans-serif",
-        ],
+        sans: ["General Sans", "Inter", "-apple-system", "sans-serif"],
+        display: ["Clash Display", "General Sans", "sans-serif"],
         mono: [
           "ui-monospace",
           "SFMono-Regular",
@@ -203,7 +211,7 @@ module.exports = {
         ],
       },
 
-      // Enhanced shadows
+      // Enhanced shadows - Linear-futuristic glow system
       boxShadow: {
         xs: "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
         sm: "0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)",
@@ -212,14 +220,49 @@ module.exports = {
         xl: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
         "2xl": "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
         inner: "inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)",
-        sage: "0 1px 3px 0 rgba(143, 166, 142, 0.2), 0 1px 2px 0 rgba(143, 166, 142, 0.12)",
-        "sage-lg":
-          "0 10px 15px -3px rgba(143, 166, 142, 0.2), 0 4px 6px -2px rgba(143, 166, 142, 0.1)",
-        "glow-sage": "0 0 0 4px rgba(143, 166, 142, 0.1)",
-        "glow-sage-strong": "0 0 0 4px rgba(143, 166, 142, 0.2)",
+
+        // Classic earthy glow shadows (sage green accent)
+        "glow-sm": "0 0 10px -2px hsl(142 40% 40% / 0.3)",
+        "glow-md": "0 0 20px -4px hsl(142 40% 40% / 0.4)",
+        "glow-lg": "0 0 30px -6px hsl(142 40% 40% / 0.5)",
+        "glow-xl": "0 0 50px -10px hsl(142 40% 40% / 0.6)",
+
+        // State glow variants - earthy tones
+        "glow-success": "0 0 20px -4px hsl(142 45% 42% / 0.5)",
+        "glow-warning": "0 0 20px -4px hsl(38 80% 50% / 0.5)",
+        "glow-error": "0 0 20px -4px hsl(12 70% 50% / 0.5)",
+        "glow-info": "0 0 20px -4px hsl(200 35% 50% / 0.5)",
+
+        // Interactive glow ring - sage green
+        "ring-glow":
+          "0 0 0 4px hsl(142 40% 40% / 0.15), 0 0 20px -4px hsl(142 40% 40% / 0.3)",
+        "ring-glow-strong":
+          "0 0 0 4px hsl(142 40% 40% / 0.25), 0 0 30px -6px hsl(142 40% 40% / 0.5)",
+
+        // Elevated cards with subtle warm glow
+        "card-glow":
+          "0 4px 20px -4px rgba(0, 0, 0, 0.1), 0 0 15px -5px hsl(142 40% 40% / 0.1)",
+        "card-glow-hover":
+          "0 8px 30px -6px rgba(0, 0, 0, 0.15), 0 0 25px -8px hsl(142 40% 40% / 0.2)",
+
+        // Glass morphism shadow
+        glass: "0 8px 32px 0 rgba(0, 0, 0, 0.12)",
+        "glass-strong":
+          "0 8px 32px 0 rgba(0, 0, 0, 0.2), inset 0 0 0 1px rgba(255, 255, 255, 0.05)",
       },
 
-      // Comprehensive animations
+      // Backdrop blur levels for glass effects
+      backdropBlur: {
+        xs: "2px",
+        sm: "4px",
+        md: "12px",
+        lg: "16px",
+        xl: "24px",
+        "2xl": "40px",
+        "3xl": "64px",
+      },
+
+      // Comprehensive animations - Linear-futuristic
       keyframes: {
         // Existing animations
         "accordion-down": {
@@ -260,10 +303,6 @@ module.exports = {
           "0%, 100%": { transform: "translateY(0px)" },
           "50%": { transform: "translateY(-10px)" },
         },
-        glow: {
-          "0%, 100%": { boxShadow: "0 0 0 0 rgba(143, 166, 142, 0.4)" },
-          "50%": { boxShadow: "0 0 0 8px rgba(143, 166, 142, 0.1)" },
-        },
         "bounce-scale": {
           "0%, 100%": { transform: "scale(1)" },
           "50%": { transform: "scale(1.2)" },
@@ -271,6 +310,109 @@ module.exports = {
         shimmer: {
           "0%": { backgroundPosition: "-200% 0" },
           "100%": { backgroundPosition: "200% 0" },
+        },
+
+        // ═══ CLASSIC YOGA ANIMATIONS ═══
+
+        // Glow pulse - sage green accent
+        "glow-pulse": {
+          "0%, 100%": {
+            boxShadow: "0 0 0 0 hsl(142 40% 40% / 0.4)",
+          },
+          "50%": {
+            boxShadow: "0 0 20px 4px hsl(142 40% 40% / 0.2)",
+          },
+        },
+
+        // Subtle glow for badges/status
+        "neon-pulse": {
+          "0%, 100%": {
+            boxShadow:
+              "0 0 5px hsl(142 40% 40% / 0.5), 0 0 10px hsl(142 40% 40% / 0.3)",
+          },
+          "50%": {
+            boxShadow:
+              "0 0 10px hsl(142 40% 40% / 0.7), 0 0 20px hsl(142 40% 40% / 0.4)",
+          },
+        },
+
+        // Gradient border animation
+        "gradient-border": {
+          "0%": { backgroundPosition: "0% 50%" },
+          "50%": { backgroundPosition: "100% 50%" },
+          "100%": { backgroundPosition: "0% 50%" },
+        },
+
+        // Subtle float with glow
+        "float-glow": {
+          "0%, 100%": {
+            transform: "translateY(0px)",
+            filter: "drop-shadow(0 0 10px hsl(142 40% 40% / 0.2))",
+          },
+          "50%": {
+            transform: "translateY(-8px)",
+            filter: "drop-shadow(0 0 20px hsl(142 40% 40% / 0.4))",
+          },
+        },
+
+        // Status dot pulse (Linear-style)
+        "dot-pulse": {
+          "0%, 100%": {
+            transform: "scale(1)",
+            opacity: "1",
+          },
+          "50%": {
+            transform: "scale(1.5)",
+            opacity: "0.5",
+          },
+        },
+
+        // Scan line effect
+        "scan-line": {
+          "0%": { transform: "translateY(-100%)" },
+          "100%": { transform: "translateY(100%)" },
+        },
+
+        // Counter roll animation
+        "counter-roll": {
+          "0%": { transform: "translateY(100%)", opacity: "0" },
+          "100%": { transform: "translateY(0)", opacity: "1" },
+        },
+
+        // Ripple effect
+        ripple: {
+          "0%": { transform: "scale(0)", opacity: "0.6" },
+          "100%": { transform: "scale(2.5)", opacity: "0" },
+        },
+
+        // Skeleton shimmer
+        "skeleton-shimmer": {
+          "0%": { backgroundPosition: "-200% 0" },
+          "100%": { backgroundPosition: "200% 0" },
+        },
+
+        // Entrance from blur
+        "blur-in": {
+          "0%": { opacity: "0", filter: "blur(10px)" },
+          "100%": { opacity: "1", filter: "blur(0)" },
+        },
+
+        // ═══ CLASSIC YOGA BREATH ANIMATIONS ═══
+        "aurora-pulse": {
+          "0%, 100%": { opacity: "0.5" },
+          "50%": { opacity: "0.8" },
+        },
+        "glow-breathe": {
+          "0%, 100%": {
+            boxShadow: "0 0 20px -5px hsl(142 40% 40% / 0.4)",
+          },
+          "50%": {
+            boxShadow: "0 0 30px -5px hsl(142 40% 40% / 0.6)",
+          },
+        },
+        "streak-pulse": {
+          "0%, 100%": { transform: "scale(1)" },
+          "50%": { transform: "scale(1.05)" },
         },
       },
 
@@ -287,9 +429,25 @@ module.exports = {
         "scale-in": "scale-in 300ms cubic-bezier(0.23, 1, 0.32, 1)",
         "pulse-gentle": "pulse-gentle 2s ease-in-out infinite",
         float: "float 3s ease-in-out infinite",
-        glow: "glow 2s ease-in-out infinite",
         "bounce-scale": "bounce-scale 300ms cubic-bezier(0.4, 0.0, 0.2, 1)",
         shimmer: "shimmer 2s linear infinite",
+
+        // ═══ CLASSIC YOGA ANIMATIONS ═══
+        "glow-pulse": "glow-pulse 2s ease-in-out infinite",
+        "neon-pulse": "neon-pulse 2s ease-in-out infinite",
+        "gradient-border": "gradient-border 3s ease infinite",
+        "float-glow": "float-glow 3s ease-in-out infinite",
+        "dot-pulse": "dot-pulse 2s ease-in-out infinite",
+        "scan-line": "scan-line 3s linear infinite",
+        "counter-roll": "counter-roll 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)",
+        ripple: "ripple 0.6s ease-out",
+        "skeleton-shimmer": "skeleton-shimmer 1.5s ease-in-out infinite",
+        "blur-in": "blur-in 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+
+        // ═══ CLASSIC YOGA BREATH ANIMATIONS ═══
+        "aurora-pulse": "aurora-pulse 4s ease-in-out infinite",
+        "glow-breathe": "glow-breathe 3s ease-in-out infinite",
+        "streak-pulse": "streak-pulse 2s ease-in-out infinite",
       },
 
       // Transition durations and easings

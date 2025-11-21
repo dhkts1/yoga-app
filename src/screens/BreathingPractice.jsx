@@ -506,7 +506,11 @@ function BreathingPractice() {
   );
 
   return (
-    <PracticeLayout header={renderHeader()} footer={renderFooter()}>
+    <PracticeLayout
+      header={renderHeader()}
+      footer={renderFooter()}
+      background="aurora"
+    >
       <ContentBody size="sm" centered padding="md">
         {/* Timer and cycle info - above breathing circle */}
         <div className="my-4 text-center">

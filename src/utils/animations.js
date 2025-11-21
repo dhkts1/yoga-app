@@ -44,18 +44,18 @@ export const LIST_ANIMATION = {
       opacity: 1,
       transition: {
         staggerChildren: 0.05,
-        delayChildren: 0.1
-      }
-    }
+        delayChildren: 0.1,
+      },
+    },
   },
   item: {
     hidden: { opacity: 0, y: 10 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.3, ease: 'easeOut' }
-    }
-  }
+      transition: { duration: 0.3, ease: "easeOut" },
+    },
+  },
 };
 
 /**
@@ -71,18 +71,18 @@ export const LIST_ANIMATION_SUBTLE = {
       opacity: 1,
       transition: {
         staggerChildren: 0.05,
-        delayChildren: 0.1
-      }
-    }
+        delayChildren: 0.1,
+      },
+    },
   },
   item: {
     hidden: { opacity: 0, y: 8 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.3, ease: 'easeOut' }
-    }
-  }
+      transition: { duration: 0.3, ease: "easeOut" },
+    },
+  },
 };
 
 /**
@@ -97,8 +97,8 @@ export const FADE_IN = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { duration: 0.3, ease: 'easeOut' }
-  }
+    transition: { duration: 0.3, ease: "easeOut" },
+  },
 };
 
 /**
@@ -114,8 +114,8 @@ export const SLIDE_UP = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }
-  }
+    transition: { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] },
+  },
 };
 
 /**
@@ -133,7 +133,321 @@ export const SCALE_IN = {
     opacity: 1,
     transition: {
       duration: 0.5,
-      ease: [0.23, 1, 0.32, 1]
-    }
-  }
+      ease: [0.23, 1, 0.32, 1],
+    },
+  },
+};
+
+// ═══════════════════════════════════════════════════════════════════
+// LINEAR-FUTURISTIC ANIMATIONS
+// Spring physics, glow effects, and modern micro-interactions
+// ═══════════════════════════════════════════════════════════════════
+
+/**
+ * SPRING - Natural spring physics for interactive elements
+ *
+ * Perfect for:
+ * - Button presses
+ * - Card hovers
+ * - Interactive feedback
+ */
+export const SPRING = {
+  hover: {
+    scale: 1.02,
+    transition: {
+      type: "spring",
+      stiffness: 400,
+      damping: 25,
+    },
+  },
+  tap: {
+    scale: 0.98,
+    transition: {
+      type: "spring",
+      stiffness: 400,
+      damping: 25,
+    },
+  },
+};
+
+/**
+ * GLOW_CARD - Card with glow effect on hover
+ *
+ * Perfect for:
+ * - Session cards
+ * - Interactive tiles
+ * - CTAs
+ */
+export const GLOW_CARD = {
+  initial: {
+    boxShadow: "0 0 0 0 rgba(139, 92, 246, 0)",
+    scale: 1,
+  },
+  hover: {
+    boxShadow: "0 0 30px -6px rgba(139, 92, 246, 0.4)",
+    scale: 1.01,
+    transition: {
+      type: "spring",
+      stiffness: 300,
+      damping: 20,
+    },
+  },
+  tap: {
+    scale: 0.99,
+    boxShadow: "0 0 20px -4px rgba(139, 92, 246, 0.3)",
+    transition: {
+      type: "spring",
+      stiffness: 400,
+      damping: 25,
+    },
+  },
+};
+
+/**
+ * BLUR_IN - Entrance with blur effect
+ *
+ * Perfect for:
+ * - Page transitions
+ * - Modal entrances
+ * - Hero sections
+ */
+export const BLUR_IN = {
+  hidden: {
+    opacity: 0,
+    filter: "blur(10px)",
+    y: 10,
+  },
+  visible: {
+    opacity: 1,
+    filter: "blur(0px)",
+    y: 0,
+    transition: {
+      duration: 0.5,
+      ease: [0.25, 0.46, 0.45, 0.94],
+    },
+  },
+};
+
+/**
+ * STAGGER_SPRING - List animation with spring physics
+ *
+ * Perfect for:
+ * - Dashboard cards
+ * - Navigation items
+ * - Feature lists
+ */
+export const STAGGER_SPRING = {
+  container: {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.08,
+        delayChildren: 0.15,
+      },
+    },
+  },
+  item: {
+    hidden: { opacity: 0, y: 20, filter: "blur(4px)" },
+    visible: {
+      opacity: 1,
+      y: 0,
+      filter: "blur(0px)",
+      transition: {
+        type: "spring",
+        stiffness: 300,
+        damping: 24,
+      },
+    },
+  },
+};
+
+/**
+ * COUNTER_ROLL - Animated number counter
+ *
+ * Use with AnimatePresence for number changes
+ */
+export const COUNTER_ROLL = {
+  initial: { y: 20, opacity: 0 },
+  animate: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      type: "spring",
+      stiffness: 500,
+      damping: 30,
+    },
+  },
+  exit: {
+    y: -20,
+    opacity: 0,
+    transition: { duration: 0.15 },
+  },
+};
+
+/**
+ * RIPPLE - Ripple effect for button clicks
+ *
+ * Use with motion.span inside buttons
+ */
+export const RIPPLE = {
+  initial: { scale: 0, opacity: 0.6 },
+  animate: {
+    scale: 2.5,
+    opacity: 0,
+    transition: { duration: 0.6, ease: "easeOut" },
+  },
+};
+
+/**
+ * GLOW_BUTTON - Button with glow on hover/focus
+ *
+ * Perfect for:
+ * - Primary CTAs
+ * - Important actions
+ */
+export const GLOW_BUTTON = {
+  initial: {
+    boxShadow: "0 0 0 0 rgba(139, 92, 246, 0)",
+  },
+  hover: {
+    boxShadow: "0 0 20px -4px rgba(139, 92, 246, 0.5)",
+    transition: {
+      duration: 0.2,
+    },
+  },
+  focus: {
+    boxShadow:
+      "0 0 0 4px rgba(139, 92, 246, 0.2), 0 0 20px -4px rgba(139, 92, 246, 0.4)",
+  },
+  tap: {
+    scale: 0.98,
+    boxShadow: "0 0 15px -3px rgba(139, 92, 246, 0.4)",
+  },
+};
+
+/**
+ * PAGE_TRANSITION - Smooth page transitions
+ *
+ * Use with AnimatePresence at router level
+ */
+export const PAGE_TRANSITION = {
+  initial: {
+    opacity: 0,
+    y: 8,
+    filter: "blur(4px)",
+  },
+  animate: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: {
+      duration: 0.3,
+      ease: [0.25, 0.46, 0.45, 0.94],
+    },
+  },
+  exit: {
+    opacity: 0,
+    y: -4,
+    filter: "blur(2px)",
+    transition: {
+      duration: 0.2,
+    },
+  },
+};
+
+/**
+ * SKELETON_PULSE - Skeleton loading animation
+ *
+ * Apply to loading placeholders
+ */
+export const SKELETON_PULSE = {
+  initial: { opacity: 0.5 },
+  animate: {
+    opacity: [0.5, 0.8, 0.5],
+    transition: {
+      duration: 1.5,
+      repeat: Infinity,
+      ease: "easeInOut",
+    },
+  },
+};
+
+/**
+ * HOVER_LIFT - Subtle lift effect on hover
+ *
+ * Perfect for:
+ * - Cards
+ * - List items
+ * - Interactive elements
+ */
+export const HOVER_LIFT = {
+  initial: { y: 0 },
+  hover: {
+    y: -4,
+    transition: {
+      type: "spring",
+      stiffness: 400,
+      damping: 25,
+    },
+  },
+};
+
+/**
+ * STAGGER_FADE - Standard stagger animation for lists
+ *
+ * Perfect for:
+ * - Welcome screen sections
+ * - Navigation lists
+ * - Card grids
+ */
+export const STAGGER_FADE = {
+  container: {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.05,
+      },
+    },
+  },
+  item: {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.4, ease: "easeOut" },
+    },
+  },
+};
+
+/**
+ * CELEBRATE - Celebration stagger animation with scale
+ *
+ * Perfect for:
+ * - Completion screens
+ * - Achievement displays
+ * - Success states
+ */
+export const CELEBRATE = {
+  container: {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15,
+        delayChildren: 0.2,
+      },
+    },
+  },
+  item: {
+    hidden: { opacity: 0, y: 30, scale: 0.9 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: { duration: 0.5, ease: "easeOut" },
+    },
+  },
 };

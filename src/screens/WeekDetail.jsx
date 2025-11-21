@@ -139,6 +139,7 @@ function WeekDetail() {
         />
       }
       contentClassName="px-4 py-6"
+      background="aurora"
     >
       {/* Week Info Card */}
       <div className="mb-6 rounded-xl border border-border bg-card p-5 shadow-sm">
@@ -165,9 +166,7 @@ function WeekDetail() {
           <h3 className="mb-2 text-sm font-medium uppercase tracking-wide text-muted-foreground">
             Focus
           </h3>
-          <p className="text-base font-medium text-foreground">
-            {week.focus}
-          </p>
+          <p className="text-base font-medium text-foreground">{week.focus}</p>
         </div>
 
         {/* Description */}
@@ -324,9 +323,7 @@ function WeekDetail() {
       <div className="mb-36 rounded-xl border border-border bg-card p-5 shadow-sm">
         <div className="mb-3 flex items-center gap-2">
           <MessageSquare className="size-5 text-muted-foreground" />
-          <h3 className="text-base font-medium text-foreground">
-            Your Notes
-          </h3>
+          <h3 className="text-base font-medium text-foreground">Your Notes</h3>
         </div>
 
         <p className="mb-3 text-sm text-muted-foreground">

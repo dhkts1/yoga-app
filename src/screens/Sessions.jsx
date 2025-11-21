@@ -211,6 +211,7 @@ function Sessions() {
           showBack={false}
         />
       }
+      background="aurora"
     >
       <ContentBody size="md" spacing="sm">
         {/* Category Tabs, Sort & Create Button */}
@@ -230,7 +231,7 @@ function Sessions() {
             />
             <button
               onClick={handleCreateSession}
-              className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground transition-colors hover:bg-primary/90"
+              className="flex size-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-r from-aurora-teal to-aurora-violet text-white shadow-lg shadow-aurora-violet/20 transition-all hover:scale-105 hover:shadow-xl hover:shadow-aurora-violet/30 active:scale-95"
               aria-label={t("screens.sessions.createCustom")}
             >
               <Plus className="size-5" />
@@ -273,8 +274,14 @@ function Sessions() {
                 const firstPoseId =
                   !isBreathing && sessionData.poses?.[0]?.poseId;
 
-                // Use bg-card for consistent theming
-                const gradient = "bg-card";
+                // Get difficulty for aurora border color
+                const sessionDifficulty = sessionData.difficulty || "beginner";
+                const difficultyBorderClass =
+                  sessionDifficulty === "beginner"
+                    ? "border-l-aurora-teal"
+                    : sessionDifficulty === "intermediate"
+                      ? "border-l-aurora-violet"
+                      : "border-l-aurora-coral";
 
                 return (
                   <motion.button
@@ -289,9 +296,8 @@ function Sessions() {
                         handleSessionSelect(rec.sessionId);
                       }
                     }}
-                    className={`w-full rounded-lg border p-3 text-left shadow-sm transition-all duration-300 hover:scale-[1.02] hover:shadow-md active:scale-[0.98] ${
-                      rec.isPrimary ? "border-accent" : "border-border"
-                    } ${gradient}`}
+                    whileHover={{ y: -2 }}
+                    className={`glass-card w-full rounded-xl border-l-4 p-3 text-left transition-all duration-300 hover:shadow-lg hover:shadow-aurora-violet/10 active:scale-[0.98] ${difficultyBorderClass}`}
                   >
                     <div className="flex items-center gap-2.5">
                       {/* Pose Image */}

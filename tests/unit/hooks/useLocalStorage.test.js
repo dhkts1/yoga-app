@@ -1,17 +1,26 @@
 import { renderHook, act } from "@testing-library/react";
-import { describe, test, expect, beforeEach, afterEach, vi } from "vitest";
+import { describe, test, expect, beforeEach, vi } from "vitest";
 import useLocalStorage from "../../../src/hooks/useLocalStorage";
 
 describe("useLocalStorage", () => {
-  beforeEach(() => {
-    localStorage.clear();
-    vi.clearAllMocks();
-  });
+  // Helper to safely clear localStorage
+  const safeClearLocalStorage = () => {
+    try {
+      localStorage.clear();
+    } catch {
+      Object.keys(localStorage).forEach((key) => {
+        try {
+          localStorage.removeItem(key);
+        } catch {
+          // Ignore
+        }
+      });
+    }
+  };
 
-  afterEach(() => {
-    localStorage.clear();
-    // Restore any mocked Storage methods
-    vi.restoreAllMocks();
+  beforeEach(() => {
+    safeClearLocalStorage();
+    vi.clearAllMocks();
   });
 
   describe("Initial state", () => {
@@ -167,11 +176,12 @@ describe("useLocalStorage", () => {
         useLocalStorage("testKey", "initial"),
       );
 
-      // Cause an error
-      const originalSetItem = Storage.prototype.setItem;
-      Storage.prototype.setItem = vi.fn(() => {
-        throw new Error("Storage error");
-      });
+      // Cause an error using vi.spyOn (properly restorable)
+      const setItemSpy = vi
+        .spyOn(Storage.prototype, "setItem")
+        .mockImplementation(() => {
+          throw new Error("Storage error");
+        });
 
       const consoleError = vi
         .spyOn(console, "error")
@@ -187,7 +197,7 @@ describe("useLocalStorage", () => {
       expect(error1).toBeTruthy();
 
       // Restore and try again
-      Storage.prototype.setItem = originalSetItem;
+      setItemSpy.mockRestore();
 
       act(() => {
         setValue("success");
@@ -228,11 +238,12 @@ describe("useLocalStorage", () => {
         useLocalStorage("testKey", "initial"),
       );
 
-      // Cause an error first
-      const originalSetItem = Storage.prototype.setItem;
-      Storage.prototype.setItem = vi.fn(() => {
-        throw new Error("Storage error");
-      });
+      // Cause an error first using vi.spyOn (properly restorable)
+      const setItemSpy = vi
+        .spyOn(Storage.prototype, "setItem")
+        .mockImplementation(() => {
+          throw new Error("Storage error");
+        });
 
       const consoleError = vi
         .spyOn(console, "error")
@@ -248,7 +259,7 @@ describe("useLocalStorage", () => {
       expect(error1).toBeTruthy();
 
       // Restore
-      Storage.prototype.setItem = originalSetItem;
+      setItemSpy.mockRestore();
 
       act(() => {
         removeValue();
@@ -267,10 +278,12 @@ describe("useLocalStorage", () => {
         useLocalStorage("testKey", "initial"),
       );
 
-      const originalSetItem = Storage.prototype.setItem;
-      Storage.prototype.setItem = vi.fn(() => {
-        throw new Error("QuotaExceededError");
-      });
+      // Use vi.spyOn for proper mock restoration
+      const setItemSpy = vi
+        .spyOn(Storage.prototype, "setItem")
+        .mockImplementation(() => {
+          throw new Error("QuotaExceededError");
+        });
 
       const consoleError = vi
         .spyOn(console, "error")
@@ -287,7 +300,7 @@ describe("useLocalStorage", () => {
       expect(error.message).toContain("QuotaExceededError");
       expect(consoleError).toHaveBeenCalled();
 
-      Storage.prototype.setItem = originalSetItem;
+      setItemSpy.mockRestore();
       consoleError.mockRestore();
     });
 
@@ -296,10 +309,12 @@ describe("useLocalStorage", () => {
         useLocalStorage("testKey", "initial"),
       );
 
-      const originalRemoveItem = Storage.prototype.removeItem;
-      Storage.prototype.removeItem = vi.fn(() => {
-        throw new Error("Remove error");
-      });
+      // Use vi.spyOn for proper mock restoration
+      const removeItemSpy = vi
+        .spyOn(Storage.prototype, "removeItem")
+        .mockImplementation(() => {
+          throw new Error("Remove error");
+        });
 
       const consoleError = vi
         .spyOn(console, "error")
@@ -315,7 +330,7 @@ describe("useLocalStorage", () => {
       expect(error).toBeTruthy();
       expect(consoleError).toHaveBeenCalled();
 
-      Storage.prototype.removeItem = originalRemoveItem;
+      removeItemSpy.mockRestore();
       consoleError.mockRestore();
     });
 

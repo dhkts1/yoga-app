@@ -28,9 +28,11 @@ const Button = React.forwardRef(
     },
     ref,
   ) => {
-    // Check for prefers-reduced-motion with lazy initialization
-    const [shouldReduceMotion, setShouldReduceMotion] = useState(
-      () => window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+    // Check for prefers-reduced-motion with lazy initialization (SSR-safe)
+    const [shouldReduceMotion, setShouldReduceMotion] = useState(() =>
+      typeof window !== "undefined"
+        ? window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        : false,
     );
 
     useEffect(() => {
@@ -116,6 +118,34 @@ const Button = React.forwardRef(
         "hover:underline hover:text-foreground",
         "active:text-foreground",
         "h-auto p-0 font-normal",
+      ],
+
+      // ═══ LINEAR-FUTURISTIC GLOW VARIANT ═══
+      glow: [
+        "bg-primary text-primary-foreground",
+        "shadow-glow-sm",
+        "hover:shadow-glow-lg hover:scale-[1.02]",
+        "active:shadow-glow-md active:scale-[0.98]",
+        "border border-primary/20",
+        "backdrop-blur-sm",
+      ],
+
+      // Glass variant with subtle glow
+      glass: [
+        "bg-card/60 text-foreground",
+        "backdrop-blur-xl border border-border/50",
+        "shadow-glass",
+        "hover:bg-card/80 hover:shadow-card-glow-hover hover:border-primary/30",
+        "active:bg-card/70 active:scale-[0.98]",
+      ],
+
+      // Neon variant for emphasis
+      neon: [
+        "bg-transparent text-primary",
+        "border-2 border-primary",
+        "shadow-glow-sm",
+        "hover:bg-primary/10 hover:shadow-glow-md",
+        "active:bg-primary/20 active:scale-[0.98]",
       ],
     };
 
@@ -259,14 +289,27 @@ Button.propTypes = {
     "secondary",
     "ghost",
     "outline",
-    "danger",
+    "destructive",
+    "link",
+    "glow",
+    "glass",
+    "neon",
   ]),
-  size: PropTypes.oneOf(["sm", "default", "lg"]),
+  size: PropTypes.oneOf([
+    "sm",
+    "default",
+    "lg",
+    "icon",
+    "mobile-full",
+    "mobile-large",
+  ]),
   children: PropTypes.node,
   disabled: PropTypes.bool,
   loading: PropTypes.bool,
   icon: PropTypes.node,
   iconPosition: PropTypes.oneOf(["left", "right"]),
+  fullWidth: PropTypes.bool,
+  mobileSafe: PropTypes.bool,
 };
 
 export { Button };

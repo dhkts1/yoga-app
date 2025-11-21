@@ -1,6 +1,14 @@
 import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { CheckCircle, Home, RotateCcw, Star, Wind, Trophy } from "lucide-react";
+import {
+  CheckCircle,
+  Home,
+  RotateCcw,
+  Star,
+  Wind,
+  Trophy,
+  Sparkles,
+} from "lucide-react";
 import { motion } from "framer-motion";
 import confetti from "canvas-confetti";
 import { getSessionById } from "../data/sessions";
@@ -8,11 +16,12 @@ import { getWeekByNumber } from "../data/programs";
 import useProgressStore from "../stores/progress";
 import useProgramProgressStore from "../stores/programProgress";
 import { FullscreenLayout } from "../components/layouts";
-import { ContentBody } from "../components/design-system";
+import { ContentBody, GradientButton, Text } from "../components/design-system";
 import { calculateMoodImprovement } from "../utils/moodCalculator.jsx";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 import useTranslation from "../hooks/useTranslation";
 import { haptics } from "../utils/haptics";
+import { CELEBRATE } from "../utils/animations";
 
 function Complete() {
   const navigate = useNavigate();
@@ -33,6 +42,14 @@ function Complete() {
 
   // Get program context from location state (optional)
   const programContext = location.state?.programContext; // { programId, weekNumber, dayNumber }
+
+  // Warn if location state is missing (direct navigation to /complete)
+  // The UI still works with fallbacks, but mood data will be lost
+  if (!location.state && process.env.NODE_ENV === "development") {
+    console.warn(
+      "Complete page accessed without navigation state. Mood tracking data may be incomplete.",
+    );
+  }
 
   const session = !isBreathingSession ? getSessionById(sessionId) : null;
   const { completeSession, getStreakStatus, getProgramWeekSessions } =
@@ -95,13 +112,18 @@ function Complete() {
 
     if (!shouldReduceMotion) {
       const timer = setTimeout(() => {
-        confetti({
-          particleCount: 100,
-          spread: 70,
-          origin: { y: 0.6 },
-          colors: ["#8FA68E", "#D4AF37", "#B5C4B4", "#F5F3F0"],
-          disableForReducedMotion: true,
-        });
+        try {
+          confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 },
+            colors: ["#14b8a6", "#8b5cf6", "#f97316", "#06b6d4", "#a855f7"],
+            disableForReducedMotion: true,
+          });
+        } catch (e) {
+          // Confetti is decorative - don't interrupt completion flow if it fails
+          console.warn("Confetti animation failed:", e);
+        }
       }, 300); // Slight delay for better effect
 
       return () => clearTimeout(timer);
@@ -225,180 +247,246 @@ function Complete() {
   );
 
   return (
-    <FullscreenLayout showBottomNav={false}>
-      <ContentBody size="sm" centered padding="lg" spacing="md">
-        {/* Success Icon with fade-in animation */}
-        <motion.div
-          className="mb-8 text-center"
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-        >
-          {isBreathingSession ? (
-            <motion.div
-              animate={shouldReduceMotion ? {} : { rotate: [0, 10, -10, 0] }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-            >
-              <Wind className="mx-auto mb-4 size-20 text-foreground" />
+    <FullscreenLayout showBottomNav={false} background="aurora">
+      <div className="bg-aurora-animated min-h-full">
+        <ContentBody size="sm" centered padding="lg" spacing="md">
+          <motion.div
+            variants={CELEBRATE.container}
+            initial="hidden"
+            animate="visible"
+            className="flex flex-col items-center"
+          >
+            {/* Success Icon with aurora text effect */}
+            <motion.div className="mb-6 text-center" variants={CELEBRATE.item}>
+              {isBreathingSession ? (
+                <motion.div
+                  animate={
+                    shouldReduceMotion ? {} : { rotate: [0, 10, -10, 0] }
+                  }
+                  transition={{ duration: 0.6, delay: 0.3 }}
+                  className="relative"
+                >
+                  <Wind className="mx-auto mb-4 size-20 text-aurora-teal" />
+                  <motion.div
+                    className="absolute -right-2 -top-2"
+                    animate={shouldReduceMotion ? {} : { scale: [1, 1.2, 1] }}
+                    transition={{ duration: 1.5, repeat: Infinity }}
+                  >
+                    <Sparkles className="size-6 text-power" />
+                  </motion.div>
+                </motion.div>
+              ) : (
+                <motion.div
+                  animate={shouldReduceMotion ? {} : { scale: [1, 1.1, 1] }}
+                  transition={{ duration: 0.6, delay: 0.3 }}
+                  className="relative"
+                >
+                  <CheckCircle className="mx-auto mb-4 size-20 text-aurora-violet" />
+                  <motion.div
+                    className="absolute -right-2 -top-2"
+                    animate={shouldReduceMotion ? {} : { scale: [1, 1.2, 1] }}
+                    transition={{ duration: 1.5, repeat: Infinity }}
+                  >
+                    <Sparkles className="size-6 text-power" />
+                  </motion.div>
+                </motion.div>
+              )}
+              <h1 className="mb-2 text-3xl font-bold text-aurora">
+                {t("screens.complete.title")}
+              </h1>
+              <Text variant="body" className="text-muted-foreground">
+                {isBreathingSession
+                  ? breathingExerciseName
+                  : `${session?.name || "session"}`}
+              </Text>
+              {isBreathingSession && breathingDuration && (
+                <Text variant="caption" className="mt-1 text-muted-foreground">
+                  {breathingDuration} {t("common.minute")}
+                </Text>
+              )}
             </motion.div>
-          ) : (
-            <motion.div
-              animate={shouldReduceMotion ? {} : { scale: [1, 1.1, 1] }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-            >
-              <CheckCircle className="mx-auto mb-4 size-20 text-foreground" />
-            </motion.div>
-          )}
-          <h1 className="mb-2 text-2xl font-medium text-foreground">
-            {t("screens.complete.title")}
-          </h1>
-          <p className="text-muted-foreground">
-            {isBreathingSession
-              ? breathingExerciseName
-              : `${session?.name || "session"}`}
-          </p>
-          {isBreathingSession && breathingDuration && (
-            <p className="mt-1 text-sm text-muted-foreground">
-              {breathingDuration} {t("common.minute")}
-            </p>
-          )}
-        </motion.div>
 
-        {/* Encouragement with Progress - with pulse animation */}
-        <motion.div
-          className="mb-8 text-center"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-        >
-          <p className="text-lg text-foreground">
-            {t("screens.complete.wellDone")}
-          </p>
-          {recordingState.streakStatus && (
+            {/* Stats Card - Glass effect */}
             <motion.div
-              className="mt-3 rounded-lg bg-muted p-3"
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.4, delay: 0.6 }}
+              className="glass-card mb-6 w-full rounded-xl p-5"
+              variants={CELEBRATE.item}
             >
-              <p className="text-sm font-medium text-foreground">
-                {recordingState.streakStatus.message}
-              </p>
-              {recordingState.streakStatus.streak > 0 && (
-                <div className="mt-2 flex items-center justify-center space-x-1">
-                  {Array.from({
-                    length: Math.min(recordingState.streakStatus.streak, 7),
-                  }).map((_, i) => (
-                    <motion.div
-                      key={i}
-                      initial={{ opacity: 0, scale: 0 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ duration: 0.3, delay: 0.7 + i * 0.05 }}
-                    >
-                      <Star className="size-4 fill-current text-accent" />
-                    </motion.div>
-                  ))}
-                  {recordingState.streakStatus.streak > 7 && (
-                    <span className="ml-1 text-xs font-medium text-accent">
-                      +{recordingState.streakStatus.streak - 7}
-                    </span>
+              <Text
+                variant="body"
+                className="mb-4 text-center font-medium text-foreground"
+              >
+                {t("screens.complete.wellDone")}
+              </Text>
+              {recordingState.streakStatus && (
+                <div className="rounded-lg bg-muted/50 p-3">
+                  <Text
+                    variant="body"
+                    className="mb-2 text-center font-medium text-foreground"
+                  >
+                    {recordingState.streakStatus.message}
+                  </Text>
+                  {recordingState.streakStatus.streak > 0 && (
+                    <div className="flex items-center justify-center space-x-1">
+                      {Array.from({
+                        length: Math.min(recordingState.streakStatus.streak, 7),
+                      }).map((_, i) => (
+                        <motion.div
+                          key={i}
+                          initial={{ opacity: 0, scale: 0 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          transition={{ duration: 0.3, delay: 0.7 + i * 0.05 }}
+                        >
+                          <Star className="size-5 fill-current text-power" />
+                        </motion.div>
+                      ))}
+                      {recordingState.streakStatus.streak > 7 && (
+                        <span className="ml-1 text-sm font-semibold text-power">
+                          +{recordingState.streakStatus.streak - 7}
+                        </span>
+                      )}
+                    </div>
                   )}
                 </div>
               )}
+              <Text
+                variant="caption"
+                className="mt-3 block text-center text-muted-foreground"
+              >
+                {t("screens.complete.journeyStep")}
+              </Text>
             </motion.div>
-          )}
-          <p className="mt-2 text-sm text-muted-foreground">
-            {t("screens.complete.journeyStep")}
-          </p>
-        </motion.div>
 
-        {/* Mood Improvement Display with fade-in */}
-        {moodImprovementInfo && (
-          <motion.div
-            className={`mb-6 w-full rounded-lg border p-4 ${moodImprovementInfo.color}`}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.8 }}
-          >
-            <div className="flex items-center space-x-3">
-              {moodImprovementInfo.icon}
-              <div className="flex-1">
-                <p className="text-sm font-medium">
-                  {moodImprovementInfo.message}
-                </p>
-                <p className="mt-1 text-xs opacity-80">
-                  {moodImprovementInfo.detail}
-                </p>
-              </div>
-            </div>
+            {/* Mood Improvement Display - Glass card */}
+            {moodImprovementInfo && (
+              <motion.div
+                className="glass-card mb-6 w-full rounded-xl p-4"
+                variants={CELEBRATE.item}
+              >
+                <div className="flex items-center space-x-3">
+                  {moodImprovementInfo.icon}
+                  <div className="flex-1">
+                    <Text
+                      variant="body"
+                      className="font-medium text-foreground"
+                    >
+                      {moodImprovementInfo.message}
+                    </Text>
+                    <Text
+                      variant="caption"
+                      className="mt-1 text-muted-foreground"
+                    >
+                      {moodImprovementInfo.detail}
+                    </Text>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+
+            {/* Week Completion Display - Special celebration card */}
+            {weekCompletionInfo && (
+              <motion.div
+                className="glass-card glow-aurora mb-6 w-full rounded-xl border-2 border-power/50 p-4"
+                variants={CELEBRATE.item}
+              >
+                <div className="flex items-start space-x-3">
+                  <Trophy className="mt-0.5 size-6 shrink-0 text-power" />
+                  <div className="flex-1">
+                    <Text
+                      variant="body"
+                      className="mb-1 font-semibold text-power"
+                    >
+                      {weekCompletionInfo.isMilestone
+                        ? t("screens.complete.milestoneAchievement")
+                        : t("screens.complete.weekComplete")}
+                    </Text>
+                    <Text
+                      variant="body"
+                      className="mb-1 font-medium text-foreground"
+                    >
+                      {weekCompletionInfo.weekName}
+                    </Text>
+                    <Text variant="caption" className="text-muted-foreground">
+                      {t("screens.complete.completedSessions", {
+                        count: weekCompletionInfo.sessionsCompleted,
+                      })}
+                    </Text>
+                    {weekCompletionInfo.isMilestone && (
+                      <Text
+                        variant="caption"
+                        className="mt-2 italic text-muted-foreground"
+                      >
+                        {t("screens.complete.significantMilestone")}
+                      </Text>
+                    )}
+                  </div>
+                </div>
+              </motion.div>
+            )}
+
+            {/* Action Buttons */}
+            <motion.div className="w-full space-y-3" variants={CELEBRATE.item}>
+              <GradientButton
+                onClick={handleGoHome}
+                size="lg"
+                className="w-full"
+              >
+                <Home className="size-5" />
+                <span>{t("screens.complete.backToHome")}</span>
+              </GradientButton>
+
+              <button
+                onClick={handlePracticeAgain}
+                className="glass-card hover:glow-aurora flex w-full items-center justify-center space-x-2 rounded-xl px-6 py-3 text-foreground transition-all active:scale-[0.98]"
+              >
+                <RotateCcw className="size-5" />
+                <span>{t("screens.complete.practiceAgain")}</span>
+              </button>
+            </motion.div>
           </motion.div>
-        )}
+        </ContentBody>
+      </div>
 
-        {/* Week Completion Display with celebration */}
-        {weekCompletionInfo && (
-          <motion.div
-            className="mb-6 w-full rounded-lg border-2 border-accent bg-accent/10 p-4 shadow-lg"
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, delay: 1.0 }}
-          >
-            <div className="flex items-start space-x-3">
-              <Trophy className="mt-0.5 size-6 shrink-0 text-accent" />
-              <div className="flex-1">
-                <p className="mb-1 text-base font-semibold text-accent">
-                  {weekCompletionInfo.isMilestone
-                    ? t("screens.complete.milestoneAchievement")
-                    : t("screens.complete.weekComplete")}
-                </p>
-                <p className="mb-1 text-sm font-medium text-foreground">
-                  {weekCompletionInfo.weekName}
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  {t("screens.complete.completedSessions", {
-                    count: weekCompletionInfo.sessionsCompleted,
-                  })}
-                </p>
-                {weekCompletionInfo.isMilestone && (
-                  <p className="mt-2 text-xs italic text-muted-foreground">
-                    {t("screens.complete.significantMilestone")}
-                  </p>
-                )}
-              </div>
-            </div>
-          </motion.div>
-        )}
-
-        {/* Action Buttons */}
-        <div className="w-full space-y-4">
-          <button
-            onClick={handleGoHome}
-            className="flex w-full items-center justify-center space-x-2 rounded-lg bg-primary px-6 py-3 text-primary-foreground shadow-sm transition-all duration-300 hover:bg-primary/90 active:scale-95"
-          >
-            <Home className="size-5" />
-            <span>{t("screens.complete.backToHome")}</span>
-          </button>
-
-          <button
-            onClick={handlePracticeAgain}
-            className="flex w-full items-center justify-center space-x-2 rounded-lg border border-primary px-6 py-3 text-foreground transition-all duration-300 hover:bg-primary/5 active:scale-95"
-          >
-            <RotateCcw className="size-5" />
-            <span>{t("screens.complete.practiceAgain")}</span>
-          </button>
-        </div>
-      </ContentBody>
-
-      {/* Subtle celebration animation */}
+      {/* Floating aurora orbs - using CSS variables for theme support */}
       <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
-        <div className="absolute -right-20 -top-20 size-40 animate-breathe rounded-full bg-accent/10"></div>
-        <div
-          className="absolute -bottom-20 -left-20 size-32 animate-breathe rounded-full bg-primary/10"
-          style={{ animationDelay: "2s" }}
-        ></div>
-        <div
-          className="absolute left-1/4 top-1/3 size-6 animate-breathe rounded-full bg-accent/20"
-          style={{ animationDelay: "1s" }}
-        ></div>
+        <motion.div
+          className="absolute -right-20 -top-20 size-40 rounded-full opacity-30"
+          style={{
+            background:
+              "radial-gradient(circle, hsl(var(--aurora-teal)), transparent)",
+          }}
+          animate={
+            shouldReduceMotion
+              ? {}
+              : { scale: [1, 1.1, 1], opacity: [0.3, 0.4, 0.3] }
+          }
+          transition={{ duration: 4, repeat: Infinity }}
+        />
+        <motion.div
+          className="absolute -bottom-20 -left-20 size-32 rounded-full opacity-30"
+          style={{
+            background:
+              "radial-gradient(circle, hsl(var(--aurora-violet)), transparent)",
+          }}
+          animate={
+            shouldReduceMotion
+              ? {}
+              : { scale: [1, 1.15, 1], opacity: [0.3, 0.4, 0.3] }
+          }
+          transition={{ duration: 5, repeat: Infinity, delay: 1 }}
+        />
+        <motion.div
+          className="absolute left-1/4 top-1/3 size-6 rounded-full opacity-40"
+          style={{
+            background:
+              "radial-gradient(circle, hsl(var(--aurora-coral)), transparent)",
+          }}
+          animate={
+            shouldReduceMotion
+              ? {}
+              : { scale: [1, 1.5, 1], opacity: [0.4, 0.6, 0.4] }
+          }
+          transition={{ duration: 3, repeat: Infinity, delay: 0.5 }}
+        />
       </div>
     </FullscreenLayout>
   );

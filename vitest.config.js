@@ -9,6 +9,8 @@ export default defineConfig({
     environment: "jsdom",
     setupFiles: "./tests/setup.js",
     css: true,
+    // Isolate each test file to prevent Storage prototype corruption between files
+    isolate: true,
     // Only run unit and integration tests, exclude e2e and a11y (those use Playwright)
     include: [
       "tests/unit/**/*.test.{js,jsx}",

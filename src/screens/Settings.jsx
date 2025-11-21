@@ -197,7 +197,10 @@ function Settings() {
   };
 
   return (
-    <DefaultLayout header={<PageHeader title="Settings" showBack={false} />}>
+    <DefaultLayout
+      header={<PageHeader title="Settings" showBack={false} />}
+      background="aurora"
+    >
       <ContentBody size="lg" spacing="sm">
         {/* Language Section */}
         <SettingsSection

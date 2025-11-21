@@ -407,6 +407,7 @@ function SessionBuilder() {
           }
         />
       }
+      background="aurora"
     >
       <ContentBody size="lg" spacing="none" className="flex h-full flex-col">
         {/* Session Details */}

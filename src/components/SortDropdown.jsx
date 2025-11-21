@@ -47,10 +47,10 @@ function SortDropdown({ selectedSort, onSortChange }) {
 
   return (
     <div className="relative" ref={dropdownRef}>
-      {/* Selected Sort Button */}
+      {/* Selected Sort Button - Glass pill style */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-1.5 rounded-lg border border-border bg-card px-2.5 py-1.5 shadow-sm transition-colors hover:border-primary"
+        className="glass-card flex items-center gap-1.5 rounded-full px-3 py-2 transition-all hover:shadow-lg hover:shadow-aurora-violet/10"
         aria-expanded={isOpen}
         aria-haspopup="true"
         aria-label="Sort options"
@@ -62,9 +62,9 @@ function SortDropdown({ selectedSort, onSortChange }) {
         />
       </button>
 
-      {/* Dropdown Menu */}
+      {/* Dropdown Menu - Glass style */}
       {isOpen && (
-        <div className="absolute right-0 top-full z-[9999] mt-1 min-w-[180px] overflow-hidden rounded-lg border border-border bg-card shadow-lg">
+        <div className="glass-card absolute right-0 top-full z-[9999] mt-1 min-w-[180px] overflow-hidden rounded-xl shadow-lg">
           <div className="max-h-[60vh] overflow-y-auto">
             {sortOptions.map((option) => {
               const isActive = selectedSort === option.id;
@@ -73,10 +73,10 @@ function SortDropdown({ selectedSort, onSortChange }) {
                 <button
                   key={option.id}
                   onClick={() => handleSelect(option.id)}
-                  className={`flex w-full items-center gap-2 border-b border-border px-3 py-2 text-left transition-colors last:border-b-0 ${
+                  className={`flex w-full items-center gap-2 border-b border-border/30 px-4 py-2 text-left transition-all last:border-b-0 ${
                     isActive
-                      ? "bg-primary text-primary-foreground"
-                      : "text-foreground hover:bg-muted active:bg-muted"
+                      ? "bg-gradient-to-r from-aurora-teal to-aurora-violet text-white"
+                      : "text-foreground hover:bg-muted/50 active:bg-muted"
                   } `}
                   aria-label={option.label}
                 >

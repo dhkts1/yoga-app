@@ -1,4 +1,4 @@
-import AppLayout from '../AppLayout';
+import AppLayout from "../AppLayout";
 
 /**
  * PracticeLayout - Specialized layout for practice/breathing screens
@@ -31,10 +31,10 @@ function PracticeLayout({
       showHeader={!!header}
       showFooter={!!footer}
       showBottomNav={false}
-      fixedHeader={true}  // Header should stick to top
-      fixedFooter={true}  // Footer should stick to bottom
+      fixedHeader={true} // Header should stick to top
+      fixedFooter={true} // Footer should stick to bottom
       scrollable={scrollable}
-      className={className}
+      className={`bg-aurora-mesh ${className || ""}`}
       contentClassName={contentClassName}
       header={header}
       footer={footer}

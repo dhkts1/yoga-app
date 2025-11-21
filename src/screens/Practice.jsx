@@ -5,6 +5,8 @@ import { getSessionById } from "../data/sessions";
 import { getPoseById } from "../data/poses";
 import { getCustomSessionWithPoses } from "../data/customSessions";
 import usePreferencesStore from "../stores/preferences";
+import useProgramCustomizationsStore from "../stores/programCustomizations";
+import useSessionCustomizationsStore from "../stores/sessionCustomizations";
 import useCustomSessions from "../hooks/useCustomSessions";
 import PoseImage from "../components/PoseImage";
 import MoodTracker from "../components/MoodTracker";
@@ -29,7 +31,18 @@ function Practice() {
 
   // Get program context from navigation state (if practicing as part of a program)
   const programContext = location.state?.programContext || null;
-  const { programName, weekNumber, dayNumber } = programContext || {};
+  const { programId, programName, weekNumber, dayNumber } =
+    programContext || {};
+
+  // Get program customizations store for applying custom durations
+  const applyProgramCustomizations = useProgramCustomizationsStore(
+    (state) => state.applyToSession,
+  );
+
+  // Get session customizations store for applying custom durations to standalone sessions
+  const applySessionCustomizations = useSessionCustomizationsStore(
+    (state) => state.applyToSession,
+  );
 
   // Use custom sessions hook
   const { getById: getCustomSessionById, isLoading: customSessionsLoading } =
@@ -42,7 +55,7 @@ function Practice() {
   // Synchronizing with external data (URL params + custom sessions hook)
   useEffect(() => {
     // Prevent cascading renders by only loading session once per session change
-    const sessionKey = `${sessionId}-${customSessionId}`;
+    const sessionKey = `${sessionId}-${customSessionId}-${programId}`;
     if (sessionLoadedRef.current === sessionKey) {
       return;
     }
@@ -62,13 +75,35 @@ function Practice() {
         setSession(getCustomSessionWithPoses(customSession));
       } else {
         console.error("Custom session not found:", customSessionId);
-        navigate("/sessions");
+        // Navigate with error state so Sessions screen can show feedback
+        navigate("/sessions", {
+          state: {
+            error: "Custom session not found. It may have been deleted.",
+          },
+        });
       }
     } else {
       // Load pre-built session
       const prebuiltSession = getSessionById(sessionId || "morning-energizer");
       sessionLoadedRef.current = sessionKey;
-      setSession(prebuiltSession);
+
+      // Apply customizations based on context
+      if (programId && prebuiltSession) {
+        // Apply program customizations when practicing as part of a program
+        const customizedPoses = applyProgramCustomizations(
+          programId,
+          prebuiltSession.id,
+          prebuiltSession.poses,
+        );
+        setSession({ ...prebuiltSession, poses: customizedPoses });
+      } else if (prebuiltSession) {
+        // Apply session customizations for standalone sessions
+        const customizedPoses = applySessionCustomizations(
+          prebuiltSession.id,
+          prebuiltSession.poses,
+        );
+        setSession({ ...prebuiltSession, poses: customizedPoses });
+      }
     }
   }, [
     sessionId,
@@ -76,6 +111,9 @@ function Practice() {
     navigate,
     getCustomSessionById,
     customSessionsLoading,
+    programId,
+    applyProgramCustomizations,
+    applySessionCustomizations,
   ]);
 
   // Preferences store for rest duration
@@ -375,9 +413,9 @@ function Practice() {
         </div>
       }
       progressBar={
-        <div className="h-1.5 rounded-full bg-muted">
+        <div className="h-1.5 overflow-hidden rounded-full bg-muted">
           <div
-            className="h-full rounded-full bg-primary transition-all duration-1000 ease-linear"
+            className="bg-aurora-progress h-full rounded-full transition-all duration-1000 ease-linear"
             style={{ width: `${progressPercent}%` }}
           />
         </div>
@@ -405,7 +443,11 @@ function Practice() {
       (nextPoseData ? getPoseById(nextPoseData.poseId) : null);
 
     return (
-      <PracticeLayout header={renderHeader()} footer={renderFooter()}>
+      <PracticeLayout
+        header={renderHeader()}
+        footer={renderFooter()}
+        background="aurora"
+      >
         <ContentBody size="sm" centered padding="none" {...swipeHandlers}>
           {/* Session name and program context - directly under header */}
           <div className="-mt-1 px-4 text-center">
@@ -438,10 +480,14 @@ function Practice() {
                   </p>
                 </div>
 
-                {/* Countdown Timer with ARIA live region */}
+                {/* Countdown Timer with ARIA live region - aurora gradient when low */}
                 <div className="my-8">
                   <div
-                    className="mb-2 text-7xl font-light text-foreground sm:text-8xl"
+                    className={`mb-2 text-7xl font-bold tabular-nums sm:text-8xl ${
+                      restTimeRemaining <= 3
+                        ? "animate-pulse text-aurora"
+                        : "text-foreground"
+                    }`}
                     aria-live="assertive"
                     aria-atomic="true"
                   >
@@ -476,10 +522,10 @@ function Practice() {
                   </div>
                 )}
 
-                {/* Skip Rest Button */}
+                {/* Skip Rest Button - glass style with aurora glow */}
                 <button
                   onClick={handleNextPose}
-                  className="mt-6 rounded-full bg-primary px-8 py-3 font-medium text-primary-foreground shadow-lg transition-all duration-300 hover:bg-primary/90 hover:shadow-xl active:scale-95"
+                  className="glass-card hover:glow-aurora mt-6 rounded-full px-8 py-3 font-medium text-foreground shadow-lg transition-all duration-300 hover:shadow-xl active:scale-95"
                 >
                   {t("screens.practice.skipRest")}
                 </button>
@@ -492,7 +538,11 @@ function Practice() {
   }
 
   return (
-    <PracticeLayout header={renderHeader()} footer={renderFooter()}>
+    <PracticeLayout
+      header={renderHeader()}
+      footer={renderFooter()}
+      background="aurora"
+    >
       <ContentBody size="sm" centered padding="none" {...swipeHandlers}>
         {/* Session name and program context - directly under header */}
         <div className="-mt-1 px-4 text-center">

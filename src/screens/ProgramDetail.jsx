@@ -11,6 +11,7 @@ import {
   Play,
   Pause,
   Lock,
+  Pencil,
 } from "lucide-react";
 import { DefaultLayout } from "../components/layouts";
 import { PageHeader } from "../components/headers";
@@ -20,11 +21,13 @@ import { getProgramById } from "../data/programs";
 import useProgramProgressStore from "../stores/programProgress";
 import { LIST_ANIMATION_SUBTLE } from "../utils/animations";
 import useTranslation from "../hooks/useTranslation";
+import ProgramDurationEditor from "../components/programs/ProgramDurationEditor";
 
 function ProgramDetail() {
   const navigate = useNavigate();
   const { programId } = useParams();
   const [showResetConfirm, setShowResetConfirm] = useState(false);
+  const [showDurationEditor, setShowDurationEditor] = useState(false);
   const { t } = useTranslation();
 
   // Optimize Zustand selectors - get individual functions and values
@@ -145,6 +148,7 @@ function ProgramDetail() {
         />
       }
       contentClassName="px-4 py-6"
+      background="aurora"
     >
       {/* Program Overview Card */}
       <div className="mb-6 rounded-xl border border-border bg-card p-5 shadow-sm">
@@ -190,6 +194,14 @@ function ProgramDetail() {
               <span className="text-muted-foreground">by {program.author}</span>
             </>
           )}
+          <span>•</span>
+          <button
+            onClick={() => setShowDurationEditor(true)}
+            className="flex items-center gap-1.5 text-primary hover:underline"
+          >
+            <Pencil className="size-4 shrink-0" />
+            <span>Edit Durations</span>
+          </button>
         </div>
 
         {/* Action Buttons */}
@@ -323,6 +335,13 @@ function ProgramDetail() {
           })}
         </motion.div>
       </div>
+
+      {/* Duration Editor Dialog */}
+      <ProgramDurationEditor
+        isOpen={showDurationEditor}
+        onClose={() => setShowDurationEditor(false)}
+        program={program}
+      />
     </DefaultLayout>
   );
 }

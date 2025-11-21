@@ -4,36 +4,63 @@ import { Clock, Star } from "lucide-react";
 import { motion } from "framer-motion";
 
 /**
+ * Helper function: Get difficulty-based border color for aurora aesthetic
+ */
+const getDifficultyBorderColor = (difficulty) => {
+  switch (difficulty?.toLowerCase()) {
+    case "beginner":
+      return "border-l-aurora-teal";
+    case "intermediate":
+      return "border-l-aurora-violet";
+    case "advanced":
+      return "border-l-aurora-coral";
+    default:
+      return "border-l-aurora-violet";
+  }
+};
+
+/**
  * Helper function: Get card styles based on variant, size, gradient, and state
  * Extracted to module level for better React Compiler optimization
+ * Updated for Liquid Aurora aesthetic with glass-card effect
  */
-const getCardStyles = (variant, size, gradient, recommendation, actions) => {
-  // Base styles with gradient support - use bg-card for theme awareness
-  const bgStyles = gradient || "bg-card";
-  const baseStyles = `w-full rounded-lg text-left shadow-sm transition-all duration-300 ${bgStyles} border border-border`;
+const getCardStyles = (
+  variant,
+  size,
+  gradient,
+  recommendation,
+  actions,
+  difficulty,
+) => {
+  // Base styles - glass card effect for aurora aesthetic
+  const baseStyles = `w-full rounded-xl text-left glass-card transition-all duration-300 hover:shadow-lg hover:shadow-aurora-violet/10`;
 
-  // Size-specific padding and height - now more compact
+  // Size-specific padding - now more compact
   const sizeStyles = size === "hero" ? "p-4" : "p-3";
+
+  // Get difficulty-based border color
+  const difficultyBorder = getDifficultyBorderColor(difficulty);
 
   switch (variant) {
     case "favorite":
-      return `${baseStyles} ${sizeStyles} hover:shadow-md hover:scale-[1.02] active:scale-[0.98] border-l-4 border-gold`;
+      return `${baseStyles} ${sizeStyles} hover:-translate-y-0.5 active:scale-[0.98] border-l-4 border-l-gold`;
 
     case "recommended":
-      return `${baseStyles} ${sizeStyles} hover:shadow-md hover:scale-[1.02] active:scale-[0.98] border-2 ${
-        recommendation?.isPrimary ? "border-accent" : "border-transparent"
+      return `${baseStyles} ${sizeStyles} hover:-translate-y-0.5 active:scale-[0.98] border-l-4 ${
+        recommendation?.isPrimary ? difficultyBorder : "border-l-accent"
       }`;
 
     case "recent":
-      return `${baseStyles} ${sizeStyles} hover:shadow-md border border-border hover:border-border`;
+      return `${baseStyles} ${sizeStyles} hover:-translate-y-0.5`;
 
     case "custom":
-      return `${baseStyles} ${sizeStyles} shadow-sm ${
-        actions ? "border-l-4 border-primary" : ""
+      return `${baseStyles} ${sizeStyles} ${
+        actions ? "border-l-4 border-l-primary" : ""
       }`;
 
     default:
-      return `${baseStyles} ${sizeStyles} hover:shadow-md hover:scale-[1.02] active:scale-[0.98]`;
+      // Default cards get difficulty-based left border
+      return `${baseStyles} ${sizeStyles} hover:-translate-y-0.5 active:scale-[0.98] border-l-4 ${difficultyBorder}`;
   }
 };
 
@@ -105,8 +132,16 @@ const SessionCard = memo(function SessionCard({
 
   // Memoize card styles to prevent recalculation
   const cardStyles = useMemo(
-    () => getCardStyles(variant, size, gradient, recommendation, actions),
-    [variant, size, gradient, recommendation, actions],
+    () =>
+      getCardStyles(
+        variant,
+        size,
+        gradient,
+        recommendation,
+        actions,
+        difficulty,
+      ),
+    [variant, size, gradient, recommendation, actions, difficulty],
   );
 
   // Memoize icon color

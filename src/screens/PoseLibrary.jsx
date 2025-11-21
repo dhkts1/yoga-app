@@ -82,6 +82,7 @@ function PoseLibrary() {
           showBack={false}
         />
       }
+      background="aurora"
       contentClassName="px-4 py-6"
     >
       {/* Search Bar */}

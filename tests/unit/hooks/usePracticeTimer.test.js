@@ -369,6 +369,40 @@ describe("usePracticeTimer", () => {
       });
     });
 
+    test("should enter rest period when handleNextPose is called (skip triggers rest)", async () => {
+      const { result } = renderHook(() =>
+        usePracticeTimer({
+          session: mockSession,
+          restDuration: 10,
+          onSessionComplete: vi.fn(),
+        }),
+      );
+
+      // Start the timer
+      await act(async () => {
+        result.current.handlePlayPause();
+        await vi.runOnlyPendingTimersAsync();
+      });
+
+      expect(result.current.currentPoseIndex).toBe(0);
+      expect(result.current.isResting).toBe(false);
+
+      // Skip to next pose (should trigger rest first)
+      act(() => {
+        result.current.handleNextPose();
+      });
+
+      // Should be in rest period, still at pose 0
+      expect(result.current.isResting).toBe(true);
+      expect(result.current.currentPoseIndex).toBe(0);
+      expect(result.current.restTimeRemaining).toBe(10);
+
+      // Pause to stop timers
+      await act(async () => {
+        result.current.handlePlayPause();
+      });
+    });
+
     test("should skip rest period when handleNextPose is called during rest", async () => {
       const { result } = renderHook(() =>
         usePracticeTimer({
@@ -416,31 +450,28 @@ describe("usePracticeTimer", () => {
         }),
       );
 
-      act(() => {
-        result.current.handlePlayPause();
-      });
-
-      // Move to second pose
-      act(() => {
-        result.current.handleNextPose();
-      });
-
-      // Complete second pose to enter rest
+      // Start the timer
       await act(async () => {
-        vi.advanceTimersByTime(45000);
+        result.current.handlePlayPause();
+        await vi.runOnlyPendingTimersAsync();
       });
 
-      expect(result.current.isResting).toBe(true);
-      // After completing pose 1 (index 1), we stay at index 1 during rest
-      expect(result.current.currentPoseIndex).toBe(1);
+      // Complete first pose to enter rest
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(30000);
+      });
 
-      // Go back during rest - this also pauses the timer
+      // Should be in rest after completing first pose
+      expect(result.current.isResting).toBe(true);
+      expect(result.current.currentPoseIndex).toBe(0);
+
+      // Go back during rest
       act(() => {
         result.current.handlePreviousPose();
       });
 
       expect(result.current.isResting).toBe(false);
-      // Going back from rest at pose 1 should go to pose 0
+      // Going back from rest at pose 0 stays at pose 0 (can't go below 0)
       expect(result.current.currentPoseIndex).toBe(0);
 
       // Pause to stop timers

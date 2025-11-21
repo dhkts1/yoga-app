@@ -49,10 +49,10 @@ function CategoryTabs({
 
   return (
     <div className="relative" ref={dropdownRef}>
-      {/* Selected Category Button */}
+      {/* Selected Category Button - Glass pill style */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex min-h-touch w-full items-center justify-between gap-2 rounded-lg border border-border bg-card px-3 py-2 shadow-sm transition-colors hover:border-primary"
+        className="glass-card flex min-h-touch w-full items-center justify-between gap-2 rounded-full px-4 py-2 transition-all hover:shadow-lg hover:shadow-aurora-violet/10"
         aria-expanded={isOpen}
         aria-haspopup="true"
       >
@@ -72,9 +72,9 @@ function CategoryTabs({
         />
       </button>
 
-      {/* Dropdown Menu */}
+      {/* Dropdown Menu - Glass style */}
       {isOpen && (
-        <div className="absolute inset-x-0 top-full z-[9999] mt-1 overflow-hidden rounded-lg border border-border bg-card shadow-lg">
+        <div className="glass-card absolute inset-x-0 top-full z-[9999] mt-1 overflow-hidden rounded-xl shadow-lg">
           <div className="max-h-[60vh] overflow-y-auto">
             {categories.map((category) => {
               const isActive = selectedCategory === category.id;
@@ -86,11 +86,11 @@ function CategoryTabs({
                   key={category.id}
                   onClick={() => handleSelect(category.id)}
                   disabled={!hasContent && category.id !== "all"}
-                  className={`flex min-h-touch w-full items-center justify-between gap-2 border-b border-border px-3 py-2 text-left transition-colors last:border-b-0 ${
+                  className={`flex min-h-touch w-full items-center justify-between gap-2 border-b border-border/30 px-4 py-2 text-left transition-all last:border-b-0 ${
                     isActive
-                      ? "bg-primary text-primary-foreground"
+                      ? "bg-gradient-to-r from-aurora-teal to-aurora-violet text-white"
                       : hasContent || category.id === "all"
-                        ? "text-foreground hover:bg-muted active:bg-muted"
+                        ? "text-foreground hover:bg-muted/50 active:bg-muted"
                         : "cursor-not-allowed text-muted-foreground opacity-40"
                   } `}
                   aria-label={`${category.label} category${hasContent ? ` (${count} items)` : ""}`}

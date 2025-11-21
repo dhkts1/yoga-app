@@ -54,18 +54,20 @@ export function PracticeControls({
   return (
     <div className="p-4">
       <div className="mx-auto flex max-w-sm items-center justify-center gap-6">
+        {/* Previous pose - glass style */}
         <button
           onClick={handlePreviousPose}
           disabled={isFirstPose}
-          className="flex size-12 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors hover:bg-muted disabled:opacity-30 disabled:hover:bg-muted"
+          className="glass-card flex size-12 items-center justify-center rounded-full text-muted-foreground transition-all hover:shadow-lg hover:shadow-aurora-violet/10 disabled:opacity-30"
           aria-label="Previous pose"
         >
           <SkipBack className="size-5" />
         </button>
 
+        {/* Play/Pause - aurora gradient */}
         <button
           onClick={handlePlayPause}
-          className="flex size-16 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg hover:bg-primary/90 active:scale-95"
+          className="flex size-16 items-center justify-center rounded-full bg-gradient-to-r from-aurora-teal to-aurora-violet text-white shadow-lg shadow-aurora-violet/30 transition-all hover:shadow-xl hover:shadow-aurora-violet/40 active:scale-95"
           aria-label={isPlaying ? "Pause" : "Play"}
         >
           {isPlaying ? (
@@ -75,10 +77,11 @@ export function PracticeControls({
           )}
         </button>
 
+        {/* Next pose - glass style */}
         <button
           onClick={handleNextPose}
           disabled={isLastPose}
-          className="flex size-12 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors hover:bg-muted disabled:opacity-30 disabled:hover:bg-muted"
+          className="glass-card flex size-12 items-center justify-center rounded-full text-muted-foreground transition-all hover:shadow-lg hover:shadow-aurora-violet/10 disabled:opacity-30"
           aria-label="Skip to next pose"
         >
           <SkipForward className="size-5" />
