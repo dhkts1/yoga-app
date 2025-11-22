@@ -29,7 +29,7 @@ test.describe("Custom Session Creation", () => {
     page,
   }) => {
     // Navigate to Sessions screen
-    await page.getByRole("button", { name: "Discover", exact: true }).click();
+    await page.getByRole("button", { name: "Sessions", exact: true }).click();
     await page.waitForURL(/\/sessions/);
 
     // Click create custom session button

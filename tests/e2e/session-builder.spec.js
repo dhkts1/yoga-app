@@ -20,7 +20,7 @@ test.describe("Session Builder", () => {
     page,
   }) => {
     // Go to Sessions screen using bottom nav (exact match to avoid "Discover Multi-Week Programs")
-    await page.getByRole("button", { name: "Discover", exact: true }).click();
+    await page.getByRole("button", { name: "Sessions", exact: true }).click();
     await page.waitForURL(/\/sessions/);
 
     // Click create custom session button (aria-label is "Create custom session")

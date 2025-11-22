@@ -13,6 +13,7 @@ import {
   Zap,
   BookOpen,
   Calendar,
+  Settings,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -183,12 +184,21 @@ function Welcome() {
               {greeting.text}
             </h1>
           </div>
-          {streakStatus.streak > 0 && (
-            <Badge variant="active" size="sm">
-              <Flame className="size-3" />
-              {streakStatus.streak}d
-            </Badge>
-          )}
+          <div className="flex items-center gap-2">
+            {streakStatus.streak > 0 && (
+              <Badge variant="active" size="sm">
+                <Flame className="size-3" />
+                {streakStatus.streak}d
+              </Badge>
+            )}
+            <button
+              onClick={() => navigate("/settings")}
+              className="flex size-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-surface-elevated hover:text-foreground"
+              aria-label="Settings"
+            >
+              <Settings className="size-5" />
+            </button>
+          </div>
         </motion.div>
 
         {/* Milestone Toast */}

@@ -193,7 +193,7 @@ export async function completeQuickSession(page) {
   await fastForwardTimer(page);
 
   // Click Quick Start button
-  await page.getByRole("button", { name: /start/i }).click();
+  await page.getByRole("button", { name: /quick start/i }).click();
 
   // Wait for practice screen
   await page.waitForURL(/\/practice/);
@@ -239,7 +239,7 @@ export async function waitForNavigation(page, urlPattern) {
  * Handles bottom navigation interaction
  *
  * @param {import('@playwright/test').Page} page - Playwright page object
- * @param {string} tabName - Tab name (Home, Discover, Insights, Settings)
+ * @param {string} tabName - Tab name (Today, Sessions, Insights, Settings)
  */
 export async function navigateToTab(page, tabName) {
   await page

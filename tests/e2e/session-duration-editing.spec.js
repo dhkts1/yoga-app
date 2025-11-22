@@ -23,12 +23,12 @@ test.describe("Session Duration Editing", () => {
   test("should open duration editor dialog from session preview", async ({
     page,
   }) => {
-    // Navigate to Discover tab
-    const discoverTab = page.getByRole("button", {
-      name: "Discover",
+    // Navigate to Sessions tab
+    const sessionsTab = page.getByRole("button", {
+      name: "Sessions",
       exact: true,
     });
-    await discoverTab.click();
+    await sessionsTab.click();
     await page.waitForURL(/\/sessions/);
 
     // Click on Morning Energizer session
