@@ -241,11 +241,11 @@ const BottomNav = memo(function BottomNav({ className }) {
                   {tab.label}
                 </span>
 
-                {/* Active indicator - bottom dot */}
+                {/* Active indicator - top bar */}
                 {isActive && (
                   <motion.div
                     layoutId="navIndicator"
-                    className="absolute bottom-1 left-1/2 size-1 -translate-x-1/2 rounded-full bg-accent"
+                    className="absolute inset-x-3 top-0 h-0.5 rounded-full bg-accent"
                     transition={{ type: "spring", stiffness: 500, damping: 30 }}
                   />
                 )}
