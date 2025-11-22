@@ -4,11 +4,11 @@ import {
   Sun,
   Compass,
   Wind,
-  Calendar,
   TrendingUp,
   Plus,
   Play,
   X,
+  Settings,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import cx from "classnames";
@@ -48,18 +48,18 @@ const BottomNav = memo(function BottomNav({ className }) {
       // Center slot for FAB
       { id: "fab", isFab: true },
       {
-        id: "programs",
-        label: "Programs",
-        icon: Calendar,
-        path: "/programs",
-        isActive: pathname.startsWith("/programs"),
-      },
-      {
         id: "progress",
         label: "Insights",
         icon: TrendingUp,
         path: "/insights",
         isActive: pathname === "/insights",
+      },
+      {
+        id: "settings",
+        label: "Settings",
+        icon: Settings,
+        path: "/settings",
+        isActive: pathname === "/settings",
       },
     ],
     [pathname],
