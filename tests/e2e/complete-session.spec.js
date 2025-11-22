@@ -35,7 +35,7 @@ test.describe("Complete Session", () => {
     page,
   }) => {
     await fastForwardTimer(page);
-    await page.getByRole("button", { name: /start/i }).click();
+    await page.getByRole("button", { name: /quick start/i }).click();
     await page.waitForURL(/\/practice/);
     await skipMoodTrackerIfPresent(page);
 
@@ -52,7 +52,7 @@ test.describe("Complete Session", () => {
     page,
   }) => {
     await fastForwardTimer(page);
-    await page.getByRole("button", { name: /start/i }).click();
+    await page.getByRole("button", { name: /quick start/i }).click();
     await page.waitForURL(/\/practice/);
     await skipMoodTrackerIfPresent(page);
 
@@ -109,7 +109,7 @@ test.describe("Complete Session", () => {
     page,
   }) => {
     await fastForwardTimer(page);
-    await page.getByRole("button", { name: /start/i }).click();
+    await page.getByRole("button", { name: /quick start/i }).click();
     await page.waitForURL(/\/practice/);
     await skipMoodTrackerIfPresent(page);
 
@@ -129,7 +129,7 @@ test.describe("Complete Session", () => {
 
   test("should allow returning home after completion", async ({ page }) => {
     await fastForwardTimer(page);
-    await page.getByRole("button", { name: /start/i }).click();
+    await page.getByRole("button", { name: /quick start/i }).click();
     await page.waitForURL(/\/practice/);
     await skipMoodTrackerIfPresent(page);
 

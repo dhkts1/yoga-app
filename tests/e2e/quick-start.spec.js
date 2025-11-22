@@ -35,7 +35,7 @@ test.describe("Quick Start Flow", () => {
     await fastForwardTimer(page);
 
     // Click Quick Start button
-    const quickStartButton = page.getByRole("button", { name: /start/i });
+    const quickStartButton = page.getByRole("button", { name: /quick start/i });
     await quickStartButton.click();
 
     // Should navigate to practice screen
@@ -45,7 +45,7 @@ test.describe("Quick Start Flow", () => {
 
   test("should show pose name on practice screen", async ({ page }) => {
     await fastForwardTimer(page);
-    await page.getByRole("button", { name: /start/i }).click();
+    await page.getByRole("button", { name: /quick start/i }).click();
 
     // Wait for practice screen
     await page.waitForURL(/\/practice/);
@@ -62,7 +62,7 @@ test.describe("Quick Start Flow", () => {
 
   test("should show timer in MM:SS format", async ({ page }) => {
     await fastForwardTimer(page);
-    await page.getByRole("button", { name: /start/i }).click();
+    await page.getByRole("button", { name: /quick start/i }).click();
     await page.waitForURL(/\/practice/);
     await skipMoodTrackerIfPresent(page);
 
@@ -78,7 +78,7 @@ test.describe("Quick Start Flow", () => {
 
   test("should show play/pause button", async ({ page }) => {
     await fastForwardTimer(page);
-    await page.getByRole("button", { name: /start/i }).click();
+    await page.getByRole("button", { name: /quick start/i }).click();
     await page.waitForURL(/\/practice/);
     await skipMoodTrackerIfPresent(page);
 
@@ -99,7 +99,7 @@ test.describe("Quick Start Flow", () => {
 
   test("should show pose image or illustration", async ({ page }) => {
     await fastForwardTimer(page);
-    await page.getByRole("button", { name: /start/i }).click();
+    await page.getByRole("button", { name: /quick start/i }).click();
     await page.waitForURL(/\/practice/);
     await skipMoodTrackerIfPresent(page);
 
@@ -111,7 +111,7 @@ test.describe("Quick Start Flow", () => {
 
   test("should show session name in header", async ({ page }) => {
     await fastForwardTimer(page);
-    await page.getByRole("button", { name: /start/i }).click();
+    await page.getByRole("button", { name: /quick start/i }).click();
     await page.waitForURL(/\/practice/);
     await skipMoodTrackerIfPresent(page);
 

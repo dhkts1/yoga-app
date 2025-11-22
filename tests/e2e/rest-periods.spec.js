@@ -61,7 +61,7 @@ test.describe("Rest Periods", () => {
     await setupFastTimerWithRest(page, 5, 10);
 
     // Start a session (Morning Energizer has multiple poses)
-    await page.getByRole("button", { name: /start/i }).click();
+    await page.getByRole("button", { name: /quick start/i }).click();
     await page.waitForURL(/\/practice/);
     await skipMoodTrackerIfPresent(page);
     await ensurePracticeStarted(page);
@@ -92,7 +92,7 @@ test.describe("Rest Periods", () => {
     await setupFastTimerWithRest(page, 5, 50);
 
     // Start a session (Morning Energizer has 8 poses)
-    await page.getByRole("button", { name: /start/i }).click();
+    await page.getByRole("button", { name: /quick start/i }).click();
     await page.waitForURL(/\/practice/);
     await skipMoodTrackerIfPresent(page);
     await ensurePracticeStarted(page);
@@ -150,7 +150,7 @@ test.describe("Rest Periods", () => {
     await page.goto("/");
     await setupFastTimerWithRest(page, 5, 10);
 
-    await page.getByRole("button", { name: /start/i }).click();
+    await page.getByRole("button", { name: /quick start/i }).click();
     await page.waitForURL(/\/practice/);
     await skipMoodTrackerIfPresent(page);
     await ensurePracticeStarted(page);
@@ -174,7 +174,7 @@ test.describe("Rest Periods", () => {
     // Use VERY SLOW speed (1x = real-time) so button is stable
     await setupFastTimerWithRest(page, 10, 1);
 
-    await page.getByRole("button", { name: /start/i }).click();
+    await page.getByRole("button", { name: /quick start/i }).click();
     await page.waitForURL(/\/practice/);
     await skipMoodTrackerIfPresent(page);
     await ensurePracticeStarted(page);
@@ -205,7 +205,7 @@ test.describe("Rest Periods", () => {
     // Use 3 second rest with 5x speed for reliable timing
     await setupFastTimerWithRest(page, 3, 5);
 
-    await page.getByRole("button", { name: /start/i }).click();
+    await page.getByRole("button", { name: /quick start/i }).click();
     await page.waitForURL(/\/practice/);
     await skipMoodTrackerIfPresent(page);
     await ensurePracticeStarted(page);
@@ -238,7 +238,7 @@ test.describe("Rest Periods", () => {
     // Set up: Disable rest period (restDuration: 0)
     await setupFastTimerWithRest(page, 0, 5);
 
-    await page.getByRole("button", { name: /start/i }).click();
+    await page.getByRole("button", { name: /quick start/i }).click();
     await page.waitForURL(/\/practice/);
     await skipMoodTrackerIfPresent(page);
     await ensurePracticeStarted(page);
@@ -297,7 +297,7 @@ test.describe("Rest Periods", () => {
     // Set up: Longer rest period with slower speed for visible countdown
     await setupFastTimerWithRest(page, 5, 3);
 
-    await page.getByRole("button", { name: /start/i }).click();
+    await page.getByRole("button", { name: /quick start/i }).click();
     await page.waitForURL(/\/practice/);
     await skipMoodTrackerIfPresent(page);
     await ensurePracticeStarted(page);

@@ -54,7 +54,7 @@ test.describe("Visual Rest Period Demo", () => {
     await setupSlowTimerWithRest(page, 5, 2);
 
     // Start session
-    await page.getByRole("button", { name: /start/i }).click();
+    await page.getByRole("button", { name: /quick start/i }).click();
     await page.waitForURL(/\/practice/);
     await skipMoodTrackerIfPresent(page);
     await ensurePracticeStarted(page);
@@ -82,7 +82,7 @@ test.describe("Visual Rest Period Demo", () => {
     await setupSlowTimerWithRest(page, 3, 1);
 
     // Start session
-    await page.getByRole("button", { name: /start/i }).click();
+    await page.getByRole("button", { name: /quick start/i }).click();
     await page.waitForURL(/\/practice/);
     await skipMoodTrackerIfPresent(page);
     await ensurePracticeStarted(page);
