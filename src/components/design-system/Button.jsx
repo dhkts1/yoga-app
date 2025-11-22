@@ -1,14 +1,14 @@
 /**
- * Button Component
+ * Button Component - Linear/Notion Inspired
  *
- * Calming, accessible button component for the yoga app.
- * Follows "Breathe First, Features Later" philosophy with gentle interactions.
+ * Crisp, minimal button component with outline-based variants.
+ * Simplified to 5 core variants for consistency.
  */
 
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { motion } from "framer-motion";
-import { cn } from "../../lib/utils";
+import cx from "classnames";
 import { haptics } from "../../utils/haptics";
 
 const Button = React.forwardRef(
@@ -28,7 +28,7 @@ const Button = React.forwardRef(
     },
     ref,
   ) => {
-    // Check for prefers-reduced-motion with lazy initialization (SSR-safe)
+    // Check for prefers-reduced-motion
     const [shouldReduceMotion, setShouldReduceMotion] = useState(() =>
       typeof window !== "undefined"
         ? window.matchMedia("(prefers-reduced-motion: reduce)").matches
@@ -37,147 +37,96 @@ const Button = React.forwardRef(
 
     useEffect(() => {
       const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-
-      const handleChange = (e) => {
-        setShouldReduceMotion(e.matches);
-      };
-
+      const handleChange = (e) => setShouldReduceMotion(e.matches);
       mediaQuery.addEventListener("change", handleChange);
       return () => mediaQuery.removeEventListener("change", handleChange);
     }, []);
-    // Base styles for all buttons
+
+    // Base styles - Linear aesthetic
     const baseStyles = [
-      // Layout and typography
+      // Layout
       "inline-flex items-center justify-center gap-2",
-      "font-medium text-base leading-6",
+      "font-medium",
       "relative overflow-hidden",
 
-      // Accessibility
+      // Focus states
       "focus-visible:outline-none",
-      "focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-      "disabled:pointer-events-none disabled:opacity-50",
+      "focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background",
 
-      // Smooth transitions
-      "transition-all duration-300 ease-gentle",
+      // Disabled
+      "disabled:pointer-events-none disabled:opacity-40",
 
-      // Touch targets (minimum 44px for accessibility)
-      "min-h-touch min-w-touch",
+      // Fast transitions for Linear feel
+      "transition-all duration-150 ease-out",
 
-      // Rounded corners (calming, not sharp)
-      "rounded-lg",
+      // Touch targets
+      "min-h-[44px]",
 
-      // Mobile-specific improvements
-      mobileSafe && [
-        "touch-manipulation", // Prevent zoom on double-tap (iOS)
-        "select-none", // Prevent text selection
-      ],
+      // Rounded - subtle for Linear aesthetic
+      "rounded-md",
 
-      // Full width option for mobile layouts
+      // Mobile
+      mobileSafe && ["touch-manipulation", "select-none"],
       fullWidth && "w-full",
-
-      // Text wrapping for mobile
-      !icon && "whitespace-normal sm:whitespace-nowrap text-center",
+      !icon && "text-center",
     ];
 
-    // Variant styles
+    // Simplified variants - 5 core styles
     const variants = {
+      // Primary: Outlined with accent fill on hover
       primary: [
-        "bg-primary text-primary-foreground",
-        "hover:bg-secondary hover:shadow-md",
-        "active:bg-secondary active:scale-[0.98]",
-        "shadow-sm hover:shadow-md",
+        "border border-accent bg-accent/10 text-accent",
+        "hover:bg-accent hover:text-accent-foreground",
+        "active:bg-accent/90 active:scale-[0.98]",
       ],
 
+      // Secondary: Ghost with border
       secondary: [
-        "bg-transparent text-muted-foreground border-2 border-primary",
-        "hover:bg-muted hover:border-primary",
-        "active:bg-muted active:scale-[0.98]",
-        "shadow-sm hover:shadow-md",
+        "border border-border bg-transparent text-foreground",
+        "hover:bg-surface-elevated hover:border-border-strong",
+        "active:bg-surface-elevated active:scale-[0.98]",
       ],
 
+      // Ghost: No border, subtle hover
       ghost: [
         "bg-transparent text-muted-foreground",
-        "hover:bg-muted",
-        "active:bg-muted active:scale-[0.98]",
+        "hover:bg-surface-elevated hover:text-foreground",
+        "active:bg-surface active:scale-[0.98]",
       ],
 
-      outline: [
-        "bg-transparent text-foreground border-2 border-border",
-        "hover:bg-muted hover:border-primary",
-        "active:bg-muted active:scale-[0.98]",
-      ],
-
-      destructive: [
-        "bg-destructive text-destructive-foreground",
-        "hover:bg-destructive/90 hover:shadow-lg",
-        "active:bg-destructive/80 active:scale-[0.98]",
-      ],
-
+      // Link: Text-only
       link: [
-        "text-muted-foreground underline-offset-4",
-        "hover:underline hover:text-foreground",
-        "active:text-foreground",
-        "h-auto p-0 font-normal",
+        "text-accent underline-offset-4",
+        "hover:underline hover:text-accent/80",
+        "h-auto p-0 min-h-0 font-normal",
       ],
 
-      // ═══ LINEAR-FUTURISTIC GLOW VARIANT ═══
-      glow: [
-        "bg-primary text-primary-foreground",
-        "shadow-glow-sm",
-        "hover:shadow-glow-lg hover:scale-[1.02]",
-        "active:shadow-glow-md active:scale-[0.98]",
-        "border border-primary/20",
-        "backdrop-blur-sm",
-      ],
-
-      // Glass variant with subtle glow
-      glass: [
-        "bg-card/60 text-foreground",
-        "backdrop-blur-xl border border-border/50",
-        "shadow-glass",
-        "hover:bg-card/80 hover:shadow-card-glow-hover hover:border-primary/30",
-        "active:bg-card/70 active:scale-[0.98]",
-      ],
-
-      // Neon variant for emphasis
-      neon: [
-        "bg-transparent text-primary",
-        "border-2 border-primary",
-        "shadow-glow-sm",
-        "hover:bg-primary/10 hover:shadow-glow-md",
-        "active:bg-primary/20 active:scale-[0.98]",
+      // Destructive: Error state
+      destructive: [
+        "border border-destructive bg-destructive/10 text-destructive",
+        "hover:bg-destructive hover:text-destructive-foreground",
+        "active:bg-destructive/90 active:scale-[0.98]",
       ],
     };
 
-    // Size styles - responsive approach
+    // Size variants
     const sizes = {
-      sm: ["h-10 px-3 py-2 sm:px-4", "text-sm", "rounded-md"],
-
-      default: ["h-12 px-4 py-3 sm:px-6", "text-base"],
-
-      lg: ["h-14 px-6 py-4 sm:px-8", "text-lg", "rounded-xl"],
-
-      icon: [
-        "h-12 w-12",
-        "p-0",
-        "flex-shrink-0", // Prevent icon buttons from shrinking
-      ],
-
-      // Mobile-optimized sizes
-      "mobile-full": ["h-12 w-full px-4 py-3", "text-base"],
-
-      "mobile-large": ["h-14 w-full px-6 py-4", "text-lg", "rounded-xl"],
+      sm: ["h-9 px-3", "text-sm"],
+      default: ["h-11 px-4", "text-sm"],
+      lg: ["h-12 px-6", "text-base"],
+      icon: ["h-11 w-11 p-0"],
+      "mobile-full": ["h-11 w-full px-4", "text-sm"],
+      "mobile-large": ["h-12 w-full px-6", "text-base"],
     };
 
-    // Combine all styles
-    const buttonStyles = cn(
+    const buttonStyles = cx(
       baseStyles,
       variants[variant],
       sizes[size],
       className,
     );
 
-    // Loading spinner component
+    // Loading spinner
     const LoadingSpinner = () => (
       <svg
         className="size-4 animate-spin"
@@ -191,7 +140,7 @@ const Button = React.forwardRef(
           cy="12"
           r="10"
           stroke="currentColor"
-          strokeWidth="4"
+          strokeWidth="3"
         />
         <path
           className="opacity-75"
@@ -201,7 +150,6 @@ const Button = React.forwardRef(
       </svg>
     );
 
-    // Render content with optional icon and loading state
     const renderContent = () => {
       if (loading) {
         return (
@@ -233,36 +181,23 @@ const Button = React.forwardRef(
       return children;
     };
 
-    // Spring animation config
-    const springConfig = {
-      type: "spring",
-      stiffness: 400,
-      damping: 17,
-    };
-
-    // Motion props (disabled if user prefers reduced motion)
+    // Motion config - subtle for Linear feel
     const motionProps = shouldReduceMotion
       ? {}
       : {
-          whileTap: { scale: 0.95 },
-          transition: springConfig,
+          whileTap: { scale: 0.97 },
+          transition: { type: "spring", stiffness: 500, damping: 30 },
         };
 
-    // Handle click with haptic feedback
     const handleClick = (e) => {
-      // Add haptic feedback for primary, secondary, and destructive buttons
       if (!disabled && !loading) {
-        if (variant === "primary" || variant === "secondary") {
+        if (variant === "primary") {
           haptics.light();
         } else if (variant === "destructive") {
           haptics.medium();
         }
       }
-
-      // Call the original onClick if provided
-      if (props.onClick) {
-        props.onClick(e);
-      }
+      props.onClick?.(e);
     };
 
     return (
@@ -288,12 +223,8 @@ Button.propTypes = {
     "primary",
     "secondary",
     "ghost",
-    "outline",
-    "destructive",
     "link",
-    "glow",
-    "glass",
-    "neon",
+    "destructive",
   ]),
   size: PropTypes.oneOf([
     "sm",

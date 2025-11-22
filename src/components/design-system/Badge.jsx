@@ -1,13 +1,13 @@
 /**
- * Badge Component
+ * Badge Component - Linear/Notion Inspired
  *
- * Versatile badge component for status indicators, difficulty levels, yoga styles, and more.
- * Designed with calming aesthetics and semantic color mapping.
+ * Simplified badge with outline-first design.
+ * Semantic variants for status and state.
  */
 
 import React from "react";
 import PropTypes from "prop-types";
-import { cn } from "../../lib/utils";
+import cx from "classnames";
 
 const Badge = React.forwardRef(
   (
@@ -23,89 +23,27 @@ const Badge = React.forwardRef(
     },
     ref,
   ) => {
-    // Base styles for all badges
     const baseStyles = [
-      // Layout and typography
       "inline-flex items-center justify-center gap-1.5",
-      "font-medium whitespace-nowrap",
-      "rounded-full",
+      "font-medium font-mono text-xs uppercase tracking-wide",
+      "rounded-md",
       "border",
-
-      // Smooth transitions
-      "transition-all duration-200 ease-gentle",
-
-      // Interactive badges
+      "transition-all duration-150 ease-out",
       onClick && [
         "cursor-pointer",
-        "hover:scale-105",
-        "active:scale-95",
-        "min-h-touch min-w-touch", // Mobile-safe touch targets when clickable
+        "hover:scale-[1.02]",
+        "active:scale-[0.98]",
       ],
     ];
 
-    // Variant styles with semantic color mapping
+    // Simplified variants - outlined by default
     const variants = {
-      // Status variants (for programs, sessions)
-      "status-active": [
-        "bg-muted text-muted-foreground border-primary",
-        "hover:bg-muted",
-      ],
-      "status-paused": [
-        "bg-state-warning/10 text-state-warning border-state-warning/30",
-        "hover:bg-state-warning/20",
-      ],
-      "status-completed": [
-        "bg-state-success/10 text-state-success border-state-success/30",
-        "hover:bg-state-success/20",
-      ],
-      "status-not-started": [
-        "bg-muted text-muted-foreground border-border",
-        "hover:bg-muted",
-      ],
-
-      // Difficulty variants
-      "difficulty-beginner": [
-        "bg-state-info/10 text-state-info border-state-info/30",
-        "hover:bg-state-info/20",
-      ],
-      "difficulty-intermediate": [
-        "bg-accent/10 text-accent border-accent/30",
-        "hover:bg-accent/20",
-      ],
-      "difficulty-advanced": [
-        "bg-state-error/10 text-state-error border-state-error/30",
-        "hover:bg-state-error/20",
-      ],
-      "difficulty-mixed": [
-        "bg-muted text-muted-foreground border-border",
-        "hover:bg-muted",
-      ],
-
-      // Yoga style variants
-      "style-iyengar": [
-        "bg-muted text-muted-foreground border-primary",
-        "hover:bg-muted",
-      ],
-      "style-vinyasa": [
-        "bg-accent/10 text-accent border-accent/30",
-        "hover:bg-accent/20",
-      ],
-      "style-hatha": [
-        "bg-muted text-muted-foreground border-border",
-        "hover:bg-muted",
-      ],
-      "style-restorative": [
-        "bg-accent/10 text-accent border-accent/30",
-        "hover:bg-accent/20",
-      ],
-
-      // Default variant
       default: [
-        "bg-muted text-muted-foreground border-primary",
-        "hover:bg-muted",
+        "bg-transparent text-muted-foreground border-border",
+        "hover:border-border-strong hover:text-foreground",
       ],
 
-      // Additional semantic variants
+      // Semantic status
       success: [
         "bg-state-success/10 text-state-success border-state-success/30",
         "hover:bg-state-success/20",
@@ -118,94 +56,53 @@ const Badge = React.forwardRef(
         "bg-state-error/10 text-state-error border-state-error/30",
         "hover:bg-state-error/20",
       ],
-      info: [
-        "bg-state-info/10 text-state-info border-state-info/30",
-        "hover:bg-state-info/20",
-      ],
+      info: ["bg-accent/10 text-accent border-accent/30", "hover:bg-accent/20"],
 
-      // ═══ LINEAR-FUTURISTIC NEON VARIANTS ═══
-
-      // Primary neon glow
-      neon: [
-        "bg-primary/10 text-primary border-primary/50",
-        "shadow-glow-sm",
-        "hover:bg-primary/20 hover:shadow-glow-md",
-      ],
-
-      // Neon success (green glow)
-      "neon-success": [
-        "bg-state-success/10 text-state-success border-state-success/50",
-        "shadow-glow-success",
-        "hover:bg-state-success/20",
-      ],
-
-      // Neon warning (amber glow)
-      "neon-warning": [
-        "bg-state-warning/10 text-state-warning border-state-warning/50",
-        "shadow-glow-warning",
-        "hover:bg-state-warning/20",
-      ],
-
-      // Neon error (red glow)
-      "neon-error": [
-        "bg-state-error/10 text-state-error border-state-error/50",
-        "shadow-glow-error",
-        "hover:bg-state-error/20",
-      ],
-
-      // Neon info (blue glow)
-      "neon-info": [
-        "bg-state-info/10 text-state-info border-state-info/50",
-        "shadow-glow-info",
-        "hover:bg-state-info/20",
-      ],
-
-      // Glass pill variant
-      glass: [
-        "bg-card/40 text-foreground border-border/30",
-        "backdrop-blur-md",
-        "hover:bg-card/60 hover:border-primary/30",
-      ],
-
-      // Solid accent pill
+      // Accent - filled
       accent: [
-        "bg-primary text-primary-foreground border-primary",
-        "hover:shadow-glow-sm",
+        "bg-accent text-accent-foreground border-accent",
+        "hover:bg-accent/90",
       ],
 
-      // Outline with glow on hover
-      "outline-glow": [
-        "bg-transparent text-foreground border-border",
-        "hover:border-primary/50 hover:shadow-glow-sm hover:text-primary",
+      // Status indicators (for programs/sessions)
+      active: ["bg-accent/10 text-accent border-accent/30"],
+      paused: [
+        "bg-state-warning/10 text-state-warning border-state-warning/30",
+      ],
+      completed: [
+        "bg-state-success/10 text-state-success border-state-success/30",
       ],
 
-      // Dot indicator style (Linear-like status dot)
-      dot: [
-        "bg-transparent border-0 gap-2",
-        "before:content-[''] before:w-2 before:h-2 before:rounded-full before:bg-primary before:animate-dot-pulse",
+      // Delta badges for stats
+      "delta-up": [
+        "bg-state-success/10 text-state-success border-state-success/30",
+        "font-mono",
+      ],
+      "delta-down": [
+        "bg-state-error/10 text-state-error border-state-error/30",
+        "font-mono",
       ],
     };
 
     // Size variants
     const sizes = {
-      sm: ["h-5 px-2 py-0.5", "text-xs", "gap-1"],
-      default: ["h-6 px-3 py-1", "text-sm"],
-      lg: ["h-8 px-4 py-1.5", "text-base", "gap-2"],
+      sm: ["h-5 px-1.5", "text-[10px]"],
+      default: ["h-6 px-2"],
+      lg: ["h-7 px-3", "text-xs"],
     };
 
-    const badgeStyles = cn(
+    const badgeStyles = cx(
       baseStyles,
       variants[variant],
       sizes[size],
       className,
     );
 
-    // Render content with optional icon
     const renderContent = () => {
       if (icon && iconPosition === "left") {
         return (
           <>
-            <span className="shrink-0">{icon}</span>
+            <span className="size-3 shrink-0">{icon}</span>
             {children}
           </>
         );
@@ -215,7 +112,7 @@ const Badge = React.forwardRef(
         return (
           <>
             {children}
-            <span className="shrink-0">{icon}</span>
+            <span className="size-3 shrink-0">{icon}</span>
           </>
         );
       }
@@ -244,32 +141,16 @@ Badge.propTypes = {
   className: PropTypes.string,
   variant: PropTypes.oneOf([
     "default",
-    "status-active",
-    "status-paused",
-    "status-completed",
-    "status-not-started",
-    "difficulty-beginner",
-    "difficulty-intermediate",
-    "difficulty-advanced",
-    "difficulty-mixed",
-    "style-iyengar",
-    "style-vinyasa",
-    "style-hatha",
-    "style-restorative",
     "success",
     "warning",
     "error",
     "info",
-    // Linear-futuristic variants
-    "neon",
-    "neon-success",
-    "neon-warning",
-    "neon-error",
-    "neon-info",
-    "glass",
     "accent",
-    "outline-glow",
-    "dot",
+    "active",
+    "paused",
+    "completed",
+    "delta-up",
+    "delta-down",
   ]),
   size: PropTypes.oneOf(["sm", "default", "lg"]),
   icon: PropTypes.node,

@@ -68,3 +68,10 @@ export { ScrollableTabContent } from "./ScrollableTabContent";
 export { default as GlassIconButton } from "./GlassIconButton";
 export { ProgressRing } from "./ProgressRing";
 export { GradientButton } from "./GradientButton";
+
+// Linear/Notion-inspired components
+export { Panel, PanelGroup } from "./Panel";
+export { Sparkline } from "./Sparkline";
+export { StatSparkline } from "./StatSparkline";
+export { LinearMeter } from "./LinearMeter";
+export { SectionHeader } from "./SectionHeader";

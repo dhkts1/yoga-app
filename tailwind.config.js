@@ -24,57 +24,14 @@ module.exports = {
       },
     },
     extend: {
-      // Complete color system for yoga app using CSS variables
+      // Linear/Notion-inspired color system using CSS variables
       colors: {
-        // Use CSS variables for theme-aware colors
+        // Core backgrounds
         background: "hsl(var(--background))",
+        surface: "hsl(var(--surface))",
+        "surface-elevated": "hsl(var(--surface-elevated))",
 
-        // Primary sage palette - CSS variables
-        sage: {
-          50: "hsl(var(--sage-50))",
-          100: "hsl(var(--sage-100))",
-          200: "hsl(var(--sage-200))",
-          300: "hsl(var(--sage-300))",
-          400: "hsl(var(--sage-400))",
-          500: "hsl(var(--sage-500))",
-          600: "hsl(var(--sage-600))",
-          700: "hsl(var(--sage-700))",
-          800: "hsl(var(--sage-800))",
-          900: "hsl(var(--sage-900))",
-          DEFAULT: "hsl(var(--sage-500))",
-        },
-
-        // Warm cream palette - CSS variables
-        cream: {
-          50: "hsl(var(--cream-50))",
-          100: "hsl(var(--cream-100))",
-          200: "hsl(var(--cream-200))",
-          300: "hsl(var(--cream-300))",
-          400: "hsl(var(--cream-400))",
-          500: "hsl(var(--cream-500))",
-          600: "hsl(var(--cream-600))",
-          700: "hsl(var(--cream-700))",
-          800: "hsl(var(--cream-800))",
-          900: "hsl(var(--cream-900))",
-          DEFAULT: "hsl(var(--cream-100))",
-        },
-
-        // Muted gold palette - CSS variables
-        gold: {
-          50: "hsl(var(--gold-50))",
-          100: "hsl(var(--gold-100))",
-          200: "hsl(var(--gold-200))",
-          300: "hsl(var(--gold-300))",
-          400: "hsl(var(--gold-400))",
-          500: "hsl(var(--gold-500))",
-          600: "hsl(var(--gold-600))",
-          700: "hsl(var(--gold-700))",
-          800: "hsl(var(--gold-800))",
-          900: "hsl(var(--gold-900))",
-          DEFAULT: "hsl(var(--gold-500))",
-        },
-
-        // Semantic color tokens using CSS variables
+        // Semantic color tokens
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
@@ -86,33 +43,22 @@ module.exports = {
         accent: {
           DEFAULT: "hsl(var(--accent))",
           foreground: "hsl(var(--accent-foreground))",
+          secondary: "hsl(var(--accent-secondary))",
         },
         border: "hsl(var(--border))",
+        "border-strong": "hsl(var(--border-strong))",
 
-        // State colors for badges and indicators
+        // State colors - Linear-inspired
         "state-success": "hsl(var(--state-success))",
         "state-warning": "hsl(var(--state-warning))",
         "state-error": "hsl(var(--state-error))",
         "state-info": "hsl(var(--state-info))",
 
-        // Earthy accent palette (classic yoga)
-        aurora: {
-          teal: "hsl(var(--aurora-teal))", // Sage green
-          violet: "hsl(var(--aurora-violet))", // Warm gold
-          coral: "hsl(var(--aurora-coral))", // Terracotta
-          cyan: "hsl(var(--aurora-cyan))", // Forest green
-          DEFAULT: "hsl(var(--aurora-teal))", // Default to sage
-        },
-
-        // Energy state colors
-        energy: "hsl(var(--energy))",
-        power: "hsl(var(--power))",
-        calm: "hsl(var(--calm))",
-
         // shadcn/ui compatibility
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         foreground: "hsl(var(--foreground))",
+        "foreground-muted": "hsl(var(--foreground-muted))",
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
           foreground: "hsl(var(--destructive-foreground))",
@@ -128,6 +74,15 @@ module.exports = {
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--foreground))",
+        },
+
+        // Chart colors - Linear-inspired
+        chart: {
+          1: "hsl(var(--chart-1))",
+          2: "hsl(var(--chart-2))",
+          3: "hsl(var(--chart-3))",
+          4: "hsl(var(--chart-4))",
+          5: "hsl(var(--chart-5))",
         },
       },
 
@@ -198,11 +153,12 @@ module.exports = {
         full: "9999px",
       },
 
-      // Complete font family
+      // Linear-inspired font family
       fontFamily: {
-        sans: ["General Sans", "Inter", "-apple-system", "sans-serif"],
-        display: ["Clash Display", "General Sans", "sans-serif"],
+        sans: ["Inter", "-apple-system", "BlinkMacSystemFont", "sans-serif"],
+        display: ["Space Grotesk", "Inter", "sans-serif"],
         mono: [
+          "IBM Plex Mono",
           "ui-monospace",
           "SFMono-Regular",
           "Monaco",
@@ -211,44 +167,43 @@ module.exports = {
         ],
       },
 
-      // Enhanced shadows - Linear-futuristic glow system
+      // Linear-style shadows - flat with accent glows
       boxShadow: {
-        xs: "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
-        sm: "0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)",
-        md: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
-        lg: "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
-        xl: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
-        "2xl": "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
-        inner: "inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)",
+        none: "none",
+        xs: "0 1px 2px 0 rgba(0, 0, 0, 0.3)",
+        sm: "0 1px 3px 0 rgba(0, 0, 0, 0.4)",
+        md: "0 4px 6px -1px rgba(0, 0, 0, 0.4)",
+        lg: "0 10px 15px -3px rgba(0, 0, 0, 0.4)",
+        xl: "0 20px 25px -5px rgba(0, 0, 0, 0.4)",
+        "2xl": "0 25px 50px -12px rgba(0, 0, 0, 0.5)",
+        inner: "inset 0 2px 4px 0 rgba(0, 0, 0, 0.2)",
 
-        // Classic earthy glow shadows (sage green accent)
-        "glow-sm": "0 0 10px -2px hsl(142 40% 40% / 0.3)",
-        "glow-md": "0 0 20px -4px hsl(142 40% 40% / 0.4)",
-        "glow-lg": "0 0 30px -6px hsl(142 40% 40% / 0.5)",
-        "glow-xl": "0 0 50px -10px hsl(142 40% 40% / 0.6)",
+        // Accent glow shadows (electric cyan)
+        "glow-sm": "0 0 10px -2px hsl(var(--accent) / 0.3)",
+        "glow-md": "0 0 20px -4px hsl(var(--accent) / 0.4)",
+        "glow-lg": "0 0 30px -6px hsl(var(--accent) / 0.5)",
+        "glow-xl": "0 0 50px -10px hsl(var(--accent) / 0.6)",
 
-        // State glow variants - earthy tones
-        "glow-success": "0 0 20px -4px hsl(142 45% 42% / 0.5)",
-        "glow-warning": "0 0 20px -4px hsl(38 80% 50% / 0.5)",
-        "glow-error": "0 0 20px -4px hsl(12 70% 50% / 0.5)",
-        "glow-info": "0 0 20px -4px hsl(200 35% 50% / 0.5)",
+        // State glow variants
+        "glow-success": "0 0 20px -4px hsl(var(--state-success) / 0.5)",
+        "glow-warning": "0 0 20px -4px hsl(var(--state-warning) / 0.5)",
+        "glow-error": "0 0 20px -4px hsl(var(--state-error) / 0.5)",
+        "glow-info": "0 0 20px -4px hsl(var(--state-info) / 0.5)",
 
-        // Interactive glow ring - sage green
+        // Interactive glow ring - accent
         "ring-glow":
-          "0 0 0 4px hsl(142 40% 40% / 0.15), 0 0 20px -4px hsl(142 40% 40% / 0.3)",
+          "0 0 0 2px hsl(var(--accent) / 0.15), 0 0 15px -4px hsl(var(--accent) / 0.3)",
         "ring-glow-strong":
-          "0 0 0 4px hsl(142 40% 40% / 0.25), 0 0 30px -6px hsl(142 40% 40% / 0.5)",
+          "0 0 0 2px hsl(var(--accent) / 0.25), 0 0 20px -6px hsl(var(--accent) / 0.5)",
 
-        // Elevated cards with subtle warm glow
-        "card-glow":
-          "0 4px 20px -4px rgba(0, 0, 0, 0.1), 0 0 15px -5px hsl(142 40% 40% / 0.1)",
-        "card-glow-hover":
-          "0 8px 30px -6px rgba(0, 0, 0, 0.15), 0 0 25px -8px hsl(142 40% 40% / 0.2)",
+        // Card shadows - subtle for Linear look
+        card: "0 1px 3px 0 rgba(0, 0, 0, 0.3), 0 1px 2px -1px rgba(0, 0, 0, 0.3)",
+        "card-hover": "0 4px 12px -2px rgba(0, 0, 0, 0.4)",
 
         // Glass morphism shadow
-        glass: "0 8px 32px 0 rgba(0, 0, 0, 0.12)",
+        glass: "0 8px 32px 0 rgba(0, 0, 0, 0.2)",
         "glass-strong":
-          "0 8px 32px 0 rgba(0, 0, 0, 0.2), inset 0 0 0 1px rgba(255, 255, 255, 0.05)",
+          "0 8px 32px 0 rgba(0, 0, 0, 0.3), inset 0 0 0 1px rgba(255, 255, 255, 0.03)",
       },
 
       // Backdrop blur levels for glass effects
@@ -262,9 +217,9 @@ module.exports = {
         "3xl": "64px",
       },
 
-      // Comprehensive animations - Linear-futuristic
+      // Linear-style animations - subtle and clean
       keyframes: {
-        // Existing animations
+        // Accordion
         "accordion-down": {
           from: { height: "0" },
           to: { height: "var(--radix-accordion-content-height)" },
@@ -274,180 +229,99 @@ module.exports = {
           to: { height: "0" },
         },
 
-        // Yoga-specific animations
-        breathe: {
-          "0%, 100%": { transform: "scale(1)", opacity: "0.8" },
-          "50%": { transform: "scale(1.05)", opacity: "1" },
-        },
+        // Core transitions
         "fade-in": {
-          "0%": { opacity: "0", transform: "translateY(10px)" },
+          "0%": { opacity: "0", transform: "translateY(4px)" },
           "100%": { opacity: "1", transform: "translateY(0)" },
         },
+        "fade-out": {
+          "0%": { opacity: "1", transform: "translateY(0)" },
+          "100%": { opacity: "0", transform: "translateY(4px)" },
+        },
         "slide-up": {
-          "0%": { transform: "translateY(100%)" },
-          "100%": { transform: "translateY(0)" },
+          "0%": { transform: "translateY(100%)", opacity: "0" },
+          "100%": { transform: "translateY(0)", opacity: "1" },
         },
         "slide-down": {
-          "0%": { transform: "translateY(0)" },
-          "100%": { transform: "translateY(100%)" },
+          "0%": { transform: "translateY(0)", opacity: "1" },
+          "100%": { transform: "translateY(100%)", opacity: "0" },
         },
         "scale-in": {
-          "0%": { transform: "scale(0.9)", opacity: "0" },
+          "0%": { transform: "scale(0.95)", opacity: "0" },
           "100%": { transform: "scale(1)", opacity: "1" },
         },
-        "pulse-gentle": {
-          "0%, 100%": { opacity: "1" },
-          "50%": { opacity: "0.7" },
-        },
-        float: {
-          "0%, 100%": { transform: "translateY(0px)" },
-          "50%": { transform: "translateY(-10px)" },
-        },
-        "bounce-scale": {
-          "0%, 100%": { transform: "scale(1)" },
-          "50%": { transform: "scale(1.2)" },
-        },
-        shimmer: {
-          "0%": { backgroundPosition: "-200% 0" },
-          "100%": { backgroundPosition: "200% 0" },
-        },
 
-        // ═══ CLASSIC YOGA ANIMATIONS ═══
-
-        // Glow pulse - sage green accent
-        "glow-pulse": {
-          "0%, 100%": {
-            boxShadow: "0 0 0 0 hsl(142 40% 40% / 0.4)",
-          },
-          "50%": {
-            boxShadow: "0 0 20px 4px hsl(142 40% 40% / 0.2)",
-          },
-        },
-
-        // Subtle glow for badges/status
-        "neon-pulse": {
-          "0%, 100%": {
-            boxShadow:
-              "0 0 5px hsl(142 40% 40% / 0.5), 0 0 10px hsl(142 40% 40% / 0.3)",
-          },
-          "50%": {
-            boxShadow:
-              "0 0 10px hsl(142 40% 40% / 0.7), 0 0 20px hsl(142 40% 40% / 0.4)",
-          },
-        },
-
-        // Gradient border animation
-        "gradient-border": {
-          "0%": { backgroundPosition: "0% 50%" },
-          "50%": { backgroundPosition: "100% 50%" },
-          "100%": { backgroundPosition: "0% 50%" },
-        },
-
-        // Subtle float with glow
-        "float-glow": {
-          "0%, 100%": {
-            transform: "translateY(0px)",
-            filter: "drop-shadow(0 0 10px hsl(142 40% 40% / 0.2))",
-          },
-          "50%": {
-            transform: "translateY(-8px)",
-            filter: "drop-shadow(0 0 20px hsl(142 40% 40% / 0.4))",
-          },
-        },
-
-        // Status dot pulse (Linear-style)
+        // Linear-style status indicators
         "dot-pulse": {
-          "0%, 100%": {
-            transform: "scale(1)",
-            opacity: "1",
-          },
-          "50%": {
-            transform: "scale(1.5)",
-            opacity: "0.5",
-          },
+          "0%, 100%": { transform: "scale(1)", opacity: "1" },
+          "50%": { transform: "scale(1.2)", opacity: "0.7" },
+        },
+        "glow-pulse": {
+          "0%, 100%": { boxShadow: "0 0 0 0 hsl(var(--accent) / 0.4)" },
+          "50%": { boxShadow: "0 0 12px 2px hsl(var(--accent) / 0.2)" },
         },
 
-        // Scan line effect
-        "scan-line": {
-          "0%": { transform: "translateY(-100%)" },
-          "100%": { transform: "translateY(100%)" },
+        // Sparkline draw animation
+        "sparkline-draw": {
+          "0%": { strokeDashoffset: "100" },
+          "100%": { strokeDashoffset: "0" },
         },
 
-        // Counter roll animation
+        // Counter roll for stats
         "counter-roll": {
           "0%": { transform: "translateY(100%)", opacity: "0" },
           "100%": { transform: "translateY(0)", opacity: "1" },
         },
 
-        // Ripple effect
-        ripple: {
-          "0%": { transform: "scale(0)", opacity: "0.6" },
-          "100%": { transform: "scale(2.5)", opacity: "0" },
-        },
-
-        // Skeleton shimmer
-        "skeleton-shimmer": {
+        // Shimmer for loading
+        shimmer: {
           "0%": { backgroundPosition: "-200% 0" },
           "100%": { backgroundPosition: "200% 0" },
         },
 
-        // Entrance from blur
-        "blur-in": {
-          "0%": { opacity: "0", filter: "blur(10px)" },
-          "100%": { opacity: "1", filter: "blur(0)" },
+        // Pulse for breathing exercises
+        breathe: {
+          "0%, 100%": { transform: "scale(1)", opacity: "0.9" },
+          "50%": { transform: "scale(1.03)", opacity: "1" },
         },
 
-        // ═══ CLASSIC YOGA BREATH ANIMATIONS ═══
-        "aurora-pulse": {
-          "0%, 100%": { opacity: "0.5" },
-          "50%": { opacity: "0.8" },
-        },
-        "glow-breathe": {
-          "0%, 100%": {
-            boxShadow: "0 0 20px -5px hsl(142 40% 40% / 0.4)",
-          },
-          "50%": {
-            boxShadow: "0 0 30px -5px hsl(142 40% 40% / 0.6)",
-          },
-        },
-        "streak-pulse": {
-          "0%, 100%": { transform: "scale(1)" },
-          "50%": { transform: "scale(1.05)" },
+        // Subtle float
+        float: {
+          "0%, 100%": { transform: "translateY(0px)" },
+          "50%": { transform: "translateY(-4px)" },
         },
       },
 
       animation: {
-        // Existing animations
+        // Accordion
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
 
-        // Yoga animations
-        breathe: "breathe 4s cubic-bezier(0.4, 0.0, 0.2, 1) infinite",
-        "fade-in": "fade-in 300ms cubic-bezier(0.4, 0.0, 0.2, 1)",
-        "slide-up": "slide-up 300ms cubic-bezier(0.25, 0.46, 0.45, 0.94)",
-        "slide-down": "slide-down 300ms cubic-bezier(0.25, 0.46, 0.45, 0.94)",
-        "scale-in": "scale-in 300ms cubic-bezier(0.23, 1, 0.32, 1)",
-        "pulse-gentle": "pulse-gentle 2s ease-in-out infinite",
-        float: "float 3s ease-in-out infinite",
-        "bounce-scale": "bounce-scale 300ms cubic-bezier(0.4, 0.0, 0.2, 1)",
-        shimmer: "shimmer 2s linear infinite",
+        // Core transitions (faster for Linear feel)
+        "fade-in": "fade-in 150ms ease-out",
+        "fade-out": "fade-out 150ms ease-out",
+        "slide-up": "slide-up 200ms ease-out",
+        "slide-down": "slide-down 200ms ease-out",
+        "scale-in": "scale-in 150ms ease-out",
 
-        // ═══ CLASSIC YOGA ANIMATIONS ═══
-        "glow-pulse": "glow-pulse 2s ease-in-out infinite",
-        "neon-pulse": "neon-pulse 2s ease-in-out infinite",
-        "gradient-border": "gradient-border 3s ease infinite",
-        "float-glow": "float-glow 3s ease-in-out infinite",
+        // Status indicators
         "dot-pulse": "dot-pulse 2s ease-in-out infinite",
-        "scan-line": "scan-line 3s linear infinite",
-        "counter-roll": "counter-roll 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)",
-        ripple: "ripple 0.6s ease-out",
-        "skeleton-shimmer": "skeleton-shimmer 1.5s ease-in-out infinite",
-        "blur-in": "blur-in 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+        "glow-pulse": "glow-pulse 2s ease-in-out infinite",
 
-        // ═══ CLASSIC YOGA BREATH ANIMATIONS ═══
-        "aurora-pulse": "aurora-pulse 4s ease-in-out infinite",
-        "glow-breathe": "glow-breathe 3s ease-in-out infinite",
-        "streak-pulse": "streak-pulse 2s ease-in-out infinite",
+        // Sparkline
+        "sparkline-draw": "sparkline-draw 1s ease-out forwards",
+
+        // Counter
+        "counter-roll": "counter-roll 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)",
+
+        // Loading
+        shimmer: "shimmer 1.5s ease-in-out infinite",
+
+        // Breathing
+        breathe: "breathe 4s ease-in-out infinite",
+
+        // Float
+        float: "float 3s ease-in-out infinite",
       },
 
       // Transition durations and easings
