@@ -590,9 +590,9 @@ test.describe("Multi-Week Programs Flow", () => {
       await page.getByRole("button", { name: "Back to Home" }).click();
       await page.waitForURL(/\/programs\/iyengar-foundation-13\/week\/1/);
 
-      // Now click Progress from bottom nav
-      await page.getByRole("button", { name: "Progress", exact: true }).click();
-      await page.waitForURL(/\/insights|\/progress/);
+      // Now click Insights from bottom nav
+      await page.getByRole("button", { name: "Insights", exact: true }).click();
+      await page.waitForURL(/\/insights/);
 
       // Just verify insights page loaded - program card may or may not be visible
       expect(page.url()).toMatch(/\/insights|\/progress/);
@@ -1492,7 +1492,9 @@ test.describe("Multi-Week Programs Flow", () => {
       await uncompletedSession.click();
       await page.waitForURL(/\/sessions\/.*\/preview/);
 
-      const startPracticeButton = page.getByRole("button", { name: /start practice/i });
+      const startPracticeButton = page.getByRole("button", {
+        name: /start practice/i,
+      });
       await startPracticeButton.click();
       await page.waitForURL(/\/practice/);
       await skipMoodTrackerIfPresent(page);
@@ -1506,7 +1508,10 @@ test.describe("Multi-Week Programs Flow", () => {
       await page.waitForTimeout(3000);
 
       // Look for week completion message
-      const weekCompletionVisible = await page.getByText(/Milestone Achievement|Week Complete/i).isVisible().catch(() => false);
+      const weekCompletionVisible = await page
+        .getByText(/Milestone Achievement|Week Complete/i)
+        .isVisible()
+        .catch(() => false);
 
       // External Validation: Week completion should have been auto-detected after 2nd session
       expect(weekCompletionVisible).toBe(true);
@@ -1589,13 +1594,13 @@ test.describe("Multi-Week Programs Flow", () => {
           await expect(weekCompleteText).toBeVisible({ timeout: 3000 });
 
           // Verify accent styling for celebration (border-accent)
-          const celebrationCard = page.locator(
-            ".border-accent",
-          );
+          const celebrationCard = page.locator(".border-accent");
           await expect(celebrationCard).toBeVisible({ timeout: 3000 });
         } else {
           // Navigate back to week detail to continue with next session
-          const backButton = page.getByRole("button", { name: /back to home/i });
+          const backButton = page.getByRole("button", {
+            name: /back to home/i,
+          });
           await backButton.click();
           await page.waitForURL(/\/programs\/iyengar-foundation-13\/week\/1/);
           // Wait for page to fully load
@@ -1617,7 +1622,7 @@ test.describe("Multi-Week Programs Flow", () => {
         const sessionButton = page
           .locator("button")
           .filter({
-            hasText: new RegExp(`Session ${sessionIndex + 1}`)
+            hasText: new RegExp(`Session ${sessionIndex + 1}`),
           })
           .first();
 
@@ -1666,7 +1671,11 @@ test.describe("Multi-Week Programs Flow", () => {
       await page.waitForURL(/\/programs\/iyengar-foundation-13\/week\/1/);
 
       // Wait for session buttons to appear and get total session count
-      await page.locator('button').filter({ hasText: /Session \d+/ }).first().waitFor({ state: 'visible', timeout: 5000 });
+      await page
+        .locator("button")
+        .filter({ hasText: /Session \d+/ })
+        .first()
+        .waitFor({ state: "visible", timeout: 5000 });
       const sessionCount = await page
         .locator("button")
         .filter({ hasText: /Session \d+/ })
@@ -1696,8 +1705,8 @@ test.describe("Multi-Week Programs Flow", () => {
       }
 
       // Navigate from week detail to program detail to check current week
-      await page.goto('/programs/iyengar-foundation-13');
-      await page.waitForLoadState('networkidle');
+      await page.goto("/programs/iyengar-foundation-13");
+      await page.waitForLoadState("networkidle");
 
       // External Validation: Check localStorage for currentWeek = 2
       const storage = await page.evaluate(() => {
@@ -1705,16 +1714,20 @@ test.describe("Multi-Week Programs Flow", () => {
         const progress = localStorage.getItem("yoga-progress");
         return {
           programProgress: programProgress ? JSON.parse(programProgress) : null,
-          progress: progress ? JSON.parse(progress) : null
+          progress: progress ? JSON.parse(progress) : null,
         };
       });
 
       // External Validation: Week should have auto-advanced to week 2
-      expect(storage.programProgress?.state?.activeProgram?.currentWeek).toBe(2);
+      expect(storage.programProgress?.state?.activeProgram?.currentWeek).toBe(
+        2,
+      );
 
       // Verify week 1 was marked complete
       expect(storage.programProgress?.state?.completedWeeks).toHaveLength(1);
-      expect(storage.programProgress?.state?.completedWeeks?.[0]?.weekNumber).toBe(1);
+      expect(
+        storage.programProgress?.state?.completedWeeks?.[0]?.weekNumber,
+      ).toBe(1);
 
       // Verify "Week 2 of 13" appears in UI
       const week2Progress = page.locator("text=/week\\s+2\\s+of\\s+13/i");
@@ -1854,7 +1867,9 @@ test.describe("Multi-Week Programs Flow", () => {
         await page.waitForURL(/\/complete/, { timeout: 45000 });
 
         // CRITICAL: Wait for "Practice Complete!" heading to ensure useEffect has run
-        await page.getByRole("heading", { name: /practice complete/i }).waitFor({ state: "visible", timeout: 5000 });
+        await page
+          .getByRole("heading", { name: /practice complete/i })
+          .waitFor({ state: "visible", timeout: 5000 });
 
         // Wait additional time for week completion logic to process
         await page.waitForTimeout(1000);
@@ -2479,7 +2494,9 @@ test.describe("Multi-Week Programs Flow", () => {
       await page.goto("/programs/invalid-program-id-123");
 
       // Should show error message or redirect
-      const errorMessage = page.locator("text=/not found|could not be found/i").first();
+      const errorMessage = page
+        .locator("text=/not found|could not be found/i")
+        .first();
       await expect(errorMessage).toBeVisible({ timeout: 3000 });
 
       // Should show back button

@@ -629,9 +629,7 @@ test.describe("Edge Cases", () => {
     await expect(page.getByText(/to delete/i)).not.toBeVisible();
 
     // But default sessions should still exist
-    await expect(
-      page.getByText(/5.*minute|10.*minute|15.*minute/i),
-    ).toBeVisible();
+    await expect(page.getByText(/5.*min|10.*min|15.*min/i)).toBeVisible();
   });
 
   test("should handle empty session name with whitespace only", async ({

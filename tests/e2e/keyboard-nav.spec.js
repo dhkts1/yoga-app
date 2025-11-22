@@ -70,25 +70,26 @@ test.describe("Keyboard Navigation", () => {
     await page.waitForLoadState("domcontentloaded");
     await page.waitForTimeout(500);
 
-    // Verify bottom nav exists with 6 tabs
+    // Verify bottom nav exists with 4 nav tabs (Today, Sessions, Programs, Insights)
+    // Plus 1 FAB button (no aria-label), totaling 5 buttons in nav
     const navButtons = page.locator("nav button[aria-label]");
     const navCount = await navButtons.count();
-    expect(navCount).toBe(6);
+    expect(navCount).toBe(4);
 
     // Tab through welcome screen to reach bottom nav
     await page.keyboard.press("Tab"); // Quick Start
-    await page.keyboard.press("Tab"); // Browse All
+    await page.keyboard.press("Tab"); // Browse All or next element
     await page.keyboard.press("Tab"); // First nav tab
 
     // Verify we can tab through multiple nav items
     let tabbedCount = 1;
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 4; i++) {
       await page.keyboard.press("Tab");
       tabbedCount++;
     }
 
-    // We should have tabbed through all 6 nav buttons
-    expect(tabbedCount).toBe(6);
+    // We should have tabbed through nav buttons (4 labeled + 1 FAB = 5 total)
+    expect(tabbedCount).toBe(5);
   });
 
   test("should activate Quick Start button with Enter key", async ({

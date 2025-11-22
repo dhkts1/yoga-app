@@ -28,7 +28,7 @@ test.describe("Navigation", () => {
 
     // Navigate to Progress/Insights tab using bottom nav
     const progressButton = page.getByRole("button", {
-      name: /progress|insights/i,
+      name: /insights/i,
     });
     if (await progressButton.isVisible({ timeout: 2000 }).catch(() => false)) {
       await progressButton.click();
@@ -47,7 +47,7 @@ test.describe("Navigation", () => {
     await page.getByRole("button", { name: "Sessions", exact: true }).click();
     await expect(bottomNav.first()).toBeVisible();
 
-    await page.getByRole("button", { name: /progress|insights/i }).click();
+    await page.getByRole("button", { name: /insights/i }).click();
     await expect(bottomNav.first()).toBeVisible();
   });
 

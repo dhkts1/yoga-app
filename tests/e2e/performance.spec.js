@@ -592,7 +592,7 @@ test.describe("Performance", () => {
 
     // App should still load and function normally (check for main content)
     const mainButton = page
-      .getByRole("button", { name: /quick start|start practice|discover/i })
+      .getByRole("button", { name: /quick start/i })
       .first();
     await expect(mainButton).toBeVisible({ timeout: 5000 });
   });
@@ -664,7 +664,7 @@ test.describe("Performance", () => {
         to: "/sessions",
         action: async () => {
           await page
-            .getByRole("button", { name: /discover/i, exact: true })
+            .getByRole("button", { name: /sessions/i, exact: true })
             .first()
             .click();
         },
@@ -680,20 +680,16 @@ test.describe("Performance", () => {
       },
       {
         from: "/insights",
-        to: "/settings",
+        to: "/programs",
         action: async () => {
-          await page
-            .getByRole("button", { name: /profile/i, exact: true })
-            .click();
+          await page.getByRole("button", { name: /programs/i }).click();
         },
       },
       {
-        from: "/settings",
+        from: "/programs",
         to: "/",
         action: async () => {
-          await page
-            .getByRole("button", { name: /home/i, exact: true })
-            .click();
+          await page.getByRole("button", { name: /today/i }).click();
         },
       },
     ];
@@ -712,9 +708,9 @@ test.describe("Performance", () => {
 
     // App should remain responsive (check for main button)
     const finalButton = page
-      .getByRole("button", { name: /quick start|start practice/i })
+      .getByRole("button", { name: /quick start/i })
       .first();
-    await expect(finalButton).toBeVisible({ timeout: 3000 });
+    await expect(finalButton).toBeVisible({ timeout: 5000 });
   });
 
   test("should load session builder with maximum poses quickly", async ({

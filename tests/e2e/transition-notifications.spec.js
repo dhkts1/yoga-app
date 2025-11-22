@@ -23,7 +23,7 @@ test.describe("Transition Notifications", () => {
 
   test("should toggle beep from Settings", async ({ page }) => {
     // Navigate to Settings
-    await page.getByRole("button", { name: /profile|settings/i }).click();
+    await page.getByRole("button", { name: "Settings" }).click();
     await page.waitForURL(/\/settings/);
 
     // Find and click Practice Settings section to expand
@@ -51,7 +51,7 @@ test.describe("Transition Notifications", () => {
 
   test("should adjust beep volume slider", async ({ page }) => {
     // Navigate to Settings and expand Practice Settings section
-    await page.getByRole("button", { name: /profile|settings/i }).click();
+    await page.getByRole("button", { name: "Settings" }).click();
     await page.waitForURL(/\/settings/);
 
     const practiceSection = page.getByText("Practice Settings").first();
@@ -84,7 +84,7 @@ test.describe("Transition Notifications", () => {
 
   test("should adjust beep frequency slider", async ({ page }) => {
     // Navigate to Settings and expand Practice section
-    await page.getByRole("button", { name: /profile|settings/i }).click();
+    await page.getByRole("button", { name: "Settings" }).click();
     await page.waitForURL(/\/settings/);
 
     const practiceSection = page.getByText("Practice Settings").first();
@@ -122,7 +122,7 @@ test.describe("Transition Notifications", () => {
 
   test("should configure transition delay", async ({ page }) => {
     // Navigate to Settings and expand Practice section
-    await page.getByRole("button", { name: /profile|settings/i }).click();
+    await page.getByRole("button", { name: "Settings" }).click();
     await page.waitForURL(/\/settings/);
 
     const practiceSection = page.getByText("Practice Settings").first();
@@ -145,7 +145,7 @@ test.describe("Transition Notifications", () => {
 
   test("should toggle vibration if supported", async ({ page }) => {
     // Navigate to Settings and expand Practice section
-    await page.getByRole("button", { name: /profile|settings/i }).click();
+    await page.getByRole("button", { name: "Settings" }).click();
     await page.waitForURL(/\/settings/);
 
     const practiceSection = page.getByText("Practice Settings").first();
@@ -191,7 +191,7 @@ test.describe("Transition Notifications", () => {
 
   test("should show preview button", async ({ page }) => {
     // Navigate to Settings and expand Practice section
-    await page.getByRole("button", { name: /profile|settings/i }).click();
+    await page.getByRole("button", { name: "Settings" }).click();
     await page.waitForURL(/\/settings/);
 
     const practiceSection = page.getByText("Practice Settings").first();
@@ -278,7 +278,7 @@ test.describe("Transition Notifications", () => {
 
   test("should preserve beep settings across page reload", async ({ page }) => {
     // Navigate to Settings and configure beep
-    await page.getByRole("button", { name: /profile|settings/i }).click();
+    await page.getByRole("button", { name: "Settings" }).click();
     await page.waitForURL(/\/settings/);
 
     const practiceSection = page.getByText("Practice Settings").first();
@@ -305,7 +305,7 @@ test.describe("Transition Notifications", () => {
     await page.waitForTimeout(500); // Give Zustand time to hydrate from localStorage
 
     // Navigate back to Settings - use more specific selector after reload
-    await page.getByRole("button", { name: /^profile$/i }).click();
+    await page.getByRole("button", { name: "Settings" }).click();
     await page.waitForURL(/\/settings/, { timeout: 10000 });
 
     const practiceSectionAfter = page.getByText("Practice Settings").first();

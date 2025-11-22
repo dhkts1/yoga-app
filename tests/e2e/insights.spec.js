@@ -22,14 +22,14 @@ test.describe("Insights", () => {
 
   test("should navigate to insights screen", async ({ page }) => {
     // Click insights/progress button in bottom nav
-    await page.getByRole("button", { name: /progress|insights/i }).click();
+    await page.getByRole("button", { name: /insights/i }).click();
 
     // Verify on insights page
     await expect(page).toHaveURL(/\/insights|\/progress/);
   });
 
   test("should show empty state for new users", async ({ page }) => {
-    await page.getByRole("button", { name: /progress|insights/i }).click();
+    await page.getByRole("button", { name: /insights/i }).click();
     await page.waitForURL(/\/insights|\/progress/);
 
     // Should show message about no practice yet
@@ -64,7 +64,7 @@ test.describe("Insights", () => {
     await page.waitForURL("/");
 
     // Navigate to insights
-    await page.getByRole("button", { name: /progress|insights/i }).click();
+    await page.getByRole("button", { name: /insights/i }).click();
     await page.waitForURL(/\/insights|\/progress/);
 
     // Should not show empty state anymore
@@ -99,11 +99,11 @@ test.describe("Insights", () => {
     await page.waitForURL("/");
 
     // Go to insights
-    await page.getByRole("button", { name: /progress|insights/i }).click();
-    await page.waitForURL(/\/insights|\/progress/);
+    await page.getByRole("button", { name: /insights/i }).click();
+    await page.waitForURL(/\/insights/);
 
     // Just verify we're on the page - streak might be on home screen instead
-    expect(page.url()).toMatch(/\/insights|\/progress/);
+    expect(page.url()).toMatch(/\/insights/);
   });
 
   test("should show total practice time", async ({ page }) => {
@@ -131,7 +131,7 @@ test.describe("Insights", () => {
     await page.waitForURL("/");
 
     // Go to insights
-    await page.getByRole("button", { name: /progress|insights/i }).click();
+    await page.getByRole("button", { name: /insights/i }).click();
     await page.waitForURL(/\/insights|\/progress/);
 
     // Just verify insights page loaded

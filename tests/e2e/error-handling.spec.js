@@ -351,10 +351,10 @@ test.describe("Error Handling", () => {
     await page.getByRole("button", { name: "Sessions", exact: true }).click();
     await page.waitForTimeout(100);
 
-    await page.getByRole("button", { name: /progress/i }).click();
+    await page.getByRole("button", { name: /insights/i }).click();
     await page.waitForTimeout(100);
 
-    await page.getByRole("button", { name: /profile|settings/i }).click();
+    await page.getByRole("button", { name: /programs/i }).click();
     await page.waitForTimeout(100);
 
     // After rapid navigation, app should still be functional
