@@ -5,28 +5,13 @@ import useCustomSessions from "../../../src/hooks/useCustomSessions";
 describe("useCustomSessions", () => {
   const STORAGE_KEY = "customSessions";
 
-  // Helper to safely clear localStorage
-  const safeClearLocalStorage = () => {
-    try {
-      localStorage.clear();
-    } catch {
-      Object.keys(localStorage).forEach((key) => {
-        try {
-          localStorage.removeItem(key);
-        } catch {
-          // Ignore
-        }
-      });
-    }
-  };
-
   beforeEach(() => {
-    safeClearLocalStorage();
+    localStorage.clear();
     vi.clearAllMocks();
   });
 
   afterEach(() => {
-    safeClearLocalStorage();
+    localStorage.clear();
   });
 
   const mockSession1 = {
@@ -538,12 +523,11 @@ describe("useCustomSessions", () => {
         .spyOn(console, "error")
         .mockImplementation(() => {});
 
-      // Mock localStorage.setItem to throw quota exceeded error using vi.spyOn
-      const setItemSpy = vi
-        .spyOn(Storage.prototype, "setItem")
-        .mockImplementation(() => {
-          throw new Error("QuotaExceededError");
-        });
+      // Mock localStorage.setItem to throw quota exceeded error
+      const originalSetItem = Storage.prototype.setItem;
+      Storage.prototype.setItem = vi.fn(() => {
+        throw new Error("QuotaExceededError");
+      });
 
       act(() => {
         result.current.add(mockSession1);
@@ -553,7 +537,7 @@ describe("useCustomSessions", () => {
       expect(consoleError).toHaveBeenCalled();
 
       // Restore
-      setItemSpy.mockRestore();
+      Storage.prototype.setItem = originalSetItem;
       consoleError.mockRestore();
     });
 
@@ -564,12 +548,11 @@ describe("useCustomSessions", () => {
         expect(result.current.isLoading).toBe(false);
       });
 
-      // Cause an error using vi.spyOn
-      const setItemSpy = vi
-        .spyOn(Storage.prototype, "setItem")
-        .mockImplementation(() => {
-          throw new Error("Test error");
-        });
+      // Cause an error
+      const originalSetItem = Storage.prototype.setItem;
+      Storage.prototype.setItem = vi.fn(() => {
+        throw new Error("Test error");
+      });
 
       const consoleError = vi
         .spyOn(console, "error")
@@ -582,7 +565,7 @@ describe("useCustomSessions", () => {
       expect(result.current.error).toBeTruthy();
 
       // Restore normal operation
-      setItemSpy.mockRestore();
+      Storage.prototype.setItem = originalSetItem;
 
       act(() => {
         result.current.add(mockSession2);

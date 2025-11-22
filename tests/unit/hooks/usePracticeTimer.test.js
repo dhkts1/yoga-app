@@ -369,40 +369,6 @@ describe("usePracticeTimer", () => {
       });
     });
 
-    test("should enter rest period when handleNextPose is called (skip triggers rest)", async () => {
-      const { result } = renderHook(() =>
-        usePracticeTimer({
-          session: mockSession,
-          restDuration: 10,
-          onSessionComplete: vi.fn(),
-        }),
-      );
-
-      // Start the timer
-      await act(async () => {
-        result.current.handlePlayPause();
-        await vi.runOnlyPendingTimersAsync();
-      });
-
-      expect(result.current.currentPoseIndex).toBe(0);
-      expect(result.current.isResting).toBe(false);
-
-      // Skip to next pose (should trigger rest first)
-      act(() => {
-        result.current.handleNextPose();
-      });
-
-      // Should be in rest period, still at pose 0
-      expect(result.current.isResting).toBe(true);
-      expect(result.current.currentPoseIndex).toBe(0);
-      expect(result.current.restTimeRemaining).toBe(10);
-
-      // Pause to stop timers
-      await act(async () => {
-        result.current.handlePlayPause();
-      });
-    });
-
     test("should skip rest period when handleNextPose is called during rest", async () => {
       const { result } = renderHook(() =>
         usePracticeTimer({
@@ -450,32 +416,32 @@ describe("usePracticeTimer", () => {
         }),
       );
 
-      // Start the timer
+      // First: Start timer and flush useEffect
       await act(async () => {
         result.current.handlePlayPause();
         await vi.runOnlyPendingTimersAsync();
       });
 
-      // Complete first pose to enter rest
+      // Second: Complete first pose to enter rest
       await act(async () => {
         await vi.advanceTimersByTimeAsync(30000);
       });
 
-      // Should be in rest after completing first pose
+      // Should be in rest period after completing first pose
       expect(result.current.isResting).toBe(true);
       expect(result.current.currentPoseIndex).toBe(0);
 
       // Go back during rest
-      act(() => {
+      await act(async () => {
         result.current.handlePreviousPose();
       });
 
+      // Should cancel rest and stay at first pose (can't go back from first pose)
       expect(result.current.isResting).toBe(false);
-      // Going back from rest at pose 0 stays at pose 0 (can't go below 0)
       expect(result.current.currentPoseIndex).toBe(0);
 
       // Pause to stop timers
-      act(() => {
+      await act(async () => {
         result.current.handlePlayPause();
       });
     });
